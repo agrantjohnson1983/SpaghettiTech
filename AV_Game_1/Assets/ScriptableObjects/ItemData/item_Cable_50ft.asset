@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5ea3149329bd95140a54094d05705c40, type: 3}
+  m_Name: item_Cable_50ft
+  m_EditorClassIdentifier: 
+  itemName: Cable_50ft
+  itemSprite: {fileID: 21300000, guid: 73d124bf77e463c45942d14136745d9f, type: 3}
+  prefabItem: {fileID: 7794338550508641806, guid: f85dcf2e78a536648b0fa169c5ddd0fc, type: 3}
