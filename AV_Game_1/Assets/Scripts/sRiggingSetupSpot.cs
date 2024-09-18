@@ -7,8 +7,6 @@ public class sRiggingSetupSpot : MonoBehaviour, iActionable
 {
     public float _taskTime;
 
-    
-
     public bool hasAction = false; // use this for turning on objects that have actions
 
     public Vector3 offset;
@@ -151,66 +149,76 @@ public class sRiggingSetupSpot : MonoBehaviour, iActionable
 
         if (other.TryGetComponent(out iRiggable _riggable))
         {
-            switch(_riggable.TypeRig)
+            // Checks that collided rig type is same as setup type
+            if(_riggable.TypeRig == rigType)
             {
-                case eTypeRigSetup.truss:
-                    {
-                        if (_riggable.Enabled)
+                switch (_riggable.TypeRig)
+                {
+                    case eTypeRigSetup.truss:
                         {
-                            Debug.Log("Truss Collision with Setup Spot");
+                            if (_riggable.Enabled)
+                            {
+                                Debug.Log("Truss Collision with Setup Spot");
 
-                            _riggable.SetRigging(other.gameObject, this.gameObject, offset);
+                                _riggable.SetRigging(other.gameObject, this.gameObject, offset);
 
-                            //_riggable.Enabled = false;
+                                //_riggable.Enabled = false;
 
-                            _riggable.RiggingObjectComplete(other.gameObject, _riggable.TypeRig);
+                                _riggable.RiggingObjectComplete(other.gameObject, _riggable.TypeRig);
 
-                            other.gameObject.GetComponent<sRigGear>().enabled = false;
+                                other.gameObject.GetComponent<sRigGear>().enabled = false;
 
-                            Destroy(this.gameObject);
+                                Destroy(this.gameObject);
+                            }
+
+                            break;
+
                         }
 
-                        break;
-
-                    }
-
-                case eTypeRigSetup.motor:
-                    {
-                        if(_riggable.Enabled)
+                    case eTypeRigSetup.motor:
                         {
-                            Debug.Log("Motor Collision with Setup Spot");
+                            if (_riggable.Enabled)
+                            {
+                                Debug.Log("Motor Collision with Setup Spot");
 
-                            _riggable.SetRigging(other.gameObject, this.gameObject, offset);
+                                _riggable.SetRigging(other.gameObject, this.gameObject, offset);
 
-                            _riggable.RiggingObjectComplete(other.gameObject, _riggable.TypeRig);
+                                _riggable.RiggingObjectComplete(other.gameObject, _riggable.TypeRig);
 
-                            other.gameObject.GetComponent<sRigGear>().enabled = false;
+                                other.gameObject.GetComponent<sRigGear>().enabled = false;
 
-                            Destroy(this.gameObject);
+                                Destroy(this.gameObject);
+                            }
+
+                            break;
                         }
 
-                        break;
-                    }
-
-                case eTypeRigSetup.motorController:
-                    {
-
-                        if (_riggable.Enabled)
+                    case eTypeRigSetup.motorController:
                         {
-                            Debug.Log("Motor Collision with Setup Spot");
 
-                            _riggable.SetRigging(other.gameObject, this.gameObject, offset);
+                            if (_riggable.Enabled)
+                            {
+                                Debug.Log("Motor Collision with Setup Spot");
 
-                            _riggable.RiggingObjectComplete(other.gameObject, _riggable.TypeRig);
+                                _riggable.SetRigging(other.gameObject, this.gameObject, offset);
 
-                            other.gameObject.GetComponent<sRigGear>().enabled = false;
+                                _riggable.RiggingObjectComplete(other.gameObject, _riggable.TypeRig);
 
-                            Destroy(this.gameObject);
+                                other.gameObject.GetComponent<sRigGear>().enabled = false;
+
+                                Destroy(this.gameObject);
+                            }
+
+                            break;
                         }
+                }
+            }
 
-                        break;
-                    }
-            } 
+            else
+            {
+                Debug.Log("Wrong setup spot type");
+            }
+            
         }
     }
 
@@ -224,11 +232,11 @@ public class sRiggingSetupSpot : MonoBehaviour, iActionable
         {
             Debug.Log("Collision with player - checking tool");
 
-            // Checks to see if correct tool is held
-            if(_toolHandler.ReturnToolType() != null)
+            // Checks to see if there are any tools held
+            if(_toolHandler.ReturnToolHeldList() != null)
             {
-                // Correct tool
-                if (_toolHandler.ReturnToolType().typeOfTool == ToolTypeNeeded)
+                // Correct tool if true
+                if (_toolHandler.CheckIfHasTool(ToolTypeNeeded))
                 {
                     CanTriggerAction = true;
 

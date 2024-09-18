@@ -22,6 +22,7 @@ public class sCharacterActionController : MonoBehaviour
 
     public string popupControlText = "Left Click For Action";
 
+
     // Start is called before the first frame update
     void Start()
     {
@@ -77,7 +78,7 @@ public class sCharacterActionController : MonoBehaviour
         {
             if(_actionable.HasAction)
             {
-                soUI.ToggleControlsPopup(popupControlText, _collisionObj.transform.position + _actionable.ui_offset);
+                soUI.ToggleControlsPopup(popupControlText);
 
                 if (_collisionObj == toolObject)
                 {
@@ -148,7 +149,7 @@ public class sCharacterActionController : MonoBehaviour
             if(actionable == _actionable)
             {
                 if(actionable.HasAction)
-                soUI.ToggleControlsPopup(null, Vector3.zero);
+                soUI.ToggleControlsPopup(null);
 
                 //Debug.Log(_actionable.ToString() + "Actionable has excited trigger");
             }

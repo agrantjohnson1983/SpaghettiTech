@@ -232,7 +232,7 @@ MonoBehaviour:
   characterImage: {fileID: 4002265945578926390}
   characterNameText: {fileID: 3769032594945237097}
   characterStats: {fileID: 3044882718964664231}
-  costText: {fileID: 4369661907479448588}
+  costText: {fileID: 2956012759181866887}
   costToHire: 0
   soUI: {fileID: 11400000, guid: 2b96b6b1405722c48a474d361c95f00a, type: 2}
 --- !u!1 &2681407107927819924

@@ -41,7 +41,7 @@ public class sBox : sInteractive, iClickable
     // Start is called before the first frame update
     private void Awake()
     {
-        pModel.GetComponent<MeshRenderer>().material = materialBoxClosed;
+        //pModel.GetComponent<MeshRenderer>().material = materialBoxClosed;
 
         gm = GameManager.gm;
 
@@ -50,7 +50,7 @@ public class sBox : sInteractive, iClickable
 
     private void Update()
     {
-        if(!isEmpty && sPlayerCharacter.playerGlobal != null)
+        if(!isEmpty && GameManager.gm.ReturnCurrentPlayer() != null)
         DetectPlayer();
 
         if(ui_Ring)
@@ -79,11 +79,11 @@ public class sBox : sInteractive, iClickable
 
                 inventory.SetInventory(itemData.ToArray());
 
-                pModel.GetComponent<MeshRenderer>().material = materialBoxOpen;
+                //pModel.GetComponent<MeshRenderer>().material = materialBoxOpen;
 
                 textMPAbove.SetText("OPEN");
 
-                ui_Ring.GetComponentInChildren<MeshRenderer>().material.color = Color.yellow;
+                //ui_Ring.GetComponentInChildren<MeshRenderer>().material.color = Color.yellow;
 
                 ui_Text.SetActive(false);
                 ui_Img.SetActive(false);
@@ -103,8 +103,8 @@ public class sBox : sInteractive, iClickable
         isOpen = false;
         //base.StopAction(_actionObj);
         // switches back to closed color unless empty
-        if(!isEmpty)
-        pModel.GetComponent<MeshRenderer>().material = materialBoxClosed;
+        //if(!isEmpty)
+        //pModel.GetComponent<MeshRenderer>().material = materialBoxClosed;
 
         if (inventory != null)
         {
@@ -195,7 +195,7 @@ public class sBox : sInteractive, iClickable
     // this checks distance between the box and player and toggles on/off UI ring
     void DetectPlayer()
     {
-        if(Vector3.Distance(this.transform.position, sPlayerCharacter.playerGlobal.transform.position) < UI_ToggleDistance)
+        if(Vector3.Distance(this.transform.position, GameManager.gm.ReturnCurrentPlayer().transform.position) < UI_ToggleDistance)
         {
             isWithinOpenRange = true;
 

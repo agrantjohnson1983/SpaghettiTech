@@ -42,7 +42,7 @@ public class sHiringButton : MonoBehaviour
 
         characterStats.text = _data.characterStats;
 
-        costText.text = _data.costToHire.ToString();
+        costText.text = "$"+_data.costToHire.ToString();
 
         costToHire = _data.costToHire;
     }

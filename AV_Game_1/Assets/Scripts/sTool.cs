@@ -11,4 +11,5 @@ public class sTool : MonoBehaviour
 
     public GameObject toolModel;
 
+    public int numberOfHandsNeededToUse = 1;
 }

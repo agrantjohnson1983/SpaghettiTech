@@ -2,8 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class sCharacterGrabController : MonoBehaviour
+public class sCharacterGrabController : MonoBehaviour, iRequireHands
 {
+    sPlayerCharacter player;
+
     public SO_EventsUI soUI;
 
     GameObject interactiveObject;
@@ -18,20 +20,63 @@ public class sCharacterGrabController : MonoBehaviour
 
     float letGoDelayTime = 0f;
 
-    public float throwPower = 10f;
+    //public float throwPower = 10f;
 
     public Transform transformGrab;
 
     public string grabPopupText = "Press SPACE To Grab";
 
-    //FixedJoint joint;
+    public int _numberOfHandsNeeded;
+    public int NumberOfHandsNeeded
+    {
+        get
+        {
+            return _numberOfHandsNeeded;
+        }
 
-    //Transform oldTransform;
+        set
+        {
+            _numberOfHandsNeeded = value;
+        }
+    }
+
+    List<int> _handIndexList;
+
+    public List<int> HandIndexList
+    {
+        get
+        {
+            return _handIndexList;
+        }
+
+        set
+        {
+            _handIndexList = value;
+        }
+    }
+
+    public Sprite _handUseSprite;
+
+    public Sprite HandUseSprite
+    {
+        get
+        {
+            return _handUseSprite;
+        }
+
+        set
+        {
+            _handUseSprite = value;
+        }
+    }
 
     // Start is called before the first frame update
     void Start()
     {
+        player = GetComponent<sPlayerCharacter>();
         //joint = GetComponent<ConfigurableJoint>();
+
+        HandIndexList = new List<int>();
     }
 
     // Update is called once per frame
@@ -86,34 +131,76 @@ public class sCharacterGrabController : MonoBehaviour
 
             grabbable.OffGrab();
 
-            soUI.ToggleControlsPopup(grabPopupText, interactiveObject.transform.position + grabbable.ui_offset);
+            soUI.ToggleControlsPopup(null);
 
             grabbable = null;
             interactiveObject = null;
             isGrabbing = false;
-            soUI.TriggerConnectionHeldImage(null);
+            //soUI.TriggerConnectionHeldImage(null);
+
+            // Checks the whole hand array and sends the indexes to let go back to the player
+            for (int i = 0; i < HandIndexList.Count; i++)
+            {
+                // Resets Hand in player script
+                GameManager.gm.ReturnCurrentPlayer().ResetHand(HandIndexList.ToArray());
+            }
+
+            HandIndexList = null;
         }
     }
 
     void HandleGrabbing(GameObject _collisionObj)
     {
-        // Does quick check to see if grabbing so this doesn't change around
-
         if (_collisionObj.TryGetComponent<iGrabbable>(out iGrabbable _grabbable))
         {
             grabbable = _grabbable;
 
-            if(!isGrabbing)
-            soUI.ToggleControlsPopup(grabPopupText, _collisionObj.transform.position + grabbable.ui_offset);
+            bool bothHandsFree = true;
+            int[] _tempIndexArray = new int[1] { -1 };
+            
+            
+            if (!isGrabbing && bothHandsFree)
+            {               
+                _tempIndexArray = GameManager.gm.ReturnCurrentPlayer().CheckHands(NumberOfHandsNeeded);
+
+                for (int i = 0; i < _tempIndexArray.Length; i++)
+                {
+                    if (_tempIndexArray[i] < 0)
+                    {
+                        Debug.Log("Temp Index is too small at position " + i.ToString() + " with value of " + _tempIndexArray[i].ToString());
+                        bothHandsFree = false;
+                    }
+
+                    else
+                    {
+                        //HandIndexList.Add(_tempIndexArray[i]);
+                    }
+                }
+
+                if (!bothHandsFree)
+                {
+                    Debug.Log("Both hands not free");
+                }
+
+                // Sets grab UI text
+                soUI.ToggleControlsPopup(grabPopupText);
+            }
+
 
             // Checks for input to start Grab
-            if (!iGrabbable.IsGrabbed && !isGrabbing && Input.GetKey(KeyCode.Space))
+            if (!iGrabbable.IsGrabbed && !isGrabbing && Input.GetKey(KeyCode.Space) && bothHandsFree)
             {
                 grabbable.OnGrab();
 
                 isGrabbing = true;
 
-                soUI.ToggleControlsPopup(null, Vector3.zero);
+                //Debug.Log("Setting Hand to index of " + _tempIndex);
+
+                // This sets the hand in the current player script to used
+                GameManager.gm.ReturnCurrentPlayer().SetHand(HandUseSprite, _tempIndexArray);
+                HandIndexList = new List<int>(_tempIndexArray);
+
+                soUI.ToggleControlsPopup(null);
 
                 //oldTransform = _collisionObj.transform;
 
@@ -188,6 +275,12 @@ public class sCharacterGrabController : MonoBehaviour
             }
         
     }
+
+    public bool ReturnIsGrabbing()
+    {
+        return isGrabbing;
+    }
+
     // checks object held and triggers event ui to show connection held image
     void PlugHoldCheck(GameObject collisionObj)
     {
@@ -195,7 +288,7 @@ public class sCharacterGrabController : MonoBehaviour
         {
             //Debug.Log("Pluggable checked and firing UI event");
 
-            soUI.TriggerConnectionHeldImage(_pluggable.connectionSprite);
+            //soUI.TriggerItemHeldImage(_pluggable.connectionSprite);
         }
     }
 
@@ -217,7 +310,7 @@ public class sCharacterGrabController : MonoBehaviour
             {
                 //Debug.Log("Grabbable has exited trigger");
 
-                soUI.ToggleControlsPopup(null, Vector3.zero);
+                soUI.ToggleControlsPopup(null);
             }
         }
     }

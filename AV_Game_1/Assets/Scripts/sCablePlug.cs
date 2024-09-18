@@ -122,7 +122,7 @@ public class sCablePlug : sInteractive, iPluggable
             cableSegmentHandler.ConnectionComplete();
         }
 
-        sPlayerCharacter.playerGlobal.ReturnGrabController().GrabReset();
+        GameManager.gm.ReturnCurrentPlayer().ReturnGrabController().GrabReset();
         //cable.ConnectionComplete(this, _transform);
     }
 

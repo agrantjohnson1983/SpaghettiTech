@@ -43,10 +43,6 @@ public class sMotorController : sRigGear
             eventsUI.ToggleMotorControlDisplay(true);
     }
 
-    private void OnTriggerStay(Collider other)
-    {
-
-    }
 
     private void OnTriggerExit(Collider other)
     {

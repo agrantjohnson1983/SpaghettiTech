@@ -18,8 +18,6 @@ public class sCable : sInteractive
 
     int activeLineIndex = 0;
 
-    sPlayerCharacter player;
-
     Transform playerTransform;
 
     Vector3 startingPos;
@@ -35,10 +33,6 @@ public class sCable : sInteractive
     // Start is called before the first frame update
     void Start()
     {
-        player = sPlayerCharacter.playerGlobal;
-
-        playerTransform = player.transform;
-
         //rb = GetComponent<Rigidbody>();
 
         collider = GetComponent<Collider>();
@@ -123,7 +117,7 @@ public class sCable : sInteractive
     {
         Debug.Log("Cable connection complete - cable is now connected at location " + _tranform.position.ToString());
 
-        sPlayerCharacter.playerGlobal.ReturnGrabController().GrabReset();
+        GameManager.gm.ReturnCurrentPlayer().ReturnGrabController().GrabReset();
 
         collider.enabled = false;
 

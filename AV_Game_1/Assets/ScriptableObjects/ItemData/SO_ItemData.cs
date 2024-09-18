@@ -8,6 +8,8 @@ public class SO_ItemData : ScriptableObject
 {
     public int index;
 
+    public int numberOfHandsNeeded;
+
     public string itemName;
 
     public Sprite itemSprite;

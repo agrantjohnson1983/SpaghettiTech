@@ -220,7 +220,7 @@ CapsuleCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   m_Radius: 0.5
-  m_Height: 2.17
+  m_Height: 2.22
   m_Direction: 2
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!136 &1590008251446551018
@@ -232,8 +232,8 @@ CapsuleCollider:
   m_GameObject: {fileID: 7353685729362514316}
   m_Material: {fileID: 0}
   m_IsTrigger: 1
-  m_Enabled: 1
-  m_Radius: 0.81
+  m_Enabled: 0
+  m_Radius: 0.66
   m_Height: 2.53
   m_Direction: 2
   m_Center: {x: 0, y: 0, z: 0}
@@ -245,7 +245,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7353685729362514316}
   serializedVersion: 2
-  m_Mass: 1
+  m_Mass: 5
   m_Drag: 0
   m_AngularDrag: 0.05
   m_UseGravity: 1
@@ -268,6 +268,7 @@ MonoBehaviour:
   eventsUI: {fileID: 11400000, guid: 2b96b6b1405722c48a474d361c95f00a, type: 2}
   _typeRig: 2
   _grabTriggersAction: 0
+  _UI_offset: {x: 0, y: 0, z: 0}
   motorRaiseTime: 5
   motorRaiseSpeed: 1
 --- !u!120 &7353685729362514304

@@ -6,11 +6,15 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager gm;
 
+    public SO_EventsUI soUI;
+
     public GameObject pCanvasGameplay;
     public canvasGameplay canvasGameplay;
 
     public GameObject pCanvasWorldSpace;
     Canvas canvasWorldSpace;
+
+    sPlayerCharacter currentPlayer;
 
     List<sPlayerCharacter> playerCharacters;
 
@@ -55,6 +59,8 @@ public class GameManager : MonoBehaviour
     {
         Debug.Log("Switching Player");
 
+        //currentPlayer.ReturnGrabController().GrabReset();
+
         playerCharacters[activePlayerIndex].CharacterControlsToggle(false);
 
         activePlayerIndex+=_increase;
@@ -73,6 +79,11 @@ public class GameManager : MonoBehaviour
 
         canvasWorldSpace.worldCamera = Camera.main;
 
+        //soUI.ToggleControlsPopup(grabPopupText, interactiveObject.transform.position + grabbable.ui_offset);
+        soUI.ToggleControlsPopup(null);
+
+
+        
     }
 
     /*
@@ -109,5 +120,15 @@ public class GameManager : MonoBehaviour
     public List<sPlayerCharacter> ReturnPlayerList()
     {
         return playerCharacters;
+    }
+
+    public void SetCurrentPlayer(sPlayerCharacter _playerCharacter)
+    {
+        currentPlayer = _playerCharacter;
+    }
+
+    public sPlayerCharacter ReturnCurrentPlayer()
+    {
+        return currentPlayer;
     }
 }

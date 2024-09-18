@@ -5,62 +5,66 @@ using UnityEngine.UI;
 
 public class canvasGameplay : MonoBehaviour
 {
-    public Text textInstructionsRigging, textInstructionsAudio, textInstructionsVideo, textInstructionsLighting;
-
-    public string startingInstructionsRigging, startingInstructionsAudio, startingInstructionsVideo, startingInstructionsLighting;
-
+    // MOVE THIS TO SPAWN OVER ITEMS THAT HAVE TASK GAUGES
     public Image taskGauge;
 
     public SO_EventsUI soUI;
 
+    // CHARACTER STUFF
     public GameObject characterPanel;
-
     public Image characterImage;
-
     public Image characterSymbolImage;
-
     public Text characterName;
 
-    //public Text characterType;
+    //HAND HELD STUFF
+    public Sprite[] handImagesEmpty;
+    public Image[] handBGImages;
+    public Image[] handImages;
+    //public GameObject handRight, handLeft;
+    //public Sprite spriteHandRight, spriteHandLeft;
+    //public Transform connectionPlatesTransform;
 
-    public Image connectionTypeHeld, toolTypeHeld;
+    // INSTRUCTIONS STUFF
 
-    public GameObject connectionTypeObj, toolTypeObj;
+    public Text textInstructionsRigging, textInstructionsAudio, textInstructionsVideo, textInstructionsLighting;
+    public string startingInstructionsRigging, startingInstructionsAudio, startingInstructionsVideo, startingInstructionsLighting;
 
+    // BLUEPRINTS STUFF
     public GameObject blueprintRiggingInstructions, blueprintRiggingInstructinsMinimized;
     public GameObject blueprintAudioInstructions, blueprintAudioInstructinsMinimized;
     public GameObject blueprintVideoInstructions, blueprintVideoInstructinsMinimized;
     public GameObject blueprintLightingInstructions, blueprintLightingInstructinsMinimized;
 
+    // BLUEPRINTS STUFF
     public Text blueprintRiggingButtonText, blueprintAudioButtonText, blueprintVideoButtonText, blueprintLightingButtonText;
-
     bool blueprintRiggingOn, blueprintAudioOn, blueprintVideoOn, blueprintLightingOn = true;
-
     public GameObject blueprintsButton, blueprintsTut, blueprintsSetupSwitcher;
-
     public Text blueprintSetupText;
-
     int activeBlueprintIndex = 0;
-
     public string[] blueprintTextName;
-
     bool blueprintsOpen = false;
 
+    // This is the controls for a Motor Controller that spawns when the motor controller is set
     public GameObject motorController;
 
+    // CONTROLS POPUP - This is used mostly for the grabbable and actionable interfaces.
     public GameObject popupControls;
     public Text popupControlsText;
     public Vector3 popupControlsOffset;
 
+    // HIRING STUFF
     public GameObject hiringPanel, hiringButton;
-
     bool isHiring = false;
 
-    public Transform connectionPlatesTransform;
-
+    // MONEY STUFF
     public float startingMoney = 1000;
     float currentMoney;
     public Text currentMoneyText;
+
+    // TOOLBELT STUFF
+
+    public GameObject toolbelt, toolbeltGrid, toolbeltArrow;
+    public Image toolHeld;
 
     private void OnEnable()
     {
@@ -70,9 +74,11 @@ public class canvasGameplay : MonoBehaviour
         soUI.instructionsLightingEvent.AddListener(ChangeLightingInstructions);
 
         soUI.taskTimeEvent.AddListener(GoTaskGauge);
+
         soUI.characterChangeEvent.AddListener(ChangeCharacter);
-        soUI.connectionHeldImage.AddListener(ChangeConnectionHeldImage);
-        soUI.toolHeldImage.AddListener(ChangeToolHeldImage);
+
+        soUI.itemHeldImage.AddListener(ChangeHandImage);
+
         soUI.motorControlDisplay.AddListener(ToggleMotorController);
 
         soUI.controlsPopup.AddListener(TogglePopup);
@@ -89,8 +95,7 @@ public class canvasGameplay : MonoBehaviour
 
         soUI.taskTimeEvent.RemoveListener(GoTaskGauge);
         soUI.characterChangeEvent.RemoveListener(ChangeCharacter);
-        soUI.connectionHeldImage.RemoveListener(ChangeConnectionHeldImage);
-        soUI.toolHeldImage.RemoveListener(ChangeToolHeldImage);
+        soUI.itemHeldImage.RemoveListener(ChangeHandImage);
         soUI.motorControlDisplay.RemoveListener(ToggleMotorController);
 
         soUI.controlsPopup.RemoveListener(TogglePopup);
@@ -103,10 +108,11 @@ public class canvasGameplay : MonoBehaviour
     {
         taskGauge.fillAmount = 0;
 
-        ChangeConnectionHeldImage(null);
-        ChangeToolHeldImage(null);
+        //ChangeHandImage(null, true);
+        //ChangeHandImage(null, false);
 
-        TogglePopup(null, Vector3.zero);
+        TogglePopup(null);
+        //ChangeHandImage(null, null);
 
         //hiringPanel.SetActive(false);
 
@@ -114,16 +120,12 @@ public class canvasGameplay : MonoBehaviour
 
         currentMoney = startingMoney;
         currentMoneyText.text = currentMoney.ToString();
+
+        toolbeltGrid.SetActive(false);
+        toolbeltArrow.SetActive(false);
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
-
-    void TogglePopup(string _popupText, Vector3 _pos)
+    void TogglePopup(string _popupText)
     {
         Vector3 playerPos;
 
@@ -134,7 +136,7 @@ public class canvasGameplay : MonoBehaviour
 
         else
         {
-            playerPos = sPlayerCharacter.playerGlobal.transform.position;
+            playerPos = GameManager.gm.ReturnCurrentPlayer().transform.position;
             popupControls.SetActive(true);
             popupControlsText.text = _popupText;
             popupControlsText.gameObject.transform.position = Camera.main.WorldToScreenPoint(playerPos + popupControlsOffset);
@@ -149,36 +151,33 @@ public class canvasGameplay : MonoBehaviour
         characterSymbolImage.sprite = _characterData.characterSymbolSprite;
     }
 
-    void ChangeConnectionHeldImage(Sprite _sprite)
+    // THis is used to change the image of the hand to reprsent what the hand is doing
+    void ChangeHandImage(Sprite _itemImage, int[] _indexArray)
     {
-        if(_sprite != null)
-        {
-            //Debug.Log("Setting New Connection Sprite");
+        //Debug.Log("Canvas Hand Image changing at index of " + _indexArray[i].ToString() + " with sprite named " + _itemImage.name.ToString());
 
-            connectionTypeObj.SetActive(true);
-            connectionTypeHeld.sprite = _sprite;
-        }
-
-        else
+        for (int i = 0; i < _indexArray.Length; i++)
         {
-            connectionTypeObj.SetActive(false);
-        }
+            if (_itemImage != null)
+            {
+                handImages[_indexArray[i]].sprite = _itemImage;
+                handBGImages[_indexArray[i]].color = Color.yellow;
+            }
+                
+
+            else
+            {
+                handImages[_indexArray[i]].sprite = handImagesEmpty[_indexArray[i]];
+                handBGImages[_indexArray[i]].color = Color.green;
+            }
+                
+        }  
     }
 
-    void ChangeToolHeldImage(Sprite _sprite)
+    // This gets called when a player clicks a item in the hands UI
+    public void OnItemClick(int _index)
     {
-        if(_sprite != null)
-        {
-            Debug.Log("Setting New Connection Sprite");
-
-            toolTypeObj.SetActive(true);
-            toolTypeHeld.sprite = _sprite;
-        }
-
-        else
-        {
-            toolTypeObj.SetActive(false);
-        }
+        Debug.Log("Item image " + _index + " triggered");
     }
 
     void ChangeRiggingInstructions(string _instructions)
@@ -344,16 +343,17 @@ public class canvasGameplay : MonoBehaviour
         blueprintsButton.SetActive(!isHiring);
         characterPanel.SetActive(!isHiring);
 
+        toolbelt.SetActive(!isHiring);
+
         GameManager.gm.ToggleHiringCamera(isHiring);
 
         if (!isHiring)
         {
             
         }
-
-        
     }
 
+    // This turns on and off the blueprints
     public void ToggleBlueprintOpen()
     {
         blueprintsOpen = !blueprintsOpen;
@@ -371,8 +371,11 @@ public class canvasGameplay : MonoBehaviour
 
         hiringButton.SetActive(!blueprintsOpen);
         characterPanel.SetActive(!blueprintsOpen);
+        toolbelt.SetActive(!blueprintsOpen);
+
     }
 
+    // This changes between the blueprint setups when the blueprints are open
     public void SwitchBlueprint(bool _isLeftButton)
     {
         sBlueprintsManager.blueprintManagerGlobal.SwitchBlueprint(_isLeftButton);
@@ -413,10 +416,24 @@ public class canvasGameplay : MonoBehaviour
         blueprintSetupText.text = blueprintTextName[activeBlueprintIndex];
     }
 
+    // This takes in an amount and adds it to the money
     void ChangeMoney(float _amount)
     {
         currentMoney += _amount;
 
         currentMoneyText.text = currentMoney.ToString();
+    }
+
+    public void ToggleToolbelt(bool _isOpen)
+    {
+        Debug.Log("Toggling the toolbelt");
+
+        toolbeltGrid.SetActive(_isOpen);
+        toolbeltArrow.SetActive(_isOpen);
+    }
+ 
+    public void ChangeToolImage(Sprite _sprite)
+    {
+        toolHeld.sprite = _sprite;
     }
 }

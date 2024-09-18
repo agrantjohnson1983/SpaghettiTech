@@ -13,18 +13,18 @@ public class SO_EventsUI : ScriptableObject
 
     public UnityEvent<SO_CharacterData> characterChangeEvent;
 
-    public UnityEvent<Sprite> connectionHeldImage;
-
-    public UnityEvent<Sprite> toolHeldImage;
+    public UnityEvent<Sprite, int[]> itemHeldImage;
 
     public UnityEvent<bool> motorControlDisplay;
 
     public UnityEvent<bool> motorControlTrigger;
     public UnityEvent motorControlStop;
 
-    public UnityEvent<string, Vector3> controlsPopup;
+    public UnityEvent<string> controlsPopup;
 
     public UnityEvent<float> characterHire;
+
+    public UnityEvent<Sprite> toolHeldImage;
 
     private void OnEnable()
     {
@@ -58,14 +58,9 @@ public class SO_EventsUI : ScriptableObject
             characterChangeEvent = new UnityEvent<SO_CharacterData>();
         }
         
-        if(connectionHeldImage == null)
+        if(itemHeldImage == null)
         {
-            connectionHeldImage = new UnityEvent<Sprite>();
-        }
-
-        if(toolHeldImage == null)
-        {
-            toolHeldImage = new UnityEvent<Sprite>();
+            itemHeldImage = new UnityEvent<Sprite, int[]>();
         }
 
         if(motorControlDisplay == null)
@@ -85,12 +80,17 @@ public class SO_EventsUI : ScriptableObject
 
         if(controlsPopup == null)
         {
-            controlsPopup = new UnityEvent<string, Vector3>();
+            controlsPopup = new UnityEvent<string>();
         }
 
         if(characterHire == null)
         {
             characterHire = new UnityEvent<float>();
+        }
+
+        if(toolHeldImage == null)
+        {
+            toolHeldImage = new UnityEvent<Sprite>();
         }
     }
 
@@ -125,14 +125,9 @@ public class SO_EventsUI : ScriptableObject
         characterChangeEvent.Invoke(_characterData);
     }
 
-    public void TriggerConnectionHeldImage(Sprite _sprite)
+    public void TriggerItemHeldImage(Sprite _sprite, int[] _indexArray)
     {
-        connectionHeldImage.Invoke(_sprite);
-    }
-
-    public void TriggerToolHeldImage(Sprite _sprite)
-    {
-        toolHeldImage.Invoke(_sprite);
+        itemHeldImage.Invoke(_sprite, _indexArray);
     }
 
     public void ToggleMotorControlDisplay(bool _controllerOn)
@@ -150,13 +145,18 @@ public class SO_EventsUI : ScriptableObject
         motorControlStop.Invoke();
     }
 
-    public void ToggleControlsPopup(string _popupText, Vector3 _pos)
+    public void ToggleControlsPopup(string _popupText)
     {
-        controlsPopup.Invoke(_popupText, _pos);
+        controlsPopup.Invoke(_popupText);
     }
 
     public void TriggerCharacterHire(float _cost)
     {
         characterHire.Invoke(_cost);
+    }
+
+    public void TriggerToolChange(Sprite _sprite)
+    {
+        toolHeldImage.Invoke(_sprite);
     }
 }
