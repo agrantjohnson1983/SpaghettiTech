@@ -22,6 +22,14 @@ public interface iGrabbable
         set;
     }
 
+
+    // Use this to toggle the grab system on/off externally from the grab controller, like when a connection is connected, etc.
+    public bool CanBeGrabbed
+    {
+        get;
+        set;
+    }
+
     void OnGrab();
 
     void OffGrab();

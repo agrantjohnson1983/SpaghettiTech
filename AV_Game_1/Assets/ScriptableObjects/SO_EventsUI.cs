@@ -24,7 +24,7 @@ public class SO_EventsUI : ScriptableObject
 
     public UnityEvent<float> characterHire;
 
-    public UnityEvent<Sprite> toolHeldImage;
+    public UnityEvent<SO_ItemData> toolHeldImage;
 
     private void OnEnable()
     {
@@ -90,7 +90,7 @@ public class SO_EventsUI : ScriptableObject
 
         if(toolHeldImage == null)
         {
-            toolHeldImage = new UnityEvent<Sprite>();
+            toolHeldImage = new UnityEvent<SO_ItemData>();
         }
     }
 
@@ -155,8 +155,8 @@ public class SO_EventsUI : ScriptableObject
         characterHire.Invoke(_cost);
     }
 
-    public void TriggerToolChange(Sprite _sprite)
+    public void TriggerToolChange(SO_ItemData _itemData)
     {
-        toolHeldImage.Invoke(_sprite);
+        toolHeldImage.Invoke(_itemData);
     }
 }

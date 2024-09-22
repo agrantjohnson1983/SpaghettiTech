@@ -8,6 +8,8 @@ public class sInputChannel : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
 {
     int index;
 
+    int channelNumber;
+
     bool isConnected;
 
     public Image channelImage;
@@ -31,9 +33,9 @@ public class sInputChannel : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
         //connectionAvailablePanel = uConnectionsAvailablePanel.connectionAvailablePanel;
     }
 
-    public void SetChannel(int _index, Sprite _connectedSprite, Sprite _disconnectedSprite, string _channelName, uConnectionsAvailablePanel _connectionsAvailablePanel)
+    public void SetChannel(int _channelNumber, Sprite _connectedSprite, Sprite _disconnectedSprite, string _channelName, uConnectionsAvailablePanel _connectionsAvailablePanel)
     {
-        index = _index;
+        channelNumber = _channelNumber;
 
         connectedImage = _connectedSprite;
 
@@ -44,6 +46,11 @@ public class sInputChannel : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
         channelImage.sprite = disconnectedImage;
 
         connectionAvailablePanel = _connectionsAvailablePanel;
+    }
+
+    public void SetIndex(int _index)
+    {
+        index = _index;
     }
 
     public void OnClick()
@@ -59,19 +66,23 @@ public class sInputChannel : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
 
             Debug.Log("Mouse Click Release When Selected");
 
-            channelImage.color = Color.yellow;
+            if(!isConnected)
+            {
+                isConnected = true;
 
-            connectionPlate.OnClick(index);
+                channelImage.color = Color.yellow;
 
-            isConnected = true;
+                connectionPlate.OnClick(connectionAvailablePanel.ReturnTempIndex());
+            } 
         }
     }
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        Debug.Log("Pointer Enter Triggered");
+        Debug.Log("Pointer Enter Triggered on channel ");
 
-        if(connectionAvailablePanel.ReturnIsClicking() == true)
+        // Sets a channel to green if a cursor is highlighted over it
+        if(connectionAvailablePanel.ReturnIsClicking() == true && !isConnected)
         {
             channelImage.color = Color.green;
             isBeingSelected = true;
@@ -79,7 +90,7 @@ public class sInputChannel : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
 
         else
         {
-            Debug.Log("Not Clicking");
+            //Debug.Log("Not Clicking");
         }
     }
 
@@ -87,12 +98,13 @@ public class sInputChannel : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
 
     public void OnPointerExit(PointerEventData eventData)
     {
+        Debug.Log("Pointer Exit Triggered");
+        // When cursor fully exits and the channel is not connected
         if(eventData.fullyExited && !isConnected)
         {
             channelImage.color = Color.white;
             isBeingSelected = false;
-        }
-        
+        } 
     }
 
     public void OnPointerDown(PointerEventData PointerEventData)
@@ -101,10 +113,22 @@ public class sInputChannel : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
 
         if(isConnected)
         {
+            isConnected = false;
+
             channelImage.color = Color.white;
 
-            connectionPlate.OnClickDisconnect(index);
+            // TODO 
+
+            // Disconnect channel here
         }
+
+        // if connections is already connected then it gets disconnected
+        //if(isConnected)
+        //{
+        //    channelImage.color = Color.white;
+
+        //    connectionPlate.OnClickDisconnect(index);
+        //}
 
         //channelImage.color = Color.green;
     }

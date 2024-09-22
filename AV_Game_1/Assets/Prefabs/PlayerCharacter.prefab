@@ -678,7 +678,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   transformToolbelt: {fileID: 1428646127320412927}
-  eventsUI: {fileID: 11400000, guid: 2b96b6b1405722c48a474d361c95f00a, type: 2}
+  soUI: {fileID: 11400000, guid: 2b96b6b1405722c48a474d361c95f00a, type: 2}
+  _numberOfHandsNeeded: 0
+  _handUseSprite: {fileID: 0}
 --- !u!114 &4579584320167969265
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -49,3 +49,4 @@ MonoBehaviour:
   pCableOut: {fileID: 4774520748497140430, guid: dd230e4a465b41742a8ed25e15b229ba, type: 3}
   numerOfSegments: 20
   connectionCompleteMaterial: {fileID: 2100000, guid: 444ab64ad61724c4299878e7d27f14ae, type: 2}
+  connectionHalfMaterial: {fileID: 2100000, guid: 8d7b5c4f6f36fc649a6756747661b6f5, type: 2}

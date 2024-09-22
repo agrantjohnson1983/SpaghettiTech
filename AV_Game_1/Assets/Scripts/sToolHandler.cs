@@ -17,9 +17,7 @@ public class sToolHandler : MonoBehaviour, iRequireHands
     List<sTool> toolHeldList;
 
 
-
     // Hands stuff
-
     public int _numberOfHandsNeeded;
     public int NumberOfHandsNeeded
     {
@@ -55,7 +53,7 @@ public class sToolHandler : MonoBehaviour, iRequireHands
     {
         get
         {
-            return toolItemData.itemSprite;
+            return _handUseSprite;
         }
 
         set { }
@@ -108,7 +106,14 @@ public class sToolHandler : MonoBehaviour, iRequireHands
 
     public void DropTool(int _index)
     {
-        Instantiate(toolHeldList[_index].toolModel);
+        // Spawns tool model
+        Instantiate(toolHeldList[_index].itemData.prefabItem);
+
+        // Triggers UI change
+        soUI.TriggerToolChange(toolHeldList[_index].itemData);
+
+        // Removes tool from list
+        toolHeldList.RemoveAt(_index);
     }
 
     private void OnTriggerEnter(Collider other)
@@ -116,7 +121,11 @@ public class sToolHandler : MonoBehaviour, iRequireHands
         if(other.gameObject.TryGetComponent<sTool>(out sTool _tool))
         {
             bool handFree = true;
-            int[] _tempIndexArray = new int[1] { -1 };
+            int[] _tempIndexArray;// = new int[NumberOfHandsNeeded];
+
+            NumberOfHandsNeeded = _tool.itemData.numberOfHandsNeeded;
+            HandUseSprite = _tool.itemData.itemSprite;
+            toolItemData = _tool.itemData;
 
             _tempIndexArray = GameManager.gm.ReturnCurrentPlayer().CheckHands(NumberOfHandsNeeded);
             int handCounter = 0;
@@ -147,28 +156,33 @@ public class sToolHandler : MonoBehaviour, iRequireHands
             }
 
             // has no tool and grabs a tool - and has hand free
-            if (toolItemData == null  && handFree)
+            if (toolItemData != null  && handFree)
             {
-                    
 
+                //toolItemData = _tool.itemData;
                 // Sets grab UI text
                 //soUI.ToggleControlsPopup(grabPopupText, _collisionObj.transform.position + grabbable.ui_offset);
 
-                GameManager.gm.ReturnCurrentPlayer().SetHand(HandUseSprite, _tempIndexArray);
-                HandIndexList = new List<int>(_tempIndexArray);
+                //GameManager.gm.ReturnCurrentPlayer().SetHand(HandUseSprite, _tempIndexArray);
+                //HandIndexList = new List<int>(_tempIndexArray);
 
-                toolItemData = _tool.itemData;
+                Debug.Log("Tool Acquired to belt");
 
                 toolHeldList.Add(_tool);
 
-                toolObj = other.gameObject;
+                soUI.TriggerToolChange(toolItemData);
+
+                Destroy(other.gameObject);
+
+                //toolObj = other.gameObject;
 
                 //eventsUI.TriggerItemHeldImage(_tool.itemData.itemSprite);
                 //GameManager.gm.ReturnCurrentPlayer().CheckHands(toolItemData.itemSprite, toolItemData.numberOfHandsNeeded);
 
-                _tool.toolModel.SetActive(false);
+                //_tool.itemData.prefabItem.SetActive(false);
 
-                toolObj.transform.parent = transformToolbelt;
+
+                //toolObj.transform.parent = transformToolbelt;
                 //other.gameObject.SetActive(false);
                 //Destroy(other.gameObject);
             }

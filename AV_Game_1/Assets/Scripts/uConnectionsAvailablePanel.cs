@@ -19,6 +19,9 @@ public class uConnectionsAvailablePanel : MonoBehaviour
     GameObject connectionClickedObj;
 
     LineRenderer lr;
+
+    List<LineRenderer> lineRendererList;
+
     Vector3 startPos;
     Vector3 endPos;
     Camera cam;
@@ -27,6 +30,8 @@ public class uConnectionsAvailablePanel : MonoBehaviour
     Vector3 camOffset = new Vector3(0, 0, 10);
     bool isClickingConnection = false;
 
+    int tempClickedIndex = -1;
+     
     private void Awake()
     {
         //connectionAvailablePanel = this;
@@ -38,7 +43,10 @@ public class uConnectionsAvailablePanel : MonoBehaviour
         lr = sConnectionLineRenderer.lineRender.lr;
         lr.enabled = false;
         cam = Camera.main;
-        connectionsAvailableList = new List<GameObject>();
+        
+        //connectionsAvailableList = new List<GameObject>();
+
+        lineRendererList = new List<LineRenderer>();
     }
 
     // Update is called once per frame
@@ -58,18 +66,13 @@ public class uConnectionsAvailablePanel : MonoBehaviour
         connectionPlate = _plate;
     }
 
-    public void SetConnectionsAvailable(GameObject[] _pluggableObjects)
+    public void SetConnectionsAvailable(List<GameObject> _pluggableObjects)
     {
-        DestroyAllButtons();
-
-        if(connectionsAvailableList == null)
-        connectionsAvailableList = new List<GameObject>();
-
-        else
-        {
-            if(connectionsAvailableList.Count > 0)
+            if(connectionsAvailableList != null)
             {
-                for (int i = 1; i < _pluggableObjects.Length; i++)
+                Debug.Log("More than 1 connection - adding to list with list count of " + connectionsAvailableList.Count);
+
+                for (int i = 1; i < _pluggableObjects.Count; i++)
                 {
                     uButtonConnectionAvailable connectionButton;
 
@@ -78,12 +81,18 @@ public class uConnectionsAvailablePanel : MonoBehaviour
                     connectionButton = connectionsAvailableList[i].gameObject.GetComponent<uButtonConnectionAvailable>();
 
                     connectionButton.SetConnection(_pluggableObjects[i].GetComponent<iPluggable>().connectionSprite, i + 1.ToString(), i);
+
+                    //connectionButton.SetI
                 }
             }
 
             else
             {
+                Debug.Log("1st connection available spawnning");// - adding to list with list count of " + connectionsAvailableList.Count);
+
                 uButtonConnectionAvailable connectionButton;
+
+                connectionsAvailableList = new List<GameObject>();
 
                 connectionsAvailableList.Add(Instantiate(pButtonConnectionAvailable, connectionsGridTransform));
 
@@ -91,39 +100,37 @@ public class uConnectionsAvailablePanel : MonoBehaviour
 
                 connectionButton.SetConnection(_pluggableObjects[0].GetComponent<iPluggable>().connectionSprite, 0 + 1.ToString(), 0);
             }
-        }
-
-        
     }
 
-    public void DestroyAllButtons()
+    // This Gets called when an available connection is clicked on an available channel.  Changes available connection color, etc.
+    public void SetButtonConnected(int _index)
     {
-        if(connectionsAvailableList != null)
-        {
-            for (int i = 0; i < connectionsAvailableList.Count - 1; i++)
-            {
-                Destroy(connectionsAvailableList[i].gameObject);
-            }
-        }
-        
+        connectionsAvailableList[_index].GetComponent<uButtonConnectionAvailable>().OnChannelClick();
     }
 
     public void OnConnectionClick(int _index)
     {
-        Debug.Log("Button Click at index of:" + _index);
+        Debug.Log("Button Click at index of: " + _index + ".  Connections available list has count of: " + connectionsAvailableList.Count);
 
         isClickingConnection = true;
 
-        Debug.Log("Triggering " + connectionsAvailableList[_index].name);
+        tempClickedIndex = _index;
+
+        Debug.Log("Triggering " + connectionsAvailableList[_index].gameObject.name);
 
         connectionClickedObj = connectionsAvailableList[_index];
+    }
+
+    public int ReturnTempIndex()
+    {
+        return tempClickedIndex;
     }
 
     void LineHandler()
     {
            if(lr.enabled == false)
             {
-            Debug.Log("Starting Line");
+            //Debug.Log("Starting Line");
             //lr = gameObject.AddComponent<LineRenderer>();
 
             lr.enabled = true;
@@ -163,7 +170,7 @@ public class uConnectionsAvailablePanel : MonoBehaviour
 
             lr.SetPosition(1, endPos);
 
-            Debug.Log("Holding Line");
+            //Debug.Log("Holding Line");
         }
 
         if(Input.GetMouseButtonUp(0))

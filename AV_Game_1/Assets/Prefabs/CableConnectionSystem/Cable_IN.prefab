@@ -440,10 +440,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   uiEvents: {fileID: 11400000, guid: 2b96b6b1405722c48a474d361c95f00a, type: 2}
   _taskTime: 0
-  _toolTypeNeeded: 0
+  _toolTypeNeeded: 1
   textMPAbove: {fileID: 0}
   itemTextMP: []
   textItem: 
+  _UI_offset: {x: 0, y: 0, z: 0}
   _connectionSprite: {fileID: 21300000, guid: 5c0a4a20d4dc4eb4780931bedf000e85, type: 3}
-  isInput: 1
+  _isInput: 1
   typePlug: 0

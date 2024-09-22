@@ -13,6 +13,12 @@ public class sRigGear : MonoBehaviour, iRiggable, iGrabbable
     bool _isSet = false;
 
     public bool _grabTriggersAction;
+    
+    public bool CanBeGrabbed
+    {
+        get;
+        set;
+    }
 
     bool enabled = true;
 
@@ -109,6 +115,11 @@ public class sRigGear : MonoBehaviour, iRiggable, iGrabbable
         }
     }
     // Start is called before the first frame update
+
+    private void Start()
+    {
+        CanBeGrabbed = true;
+    }
 
     // Update is called once per frame
 

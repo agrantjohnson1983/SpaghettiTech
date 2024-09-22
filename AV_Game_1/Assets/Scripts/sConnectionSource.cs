@@ -22,7 +22,7 @@ public class sConnectionSource : MonoBehaviour
     uConnectionPlate connectionPlate;
     uConnectionsAvailablePanel connectionsAvailablePlate;
 
-    public List<GameObject> pluggableAvailableList;
+    public List<GameObject> pluggableList;
 
     Rigidbody rb;
 
@@ -33,7 +33,7 @@ public class sConnectionSource : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        pluggableAvailableList = new List<GameObject>();
+        pluggableList = new List<GameObject>();
         //numberOfPlugsOpen = plugInLocations.Length;
 
         SpawnConnectionPlate();
@@ -70,6 +70,7 @@ public class sConnectionSource : MonoBehaviour
         connectionsAvailablePlate.gameObject.SetActive(false);
 
         connectionPlate.SetConnectionsAvailablePanel(connectionsAvailablePlate);
+
         connectionsAvailablePlate.SetConnectionPlate(connectionPlate);
     }
 
@@ -85,9 +86,13 @@ public class sConnectionSource : MonoBehaviour
     }
 
     // When a connection is clicked from connection plate - turns connection plate off
-    public void OnConnectionClick()
+    public void OnConnectionClick(int _index)
     {
-        Debug.Log("Power is Connected");
+        Debug.Log("Power is Connected to source");
+
+        //pluggableList[_index]
+
+        // TO DO - Set all the segments of a cable to yellow if half connected
 
         //connectionPlate.gameObject.SetActive(false);
     }
@@ -104,14 +109,18 @@ public class sConnectionSource : MonoBehaviour
         {
             if(_pluggable.IsInput)
             {
+                Debug.Log("Input connection detected");
+
                 // Checks for dupes in pluggable list
                 bool _isThereADupe = false;
 
-                if (pluggableAvailableList.Count > 0)
+                if (pluggableList.Count > 1)
                 {
-                    for (int i = 0; i < pluggableAvailableList.Count - 1; i++)
+                    Debug.Log("Checking for dupes");
+
+                    for (int i = 0; i < pluggableList.Count; i++)
                     {
-                        if (pluggableAvailableList[i].GetComponent<iPluggable>() == _pluggable)
+                        if (pluggableList[i].GetComponent<iPluggable>() == _pluggable)
                         {
                             Debug.Log("Dupe found!");
                             _isThereADupe = true;
@@ -121,18 +130,36 @@ public class sConnectionSource : MonoBehaviour
                     // if no dupe then can be added to pluggables list
                     if (_isThereADupe == false)
                     {
-                        Debug.Log("Adding Pluggable" + _pluggable.ToString() + "to List");
+                        Debug.Log("No dupe found - Adding Pluggable " + _pluggable.ToString() + " to pluggable available list");
+
+                        // Connects joint to plug securing it's position 
                         ConnectPlugJoint(collision.gameObject);
-                        pluggableAvailableList.Add(collision.gameObject);
+
+                        // adds plug to list of plugs available
+                        pluggableList.Add(collision.gameObject);
+
+                        // sets plug to available for plugin
                         _pluggable.SetPlugAvailable(this.gameObject, true);
+                    }
+
+                    else
+                    {
+                        Debug.Log("Dupe was found - doing nothing");
                     }
                 }
 
                 else
                 {
                     Debug.Log("First Pluggable " + _pluggable.ToString() + " added to List");
+
+                    // Connects joint to plug securing it's position 
                     ConnectPlugJoint(collision.gameObject);
-                    pluggableAvailableList.Add(collision.gameObject);
+
+                    // adds plug to list of plugs available
+                    pluggableList = new List<GameObject>();
+                    pluggableList.Add(collision.gameObject);
+
+                    // sets plug to available for plugin
                     _pluggable.SetPlugAvailable(this.gameObject, true);
                 }
             }
@@ -141,6 +168,8 @@ public class sConnectionSource : MonoBehaviour
             {
                 Debug.Log("Plug is an output!");
             }
+
+            Debug.Log("Pluggable List count is: " + pluggableList.Count);
         }
 
         if(collision.gameObject.CompareTag("Player"))
@@ -159,21 +188,35 @@ public class sConnectionSource : MonoBehaviour
                 Debug.Log("Opening Connection Available Canvas");
                 connectionAvailableCanvasOpen = true;
                 connectionsAvailablePlate.gameObject.SetActive(true);
-                connectionsAvailablePlate.SetConnectionsAvailable(pluggableAvailableList.ToArray());
+
+                if (pluggableList != null)
+                {
+                   // Debug.Log("Destroying all buttons and then opening connection available canvas and sending connection available list");
+                    //connectionsAvailablePlate.DestroyAllButtons();
+                    connectionsAvailablePlate.SetConnectionsAvailable(pluggableList);
+                }
+                    
+
+                else
+                    Debug.Log("Pluggable Available List is null");
             }            
         }
     }
 
+    // Collision Exit even needed if we are using joints?
+
+    
     private void OnCollisionExit(Collision collision)
     {
-        if (collision.gameObject.TryGetComponent<iPluggable>(out iPluggable _pluggable))
-        {
+        //if (collision.gameObject.TryGetComponent<iPluggable>(out iPluggable _pluggable))
+        //{
+            /*
             if(pluggableAvailableList != null)
             {
                 // Checks for dupes in pluggable list - removes a dupe in this case
                 bool _isThereADupe = false;
 
-                for (int i = 0; i < pluggableAvailableList.Count - 1; i++)
+                for (int i = 0; i < pluggableAvailableList.Count; i++)
                 {
                     if (pluggableAvailableList[i] == collision.gameObject)
                     {
@@ -188,8 +231,9 @@ public class sConnectionSource : MonoBehaviour
                     Debug.Log("Removing Dupe");
                     pluggableAvailableList.Remove(collision.gameObject);
                 }
-            }      
-        }
+            }
+            */
+        //}
 
         if (collision.gameObject.CompareTag("Player"))
         {
@@ -202,17 +246,19 @@ public class sConnectionSource : MonoBehaviour
             // Checks to see if connections avail is open and if there are any
             if (connectionAvailableCanvasOpen)
             {
-                Debug.Log("Destorying all buttons and resetting connections available panel");
+                //Debug.Log("Destroying all buttons and resetting connections available panel");
 
                 connectionAvailableCanvasOpen = false;
-                connectionsAvailablePlate.DestroyAllButtons();
-                connectionsAvailablePlate.gameObject.SetActive(false);  
+                //connectionsAvailablePlate.DestroyAllButtons();
+                connectionsAvailablePlate.gameObject.SetActive(false);
             }
         }
     }
 
+    
+
     public List<GameObject> ReturnPluggableAvailableList()
     {
-        return pluggableAvailableList;
+        return pluggableList;
     }
 }

@@ -10,7 +10,7 @@ public class sCableSegmentHandler : MonoBehaviour
 
     public int numerOfSegments = 20;
 
-    public Material connectionCompleteMaterial;
+    public Material connectionCompleteMaterial, connectionHalfMaterial;
 
     List<GameObject> cableList;
 
@@ -73,6 +73,14 @@ public class sCableSegmentHandler : MonoBehaviour
 
         cableIn.SetPlugOtherEnd(cableOut);
         cableOut.SetPlugOtherEnd(cableIn);
+    }
+
+    public void HalfConnect()
+    {
+        for (int i = 1; i < cableList.Count-2; i++)
+        {
+            cableList[i].GetComponent<MeshRenderer>().material = connectionHalfMaterial;
+        }   
     }
 
     public void ConnectionComplete()

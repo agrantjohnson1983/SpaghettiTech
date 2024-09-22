@@ -159,7 +159,7 @@ public class sCharacterGrabController : MonoBehaviour, iRequireHands
             int[] _tempIndexArray = new int[1] { -1 };
             
             
-            if (!isGrabbing && bothHandsFree)
+            if (!isGrabbing && bothHandsFree && _grabbable.CanBeGrabbed)
             {               
                 _tempIndexArray = GameManager.gm.ReturnCurrentPlayer().CheckHands(NumberOfHandsNeeded);
 

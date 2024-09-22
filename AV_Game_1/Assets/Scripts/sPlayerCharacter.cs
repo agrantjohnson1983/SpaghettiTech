@@ -154,7 +154,7 @@ public class sPlayerCharacter : MonoBehaviour
     {
         Debug.Log("Setting hand");
 
-        for (int i = 0; i < _indexArray.Length; i++)
+        for (int i = 0; i < _indexArray.Length-1; i++)
         {
             handsList[_indexArray[i]].SetHand(true);    
         }
@@ -166,6 +166,8 @@ public class sPlayerCharacter : MonoBehaviour
     // Returns -1 if hands are full.  This only checks a hand but does not set anything
     public int[] CheckHands(int _numberOfHandsNeeded)
     {
+        Debug.Log("Checking hands with " + _numberOfHandsNeeded + " number of hands needed");
+
         int[] handsUsedIndexArray = new int[_numberOfHandsNeeded];
 
         //bool canUse = false;
@@ -173,6 +175,8 @@ public class sPlayerCharacter : MonoBehaviour
 
         // Set to -1 by default
         //int _tempIndex = -1;
+
+        Debug.Log("Hands Index Array has length of " + handsUsedIndexArray.Length);
 
         Debug.Log("Hands List Count = " + handsList.Count);
 
@@ -182,7 +186,7 @@ public class sPlayerCharacter : MonoBehaviour
         }
 
         // -1 for the 0 offset
-        for (int i = 0; i < handsNumber; i++)
+        for (int i = 0; i < handsList.Count; i++)
         {
 
             bool canUse = true;
@@ -197,6 +201,11 @@ public class sPlayerCharacter : MonoBehaviour
                 //handsArray[i].SetSprite(_itemSprite);
                 //soUI.TriggerItemHeldImage(_itemSprite, i);
                 //tempHand = handsArray[i];
+                if(handsUsedIndexArray == null)
+                {
+                    Debug.Log("HandsUsedIndexArray is null");
+                }
+
                 Debug.Log("Temp hand set to hand number " + i);
                 //_tempIndex = i;
                 handsUsedIndexArray[i] = i;

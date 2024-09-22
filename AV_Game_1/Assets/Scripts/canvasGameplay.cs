@@ -64,7 +64,14 @@ public class canvasGameplay : MonoBehaviour
     // TOOLBELT STUFF
 
     public GameObject toolbelt, toolbeltGrid, toolbeltArrow;
+    bool isHoldingTool = false;
     public Image toolHeld;
+    public Text tooldHeldText;
+
+    public Transform toolbeltPanel;
+    public GameObject toolbeltToolButton;
+
+    public List<GameObject> toolButtonsList;
 
     private void OnEnable()
     {
@@ -84,6 +91,8 @@ public class canvasGameplay : MonoBehaviour
         soUI.controlsPopup.AddListener(TogglePopup);
 
         soUI.characterHire.AddListener(ChangeMoney);
+
+        soUI.toolHeldImage.AddListener(AddToolToBelt);
     }
 
     private void OnDisable()
@@ -101,6 +110,8 @@ public class canvasGameplay : MonoBehaviour
         soUI.controlsPopup.RemoveListener(TogglePopup);
 
         soUI.characterHire.RemoveListener(ChangeMoney);
+
+        soUI.toolHeldImage.RemoveListener(AddToolToBelt);
     }
 
     // Start is called before the first frame update
@@ -123,6 +134,7 @@ public class canvasGameplay : MonoBehaviour
 
         toolbeltGrid.SetActive(false);
         toolbeltArrow.SetActive(false);
+        tooldHeldText.text = "";
     }
 
     void TogglePopup(string _popupText)
@@ -156,7 +168,7 @@ public class canvasGameplay : MonoBehaviour
     {
         //Debug.Log("Canvas Hand Image changing at index of " + _indexArray[i].ToString() + " with sprite named " + _itemImage.name.ToString());
 
-        for (int i = 0; i < _indexArray.Length; i++)
+        for (int i = 0; i < _indexArray.Length-1; i++)
         {
             if (_itemImage != null)
             {
@@ -435,5 +447,36 @@ public class canvasGameplay : MonoBehaviour
     public void ChangeToolImage(Sprite _sprite)
     {
         toolHeld.sprite = _sprite;
+    }
+
+    public void OnToolClick(SO_ItemData _itemData, int _index)
+    {
+        Debug.Log("Tool Item Clicked");
+    }
+
+    public void AddToolToBelt(SO_ItemData _itemData)
+    {
+        // if no tool is held then it changes the held tool;
+        if(!isHoldingTool)
+        {
+            isHoldingTool = true;
+            toolHeld.sprite = _itemData.itemSprite;
+            tooldHeldText.text = _itemData.itemName;
+        }
+
+        // Spawns toolbelt button and adds it to list
+        GameObject tempObject = Instantiate(toolbeltToolButton, toolbeltPanel);
+
+        uButtonTool buttonTool;
+
+        buttonTool = tempObject.GetComponent<uButtonTool>();
+
+        buttonTool.SetButton(_itemData);
+
+        toolButtonsList.Add(tempObject);
+
+        buttonTool.SetIndex(toolButtonsList.Count);
+
+        Debug.Log("Setting Tool to index " + toolButtonsList.Count);
     }
 }

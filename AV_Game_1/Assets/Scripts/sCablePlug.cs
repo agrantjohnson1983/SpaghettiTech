@@ -122,6 +122,13 @@ public class sCablePlug : sInteractive, iPluggable
             cableSegmentHandler.ConnectionComplete();
         }
 
+        else
+        {
+            Debug.Log("One side of cable plugged in");
+
+            cableSegmentHandler.HalfConnect();
+        }
+
         GameManager.gm.ReturnCurrentPlayer().ReturnGrabController().GrabReset();
         //cable.ConnectionComplete(this, _transform);
     }
@@ -145,13 +152,15 @@ public class sCablePlug : sInteractive, iPluggable
 
             IsAvailableToPlugIn = true;
 
-            transform.parent = _sourceToConnectObj.transform;
+            //transform.parent = _sourceToConnectObj.transform;
 
             //rb.constraints = RigidbodyConstraints.FreezeAll;
 
             rb.velocity = Vector3.zero;
 
             //joint.connectedBody = _sourceToConnectObj.GetComponent<Rigidbody>();
+
+            CanBeGrabbed = false;
         }
 
         // unplugs cable and shoots it out
@@ -164,6 +173,8 @@ public class sCablePlug : sInteractive, iPluggable
             //joint.connectedBody = null;
 
             rb.AddForce(_sourceToConnectObj.transform.forward * 10, ForceMode.Impulse);
+
+            CanBeGrabbed = true;
         }
     }
 

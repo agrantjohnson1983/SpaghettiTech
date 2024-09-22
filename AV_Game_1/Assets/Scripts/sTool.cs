@@ -9,7 +9,7 @@ public class sTool : MonoBehaviour
 
     public SO_ItemData itemData;
 
-    public GameObject toolModel;
+    //public GameObject toolModel;
 
-    public int numberOfHandsNeededToUse = 1;
+    //public int numberOfHandsNeededToUse = 1;
 }

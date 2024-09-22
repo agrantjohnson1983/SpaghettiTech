@@ -7,22 +7,39 @@ public class uButtonTool : MonoBehaviour
 {
     canvasGameplay CanvasGameplay;
 
-    public Image toolImage;
+    int index;
 
-    SO_EventsUI soUI;
+    public Image toolImage;
+    public Text toolText;
+
+    public SO_EventsUI soUI;
+    SO_ItemData itemData;
+
+    
 
     private void Start()
     {
         CanvasGameplay = GetComponentInParent<canvasGameplay>();
     }
 
-    public void SetImage(Sprite _sprite)
+    public void SetIndex(int _index)
     {
-        toolImage.sprite = _sprite;
+        index = _index;
+    }
+
+    public void SetButton(SO_ItemData _itemData)
+    {
+        itemData = _itemData;
+
+        toolImage.sprite = _itemData.itemSprite;
+
+        toolText.text = _itemData.itemName;
     }
 
     public void OnClick()
     {
+        CanvasGameplay.OnToolClick(itemData, index);
+        
         CanvasGameplay.ToggleToolbelt(false);
 
         // Sets 

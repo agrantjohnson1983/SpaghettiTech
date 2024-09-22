@@ -52,6 +52,12 @@ public class sInteractive : MonoBehaviour, iGrabbable
         }
     }
 
+    public bool CanBeGrabbed
+    {
+        get;
+        set;
+    }
+
     public bool IsGrabbed
     {
         get
@@ -109,6 +115,8 @@ public class sInteractive : MonoBehaviour, iGrabbable
         }
 
         rb = GetComponent<Rigidbody>();
+
+        CanBeGrabbed = true;
     }
 
     public virtual void OnGrab()

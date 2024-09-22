@@ -49,18 +49,23 @@ public class uConnectionPlate : MonoBehaviour
 
     public void OnClickDisconnect(int _index)
     {
-        Debug.Log("Disconnecting Input");
+        Debug.Log("Disconnecting Input at Connection Plate");
 
         
     }
 
+    // This gets called when the line is connected to an available channel
     public void OnClick(int _index)
     {
         //inputChannelList[_index].TogglePlug();
-        Debug.Log("Cable Plugged Into Connection Plate");
-            // connect image, etc.
+        Debug.Log("Cable Plugged Into Connection Plate at index " +_index);
+
+        connectionsAvailablePanel.SetButtonConnected(_index);
+        // connect image, etc.
         if(connectionSource.ReturnPluggableAvailableList() != null)
         {
+            Debug.Log("Plugging in at connection source");
+
             connectionSource.ReturnPluggableAvailableList()[_index].GetComponent<iPluggable>().PlugConnect();
             //pluggable.PlugConnect();
             connectionSource.ConnectPlugJoint(connectionSource.ReturnPluggableAvailableList()[_index]);
@@ -69,10 +74,10 @@ public class uConnectionPlate : MonoBehaviour
 
         else
         {
-            Debug.Log("Pluggable null");
+            Debug.Log("Pluggable list is null");
         }
 
-        connectionSource.OnConnectionClick();
+        //connectionSource.OnConnectionClick();
 
     }
 }
