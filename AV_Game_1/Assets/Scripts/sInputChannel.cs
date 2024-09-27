@@ -6,7 +6,7 @@ using UnityEngine.EventSystems;
 
 public class sInputChannel : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IPointerEnterHandler, IPointerExitHandler
 {
-    int index;
+    int index = -1;
 
     int channelNumber;
 
@@ -33,6 +33,7 @@ public class sInputChannel : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
         //connectionAvailablePanel = uConnectionsAvailablePanel.connectionAvailablePanel;
     }
 
+    // This gets used to set a channel after it gets spawned
     public void SetChannel(int _channelNumber, Sprite _connectedSprite, Sprite _disconnectedSprite, string _channelName, uConnectionsAvailablePanel _connectionsAvailablePanel)
     {
         channelNumber = _channelNumber;
@@ -48,32 +49,41 @@ public class sInputChannel : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
         connectionAvailablePanel = _connectionsAvailablePanel;
     }
 
+    // This is used to set a channels index
     public void SetIndex(int _index)
     {
+        Debug.Log("Setting Index of " + " to channel " + channelNumber);
         index = _index;
     }
 
+
+    // This returns a channels index
+    public int ReturnIndex()
+    {
+        return index;
+    }
+
+    // This gets called when a input channel button gets clicked directly
     public void OnClick()
     {
+        if(isConnected)
+        {
+            TogglePlug();
+        }
         //connectionPlate.OnClick(index);
     }
 
     private void Update()
     {
+        // This is used to Detect Mouse up-click after the mouse is already held and line rendered.  It connects the connection and plug.
+        
         if(Input.GetMouseButtonUp(0) && isBeingSelected)
         {
             // TO DO : mouse up connects the input channel with connection available
 
-            Debug.Log("Mouse Click Release When Selected");
+            Debug.Log("Mouse Click Release When a Pluge is Selected - Toggling Plug");
 
-            if(!isConnected)
-            {
-                isConnected = true;
-
-                channelImage.color = Color.yellow;
-
-                connectionPlate.OnClick(connectionAvailablePanel.ReturnTempIndex());
-            } 
+            TogglePlug();
         }
     }
 
@@ -95,40 +105,28 @@ public class sInputChannel : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
     }
 
     
+    // This gets called when the mouse exits the button - Just used for toggling the isBeingSelected
 
     public void OnPointerExit(PointerEventData eventData)
     {
         Debug.Log("Pointer Exit Triggered");
+
         // When cursor fully exits and the channel is not connected
         if(eventData.fullyExited && !isConnected)
         {
             channelImage.color = Color.white;
             isBeingSelected = false;
+            //TogglePlug();
         } 
     }
 
+    
     public void OnPointerDown(PointerEventData PointerEventData)
     {
-        Debug.Log(name + " was down clicked");
-
-        if(isConnected)
-        {
-            isConnected = false;
-
-            channelImage.color = Color.white;
-
-            // TODO 
-
-            // Disconnect channel here
-        }
+        //Debug.Log(name + " was down clicked");
 
         // if connections is already connected then it gets disconnected
-        //if(isConnected)
-        //{
-        //    channelImage.color = Color.white;
-
-        //    connectionPlate.OnClickDisconnect(index);
-        //}
+        
 
         //channelImage.color = Color.green;
     }
@@ -136,27 +134,49 @@ public class sInputChannel : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
     public void OnPointerUp(PointerEventData pointerEventData)
     {
         //Debug.Log(name + " was upclicked");
-
-        //channelImage.color = Color.red;
     }
+
+    
 
     public void TogglePlug()
     {
         isConnected = !isConnected;
 
-        if(isConnected)
+        if (!isConnected)
         {
+            Debug.Log("Toggling plug disconnect");
+
+            // changes the image to disconnected image
             channelImage.sprite = disconnectedImage;
 
-            channelImage.color = Color.red;
+            // changes the image color to green to show it is available
+            channelImage.color = Color.white;
+
+            // This disconnects button from connection plate
+            connectionPlate.OnClickDisconnect(index);
+
+            // This disconnects the other button that is the connection available
+            connectionPlate.ReturnConnectionAvailablePanel().DisconnectLine(index);
         }
 
         else
         {
+            Debug.Log("Toggling plug connect");
+
+            // changes the image to connected image
             channelImage.sprite = connectedImage;
 
-            channelImage.color = Color.green;
+            //changes the image color to green to show it is connected
+            channelImage.color = Color.yellow;
+
+            // This connects button from connection plate
+            connectionPlate.OnClickConnect(connectionAvailablePanel.ReturnTempIndex());
+
+            // This connects 
+            connectionPlate.ReturnConnectionAvailablePanel().OnConnectionClick(index);
         }
+
+        
     }
 
     public bool ReturnIsConnected()

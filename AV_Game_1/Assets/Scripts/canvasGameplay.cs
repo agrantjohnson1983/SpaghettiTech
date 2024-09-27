@@ -440,8 +440,12 @@ public class canvasGameplay : MonoBehaviour
     {
         Debug.Log("Toggling the toolbelt");
 
-        toolbeltGrid.SetActive(_isOpen);
-        toolbeltArrow.SetActive(_isOpen);
+        // Checks if there are any tools
+        if(toolButtonsList.Count > 0)
+        {
+            toolbeltGrid.SetActive(_isOpen);
+            toolbeltArrow.SetActive(_isOpen);
+        }      
     }
  
     public void ChangeToolImage(Sprite _sprite)

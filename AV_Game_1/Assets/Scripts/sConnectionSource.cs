@@ -57,6 +57,7 @@ public class sConnectionSource : MonoBehaviour
         connectionPlate.gameObject.SetActive(false);
     }
 
+
     void SpawnConnectionsAvailablePanel()
     {
         GameObject tempObj;
@@ -74,6 +75,8 @@ public class sConnectionSource : MonoBehaviour
         connectionsAvailablePlate.SetConnectionPlate(connectionPlate);
     }
 
+
+    // This handles adding a joint to the plug object when it collides with the connection source
     public void ConnectPlugJoint(GameObject _plugObject)
     {
         Debug.Log("Adding fixed joint to " + _plugObject.name);
@@ -189,7 +192,7 @@ public class sConnectionSource : MonoBehaviour
                 connectionAvailableCanvasOpen = true;
                 connectionsAvailablePlate.gameObject.SetActive(true);
 
-                if (pluggableList != null)
+                if (pluggableList.Count > 0)
                 {
                    // Debug.Log("Destroying all buttons and then opening connection available canvas and sending connection available list");
                     //connectionsAvailablePlate.DestroyAllButtons();

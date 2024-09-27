@@ -587,6 +587,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  connectionLine: {fileID: 8758780058835412406, guid: ce1da97931b77084f9fbc702ce28fec0, type: 3}
 --- !u!120 &4996916721707093088
 LineRenderer:
   m_ObjectHideFlags: 0

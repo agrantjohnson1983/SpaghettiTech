@@ -31,41 +31,41 @@ public class uConnectionsAvailablePanel : MonoBehaviour
     bool isClickingConnection = false;
 
     int tempClickedIndex = -1;
-     
-    private void Awake()
-    {
-        //connectionAvailablePanel = this;
-    }
+
+    public GameObject connectionLine;
+
 
     // Start is called before the first frame update
     void Start()
     {
+        // Line Renderer stuff
         lr = sConnectionLineRenderer.lineRender.lr;
         lr.enabled = false;
         cam = Camera.main;
-        
-        //connectionsAvailableList = new List<GameObject>();
 
         lineRendererList = new List<LineRenderer>();
     }
 
-    // Update is called once per frame
+    // Line Rendere Gets toggled when "isClickingConnection" is toggled
     void Update()
     {
         if(isClickingConnection)
         LineHandler();
     }
 
+    // Sets the reference to connection source
     public void SetConnectionSource(sConnectionSource _source)
     {
         connectionSource = _source;
     }
 
+    // Sets the reference to connection plate
     public void SetConnectionPlate(uConnectionPlate _plate)
     {
         connectionPlate = _plate;
     }
 
+    // This sets all the connection available buttons
     public void SetConnectionsAvailable(List<GameObject> _pluggableObjects)
     {
             if(connectionsAvailableList != null)
@@ -106,26 +106,43 @@ public class uConnectionsAvailablePanel : MonoBehaviour
     public void SetButtonConnected(int _index)
     {
         connectionsAvailableList[_index].GetComponent<uButtonConnectionAvailable>().OnChannelClick();
+        
+        // This sets a line renderer
+        SetConnectionLine(_index);
     }
 
+
+    // This sets the isClickingConnection to true which turns on the line renderer
     public void OnConnectionClick(int _index)
     {
+
         Debug.Log("Button Click at index of: " + _index + ".  Connections available list has count of: " + connectionsAvailableList.Count);
 
         isClickingConnection = true;
 
         tempClickedIndex = _index;
 
-        Debug.Log("Triggering " + connectionsAvailableList[_index].gameObject.name);
+        if (_index >= 0)
+        {
+            Debug.Log("Triggering " + connectionsAvailableList[_index].gameObject.name);
 
-        connectionClickedObj = connectionsAvailableList[_index];
+            connectionClickedObj = connectionsAvailableList[_index];
+        }
+            
+
+        else
+            Debug.Log("Index is less than 0");
+
+        
     }
 
+    // This returns the index that has been temporarily set
     public int ReturnTempIndex()
     {
         return tempClickedIndex;
     }
 
+    // This method handles the line renderer when the player clicks a button for a "connection available"
     void LineHandler()
     {
            if(lr.enabled == false)
@@ -187,6 +204,66 @@ public class uConnectionsAvailablePanel : MonoBehaviour
         }
     }
 
+
+
+    // Use this for setting a connection line to continually appear once it's been connected
+    public void SetConnectionLine(int _index)
+    {
+        // Caches a line renderer
+        LineRenderer _lr;
+        
+        // Spanws the line renderer and then gets a reference to it
+        _lr = Instantiate(connectionLine, this.transform).GetComponent<LineRenderer>();
+
+        // Adds position count to set the two line points
+        _lr.positionCount = 2;
+
+        // Uses the startPos and endPos of the other line renderer system which sets the line to the last 2 points used
+        _lr.SetPosition(0, startPos - camOffset);
+        _lr.SetPosition(1, endPos - camOffset);
+
+        // Adds the line to the line renderer list
+        lineRendererList.Add(_lr);
+    }
+
+    // When a connection available button is clicked when connected
+    public void DisconnectLine(int _index)
+    {
+
+        Debug.Log("Disabling Line Renderer at index of: " + _index);
+
+        // Checks to make sure index is not set to negative
+        if (_index < 0)
+        {
+            Debug.Log("Line Index Cannot Be Less Than 0");
+            return;
+        }
+
+        // Checks to see if line renderer list is null
+        if(lineRendererList == null)
+        {
+            Debug.Log("Line Render List Null");
+            return;
+        }
+
+        // Sets line render from index
+        LineRenderer lr = lineRendererList[_index];
+
+        // Removes line from list
+        lineRendererList.Remove(lr);
+
+        // Destroys line
+        Destroy(lr.gameObject);
+    }
+    
+
+    // Returns a reference to the connection plate
+    public uConnectionPlate ReturnConnectionPlate()
+    {
+        return connectionPlate;
+    }
+    
+    // Returns if the player is clicking connection or not
     public bool ReturnIsClicking()
     {
         return isClickingConnection;

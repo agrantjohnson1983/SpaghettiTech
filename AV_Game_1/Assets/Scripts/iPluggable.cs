@@ -18,4 +18,6 @@ public interface iPluggable
 
     void PlugConnect();
 
+    void PlugDisconnect();
+
 }

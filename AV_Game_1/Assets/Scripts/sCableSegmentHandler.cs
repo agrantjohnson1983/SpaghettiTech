@@ -8,11 +8,20 @@ public class sCableSegmentHandler : MonoBehaviour
 
     public GameObject pCableIn, pCableOut;
 
+    public GameObject MovingUI;
+
+    public float movingUItimePerSegment = 1f;
+    public float movingUIspeed = 5f;
+
     public int numerOfSegments = 20;
 
-    public Material connectionCompleteMaterial, connectionHalfMaterial;
+    public Material startingMaterial, connectionCompleteMaterial, connectionHalfMaterial;
 
     List<GameObject> cableList;
+
+    bool isConnected = false;
+
+    //public Sprite
 
     // Start is called before the first frame update
     void Start()
@@ -73,14 +82,36 @@ public class sCableSegmentHandler : MonoBehaviour
 
         cableIn.SetPlugOtherEnd(cableOut);
         cableOut.SetPlugOtherEnd(cableIn);
+
+        MovingUI.SetActive(false);
     }
 
     public void HalfConnect()
     {
-        for (int i = 1; i < cableList.Count-2; i++)
+        //isConnected = true;
+
+        //MovingUI.SetActive(true);
+        StartCoroutine(MoveConnectionUI());
+
+        for (int i = 1; i < cableList.Count-1; i++)
         {
             cableList[i].GetComponent<MeshRenderer>().material = connectionHalfMaterial;
         }   
+    }
+
+    // This will disconnect the cable from the connection plate, changes the color of segments and turns of moving UI
+    public void Disconnect()
+    {
+        //isConnected = false;
+
+        StopCoroutine(MoveConnectionUI());
+
+        MovingUI.SetActive(false);
+
+        for (int i = 1; i < cableList.Count-1; i++)
+        {
+            cableList[i].GetComponent<MeshRenderer>().material = startingMaterial;
+        }
     }
 
     public void ConnectionComplete()
@@ -92,15 +123,89 @@ public class sCableSegmentHandler : MonoBehaviour
         //this.gameObject.transform.position = _tranform.position;
         //this.gameObject.transform.rotation = _tranform.rotation;
 
-        for (int i = 1; i < cableList.Count-2; i++)
+        for (int i = 1; i < cableList.Count-1; i++)
         {
             cableList[i].GetComponent<MeshRenderer>().material = connectionCompleteMaterial;
         }
     }
 
+    // This is for the movement of the overhead UI
+    // This is recursive and keeps looping till it's told to stop
+    IEnumerator MoveConnectionUI()
+    {
+
+        if(cableList == null)
+        {
+            Debug.Log("Cable List Null");
+            yield return null;
+        }
+
+        MovingUI.SetActive(true);
+
+        //int currentIndex = 0;
+        int nextIndex;
+
+
+        for (int i = 0; i < cableList.Count-1; i++)
+        {
+            nextIndex = (int)i + 1;
+
+            Debug.Log("Cable Moving from cable list index " + i + " to " + nextIndex);
+
+            int counter = 0;
+
+            while (counter < movingUItimePerSegment)
+            {
+                MovingUI.transform.position = Vector3.Lerp(cableList[i].transform.position, cableList[nextIndex].transform.position, (counter/movingUItimePerSegment));
+
+                counter++;
+
+                yield return null;
+            }
+
+            //currentIndex++;
+            //nextIndex++;
+
+            // Needs to flip index backwards 
+        }
+
+        //currentIndex - 1;
+
+        // current index should come out as cable list count
+
+        // Reverse
+
+        for (int i = cableList.Count-1; i > 0; i--)
+        {
+            nextIndex = (int)i - 1;
+
+            int counter = 0;
+
+            while (counter < movingUItimePerSegment)
+            {
+                MovingUI.transform.position = Vector3.Lerp(cableList[i].transform.position, cableList[nextIndex].transform.position, (counter / movingUItimePerSegment));
+
+                counter++;
+
+                yield return null;
+            }
+
+            //currentIndex--;
+            //nextIndex--;
+        }
+
+        StartCoroutine(MoveConnectionUI());
+    }
+
     // Update is called once per frame
     void Update()
     {
-        
+        if(isConnected)
+        {
+            for (int i = 0; i < cableList.Count; i++)
+            {
+
+            }
+        }
     }
 }

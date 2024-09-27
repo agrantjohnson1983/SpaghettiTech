@@ -133,6 +133,25 @@ public class sCablePlug : sInteractive, iPluggable
         //cable.ConnectionComplete(this, _transform);
     }
 
+    public void PlugDisconnect()
+    {
+        IsPluggedIn = false;
+
+        if(cablePlugOtherEnd.ReturnIsPluggedIn() == true)
+        {
+            Debug.Log("One side of cable plugged in");
+
+            cableSegmentHandler.HalfConnect();
+        }
+
+        else
+        {
+            Debug.Log("Disconnecting Cables");
+
+            cableSegmentHandler.Disconnect();
+        }
+    }
+
     public bool ReturnIsPluggedIn()
     {
         return IsPluggedIn;
