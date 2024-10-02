@@ -34,4 +34,8 @@ public interface iGrabbable
 
     void OffGrab();
 
+    void OnSelect();
+
+    void OffSelect();
+
 }

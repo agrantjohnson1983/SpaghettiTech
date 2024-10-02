@@ -22,6 +22,7 @@ public class sRiggingSetupSpot : MonoBehaviour, iActionable
     public TextMeshPro textSetup;
 
     public Vector3 _UI_offset;
+
     public Vector3 ui_offset
     {
         get
@@ -47,6 +48,7 @@ public class sRiggingSetupSpot : MonoBehaviour, iActionable
             hasAction = value;
         }
     }
+
     public float TaskTime
     {
         get
@@ -92,15 +94,17 @@ public class sRiggingSetupSpot : MonoBehaviour, iActionable
         }
     }
 
-    public SO_EventsUI uiEvents;
+    public SO_EventsUI soUI;
 
-    public void TriggerAction(GameObject _actionObj, eToolType _toolToUse)
+    public void TriggerAction(GameObject _actionObj, SO_ItemData _itemData)
     {
         //base.TriggerAction(_actionObj, _toolToUse);
 
         if(CanTriggerAction && hasAction)
         {
             StartCoroutine(ActionTasking());
+
+            //soUI.TriggerItemHeldImage(_itemData.itemSprite, );
         }
 
         else
@@ -109,22 +113,26 @@ public class sRiggingSetupSpot : MonoBehaviour, iActionable
         }
     }
 
-    public void StopAction(GameObject _actionObj)
+    public void StopAction()
     {
-        //base.StopAction(_actionObj);
-
         Debug.Log("Stopping Action Tasking Cortoutine");
 
         StopCoroutine(ActionTasking());
 
-        uiEvents.TriggerTaskGauge(0);
+        StopAllCoroutines();
+
+        GameManager.gm.ReturnCurrentPlayer().ToggleMovement(true);
+
+        soUI.TriggerTaskGauge(0, Vector3.zero);
     }
 
     IEnumerator ActionTasking()
     {
         Debug.Log("Starting Action Tasking");
 
-        uiEvents.TriggerTaskGauge(TaskTime);
+        GameManager.gm.ReturnCurrentPlayer().ToggleMovement(false);
+
+        soUI.TriggerTaskGauge(TaskTime, this.transform.position + ui_offset);
 
         yield return new WaitForSeconds(TaskTime);
 
@@ -132,11 +140,15 @@ public class sRiggingSetupSpot : MonoBehaviour, iActionable
 
         sRiggingManager.riggingManger.RigSet(rigType);
 
+        GameManager.gm.ReturnCurrentPlayer().ToggleMovement(true);
+
         Destroy(this.gameObject);
     }
 
     public void WrongTool()
     {
+        Debug.Log("Wrong Tool");
+
         textSetup.color = Color.red;
 
         CanTriggerAction = false;
@@ -144,6 +156,8 @@ public class sRiggingSetupSpot : MonoBehaviour, iActionable
 
     private void OnTriggerEnter(Collider other)
     {
+        Debug.Log("Rigging Setup On Trigger Enter");
+
         if (HasAction)
             ToolCheck(other.gameObject);
 
@@ -230,29 +244,48 @@ public class sRiggingSetupSpot : MonoBehaviour, iActionable
         // Checks for tool handler - located on Player
         if(_toolCheckObj.TryGetComponent<sToolHandler>(out sToolHandler _toolHandler))
         {
-            Debug.Log("Collision with player - checking tool");
+            //Debug.Log("Collision with player and " + this.name + " - checking tool");
 
             // Checks to see if there are any tools held
             if(_toolHandler.ReturnToolHeldList() != null)
             {
-                // Correct tool if true
-                if (_toolHandler.CheckIfHasTool(ToolTypeNeeded))
+                //Debug.Log("Tool list isn't null");
+
+                SO_ItemData tempToolData;
+
+                tempToolData = _toolHandler.CheckIfHasTool(ToolTypeNeeded);
+
+               // Debug.Log(tempTool + " temp tool");
+
+                // Returns null if tool is not correct
+                if (tempToolData != null)
                 {
+                    //Debug.Log("Temp Tool Not Null and Setting UI");
+
+                    // Toggles bool
                     CanTriggerAction = true;
 
+                    // Displays text above spot
                     textSetup.SetText("CORRECT TOOL");
 
+                    // Sets the color of the text to green showing the tool is good
                     textSetup.color = Color.green;
                 }
 
                 else
                 {
+                    Debug.Log("Temp Tool Data is null");
+
+                    // If the player character doesn't have the correct tool
                     WrongTool();
                 }  
             }
 
             else
             {
+                Debug.Log("Tool Handler List is null");
+
+                // If the player character doesn't have the correct tool
                 WrongTool();
             }
 
@@ -263,14 +296,13 @@ public class sRiggingSetupSpot : MonoBehaviour, iActionable
 
     private void OnTriggerExit(Collider other)
     {
-        
         if (other.gameObject.CompareTag("Player")  && HasAction)
         {
             CanTriggerAction = false;
 
             if(IsDoingAction)
             {
-                StopAction(null);
+                StopAction();
             }
         }
         

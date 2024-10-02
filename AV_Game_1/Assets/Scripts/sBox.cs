@@ -28,7 +28,7 @@ public class sBox : sInteractive, iClickable
 
     public Vector3 inventoryPanelOffset;
 
-    public GameObject ui_Ring;
+    //public GameObject ui_Ring;
     public float UI_ToggleDistance = 5f;
     bool isWithinOpenRange = false;
 
@@ -45,7 +45,12 @@ public class sBox : sInteractive, iClickable
 
         gm = GameManager.gm;
 
-        ui_Ring.SetActive(false);
+        ui_Select.SetActive(false);
+
+        ui_Img.SetActive(false);
+
+        ui_Text.SetActive(false);
+        //ui_Ring.SetActive(false);
     }
 
     private void Update()
@@ -53,13 +58,13 @@ public class sBox : sInteractive, iClickable
         if(!isEmpty && GameManager.gm.ReturnCurrentPlayer() != null)
         DetectPlayer();
 
-        if(ui_Ring)
-        {
+        //if(ui_Ring)
+        //{
             //Debug.Log("Offsetting Ring UI");
-
+             
             ui_Img.gameObject.transform.position = this.gameObject.transform.position + ui_Img_Offset;
             ui_Text.gameObject.transform.position = this.gameObject.transform.position + ui_Text_Offset;
-        }
+        //}
     }
 
     public void TriggerOpenBox()
@@ -69,7 +74,7 @@ public class sBox : sInteractive, iClickable
 
             if(numberOfSlots > 0)
             {
-            Debug.Log("Opening Box");
+            //Debug.Log("Opening Box");
 
                 inventory = Instantiate(pBoxInventoryPanel, this.transform.position + inventoryPanelOffset, Quaternion.identity).GetComponent<sInventory>();
 
@@ -86,6 +91,7 @@ public class sBox : sInteractive, iClickable
                 //ui_Ring.GetComponentInChildren<MeshRenderer>().material.color = Color.yellow;
 
                 ui_Text.SetActive(false);
+
                 ui_Img.SetActive(false);
             }
 
@@ -98,7 +104,7 @@ public class sBox : sInteractive, iClickable
 
     public void CloseBox()
     {
-        Debug.Log("Closing Box");
+        //Debug.Log("Closing Box");
 
         isOpen = false;
         //base.StopAction(_actionObj);
@@ -115,8 +121,10 @@ public class sBox : sInteractive, iClickable
 
         textMPAbove.SetText("CLOSED");
 
-        ui_Ring.GetComponentInChildren<MeshRenderer>().material.color = Color.green;
+        //ui_Ring.GetComponentInChildren<MeshRenderer>().material.color = Color.green;
+
         ui_Text.SetActive(true);
+
         ui_Img.SetActive(true);
     }
 
@@ -149,7 +157,7 @@ public class sBox : sInteractive, iClickable
 
         textMPAbove.SetText("EMPTY");
 
-        ui_Ring.SetActive(false);
+        //ui_Ring.SetActive(false);
         //ui_Ring.GetComponentInChildren<MeshRenderer>().material.color = Color.red;
         ui_Text.SetActive(false);
         ui_Img.SetActive(false);
@@ -195,11 +203,14 @@ public class sBox : sInteractive, iClickable
     // this checks distance between the box and player and toggles on/off UI ring
     void DetectPlayer()
     {
+        // Checks if the player is less than the distance of the UI toggle distance and if so turns on the UI
         if(Vector3.Distance(this.transform.position, GameManager.gm.ReturnCurrentPlayer().transform.position) < UI_ToggleDistance)
         {
             isWithinOpenRange = true;
 
-            ui_Ring.SetActive(!iGrabbable.IsGrabbed);
+            ui_Img.SetActive(true);
+            ui_Text.SetActive(true);
+            //ui_Ring.SetActive(!iGrabbable.IsGrabbed);
         }
 
         else
@@ -208,7 +219,10 @@ public class sBox : sInteractive, iClickable
 
             isWithinOpenRange = false;
 
-            ui_Ring.SetActive(false);
+            ui_Img.SetActive(false);
+            ui_Text.SetActive(false);
+
+            //ui_Ring.SetActive(false);
 
             if (isOpen)
                 CloseBox();
@@ -219,16 +233,32 @@ public class sBox : sInteractive, iClickable
     {
         Debug.Log("Box On Grab Triggered");
         iGrabbable.IsGrabbed = true;
-        ui_Ring.SetActive(false);
+        //ui_Ring.SetActive(false);
+        ui_Select.SetActive(false);
     }
+
 
     public override void OffGrab()
     {
         Debug.Log("Box Off Grab Triggered");
         iGrabbable.IsGrabbed = false;
-        ui_Ring.SetActive(true);
+        //ui_Select.SetActive(true);
     }
 
+    public override void OnSelect()
+    {
+        //Debug.Log("On Select on Box");
+        ui_Select.SetActive(true);
+
+        //base.OnSelect();
+    }
+
+    public override void OffSelect()
+    {
+        //Debug.Log("Off Select on Box");
+        ui_Select.SetActive(false);
+        //base.OnSelect();
+    }
 
     /*
     private void OnTriggerEnter(Collider other)

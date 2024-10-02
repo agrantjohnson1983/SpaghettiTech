@@ -22,7 +22,7 @@ public class uBillboard : MonoBehaviour
 
     private void LateUpdate()
     {
-        if(GameManager.gm)
+        if(GameManager.gm && Camera.main)
         {
             switch (type)
             {

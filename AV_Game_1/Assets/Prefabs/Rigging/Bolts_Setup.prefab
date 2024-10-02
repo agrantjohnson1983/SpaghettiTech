@@ -290,4 +290,4 @@ MonoBehaviour:
   _toolTypeNeeded: 0
   textSetup: {fileID: 6926732273762619244}
   _UI_offset: {x: 0, y: 0, z: 0}
-  uiEvents: {fileID: 11400000, guid: 2b96b6b1405722c48a474d361c95f00a, type: 2}
+  soUI: {fileID: 11400000, guid: 2b96b6b1405722c48a474d361c95f00a, type: 2}

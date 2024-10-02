@@ -42,7 +42,7 @@ public class sCamera : sInteractive, iActionable
         
     }
 
-    public void TriggerAction(GameObject _actionObj, eToolType _toolToUse)
+    public void TriggerAction(GameObject _actionObj, SO_ItemData _itemData)
     {
         //base.TriggerAction(_actionObj, _toolToUse);
 
@@ -54,7 +54,7 @@ public class sCamera : sInteractive, iActionable
         cameraFPS.SetActive(true);
     }
 
-    public void StopAction(GameObject _actionObj)
+    public void StopAction()
     {
         //base.StopAction(_actionObj);
 

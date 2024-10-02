@@ -5,11 +5,8 @@ using UnityEngine;
 public enum eToolType { ratchet, NONE }
 public class sTool : MonoBehaviour
 {
-    public eToolType typeOfTool;
 
+    // This holds all the info for the tool
     public SO_ItemData itemData;
 
-    //public GameObject toolModel;
-
-    //public int numberOfHandsNeededToUse = 1;
 }

@@ -26,6 +26,8 @@ public class sInteractive : MonoBehaviour, iGrabbable
 
     public string textItem;
 
+    public GameObject ui_Select;
+
     public float TaskTime
     {
         get
@@ -108,8 +110,6 @@ public class sInteractive : MonoBehaviour, iGrabbable
 
             for (int i = 0; i < itemTextMP.Length; i++)
             {
-
-
                 itemTextMP[i].SetText(textItem);
             }
         }
@@ -129,4 +129,19 @@ public class sInteractive : MonoBehaviour, iGrabbable
         IsGrabbed = false;
     }
 
+    public virtual void OnSelect()
+    {
+        if(ui_Select != null)
+        {
+            ui_Select.SetActive(true);
+        }
+    }
+
+    public virtual void OffSelect()
+    {
+        if(ui_Select != null)
+        {
+            ui_Select.SetActive(false);
+        }
+    }
 }

@@ -9,7 +9,7 @@ public class SO_EventsUI : ScriptableObject
 
     public UnityEvent<string> instructionsRiggingEvent, instructionsAudioEvent, instructionsVideoEvent, instructionsLightingEvent;
 
-    public UnityEvent<float> taskTimeEvent;
+    public UnityEvent<float, Vector3> taskTimeEvent;
 
     public UnityEvent<SO_CharacterData> characterChangeEvent;
 
@@ -50,7 +50,7 @@ public class SO_EventsUI : ScriptableObject
 
         if (taskTimeEvent == null)
         {
-            taskTimeEvent = new UnityEvent<float>();
+            taskTimeEvent = new UnityEvent<float, Vector3>();
         }
 
         if(characterChangeEvent == null)
@@ -115,9 +115,9 @@ public class SO_EventsUI : ScriptableObject
         instructionsLightingEvent.Invoke(_instructions);
     }
 
-    public void TriggerTaskGauge(float _time)
+    public void TriggerTaskGauge(float _time, Vector3 _pos)
     {
-        taskTimeEvent.Invoke(_time);
+        taskTimeEvent.Invoke(_time, _pos);
     }
 
     public void TriggerCharacterChange(SO_CharacterData _characterData)

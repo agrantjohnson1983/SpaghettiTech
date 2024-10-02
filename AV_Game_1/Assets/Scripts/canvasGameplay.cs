@@ -212,20 +212,32 @@ public class canvasGameplay : MonoBehaviour
         textInstructionsLighting.text = _instructions;
     }
 
-    void GoTaskGauge(float _time)
+    // This is used to trigger the UI
+    void GoTaskGauge(float _time, Vector3 _pos)
     {
-        Debug.Log("Go Task Gauge Triggered on Canvas");
+
+        //Debug.Log("Go Task Gauge Triggered on Canvas");
+
+        taskGauge.transform.position = Camera.main.WorldToScreenPoint(_pos);
 
         if(_time == 0)
         {
             Debug.Log("Stopping Task Gauge");
 
-            StopCoroutine(TaskGauge(0));
+            //StopCoroutine(TaskGauge(0));
+
+            StopAllCoroutines();
 
             taskGauge.fillAmount = 0;
+
+            return;
         }
 
-        StartCoroutine(TaskGauge(_time));
+        else
+        {
+            //StopAllCoroutines();
+            StartCoroutine(TaskGauge(_time));
+        }
     }
 
     IEnumerator TaskGauge(float _time)
@@ -237,6 +249,8 @@ public class canvasGameplay : MonoBehaviour
             taskGauge.fillAmount = Mathf.Lerp(0, 1, (counter / _time));
 
             counter += Time.deltaTime;
+
+            Debug.Log("Task Counter is at : " + counter / _time);
 
             yield return null;
         }

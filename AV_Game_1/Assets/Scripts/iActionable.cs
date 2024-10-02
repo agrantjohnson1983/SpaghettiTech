@@ -36,9 +36,9 @@ public interface iActionable
         set;
     }
 
-    public void TriggerAction(GameObject _actionObj, eToolType _toolToUse);
+    public void TriggerAction(GameObject _actionObj, SO_ItemData _itemData);
 
 
-    public void StopAction(GameObject _actionObj);
+    public void StopAction();
 
 }

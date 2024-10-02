@@ -41,9 +41,7 @@ public class GameManager : MonoBehaviour
 
         cameraBlueprint.SetActive(false);
 
-        canvasGameplay.ToggleHireScreen(); 
-        
-        
+        canvasGameplay.ToggleHireScreen();    
     }
 
     // Update is called once per frame
@@ -55,31 +53,44 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    // This is used to change the index manually outside of the TAB button or arrow buttons - mostly when a player gets clicked
+    public void SwitchActivePlayerIndex(int _index)
+    {
+        activePlayerIndex = _index;
+    }
+
     public void SwitchActivePlayer(int _increase)
     {
+
         Debug.Log("Switching Player");
 
         //currentPlayer.ReturnGrabController().GrabReset();
 
+        // turns off the current players controls
         playerCharacters[activePlayerIndex].CharacterControlsToggle(false);
 
+        // increments or decrements the player index based on the argument given
         activePlayerIndex+=_increase;
 
+        // if the index is too high then it resets at 0
         if(activePlayerIndex > playerCharacters.Count-1)
         {
             activePlayerIndex = 0;
         }
 
+        // if the index is too low then it resets to the count minus 1 (matches array)
         if(activePlayerIndex < 0)
         {
             activePlayerIndex = playerCharacters.Count - 1;
         }
 
+        // turns back the character controls with the correct character
         playerCharacters[activePlayerIndex].CharacterControlsToggle(true);
 
+        // sets the camera to the new character
         canvasWorldSpace.worldCamera = Camera.main;
 
-        //soUI.ToggleControlsPopup(grabPopupText, interactiveObject.transform.position + grabbable.ui_offset);
+        // turns off any popups currently over a character
         soUI.ToggleControlsPopup(null);
 
 
@@ -102,7 +113,12 @@ public class GameManager : MonoBehaviour
         cameraHiring.SetActive(_isOn);
 
         if(playerCharacters != null)
-        playerCharacters[activePlayerIndex].CharacterControlsToggle(!_isOn);
+        {
+            //SetCurrentPlayer(playerCharacters[activePlayerIndex]);
+            playerCharacters[activePlayerIndex].SetToCurrentPlayer();
+            //playerCharacters[activePlayerIndex].CharacterControlsToggle(!_isOn);
+        }
+        
     }
 
     public void ToggleBlueprintCamera(bool _isOn)
@@ -130,5 +146,10 @@ public class GameManager : MonoBehaviour
     public sPlayerCharacter ReturnCurrentPlayer()
     {
         return currentPlayer;
+    }
+
+    public Canvas ReturnCanvasWorldSpace()
+    {
+        return canvasWorldSpace;
     }
 }

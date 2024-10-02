@@ -6,7 +6,8 @@ public class sPlayerCharacter : MonoBehaviour
 {
     GameManager gm;
 
-    //sPlayerCharacter playerRef;
+    // this is used to switch betweeen players
+    int index;
 
     public SO_CharacterData characterData;
 
@@ -16,6 +17,7 @@ public class sPlayerCharacter : MonoBehaviour
     sCharacterMovementController movementController;
     sCharacterGrabController grabController;
     sToolHandler toolHandler;
+    sMouseClickController mouseClickController;
 
     Camera camera;
 
@@ -47,11 +49,6 @@ public class sPlayerCharacter : MonoBehaviour
         camera = GetComponentInChildren<Camera>();
     }
 
-    private void OnEnable()
-    {
-        
-    }
-
     // Start is called before the first frame update
     void Start()
     {
@@ -59,6 +56,7 @@ public class sPlayerCharacter : MonoBehaviour
         movementController = GetComponent<sCharacterMovementController>();
         grabController = GetComponent<sCharacterGrabController>();
         toolHandler = GetComponent<sToolHandler>();
+        mouseClickController = GetComponent<sMouseClickController>();
 
         gm = GameManager.gm;
 
@@ -72,10 +70,15 @@ public class sPlayerCharacter : MonoBehaviour
 
         else
         {
+            
             CharacterControlsToggle(false);
         }
 
+        // adds to the GM's list of players
         gm.AddCharacterToList(this);
+
+        // Sets the index to the list index -1 to match array start
+        SetIndex(gm.ReturnPlayerList().Count - 1);
 
         //handsList = new List<handBehavior>(handsNumber);
 
@@ -90,41 +93,71 @@ public class sPlayerCharacter : MonoBehaviour
         //Debug.Log("Hands list initialized with a count of " + handsList.Count);
     }
 
+    // Sets the player index - only used upon spawn
+    public void SetIndex(int _index)
+    {
+        index = _index;
+    }
+
+    // Returns the player index
+    public int GetIndex()
+    {
+        return index;
+    }
+
+    // Returns a reference to the action controller for the instance of the character
     public sCharacterActionController ReturnActionController()
     {
         return actionController;
     }
 
+    // Returns a refernce to the movmement controller for the instance of the character
     public sCharacterMovementController ReturnMovementController()
     {
         return movementController;
     }
 
+    // Returns a reference to the grab controller for the instance of the character
     public sCharacterGrabController ReturnGrabController()
     {
         return grabController;
     }
 
-    public void CharacterControlsToggle(bool _isOn)
+    // Sets this instance to the current player in the GameManager and turns on the controlls
+    public void SetToCurrentPlayer()
     {
         gm.SetCurrentPlayer(this);
 
-        movementController.enabled = _isOn;
-        
-        grabController.enabled = _isOn;
-        
+        CharacterControlsToggle(true);
+    }
+
+    // This toggles the controls on/off for a character
+    public void CharacterControlsToggle(bool _isOn)
+    {
+        // Toggles control scripts
+        movementController.enabled = _isOn;       
+        grabController.enabled = _isOn;     
         actionController.enabled = _isOn;
-        
         toolHandler.enabled = _isOn;
 
+        // Keep the mouse on for all characters so any of them can be clicked?
+
+        //mouseClickController.enabled = _isOn;
+        //mouseClickController.ToggleMouseClickController(_isOn);
+
+        // turns camera on/off
         camera.gameObject.SetActive(_isOn);
 
+        // Changes the UI based on character data
+        if(_isOn)
         soUI.TriggerCharacterChange(characterData);
 
+        // Resets grabbing
         if(grabController.ReturnIsGrabbing())
         {
             grabController.GrabReset();
         }
+
         //soUI.ToggleControlsPopup(null, Vector3.zero);
     }
 
@@ -152,7 +185,7 @@ public class sPlayerCharacter : MonoBehaviour
     // This will set a hand to use and trigger the UI
     public void SetHand(Sprite _itemSprite, int[] _indexArray)
     {
-        Debug.Log("Setting hand");
+        //Debug.Log("Setting hand");
 
         for (int i = 0; i < _indexArray.Length-1; i++)
         {
@@ -166,7 +199,7 @@ public class sPlayerCharacter : MonoBehaviour
     // Returns -1 if hands are full.  This only checks a hand but does not set anything
     public int[] CheckHands(int _numberOfHandsNeeded)
     {
-        Debug.Log("Checking hands with " + _numberOfHandsNeeded + " number of hands needed");
+        //Debug.Log("Checking hands with " + _numberOfHandsNeeded + " number of hands needed");
 
         int[] handsUsedIndexArray = new int[_numberOfHandsNeeded];
 
@@ -176,9 +209,9 @@ public class sPlayerCharacter : MonoBehaviour
         // Set to -1 by default
         //int _tempIndex = -1;
 
-        Debug.Log("Hands Index Array has length of " + handsUsedIndexArray.Length);
+        //Debug.Log("Hands Index Array has length of " + handsUsedIndexArray.Length);
 
-        Debug.Log("Hands List Count = " + handsList.Count);
+        //Debug.Log("Hands List Count = " + handsList.Count);
 
         if(handsList == null)
         {
@@ -191,7 +224,7 @@ public class sPlayerCharacter : MonoBehaviour
 
             bool canUse = true;
 
-            Debug.Log("Running check on hand list index of " + i);
+           // Debug.Log("Running check on hand list index of " + i);
 
             // Checks if a hand is available to use
             if(!handsList[i].ReturnIsBeingUsed())
@@ -206,7 +239,7 @@ public class sPlayerCharacter : MonoBehaviour
                     Debug.Log("HandsUsedIndexArray is null");
                 }
 
-                Debug.Log("Temp hand set to hand number " + i);
+                //Debug.Log("Temp hand set to hand number " + i);
                 //_tempIndex = i;
                 handsUsedIndexArray[i] = i;
                 //return tempHand;

@@ -172,4 +172,14 @@ public class sRigGear : MonoBehaviour, iRiggable, iGrabbable
     {
 
     }
+
+    public void OnSelect()
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public void OffSelect()
+    {
+        throw new System.NotImplementedException();
+    }
 }

@@ -6,19 +6,17 @@ public class sCharacterActionController : MonoBehaviour
 {
     public SO_EventsUI soUI;
 
-    GameObject interactiveObject;
+    sToolHandler toolHandler;
 
-    GameObject toolObject;
+    GameObject interactiveObject = null;
 
-    iActionable actionable;
+    iActionable actionable = null;
 
     bool isTouchingActionable = false;
 
     bool isDoingAction = false;
 
-    bool hasTool;
-
-    eToolType toolTypeHeld = eToolType.NONE;
+    SO_ItemData itemData = null;
 
     public string popupControlText = "Left Click For Action";
 
@@ -26,9 +24,7 @@ public class sCharacterActionController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        interactiveObject = null;
-
-        actionable = null;
+        toolHandler = GetComponent<sToolHandler>();
     }
 
     // Update is called once per frame
@@ -41,101 +37,103 @@ public class sCharacterActionController : MonoBehaviour
     {
         if (isTouchingActionable && !isDoingAction)
         {
-            if (Input.GetMouseButton(0) && actionable != null && interactiveObject != null)
+            // This checks for input to trigger an actionable.  Does a null check for actionable interface and interactive object
+            if (Input.GetMouseButton(0))// && actionable != null && interactiveObject != null)
             {
+                if(actionable!=null && interactiveObject != null)
+                {
                     isDoingAction = true;
+
                     Debug.Log("Action triggered on " + actionable.ToString());
-                    actionable.TriggerAction(interactiveObject, toolTypeHeld);
+
+                    actionable.TriggerAction(interactiveObject, itemData);
+                }   
             }
 
+            else
+            {
+                if (actionable != null && interactiveObject != null)
+                {
+                    isDoingAction = false;
 
+                    Debug.Log("Action Stopped in  " + interactiveObject.name);
+
+                    actionable.StopAction();
+                }
+            }
+
+            
+            // This stops an action
             if (Input.GetMouseButtonUp(0) && actionable != null)
             {
                 isDoingAction = false;
 
-                Debug.Log("Action Stopped with " + interactiveObject.name);
-                actionable.StopAction(interactiveObject);
-                
-            }
-        }
+                Debug.Log("Action Stopped on  " + actionable);
 
-        else
-        {
-            if (Input.GetMouseButtonUp(0) && actionable != null)
-            {
-                isDoingAction = false;
-
-                Debug.Log("Action Stopped with " + interactiveObject.name);
-                actionable.StopAction(interactiveObject);
-                
-            }
-        }
-    }
-
-    void ActionableCheck(GameObject _collisionObj)
-    {
-        if (_collisionObj.TryGetComponent(out iActionable _actionable))
-        {
-            if(_actionable.HasAction)
-            {
-                soUI.ToggleControlsPopup(popupControlText);
-
-                if (_collisionObj == toolObject)
-                {
-                    //Debug.Log("Collision with tool object");
-
-                    return;
-                }
-
-                else
-                {
-                    //Debug.Log("Touching Actionable and can trigger an action with LEFT CLICK");
-                    isTouchingActionable = true;
-                    actionable = _actionable;
-                    interactiveObject = _collisionObj;
-
-                    //GetComponent<sCharacterGrabController>().SetActionable(actionable);
-                }
+                actionable.StopAction();      
             }
             
         }
 
-        //else
-        //{
-            //Debug.Log("Collision with non Actionable");
-            //isTouchingActionable = false;
-            //actionable = null;
-        //}
-    }
-
-    // Checks on collision to see if a character is touchign a tool
-    void ToolCheck(Collision collision)
-    {
-        if (collision.gameObject.TryGetComponent<sTool>(out sTool _tool))
+        else
         {
-            hasTool = true;
+            // This stops an active action.  Does a check for an actionable
+            if (Input.GetMouseButtonUp(0) && actionable != null)
+            {
+                isDoingAction = false;
 
-            toolObject = collision.gameObject;
+                Debug.Log("Action Stopped with " + actionable.ToString());
 
-            toolTypeHeld = _tool.typeOfTool;
-
-            //Debug.Log(toolTypeHeld.ToString() + " tool picked up.");
-
-            interactiveObject = null;
+                actionable.StopAction();
+            }
         }
     }
 
-    public bool CheckIfRightToolHeld(eToolType _toolNeeded)
+    // This checks if an item has an actionable interface and sets it if so and triggers UI
+    void ActionableCheck(GameObject _collisionObj)
     {
-        if (_toolNeeded == toolTypeHeld)
-            return true;
-        else return false;
+        if (_collisionObj.TryGetComponent(out iActionable _actionable))
+        {
+            // Sets the actionable
+            actionable = _actionable;
+            interactiveObject = _collisionObj;
+            isTouchingActionable = true;
+
+            // This sets a temp tool that will be null if the player doesn't have the right tool
+            SO_ItemData tempToolData = toolHandler.CheckIfHasTool(actionable.ToolTypeNeeded);
+
+            // Checks if the tool isn't null
+            if(tempToolData != null)
+            {
+                Debug.Log("Item data set from " + tempToolData.name);
+
+                // Sets the item data to the tools item data
+                itemData = tempToolData;
+            }
+            
+
+
+            if(_actionable.HasAction)
+            {
+                soUI.ToggleControlsPopup(popupControlText);
+            }
+        }
     }
 
-    public eToolType ReturnToolTypeHeld()
+    /*
+    public bool CheckIfRightToolHeld(eToolType _toolNeeded)
     {
-        return toolTypeHeld;
+        if(toolHandler.CheckIfHasTool(_toolNeeded) == true)
+        {
+            return true;
+        }
+
+        else
+        {
+            return false;
+        }
     }
+    */
 
     private void OnTriggerStay(Collider other)
     {
@@ -151,21 +149,13 @@ public class sCharacterActionController : MonoBehaviour
                 if(actionable.HasAction)
                 soUI.ToggleControlsPopup(null);
 
+                isTouchingActionable = false;
+
+                interactiveObject = null;
+
+                actionable = null;
                 //Debug.Log(_actionable.ToString() + "Actionable has excited trigger");
             }
         }
     }
-
-    private void OnCollisionEnter(Collision collision)
-    {
-        //ActionableCheck(collision.gameObject);;
-    }
-
-    private void OnCollisionStay(Collision collision)
-    {
-       // ActionableCheck(collision.gameObject);
-    }
-
-
-
 }

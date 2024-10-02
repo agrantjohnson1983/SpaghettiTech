@@ -10,11 +10,11 @@ public class sToolHandler : MonoBehaviour, iRequireHands
 
     sPlayerCharacter playerCharacter;
 
-    SO_ItemData toolItemData;
+    //SO_ItemData toolItemData;
 
-    GameObject toolObj;
+    //GameObject toolObj;
 
-    List<sTool> toolHeldList;
+    List<SO_ItemData> toolHeldItemDataList;
 
 
     // Hands stuff
@@ -59,19 +59,39 @@ public class sToolHandler : MonoBehaviour, iRequireHands
         set { }
     }
 
-    public bool CheckIfHasTool(eToolType _toolType)
+    
+
+    // Start is called before the first frame update
+    void Start()
     {
+        playerCharacter = GetComponentInParent<sPlayerCharacter>();
 
-        bool hasCorrectTool = false;
+        //toolItemData = new SO_ItemData();
+        //toolItemData = null;
 
-        if (toolHeldList != null)
+        //toolObj = null;
+        toolHeldItemDataList = new List<SO_ItemData>();
+        //toolList = new List<SO_ItemData>();
+    }
+
+    public SO_ItemData CheckIfHasTool(eToolType _toolType)
+    {
+        SO_ItemData _tempTool = toolHeldItemDataList[0];
+
+        //bool hasCorrectTool = false;
+
+        if (toolHeldItemDataList != null)
         {
-            for (int i = 0; i < toolHeldList.Count; i++)
+            for (int i = 0; i < toolHeldItemDataList.Count; i++)
             {
-                if (toolHeldList[i].typeOfTool == _toolType)
+                if (toolHeldItemDataList[i].typeOfTool == _toolType)
                 {
-                    Debug.Log("Tool check - has correct type of tool!");
-                    hasCorrectTool = true;
+                    _tempTool = toolHeldItemDataList[i];
+
+                    Debug.Log("Tool check - has correct type of tool!  Returning tool");// + toolHeldList[i].name);
+                    //hasCorrectTool = true;
+
+                    return _tempTool;
                 }
             }
 
@@ -81,52 +101,46 @@ public class sToolHandler : MonoBehaviour, iRequireHands
 
         {
             Debug.Log("Tool held list is null");
+
+            _tempTool = null;
         }
 
-        return hasCorrectTool;
+        Debug.Log("End of tool check - returning at end");
+
+        return _tempTool;
     }
 
-    // Start is called before the first frame update
-    void Start()
+    public List<SO_ItemData> ReturnToolHeldList()
     {
-        playerCharacter = GetComponentInParent<sPlayerCharacter>();
-
-        toolItemData = new SO_ItemData();
-        toolItemData = null;
-
-        toolObj = null;
-        toolHeldList = new List<sTool>();
-        //toolList = new List<SO_ItemData>();
-    }
-
-    public List<sTool> ReturnToolHeldList()
-    {
-        return toolHeldList;
+        return toolHeldItemDataList;
     }
 
     public void DropTool(int _index)
     {
         // Spawns tool model
-        Instantiate(toolHeldList[_index].itemData.prefabItem);
+        Instantiate(toolHeldItemDataList[_index].prefabItem);
 
         // Triggers UI change
-        soUI.TriggerToolChange(toolHeldList[_index].itemData);
+        soUI.TriggerToolChange(toolHeldItemDataList[_index]);
 
         // Removes tool from list
-        toolHeldList.RemoveAt(_index);
+        toolHeldItemDataList.RemoveAt(_index);
     }
 
     private void OnTriggerEnter(Collider other)
     {
         if(other.gameObject.TryGetComponent<sTool>(out sTool _tool))
         {
-            bool handFree = true;
-            int[] _tempIndexArray;// = new int[NumberOfHandsNeeded];
+            Debug.Log("Collided with a tool: " + _tool);
 
-            NumberOfHandsNeeded = _tool.itemData.numberOfHandsNeeded;
+            //bool handFree = true;
+            //int[] _tempIndexArray;// = new int[NumberOfHandsNeeded];
+
+            //umberOfHandsNeeded = _tool.itemData.numberOfHandsNeeded;
             HandUseSprite = _tool.itemData.itemSprite;
-            toolItemData = _tool.itemData;
-
+            //toolItemData = _tool.itemData;
+            
+            /*
             _tempIndexArray = GameManager.gm.ReturnCurrentPlayer().CheckHands(NumberOfHandsNeeded);
             int handCounter = 0;
 
@@ -155,8 +169,10 @@ public class sToolHandler : MonoBehaviour, iRequireHands
                 Debug.Log("No hand free");
             }
 
+            */
+
             // has no tool and grabs a tool - and has hand free
-            if (toolItemData != null  && handFree)
+            if (toolHeldItemDataList != null)//  && handFree)
             {
 
                 //toolItemData = _tool.itemData;
@@ -168,9 +184,9 @@ public class sToolHandler : MonoBehaviour, iRequireHands
 
                 Debug.Log("Tool Acquired to belt");
 
-                toolHeldList.Add(_tool);
+                toolHeldItemDataList.Add(_tool.itemData);
 
-                soUI.TriggerToolChange(toolItemData);
+                soUI.TriggerToolChange(_tool.itemData);
 
                 Destroy(other.gameObject);
 
@@ -192,7 +208,7 @@ public class sToolHandler : MonoBehaviour, iRequireHands
             else
 
             {
-                Debug.Log("You alreayd have a tool and just got another - need to implement this!");
+                Debug.Log("Tool item data list is null!");
                 // spawn a canvas asking if you want to drop current tool
             }
             

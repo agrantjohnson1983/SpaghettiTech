@@ -359,6 +359,7 @@ MonoBehaviour:
   - {fileID: 3165362487830842108}
   - {fileID: 4827032076767576494}
   textItem: SPEAKER
+  ui_Select: {fileID: 6133390124020687999}
   _UI_offset: {x: 0, y: 0, z: 0}
   pBoxInventoryPanel: {fileID: 1716534706403600943, guid: a25d00a46610fa143bd7eae6ac899d6b, type: 3}
   numberOfSlots: 2
@@ -369,7 +370,6 @@ MonoBehaviour:
   materialBoxOpen: {fileID: 2100000, guid: 8d7b5c4f6f36fc649a6756747661b6f5, type: 2}
   materialBoxEmpty: {fileID: 2100000, guid: 7b499c35b7ef4304e8e9004dfcff65af, type: 2}
   inventoryPanelOffset: {x: 0, y: 0, z: 0}
-  ui_Ring: {fileID: 6658291846032122076}
   UI_ToggleDistance: 5
   ui_Img: {fileID: 9113000261166430460}
   ui_Text: {fileID: 3846992118911322363}
@@ -1360,14 +1360,14 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 8911207947660909446, guid: 90062c54f25c7c7428a930ef03996f33, type: 3}
   m_PrefabInstance: {fileID: 5677273971613537149}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &6133390124020687999 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2006238508900742914, guid: 90062c54f25c7c7428a930ef03996f33, type: 3}
+  m_PrefabInstance: {fileID: 5677273971613537149}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &6281625948348463718 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1866015396096059675, guid: 90062c54f25c7c7428a930ef03996f33, type: 3}
-  m_PrefabInstance: {fileID: 5677273971613537149}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &6658291846032122076 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1346219708168762273, guid: 90062c54f25c7c7428a930ef03996f33, type: 3}
   m_PrefabInstance: {fileID: 5677273971613537149}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &9113000261166430460 stripped

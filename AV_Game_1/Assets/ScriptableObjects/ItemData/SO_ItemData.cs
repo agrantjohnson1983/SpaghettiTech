@@ -16,4 +16,5 @@ public class SO_ItemData : ScriptableObject
 
     public GameObject prefabItem;
 
+    public eToolType typeOfTool;
 }

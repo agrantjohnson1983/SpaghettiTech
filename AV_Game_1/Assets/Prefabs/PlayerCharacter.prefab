@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5730748812189424264}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: transformGrab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -42,8 +42,7 @@ GameObject:
   - component: {fileID: 4174687813078836112}
   - component: {fileID: 4174687813078836119}
   - component: {fileID: 4174687813078836118}
-  - component: {fileID: 4174687813078836113}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Cube (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -115,19 +114,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &4174687813078836113
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4174687813078836115}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &4174687813647007813
 GameObject:
   m_ObjectHideFlags: 0
@@ -139,7 +125,7 @@ GameObject:
   - component: {fileID: 4174687813647007834}
   - component: {fileID: 4174687813647007833}
   - component: {fileID: 4174687813647007832}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Capsule
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -223,7 +209,7 @@ GameObject:
   - component: {fileID: 4174687813778331257}
   - component: {fileID: 8416830006361018297}
   - component: {fileID: 4174687813778331256}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Main Camera
   m_TagString: MainCamera
   m_Icon: {fileID: 0}
@@ -321,7 +307,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4174687813809144923}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: model
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -361,7 +347,7 @@ GameObject:
   - component: {fileID: 4174687813835436256}
   - component: {fileID: 4174687813835436262}
   - component: {fileID: 4174687813835436257}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Head (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -444,7 +430,7 @@ GameObject:
   - component: {fileID: 4174687813887566941}
   - component: {fileID: 4174687813887566931}
   - component: {fileID: 4174687813887566930}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Head (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -534,7 +520,7 @@ GameObject:
   - component: {fileID: 6550518059305728465}
   - component: {fileID: 6254593303513223787}
   - component: {fileID: 4579584320167969265}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: PlayerCharacter
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -707,8 +693,7 @@ GameObject:
   - component: {fileID: 4174687814354459211}
   - component: {fileID: 4174687814354459214}
   - component: {fileID: 4174687814354459209}
-  - component: {fileID: 4174687814354459208}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -780,19 +765,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &4174687814354459208
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4174687814354459210}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &4174687814551981143
 GameObject:
   m_ObjectHideFlags: 0
@@ -804,7 +776,7 @@ GameObject:
   - component: {fileID: 4174687814551981140}
   - component: {fileID: 4174687814551981162}
   - component: {fileID: 4174687814551981141}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Head (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -887,7 +859,7 @@ GameObject:
   - component: {fileID: 4174687814903938591}
   - component: {fileID: 4174687814903938589}
   - component: {fileID: 4174687814903938588}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Head
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -968,7 +940,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1428646127320412927}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: transformToolbelt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
