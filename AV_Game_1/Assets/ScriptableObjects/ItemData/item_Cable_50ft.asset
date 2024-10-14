@@ -15,5 +15,6 @@ MonoBehaviour:
   index: 0
   numberOfHandsNeeded: 1
   itemName: Cable_50ft
-  itemSprite: {fileID: 21300000, guid: 73d124bf77e463c45942d14136745d9f, type: 3}
+  itemSprite: {fileID: 21300000, guid: 920bdd9aaec08f441ab2a8f4cc0bcaf3, type: 3}
   prefabItem: {fileID: 7794338550508641806, guid: f85dcf2e78a536648b0fa169c5ddd0fc, type: 3}
+  typeOfTool: 1

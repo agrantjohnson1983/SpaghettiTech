@@ -231,3 +231,5 @@ MonoBehaviour:
   textMPAbove: {fileID: 0}
   itemTextMP: []
   textItem: 
+  ui_Select: {fileID: 0}
+  _UI_offset: {x: 0, y: 0, z: 0}

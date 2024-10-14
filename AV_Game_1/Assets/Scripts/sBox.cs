@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
-public class sBox : sInteractive, iClickable
+public class sBox : sInteractive, iClickable, IPointerEnterHandler, IPointerExitHandler
 {
     GameManager gm;
 
@@ -37,6 +38,8 @@ public class sBox : sInteractive, iClickable
     public Vector3 ui_Img_Offset, ui_Text_Offset;
 
     public GameObject pModel;
+
+    public Texture2D boxSelectMouseImage;
 
     // Start is called before the first frame update
     private void Awake()
@@ -93,6 +96,10 @@ public class sBox : sInteractive, iClickable
                 ui_Text.SetActive(false);
 
                 ui_Img.SetActive(false);
+
+                ui_Select.SetActive(false);
+
+                //GameManager.gm.ReturnCurrentPlayer().ReturnGrabController().grabPopupText.
             }
 
             else
@@ -160,6 +167,7 @@ public class sBox : sInteractive, iClickable
         //ui_Ring.SetActive(false);
         //ui_Ring.GetComponentInChildren<MeshRenderer>().material.color = Color.red;
         ui_Text.SetActive(false);
+
         ui_Img.SetActive(false);
 
 
@@ -208,7 +216,8 @@ public class sBox : sInteractive, iClickable
         {
             isWithinOpenRange = true;
 
-            ui_Img.SetActive(true);
+            //ui_Img.SetActive(true);
+            if(!isOpen)
             ui_Text.SetActive(true);
             //ui_Ring.SetActive(!iGrabbable.IsGrabbed);
         }
@@ -219,7 +228,7 @@ public class sBox : sInteractive, iClickable
 
             isWithinOpenRange = false;
 
-            ui_Img.SetActive(false);
+            //ui_Img.SetActive(false);
             ui_Text.SetActive(false);
 
             //ui_Ring.SetActive(false);
@@ -258,6 +267,24 @@ public class sBox : sInteractive, iClickable
         //Debug.Log("Off Select on Box");
         ui_Select.SetActive(false);
         //base.OnSelect();
+    }
+
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        Debug.Log("Mouse entered the box object of " + this.gameObject.name);
+
+        if(isWithinOpenRange)
+        ui_Img.SetActive(true);
+        //Cursor.SetCursor(boxSelectMouseImage, new Vector2(10, 10), CursorMode.Auto);
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        Debug.Log("Mouse has exited box " + this.gameObject.name);
+
+        if (eventData.fullyExited)
+            ui_Img.SetActive(false);
+        //Cursor.SetCursor()
     }
 
     /*

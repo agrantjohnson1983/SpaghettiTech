@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
+// This script handles all of the connections available within the connection source and creates/destroys the buttons associated with those connections
+// as well as handling the line rendering systems
 public class uConnectionsAvailablePanel : MonoBehaviour
 {
     //public static uConnectionsAvailablePanel connectionAvailablePanel;
@@ -11,45 +13,68 @@ public class uConnectionsAvailablePanel : MonoBehaviour
 
     public GameObject pButtonConnectionAvailable;
 
+    // This is a list of game objects that have pluggable behaviors
     List<GameObject> connectionsAvailableList;
 
+    // connection source what starts the connection of a plug
     sConnectionSource connectionSource;
+
+    // connection plate has all of the input channels
     uConnectionPlate connectionPlate;
 
     GameObject connectionClickedObj;
 
+    // Line Renderer Stuff
     LineRenderer lr;
-
-    List<LineRenderer> lineRendererList;
-
     Vector3 startPos;
     Vector3 endPos;
     Camera cam;
     [SerializeField] AnimationCurve animationCurve;
 
     Vector3 camOffset = new Vector3(0, 0, 10);
-    bool isClickingConnection = false;
+
+    // this bool is used by the line renderer to know if the player is clicking the mouse which renders the line
+    bool isClickingConnectionAvailable = false;
 
     int tempClickedIndex = -1;
 
-    public GameObject connectionLine;
+    // this spawns a "connection" line renderer when the player connects a line
+    public GameObject pConnectionLineRenderer;
 
+    // these get set for the line renderer to determine start and end positions when making a line connection
+    GameObject tempStartObj, tempEndObj;
+
+    // connection lines gets spawned to this location
+    public Transform lineRenderersTransform;
+
+    // a list of the connection lines when they gets spawned upon making a connection
+    List<sConnectionLineRenderer> lineRendererConnectionList;
+
+    private void OnEnable()
+    {
+        if(lr)
+        lr.enabled = false;
+    }
 
     // Start is called before the first frame update
     void Start()
     {
-        // Line Renderer stuff
-        lr = sConnectionLineRenderer.lineRender.lr;
+        lr = GetComponent<LineRenderer>();
+
+        // turns the line renderer off upon start
         lr.enabled = false;
+
+        // sets a reference to the main camera
         cam = Camera.main;
 
-        lineRendererList = new List<LineRenderer>();
+        lineRendererConnectionList = new List<sConnectionLineRenderer>();
     }
 
     // Line Rendere Gets toggled when "isClickingConnection" is toggled
     void Update()
     {
-        if(isClickingConnection)
+        // The line renderer only turns on if "isClickingConnection" is toggled on
+        if(isClickingConnectionAvailable)
         LineHandler();
     }
 
@@ -68,24 +93,35 @@ public class uConnectionsAvailablePanel : MonoBehaviour
     // This sets all the connection available buttons
     public void SetConnectionsAvailable(List<GameObject> _pluggableObjects)
     {
+            // checks to make sure there are connections available
             if(connectionsAvailableList != null)
             {
+                if(connectionsAvailableList.Count >= _pluggableObjects.Count)
+                {
+                    Debug.Log("Connection available list count is greater than or equal to pluggable objects list count - returning");
+                    return;
+                }
+                
                 Debug.Log("More than 1 connection - adding to list with list count of " + connectionsAvailableList.Count);
 
-                for (int i = 1; i < _pluggableObjects.Count; i++)
+                // iterates through plugable objects list - This was set to start at 1 - not sure why?  setting to 0
+                for (int i = 0; i < _pluggableObjects.Count; i++)
                 {
+                    // temp connection button reference
                     uButtonConnectionAvailable connectionButton;
-
+                    
+                    // button is spawned and aded to connections available list
                     connectionsAvailableList.Add(Instantiate(pButtonConnectionAvailable, connectionsGridTransform));
-
+                    
+                    // gets a reference to the button component on the connection available object
                     connectionButton = connectionsAvailableList[i].gameObject.GetComponent<uButtonConnectionAvailable>();
 
+                    // sets the button to the plugs information
                     connectionButton.SetConnection(_pluggableObjects[i].GetComponent<iPluggable>().connectionSprite, i + 1.ToString(), i);
-
-                    //connectionButton.SetI
                 }
             }
 
+            // This does same thing as about but creates a new list and adds the first object to 0 index
             else
             {
                 Debug.Log("1st connection available spawnning");// - adding to list with list count of " + connectionsAvailableList.Count);
@@ -105,35 +141,83 @@ public class uConnectionsAvailablePanel : MonoBehaviour
     // This Gets called when an available connection is clicked on an available channel.  Changes available connection color, etc.
     public void SetButtonConnected(int _index)
     {
-        connectionsAvailableList[_index].GetComponent<uButtonConnectionAvailable>().OnChannelClick();
-        
-        // This sets a line renderer
-        SetConnectionLine(_index);
+        Debug.Log("Setting button connected and line connection with index of: " + _index);
+
+        isClickingConnectionAvailable = false;
+
+        GameObject tempObj;
+
+        tempObj = connectionsAvailableList[_index];
+
+        connectionsAvailableList.Remove(tempObj);
+
+        Destroy(tempObj);
+
+        if (connectionsAvailableList.Count == 0)
+            this.gameObject.SetActive(false);
+        //connectionsAvailableList[_index].GetComponent<uButtonConnectionAvailable>().OnChannelClick();
     }
 
-
-    // This sets the isClickingConnection to true which turns on the line renderer
+    // Returns the button connected gameobject from an index
+    public GameObject ReturnButtonConnectedFromIndex(int _index)
+    {
+        return connectionsAvailableList[_index];
+    }
+    
+    // This gets called by a Connection Available Channel - This sets the isClickingConnection to true which turns on the line renderer.  This also sets the tempClickIndex, which lets an input channel get an index.
     public void OnConnectionClick(int _index)
     {
-
         Debug.Log("Button Click at index of: " + _index + ".  Connections available list has count of: " + connectionsAvailableList.Count);
 
-        isClickingConnection = true;
+        // toggles the bool
+        isClickingConnectionAvailable = true;
 
-        tempClickedIndex = _index;
-
+        // Checks to make sure index is greater than 0
         if (_index >= 0)
         {
-            Debug.Log("Triggering " + connectionsAvailableList[_index].gameObject.name);
+            //Debug.Log("Triggering " + connectionsAvailableList[_index].gameObject.name);
 
+            // Sets the connection clicked object
             connectionClickedObj = connectionsAvailableList[_index];
+
+            // Sets the temp clicked index
+            tempClickedIndex = _index;
         }
             
 
         else
             Debug.Log("Index is less than 0");
+    }
 
-        
+    // This gets called when a plug is getting disconnected - it removes the plug from connections available list and destroys the button
+    public void DisconnectPlug(int _index)
+    {
+        if (connectionsAvailableList.Count > 0)
+        {
+            // iterates through the connection available list
+            for (int i = 0; i < connectionsAvailableList.Count; i++)
+            {
+                // checks if the button available's index on the connection available list is the same as the parameter input
+                if (connectionsAvailableList[i].GetComponent<uButtonConnectionAvailable>().ReturnIndex() == _index)
+                {
+                    Debug.Log("Connection Available is disconnecting " + _index);
+
+                    // temp GO ref
+                    GameObject tempObj;
+
+                    // sets a temp GO ref to the button object
+                    tempObj = connectionsAvailableList[i];
+
+                    // Removes the connection at this array point
+                    connectionsAvailableList.Remove(tempObj);
+
+                    // Destroys the button object
+                    Destroy(tempObj);
+
+                    // Will this mess up index points of other connections????
+                }
+            }
+        }
     }
 
     // This returns the index that has been temporarily set
@@ -142,52 +226,45 @@ public class uConnectionsAvailablePanel : MonoBehaviour
         return tempClickedIndex;
     }
 
+    // This changes the color of the connection available line that gets drawn to whatever color is input
+    public void ChangeLineColor(Color _color)
+    {
+        lr.startColor = _color;
+        lr.endColor = _color;
+    }
+
     // This method handles the line renderer when the player clicks a button for a "connection available"
     void LineHandler()
     {
-           if(lr.enabled == false)
-            {
-            //Debug.Log("Starting Line");
-            //lr = gameObject.AddComponent<LineRenderer>();
+        if(lr.enabled == false)
+           {
 
+            // Turns on line
             lr.enabled = true;
 
+            // Sets line to world space
             lr.useWorldSpace = true;
 
+            // Sets line to have 2 positions
             lr.positionCount = 2;
             
-            //startPos = connectionClickedObj.transform.position;
-
+            // Sets first position to mouse position converted from screen to world
             startPos = cam.ScreenToWorldPoint(Input.mousePosition+camOffset);
 
-            //startPos.z = sPlayerCharacter.playerGlobal.transform.position.z;
-
+            // Sets the line to the startPos
             lr.SetPosition(0, startPos);
-            
-            
-            //lr.widthCurve = animationCurve;
-            //lr.numCapVertices = 10;
-
-            }
+        }
 
         if(Input.GetMouseButton(0))
         {
-            //endPos = Input.mousePosition;
-
+            // Gets a reference to mouse position
             Vector3 endMousePos = Input.mousePosition;
 
-            //endMousePos = endMousePos * -1;
-
-            //endPos = Camera.main.ScreenToWorldPoint(endPos);
+            // Sets the end pos to the mouse pos converted from screen space to world space
             endPos = Camera.main.ScreenToWorldPoint(endMousePos+camOffset);
 
-            //endPos.z = 0;
-
-            //endPos.z = sPlayerCharacter.playerGlobal.transform.position.z;
-
+            // Sets the line end point to the endPos
             lr.SetPosition(1, endPos);
-
-            //Debug.Log("Holding Line");
         }
 
         if(Input.GetMouseButtonUp(0))
@@ -196,41 +273,43 @@ public class uConnectionsAvailablePanel : MonoBehaviour
             
             lr.positionCount = 0;
 
-            
-            //lr = null;
-            isClickingConnection = false;
+            isClickingConnectionAvailable = false;
 
-            Debug.Log("Line Release");
+            //Debug.Log("Line Release");
         }
     }
 
+    // Sets the temp connection objects for the line connection
+    public void SetTempConnectionObjects(GameObject _tempStartObj, GameObject _tempEndObj)
+    {
+        tempStartObj = _tempStartObj;
 
+        tempEndObj = _tempEndObj;
+    }
 
     // Use this for setting a connection line to continually appear once it's been connected
     public void SetConnectionLine(int _index)
     {
-        // Caches a line renderer
-        LineRenderer _lr;
-        
-        // Spanws the line renderer and then gets a reference to it
-        _lr = Instantiate(connectionLine, this.transform).GetComponent<LineRenderer>();
+        //Debug.Log("Setting Connection Line at index of " + _index);
 
-        // Adds position count to set the two line points
-        _lr.positionCount = 2;
+        // temp ref for line renderer connection
+        sConnectionLineRenderer lineRendererConnection;
 
-        // Uses the startPos and endPos of the other line renderer system which sets the line to the last 2 points used
-        _lr.SetPosition(0, startPos - camOffset);
-        _lr.SetPosition(1, endPos - camOffset);
+        // Spawns the line renderer prefab and gets a reference to the Connection Line Renderer component inside
+        lineRendererConnection = Instantiate(pConnectionLineRenderer, lineRenderersTransform).GetComponent<sConnectionLineRenderer>();
 
-        // Adds the line to the line renderer list
-        lineRendererList.Add(_lr);
+        // Sets the start and end connection object and index of the line renderer connection
+        lineRendererConnection.SetConnectionObjects(tempStartObj, tempEndObj, _index);
+
+        // Adds the line to the line renderer connection list
+        lineRendererConnectionList.Add(lineRendererConnection);
     }
 
     // When a connection available button is clicked when connected
     public void DisconnectLine(int _index)
     {
 
-        Debug.Log("Disabling Line Renderer at index of: " + _index);
+        //Debug.Log("Disabling Line Renderer at index of: " + _index);
 
         // Checks to make sure index is not set to negative
         if (_index < 0)
@@ -240,23 +319,34 @@ public class uConnectionsAvailablePanel : MonoBehaviour
         }
 
         // Checks to see if line renderer list is null
-        if(lineRendererList == null)
+        if(lineRendererConnectionList == null)
         {
             Debug.Log("Line Render List Null");
             return;
         }
 
         // Sets line render from index
-        LineRenderer lr = lineRendererList[_index];
+        sConnectionLineRenderer lr = lineRendererConnectionList[_index];
 
         // Removes line from list
-        lineRendererList.Remove(lr);
+        lineRendererConnectionList.Remove(lr);
 
         // Destroys line
         Destroy(lr.gameObject);
     }
-    
 
+    private void OnDisable()
+    {
+        ResetLineRenderer();
+    }
+
+    void ResetLineRenderer()
+    {
+        isClickingConnectionAvailable = false;
+
+        lr.enabled = false;
+    }
+    
     // Returns a reference to the connection plate
     public uConnectionPlate ReturnConnectionPlate()
     {
@@ -264,8 +354,8 @@ public class uConnectionsAvailablePanel : MonoBehaviour
     }
     
     // Returns if the player is clicking connection or not
-    public bool ReturnIsClicking()
+    public bool ReturnIsClickingConnectionAvailable()
     {
-        return isClickingConnection;
+        return isClickingConnectionAvailable;
     }
 }

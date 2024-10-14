@@ -8,6 +8,8 @@ public class sConnectionSource : MonoBehaviour
 
     //public sPlug[] plugs;
 
+    public ePlugType typeOfConnection;
+
     int numberOfPlugsOpen;
 
     bool isFull;
@@ -20,6 +22,7 @@ public class sConnectionSource : MonoBehaviour
     public GameObject pConnectionPanel, pConnectionAvailablePanel;
 
     uConnectionPlate connectionPlate;
+
     uConnectionsAvailablePanel connectionsAvailablePlate;
 
     public List<GameObject> pluggableList;
@@ -28,7 +31,8 @@ public class sConnectionSource : MonoBehaviour
 
     public Transform connectionsPlateTransforms;
 
-    //FixedJoint joint;
+    public uTextPopupSpawn uTextPopup;
+
 
     // Start is called before the first frame update
     void Start()
@@ -37,6 +41,7 @@ public class sConnectionSource : MonoBehaviour
         //numberOfPlugsOpen = plugInLocations.Length;
 
         SpawnConnectionPlate();
+
         SpawnConnectionsAvailablePanel();
 
         rb = GetComponent<Rigidbody>();
@@ -44,20 +49,27 @@ public class sConnectionSource : MonoBehaviour
         //joint = GetComponent<FixedJoint>();
     }
 
+    // This spawns the connection plate which all of the input channels
     void SpawnConnectionPlate()
     {
+        // temp game object reference
         GameObject tempObj;
 
+        // spawns a connection panel prefab in the connectin plate transform
         tempObj = Instantiate(pConnectionPanel, connectionsPlateTransforms);
 
-        connectionPlate = tempObj.GetComponent<uConnectionPlate>();
+        // gets a reference to the connection plate
+        connectionPlate = tempObj.GetComponentInChildren<uConnectionPlate>();
 
+        // Gives connectino plate a reference to this connection source
         connectionPlate.SetSource(this);
 
-        connectionPlate.gameObject.SetActive(false);
+        // Turns off the connection plate
+        connectionPlate.gameObject.transform.parent.gameObject.SetActive(false);
     }
 
 
+    // This spawns the connection available panel which shows connections that are avaiable when the have collided with the connection source
     void SpawnConnectionsAvailablePanel()
     {
         GameObject tempObj;
@@ -66,12 +78,15 @@ public class sConnectionSource : MonoBehaviour
 
         connectionsAvailablePlate = tempObj.GetComponent<uConnectionsAvailablePanel>();
 
+        // Gives the connection available plate a reference to this connection source
         connectionsAvailablePlate.SetConnectionSource(this);
 
         connectionsAvailablePlate.gameObject.SetActive(false);
 
+        // Gives the connection plate a reference to the connection available panel
         connectionPlate.SetConnectionsAvailablePanel(connectionsAvailablePlate);
 
+        // Gives the connection available plate a reference to the connection plate
         connectionsAvailablePlate.SetConnectionPlate(connectionPlate);
     }
 
@@ -79,13 +94,25 @@ public class sConnectionSource : MonoBehaviour
     // This handles adding a joint to the plug object when it collides with the connection source
     public void ConnectPlugJoint(GameObject _plugObject)
     {
-        Debug.Log("Adding fixed joint to " + _plugObject.name);
+        //Debug.Log("Adding hinge joint to " + _plugObject.name);
 
-        FixedJoint joint;
+        HingeJoint joint;
 
-        joint = _plugObject.AddComponent<FixedJoint>();
+        // adds joint to the plug object
+        joint = _plugObject.AddComponent<HingeJoint>();
 
+        // sets the joints connected body to this rigidbody
         joint.connectedBody = rb;
+    }
+
+
+    // This gets called when a plug connection is completed within the connection plate UI system
+    public void ConnectPlug(int _index)
+    {
+        Debug.Log("Plug is connected at index of " + _index);
+
+        // This sets the connectionSource of the plug to this.
+        pluggableList[_index].GetComponent<iPluggable>().SetConnection(this.gameObject);
     }
 
     // When a connection is clicked from connection plate - turns connection plate off
@@ -93,39 +120,56 @@ public class sConnectionSource : MonoBehaviour
     {
         Debug.Log("Power is Connected to source");
 
-        //pluggableList[_index]
+        //pluggableList[_index].GetComponent<iPluggable>().SetConnection(this.gameObject);
 
         // TO DO - Set all the segments of a cable to yellow if half connected
 
         //connectionPlate.gameObject.SetActive(false);
     }
 
-    public void DisconnectClick()
+    // This Removes a pluggable object based in the index given
+    public void DisconnectClick(int _index)
     {
         Debug.Log("Power is now disconnected");
+
+        // temp GO ref
+        GameObject tempObj;
+
+        // sets temp GO as pluggable list obj
+        tempObj = pluggableList[_index];
+
+        // removes plug from pluggable list
+        pluggableList.Remove(tempObj);
 
     }
 
     private void OnCollisionEnter(Collision collision)
     {
+        // Checks for a pluggable interaface
         if (collision.gameObject.TryGetComponent<iPluggable>(out iPluggable _pluggable))
         {
-            if(_pluggable.IsInput)
+            // Checks if the plug is input and also that the plug is NOT plugged in AND if the connection type is correct - Connection Source requires an input - 
+            if(_pluggable.IsInput && !_pluggable.IsPluggedIn && _pluggable.CheckIfCorrectConnection(typeOfConnection) == true)
             {
-                Debug.Log("Input connection detected");
+                //Debug.Log("Input connection detected");
 
                 // Checks for dupes in pluggable list
                 bool _isThereADupe = false;
 
-                if (pluggableList.Count > 1)
+                // Checks if the pluggable list has anything in it - looking for dupes
+                if (pluggableList.Count > 1 )
                 {
-                    Debug.Log("Checking for dupes");
+                    //Debug.Log("Checking for dupes");
 
+                    // iterates through the pluggable list - should the Count be -1?
                     for (int i = 0; i < pluggableList.Count; i++)
                     {
+                        // Checks if the pluggable in the pluggable list is the same as the one collided with
                         if (pluggableList[i].GetComponent<iPluggable>() == _pluggable)
                         {
-                            Debug.Log("Dupe found!");
+                            Debug.Log("Dupe pluggable found!");
+
+                            // Sets bool to true if there was a dupe
                             _isThereADupe = true;
                         }
                     }
@@ -133,7 +177,7 @@ public class sConnectionSource : MonoBehaviour
                     // if no dupe then can be added to pluggables list
                     if (_isThereADupe == false)
                     {
-                        Debug.Log("No dupe found - Adding Pluggable " + _pluggable.ToString() + " to pluggable available list");
+                        //Debug.Log("No dupe found - Adding Pluggable " + _pluggable.ToString() + " to pluggable available list");
 
                         // Connects joint to plug securing it's position 
                         ConnectPlugJoint(collision.gameObject);
@@ -141,13 +185,19 @@ public class sConnectionSource : MonoBehaviour
                         // adds plug to list of plugs available
                         pluggableList.Add(collision.gameObject);
 
+                        // gives the pluggable a reference to this GO which will get a ref to this source behavior
+                        _pluggable.SetConnection(this.gameObject);
+
                         // sets plug to available for plugin
-                        _pluggable.SetPlugAvailable(this.gameObject, true);
+                        _pluggable.SetPlugAvailable(true);
+
+                        // Sets the index in the pluggable.  Minus -1 to get correct array position.
+                        _pluggable.SetIndex(pluggableList.Count-1);
                     }
 
                     else
                     {
-                        Debug.Log("Dupe was found - doing nothing");
+                        //Debug.Log("Dupe was found - doing nothing");
                     }
                 }
 
@@ -158,50 +208,93 @@ public class sConnectionSource : MonoBehaviour
                     // Connects joint to plug securing it's position 
                     ConnectPlugJoint(collision.gameObject);
 
-                    // adds plug to list of plugs available
+                    // creats new pluggable list
                     pluggableList = new List<GameObject>();
+
+                    // adds plug to list of plugs available
                     pluggableList.Add(collision.gameObject);
 
+                    // gives the pluggable a reference to this GO which will get a ref to this source behavior
+                    _pluggable.SetConnection(this.gameObject);
+
                     // sets plug to available for plugin
-                    _pluggable.SetPlugAvailable(this.gameObject, true);
+                    _pluggable.SetPlugAvailable(true);
+
+                    // Sets the index in the pluggable.  Minus -1 to get correct array position.
+                    _pluggable.SetIndex(pluggableList.Count - 1);
                 }
             }
             
             else
             {
-                Debug.Log("Plug is an output!");
-            }
+                Debug.Log("Plug is an output or plug is plugged in or the plug type is incorrect!");
 
-            Debug.Log("Pluggable List count is: " + pluggableList.Count);
-        }
-
-        if(collision.gameObject.CompareTag("Player"))
-        {
-            // Checks the connection canvas and turns it on
-            if(!connectionCanvasOpen)
-            {
-                Debug.Log("Opening Connection Plate Canvas");
-                connectionCanvasOpen = true;
-                connectionPlate.gameObject.SetActive(true);
-            }
-
-            // Checks to see if connections avail is open and if there are any
-            if(!connectionAvailableCanvasOpen)
-            {
-                Debug.Log("Opening Connection Available Canvas");
-                connectionAvailableCanvasOpen = true;
-                connectionsAvailablePlate.gameObject.SetActive(true);
-
-                if (pluggableList.Count > 0)
+                if(_pluggable.CheckIfCorrectConnection(typeOfConnection) == false)
                 {
-                   // Debug.Log("Destroying all buttons and then opening connection available canvas and sending connection available list");
-                    //connectionsAvailablePlate.DestroyAllButtons();
-                    connectionsAvailablePlate.SetConnectionsAvailable(pluggableList);
+                    // Spawns a text message saying wrong type of connection
+                    uTextPopup.SpawnTextPopup(this.transform, "WRONG TYPE OF CONNECTION", 12);
                 }
-                    
+
+                else if(_pluggable.IsInput && _pluggable.CheckIfCorrectConnection(typeOfConnection) == true)
+                {
+                    // Spawns a text message saying wrong end of cable
+                    uTextPopup.SpawnTextPopup(this.transform, "WRONG END OF CABLE", 12);
+                }
 
                 else
-                    Debug.Log("Pluggable Available List is null");
+                {
+                    // Not sure what would go here?
+                }
+            }
+
+            //Debug.Log("Pluggable List count is: " + pluggableList.Count);
+        }
+
+        // Checks for a collision with a player
+        if(collision.gameObject.CompareTag("Player"))
+        {
+            if(pluggableList.Count <= 0)
+            {
+                Debug.Log("No pluggables in list");
+                return;
+            }
+
+            // Checks the connection canvas is not open
+            if(!connectionCanvasOpen && pluggableList.Count > 0)
+            {
+                //Debug.Log("Opening Connection Plate Canvas");
+
+                // Sets bool to true to open
+                connectionCanvasOpen = true;
+
+                // Turns on the connection plate canvas object
+                connectionPlate.gameObject.transform.parent.gameObject.SetActive(true);
+            }
+
+            // Checks to see if connections avail is not open
+            if(!connectionAvailableCanvasOpen && pluggableList.Count > 0)
+            {
+                //Debug.Log("Opening Connection Available Canvas");
+
+                // Sets bool to true to open
+                connectionAvailableCanvasOpen = true;
+
+                // Sets the connection avaiable plate to open
+                connectionsAvailablePlate.gameObject.SetActive(true);
+
+                // Checks that there's something in the pluggable list
+                //if (pluggableList.Count > 0)
+                //{
+                    Debug.Log("Setting connections available list from pluggable list");
+                    //connectionsAvailablePlate.DestroyAllButtons();
+
+                    //Sets the connections abailable based on the pluggable list
+                    connectionsAvailablePlate.SetConnectionsAvailable(pluggableList);
+                //}
+                    
+
+                //else
+                    //Debug.Log("Pluggable Available List is null");
             }            
         }
     }
@@ -211,39 +304,17 @@ public class sConnectionSource : MonoBehaviour
     
     private void OnCollisionExit(Collision collision)
     {
-        //if (collision.gameObject.TryGetComponent<iPluggable>(out iPluggable _pluggable))
-        //{
-            /*
-            if(pluggableAvailableList != null)
-            {
-                // Checks for dupes in pluggable list - removes a dupe in this case
-                bool _isThereADupe = false;
-
-                for (int i = 0; i < pluggableAvailableList.Count; i++)
-                {
-                    if (pluggableAvailableList[i] == collision.gameObject)
-                    {
-                        Debug.Log("Dupe found on exit!");
-                        _isThereADupe = true;
-                    }
-                }
-
-                // if  dupe then can be removed from pluggables list
-                if (_isThereADupe == true)
-                {
-                    Debug.Log("Removing Dupe");
-                    pluggableAvailableList.Remove(collision.gameObject);
-                }
-            }
-            */
-        //}
-
+        // Checks for a collision with the player
         if (collision.gameObject.CompareTag("Player"))
         {
-            if (connectionCanvasOpen)
+            // Checks i the connection canvas is open AND if the connection plate doesn't have anything plugged in, otherwise will stay open
+            if (connectionCanvasOpen && connectionPlate.ReturnHasAPlugPlugged() == false)
             {
+                // Sets the connection canvas open to false
                 connectionCanvasOpen = false;
-                connectionPlate.gameObject.SetActive(false);
+
+                // Turns the connection plate off
+                connectionPlate.gameObject.transform.parent.gameObject.SetActive(false);
             }
 
             // Checks to see if connections avail is open and if there are any
@@ -251,17 +322,35 @@ public class sConnectionSource : MonoBehaviour
             {
                 //Debug.Log("Destroying all buttons and resetting connections available panel");
 
+                // Sets the connectino available open to false
                 connectionAvailableCanvasOpen = false;
                 //connectionsAvailablePlate.DestroyAllButtons();
+
+                // Resets the line renderer if the player walks out while it's still on
+                //connectionsAvailablePlate.ResetLineRenderer();
+
+                // Turns off the connection available plate
                 connectionsAvailablePlate.gameObject.SetActive(false);
             }
         }
     }
 
     
-
+    // This returns a list of the pluggable game objects
     public List<GameObject> ReturnPluggableAvailableList()
     {
         return pluggableList;
+    }
+
+    // This returns a reference to the connection plate
+    public uConnectionPlate ReturnConnectionPlate()
+    {
+        return connectionPlate;
+    }
+
+    // This returns a reference to the connection available panel
+    public uConnectionsAvailablePanel ReturnConnectionAvailablePanel()
+    {
+        return connectionsAvailablePlate;
     }
 }

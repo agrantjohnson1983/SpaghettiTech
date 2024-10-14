@@ -11,6 +11,7 @@ public class sCableSegmentHandler : MonoBehaviour
     public GameObject MovingUI;
 
     public float movingUItimePerSegment = 1f;
+
     public float movingUIspeed = 5f;
 
     public int numerOfSegments = 20;
@@ -21,10 +22,17 @@ public class sCableSegmentHandler : MonoBehaviour
 
     bool isConnected = false;
 
+    public Vector3 spawnOffset = new Vector3(0,1,0);
+
     //public Sprite
 
     // Start is called before the first frame update
     void Start()
+    {
+        SpawnCable();
+    }
+
+    void SpawnCable()
     {
         cableList = new List<GameObject>();
 
@@ -32,26 +40,39 @@ public class sCableSegmentHandler : MonoBehaviour
 
         sCablePlug cableIn;
 
+        // Spawns the cable INPUT plug
         cableInTemp = Instantiate(pCableIn, this.transform);
 
+        cableInTemp.transform.position += spawnOffset;
+
+        // gets a reference to the plug
         cableIn = cableInTemp.GetComponent<sCablePlug>();
 
+        // add plug reference to cable list
         cableList.Add(cableInTemp);
 
+        // Spawns the segments of the cable
         for (int i = 0; i < numerOfSegments; i++)
         {
             GameObject tempObj;
             ConfigurableJoint tempJoint;
             Rigidbody tempRB;
 
+            // gets a reference to the RB of the cable list - this will start with the plug in
             tempRB = cableList[i].GetComponent<Rigidbody>();
 
+            // spawns a new cable segment
             tempObj = Instantiate(pCableSegment, cableList[i].transform);
 
+            tempObj.transform.position += spawnOffset;
+
+            // gets a reference to the joint on the newly spawned cable segment
             tempJoint = tempObj.GetComponent<ConfigurableJoint>();
 
+            // sets the connected body of the joint as the temp RB
             tempJoint.connectedBody = tempRB;
 
+            //tempRB.velocity = Vector3.zero;
             //tempObj.transform.position = Vector3.zero;
             //tempObj.transform.rotation = cableList[i].transform.rotation;
 
@@ -65,24 +86,38 @@ public class sCableSegmentHandler : MonoBehaviour
         sCablePlug cableOut;
 
         ConfigurableJoint _joint;
-        
+
         Rigidbody _rb;
 
+        // gets a reference to the last cable segments RB
         _rb = cableList[cableList.Count - 1].GetComponent<Rigidbody>();
 
+        // spawns the output plug
         tempCableOut = Instantiate(pCableOut, cableList[cableList.Count - 1].transform);
 
+        tempCableOut.transform.position += spawnOffset;
+
+        // gets reference to the cable plug in the the newly spawn tempCableOut object
         cableOut = tempCableOut.GetComponent<sCablePlug>();
 
+        // gets a reference to the joint in the cable out
         _joint = tempCableOut.GetComponent<ConfigurableJoint>();
 
+        // sets cable out joint to the last sements RB
         _joint.connectedBody = _rb;
 
+        //_rb.velocity = Vector3.zero;
+
+        // adds cable out to the cable list
         cableList.Add(tempCableOut);
 
+        // Gives the cable in a ref to the cable out
         cableIn.SetPlugOtherEnd(cableOut);
+
+        // Gives the cable out a ref to the cable in
         cableOut.SetPlugOtherEnd(cableIn);
 
+        // Turns off the moving UI
         MovingUI.SetActive(false);
     }
 
@@ -90,7 +125,8 @@ public class sCableSegmentHandler : MonoBehaviour
     {
         //isConnected = true;
 
-        //MovingUI.SetActive(true);
+        MovingUI.SetActive(true);
+
         StartCoroutine(MoveConnectionUI());
 
         for (int i = 1; i < cableList.Count-1; i++)
@@ -104,7 +140,7 @@ public class sCableSegmentHandler : MonoBehaviour
     {
         //isConnected = false;
 
-        StopCoroutine(MoveConnectionUI());
+        StopAllCoroutines();
 
         MovingUI.SetActive(false);
 
@@ -140,7 +176,7 @@ public class sCableSegmentHandler : MonoBehaviour
             yield return null;
         }
 
-        MovingUI.SetActive(true);
+        //MovingUI.SetActive(true);
 
         //int currentIndex = 0;
         int nextIndex;
@@ -150,7 +186,7 @@ public class sCableSegmentHandler : MonoBehaviour
         {
             nextIndex = (int)i + 1;
 
-            Debug.Log("Cable Moving from cable list index " + i + " to " + nextIndex);
+            //Debug.Log("Cable Moving from cable list index " + i + " to " + nextIndex);
 
             int counter = 0;
 
@@ -194,18 +230,14 @@ public class sCableSegmentHandler : MonoBehaviour
             //nextIndex--;
         }
 
+        MovingUI.SetActive(true);
+
         StartCoroutine(MoveConnectionUI());
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(isConnected)
-        {
-            for (int i = 0; i < cableList.Count; i++)
-            {
 
-            }
-        }
     }
 }

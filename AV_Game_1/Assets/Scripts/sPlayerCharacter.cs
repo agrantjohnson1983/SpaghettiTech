@@ -169,7 +169,7 @@ public class sPlayerCharacter : MonoBehaviour
     // This will reset a hand and trigger the UI
     public void ResetHand(int[] _indexArray)
     {
-        Debug.Log("Resetting hand");
+        //Debug.Log("Resetting hand");
 
         for (int i = 0; i < _indexArray.Length; i++)
         {

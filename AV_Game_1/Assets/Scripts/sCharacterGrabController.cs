@@ -163,7 +163,7 @@ public class sCharacterGrabController : MonoBehaviour, iRequireHands
             // If the collision is with the same grabbable then the function returns
             if(_grabbable == grabbable && isGrabbing)
             {
-                Debug.Log("Grab handler found itself and is already grabbing");
+                //Debug.Log("Grab handler found itself and is already grabbing");
                 return;
             }
 
@@ -173,7 +173,7 @@ public class sCharacterGrabController : MonoBehaviour, iRequireHands
                 // Checks if the current grabbable is closer than the new one triggered and if so sets it as the new grabbable
                 if (Vector3.Distance(this.gameObject.transform.position, interactiveObject.transform.position) > Vector3.Distance(this.gameObject.transform.position, _collisionObj.transform.position))
                 {
-                    Debug.Log("New grabbale object is closer than the current grabbable");
+                    //Debug.Log("New grabbale object is closer than the current grabbable");
 
                     // De-selects current grabbable
                     grabbable.OffSelect();
@@ -190,14 +190,14 @@ public class sCharacterGrabController : MonoBehaviour, iRequireHands
 
                 else
                 {
-                    Debug.Log("Current grabbable object is closer");
+                    //Debug.Log("Current grabbable object is closer");
                 }
             }
 
             // This gets called if grabbable or interactive object is null
             else
             {
-                Debug.Log("Grabbable or Interactive Object Null - Setting to current collision object");
+                //Debug.Log("Grabbable or Interactive Object Null - Setting to current collision object");
 
                 grabbable = _grabbable;
 
@@ -228,22 +228,22 @@ public class sCharacterGrabController : MonoBehaviour, iRequireHands
 
                     else
                     {
-                        Debug.Log("Temp index pos is greater than -1 at value of: " + _tempIndexArray[i]);
+                        //Debug.Log("Temp index pos is greater than -1 at value of: " + _tempIndexArray[i]);
                         //HandIndexList.Add(_tempIndexArray[i]);
                     }
                 }
 
                 if (!bothHandsFree)
                 {
-                    Debug.Log("Both hands not free");
+                    //Debug.Log("Both hands not free");
                 }
 
                 else
                 {
-                    Debug.Log("Both hands are free");
+                    //Debug.Log("Both hands are free");
                 }
 
-                Debug.Log("Triggering Grab Popup Text");
+                //Debug.Log("Triggering Grab Popup Text");
 
                 // Sets grab UI text
                 soUI.ToggleControlsPopup(grabPopupText);
@@ -258,13 +258,13 @@ public class sCharacterGrabController : MonoBehaviour, iRequireHands
 
             if(Input.GetKey(KeyCode.Space))
             {
-                Debug.Log("Space Key");
+                //Debug.Log("Space Key");
             }
 
             // Checks for input to start Grab, if the player is grabbing already, if both hands are free and if the grabbable object is grabbed
             if (!iGrabbable.IsGrabbed && !isGrabbing && Input.GetKey(KeyCode.Space) && bothHandsFree)
             {
-                Debug.Log("Grab Key Detected and can grab");
+                //Debug.Log("Grab Key Detected and can grab");
 
                 // This gets called when the grabbable is first grabbed
                 grabbable.OnGrab();
@@ -342,7 +342,7 @@ public class sCharacterGrabController : MonoBehaviour, iRequireHands
 
             else
             {
-                Debug.Log("No Key input working");
+                //Debug.Log("No Key input working");
             }
 
             //Debug.Log("Mid Test");
@@ -361,10 +361,10 @@ public class sCharacterGrabController : MonoBehaviour, iRequireHands
         else
 
         {
-            Debug.Log("No keyboard input, grabbable is already grabbed or is already grabbing or both hands aren't free");
+            //Debug.Log("No keyboard input, grabbable is already grabbed or is already grabbing or both hands aren't free");
         }
 
-            Debug.Log("End of Handle Grabbing Function");
+            //Debug.Log("End of Handle Grabbing Function");
     }
 
     public bool ReturnIsGrabbing()
@@ -399,7 +399,7 @@ public class sCharacterGrabController : MonoBehaviour, iRequireHands
         {
             if(_grabbable == grabbable)
             {
-                Debug.Log("Grabbable has exited trigger");
+                //Debug.Log("Grabbable has exited trigger");
 
                 //grabbable.OffSelect();
 

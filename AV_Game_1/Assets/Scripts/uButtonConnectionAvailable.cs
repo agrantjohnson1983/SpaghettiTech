@@ -20,9 +20,12 @@ public class uButtonConnectionAvailable : MonoBehaviour, IPointerDownHandler
     bool isConnected = false;
 
     // Start is called before the first frame update
+
+
+
     void Start()
     {
-        Debug.Log("Button available spawnned");
+        //Debug.Log("Button available spawnned");
 
         connectionsAvailablePanel = GetComponentInParent<uConnectionsAvailablePanel>();
 
@@ -39,12 +42,12 @@ public class uButtonConnectionAvailable : MonoBehaviour, IPointerDownHandler
         index = _index;
     }
 
-    // This gets called when a click release happens on an available channel
+    // This gets called by the connection available panel.  Changes the isConnected bool and switches the color
     public void OnChannelClick()
     {
         if(!isConnected)
         {
-            Debug.Log("Connection available button clicked");
+            //Debug.Log("Connection available button clicked");
 
             isConnected = true;
 
@@ -57,7 +60,7 @@ public class uButtonConnectionAvailable : MonoBehaviour, IPointerDownHandler
     {
         if(isConnected)
         {
-            Debug.Log("Disconnecting Connection Available");
+            //Debug.Log("Disconnecting Connection Available");
 
             isConnected = false;
 
@@ -69,7 +72,7 @@ public class uButtonConnectionAvailable : MonoBehaviour, IPointerDownHandler
             connectionsAvailablePanel.DisconnectLine(index);
 
             // Sends a disconnect to the channel on the plate the connection available is connected to
-            connectionsAvailablePanel.ReturnConnectionPlate().Disconnect(index);
+            connectionsAvailablePanel.ReturnConnectionPlate().DisconnectChannel(index);
         }
     }
 
@@ -78,22 +81,19 @@ public class uButtonConnectionAvailable : MonoBehaviour, IPointerDownHandler
     {
         if(!isConnected)
         {
-            Debug.Log(name + " clicked");
-            //isConnected = true;
+            //Debug.Log(name + " clicked");
+            
             connectionsAvailablePanel.OnConnectionClick(index);
         }      
     }
 
-    //public void OnPointerClick(PointerEventData _eventData)
-    //{
-    //    Debug.Log(name + "clicked");
-    //}
-
+    // Returns if the button is connected to anything
     public bool ReturnIsConnected()
     {
         return isConnected;
     }
 
+    // Returns the index
     public int ReturnIndex()
     {
         return index;
