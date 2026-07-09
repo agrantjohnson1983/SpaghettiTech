@@ -45,8 +45,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4c78ef880e9e4cb498037450fafb7b56, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  soUI: {fileID: 0}
   pCanvasGameplay: {fileID: 0}
   canvasGameplay: {fileID: 0}
+  pCanvasWorldSpace: {fileID: 0}
+  cameraHiring: {fileID: 0}
+  cameraBlueprint: {fileID: 0}
+  isDoingTut: 0
 --- !u!1001 &352652041227535955
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -61,7 +61,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 024097677437c2c4b9bf6111f4fcbc8f, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -375,6 +375,7 @@ MonoBehaviour:
   ui_Img_Offset: {x: 0.6, y: 1, z: -1.5}
   ui_Text_Offset: {x: 0, y: 2, z: 0}
   pModel: {fileID: 918968547397493178}
+  boxSelectMouseImage: {fileID: 0}
 --- !u!1 &4352374421192502972
 GameObject:
   m_ObjectHideFlags: 0

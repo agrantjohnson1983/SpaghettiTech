@@ -225,7 +225,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 9dfc825aed78fcd4ba02077103263b40, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -340,11 +340,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7492ec93d3076a742a2ef356c06ce14b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  typeOfConnection: 0
   connectionPlateImage: {fileID: 813020616, guid: 2ce83a4af89c15246aa3431ece97d0f4, type: 3}
   pConnectionPanel: {fileID: 4570222519362867090, guid: 92110a18d74a8304c8b4024e219361b2, type: 3}
   pConnectionAvailablePanel: {fileID: 8240157060571585621, guid: dff9f0a6a9f8e83478bbefb71edf334f, type: 3}
   pluggableList: []
   connectionsPlateTransforms: {fileID: 4155645299308632265}
+  uTextPopup: {fileID: 0}
 --- !u!54 &5308715348358764727
 Rigidbody:
   m_ObjectHideFlags: 0

@@ -9,6 +9,8 @@ public class sBox : sInteractive, iClickable, IPointerEnterHandler, IPointerExit
 
     public GameObject pBoxInventoryPanel;
 
+    public Vector3 inventoryPanelOffset;
+
     static sInventory inventory = null;
 
     public int numberOfSlots;
@@ -27,7 +29,7 @@ public class sBox : sInteractive, iClickable, IPointerEnterHandler, IPointerExit
 
     int pickOffset = 0;
 
-    public Vector3 inventoryPanelOffset;
+    
 
     //public GameObject ui_Ring;
     public float UI_ToggleDistance = 5f;

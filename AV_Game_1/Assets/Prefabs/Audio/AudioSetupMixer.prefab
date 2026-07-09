@@ -264,7 +264,7 @@ MonoBehaviour:
   _toolTypeNeeded: 1
   textSetup: {fileID: 0}
   _UI_offset: {x: 0, y: 0, z: 0}
-  uiEvents: {fileID: 11400000, guid: 2b96b6b1405722c48a474d361c95f00a, type: 2}
+  soUI: {fileID: 0}
 --- !u!1 &8468445531994352861
 GameObject:
   m_ObjectHideFlags: 0

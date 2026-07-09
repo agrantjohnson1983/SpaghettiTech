@@ -292,6 +292,7 @@ MonoBehaviour:
   ui_Img_Offset: {x: 0.6, y: 1, z: -1.5}
   ui_Text_Offset: {x: 0, y: 2, z: 0}
   pModel: {fileID: 6335440672259077269}
+  boxSelectMouseImage: {fileID: 0}
 --- !u!1 &4352374421192502972
 GameObject:
   m_ObjectHideFlags: 0
