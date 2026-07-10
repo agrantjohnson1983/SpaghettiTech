@@ -1,16 +1,21 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class sKitBuilder : MonoBehaviour
 {
-    public GameObject canvasKit;
+    public UnityEngine.GameObject canvasKit;
 
     public string kitName;
 
     List<SO_ItemData> itemList;
 
     public GameObject pBox;
+
+    public TextMeshProUGUI spawnText;
+
+    
 
     // Start is called before the first frame update
     void Start()
@@ -23,10 +28,16 @@ public class sKitBuilder : MonoBehaviour
     public void AddToBox(SO_ItemData _itemToAdd)
     {
         itemList.Add(_itemToAdd);
+
+        spawnText.text = spawnText.text + " and " + _itemToAdd.itemName;
+
     }
 
     public void SpawnGear()
     {
+        if(itemList.Count == 0)
+            return;
+
         SO_BoxData _newBox = new SO_BoxData();
 
         _newBox.numberOfSlots = itemList.Count;
@@ -67,7 +78,7 @@ public class sKitBuilder : MonoBehaviour
             return null;
         }
 
-        GameObject boxObj = Instantiate(data.boxPrefab, position, rotation);
+        UnityEngine.GameObject boxObj = Instantiate(data.boxPrefab, position, rotation);
         sBox box = boxObj.GetComponent<sBox>();
 
         if (box == null)

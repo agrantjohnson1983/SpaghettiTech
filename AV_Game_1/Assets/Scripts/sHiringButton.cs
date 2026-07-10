@@ -56,11 +56,12 @@ public class sHiringButton : MonoBehaviour
 
         tempObj = Instantiate(characterData.pCharacter);
 
-        soUI.TriggerCharacterHire(-costToHire);
-        //tempPlayer = tempObj.GetComponent<sPlayerCharacter>();
+        if (GameManager.gm.GetGameMode() == eGameMode.warehouse)
+            tempObj.SetActive(false);
 
-        //tempPlayer.ToggleCameraMain(false);
-        //tempPlayer.CharacterSwitch(false);
+        sGigManager.gigManagerGlobal.AddWorkerToGig(tempObj);
+
+        soUI.TriggerCharacterHire(-costToHire);
 
         Destroy(this.gameObject);
     }

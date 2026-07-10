@@ -26,8 +26,8 @@ public class sMouseClickController : MonoBehaviour, iClickable
 
     void HandleMouseClicking()
     {
-        // When a user clicks the left mouse button down
-        if (Input.GetMouseButtonDown(0))
+        // When a user clicks the left mouse button down and character isn't grabbing
+        if (Input.GetMouseButtonDown(0) && !sCharacterGrabController.isGrabbing)
         {
             // creats a ray at the mouse position
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);

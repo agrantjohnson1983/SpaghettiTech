@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Dynamic;
 using UnityEngine;
 
 public class sCharacterGrabController : MonoBehaviour, iRequireHands
@@ -8,13 +9,13 @@ public class sCharacterGrabController : MonoBehaviour, iRequireHands
 
     public SO_EventsUI soUI;
 
-    GameObject interactiveObject;
+    UnityEngine.GameObject interactiveObject;
 
-    GameObject toolObject;
+    UnityEngine.GameObject toolObject;
 
     iGrabbable grabbable = null;
 
-    bool isGrabbing = false;
+    public static bool isGrabbing = false;
 
     bool canLetGo = false;
 
@@ -24,7 +25,7 @@ public class sCharacterGrabController : MonoBehaviour, iRequireHands
 
     public Transform transformGrab;
 
-    public string grabPopupText = "Press SPACE To Grab";
+    public string grabPopupText, throwPromptText;
 
     public int _numberOfHandsNeeded;
     public int NumberOfHandsNeeded
@@ -70,6 +71,11 @@ public class sCharacterGrabController : MonoBehaviour, iRequireHands
         }
     }
 
+    // THROWING
+    public float throwPower = 10f;
+
+    bool waitingForSpaceRelease = false;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -82,8 +88,14 @@ public class sCharacterGrabController : MonoBehaviour, iRequireHands
     // Update is called once per frame
     void Update()
     {
+        if (waitingForSpaceRelease && Input.GetKeyUp(KeyCode.Space))
+        {
+            waitingForSpaceRelease = false;
+        }
+
         if(canLetGo)
         HandleGrabLetGo();
+        HandleGrabToss();
     }
 
     void HandleGrabLetGo()
@@ -91,15 +103,17 @@ public class sCharacterGrabController : MonoBehaviour, iRequireHands
         // This handles the "let go" part of the grabbing
         if (Input.GetKeyUp(KeyCode.Space) && isGrabbing)
         {
-            //Debug.Log("Off Grab Control Triggered");
             GrabReset();
-
             canLetGo = false;
+            waitingForSpaceRelease = true;
         }
     }
+
     IEnumerator LetGoDelay()
     {
         float counter = 0;
+
+        //soUI.ToggleControlsPopup(null);
 
         while (counter < letGoDelayTime)
         {
@@ -132,7 +146,7 @@ public class sCharacterGrabController : MonoBehaviour, iRequireHands
             grabbable.OffGrab();
 
             // Sets the UI popup to null which turns it off
-            soUI.ToggleControlsPopup(null);
+            //soUI.ToggleControlsPopup(null);
 
             // resets grabbable, interactive object to null and isGrabbing off
             grabbable = null;
@@ -155,7 +169,7 @@ public class sCharacterGrabController : MonoBehaviour, iRequireHands
         }
     }
 
-    void HandleGrabbing(GameObject _collisionObj)
+    void HandleGrabbing(UnityEngine.GameObject _collisionObj)
     {
         // Checks for a grabbable interface in collision
         if (_collisionObj.TryGetComponent<iGrabbable>(out iGrabbable _grabbable))
@@ -256,13 +270,8 @@ public class sCharacterGrabController : MonoBehaviour, iRequireHands
 
             //Debug.Log("Testttt");
 
-            if(Input.GetKey(KeyCode.Space))
-            {
-                //Debug.Log("Space Key");
-            }
-
             // Checks for input to start Grab, if the player is grabbing already, if both hands are free and if the grabbable object is grabbed
-            if (!iGrabbable.IsGrabbed && !isGrabbing && Input.GetKey(KeyCode.Space) && bothHandsFree)
+            if (!iGrabbable.IsGrabbed && !isGrabbing && !waitingForSpaceRelease && Input.GetKey(KeyCode.Space) && bothHandsFree)
             {
                 //Debug.Log("Grab Key Detected and can grab");
 
@@ -284,7 +293,7 @@ public class sCharacterGrabController : MonoBehaviour, iRequireHands
                 HandIndexList = new List<int>(_tempIndexArray);
 
                 // Turns off the popup by sending a null
-                soUI.ToggleControlsPopup(null);
+                soUI.ToggleControlsPopup(throwPromptText);
 
                 // Sets the interactive object
                 interactiveObject = _collisionObj;
@@ -373,7 +382,7 @@ public class sCharacterGrabController : MonoBehaviour, iRequireHands
     }
 
     // checks object held and triggers event ui to show connection held image
-    void PlugHoldCheck(GameObject collisionObj)
+    void PlugHoldCheck(UnityEngine.GameObject collisionObj)
     {
         if (collisionObj.TryGetComponent<iPluggable>(out iPluggable _pluggable))
         {
@@ -382,6 +391,47 @@ public class sCharacterGrabController : MonoBehaviour, iRequireHands
             //soUI.TriggerItemHeldImage(_pluggable.connectionSprite);
         }
     }
+
+    void HandleGrabToss()
+{
+    if (Input.GetMouseButtonDown(0) && isGrabbing)
+    {
+        TossGrabbedObject();
+    }
+}
+
+void TossGrabbedObject()
+{
+    // Grab a reference to the rigidbody before GrabReset() clears interactiveObject
+    if (interactiveObject != null && interactiveObject.TryGetComponent<Rigidbody>(out Rigidbody _grabbedRB))
+    {
+        // Cache the facing direction before GrabReset() runs
+        Vector3 _tossDirection = this.transform.forward;
+
+        // Reuses your existing cleanup: destroys the FixedJoint,
+        // calls OffSelect/OffGrab, resets hands, clears state
+        
+        
+        if(interactiveObject.TryGetComponent<FixedJoint>(out FixedJoint _joint))
+            {
+                Destroy(_joint);
+            }
+
+        Invoke("GrabReset", 0.5f);
+        
+        soUI.ToggleControlsPopup(null);
+
+        waitingForSpaceRelease = true;
+
+        _grabbedRB.velocity = _tossDirection * throwPower;
+        // If you want a little arc instead of a flat throw:
+        // _grabbedRB.velocity += Vector3.up * (throwPower * 0.2f);
+    }
+    else
+    {
+        GrabReset();
+    }
+}
 
     private void OnTriggerEnter(Collider other)
     {
@@ -401,12 +451,15 @@ public class sCharacterGrabController : MonoBehaviour, iRequireHands
             {
                 if (isGrabbing)
                 {
+                    Debug.Log("Trigger Exit from grabbing");
                     // Actively holding this object — don't clear references,
                     // just stop showing the popup. Let GrabReset() (on key-up)
                     // be the only thing that destroys the joint and clears state.
-                    soUI.ToggleControlsPopup(null);
+                    //soUI.ToggleControlsPopup(null);
                     return;
                 }
+
+                Debug.Log("Trigger Exit from grabbing");
 
                 // Not grabbing yet, just hovered off it — safe to clear
                 grabbable.OffSelect();

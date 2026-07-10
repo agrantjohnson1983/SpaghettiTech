@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public enum eGameMode { none, frontEnd, warehouse, gig }
 
@@ -31,7 +32,12 @@ public class GameManager : MonoBehaviour
     public bool isDoingTut = false;
     private void Awake()
     {
-        gm = this;
+        if (gm == null)
+            gm = this;
+        else
+            Destroy(this.gameObject);
+
+        DontDestroyOnLoad(this);
 
         SetGameMode(startingGameMode);
     }
@@ -60,6 +66,10 @@ public class GameManager : MonoBehaviour
             SwitchActivePlayer(1);
         }
     }
+    public eGameMode GetGameMode()
+    {
+        return currentGameMode;
+    }
 
     public void SetGameMode(eGameMode _gameMode)
     {
@@ -84,10 +94,22 @@ public class GameManager : MonoBehaviour
 
             case eGameMode.gig:
 
+                cameraBlueprint.SetActive(true);
+                canvasGameplay.characterPanel.SetActive(true);
+                canvasGameplay.moneyUI.SetActive(true);
+                canvasGameplay.timeUI.SetActive(true);
+                canvasGameplay.toolbelt.SetActive(true);
+                canvasGameplay.blueprintsButton.SetActive(true);
 
                 break;
 
         }
+    }
+
+    public void StartGig()
+    {
+        SetGameMode(eGameMode.gig);
+        SceneManager.LoadScene("TestLevel");
     }
 
     // This is used to change the index manually outside of the TAB button or arrow buttons - mostly when a player gets clicked

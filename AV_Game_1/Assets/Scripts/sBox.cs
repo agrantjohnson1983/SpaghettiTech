@@ -76,21 +76,21 @@ public class sBox : sInteractive, iClickable, IPointerEnterHandler, IPointerExit
         numberOfSlots = data.numberOfSlots;
         itemData = new List<SO_ItemData>(data.startingItemData);
 
-        materialBoxClosed = data.materialBoxClosed;
-        materialBoxOpen = data.materialBoxOpen;
-        materialBoxEmpty = data.materialBoxEmpty;
-        boxSelectMouseImage = data.boxSelectMouseImage;
+        //materialBoxClosed = data.materialBoxClosed;
+        //materialBoxOpen = data.materialBoxOpen;
+        //materialBoxEmpty = data.materialBoxEmpty;
+        //boxSelectMouseImage = data.boxSelectMouseImage;
 
-        UI_ToggleDistance = data.UI_ToggleDistance;
-        ui_Img_Offset = data.ui_Img_Offset;
-        ui_Text_Offset = data.ui_Text_Offset;
-        inventoryPanelOffset = data.inventoryPanelOffset;
+        //UI_ToggleDistance = data.UI_ToggleDistance;
+        //ui_Img_Offset = data.ui_Img_Offset;
+        //ui_Text_Offset = data.ui_Text_Offset;
+        //inventoryPanelOffset = data.inventoryPanelOffset;
 
-        ApplyScale(data);
+        //ApplyScale(data);
 
         // Make sure the model starts on the closed material to match the fresh state
-        if (pModel != null && materialBoxClosed != null)
-            pModel.GetComponent<MeshRenderer>().material = materialBoxClosed;
+        //if (pModel != null && materialBoxClosed != null)
+        //    pModel.GetComponent<MeshRenderer>().material = materialBoxClosed;
     }
 
     void ApplyScale(SO_BoxData data)
@@ -320,6 +320,8 @@ public class sBox : sInteractive, iClickable, IPointerEnterHandler, IPointerExit
         iGrabbable.IsGrabbed = true;
         //ui_Ring.SetActive(false);
         ui_Select.SetActive(false);
+
+        ui_Img.SetActive(false);
     }
 
 
@@ -332,6 +334,9 @@ public class sBox : sInteractive, iClickable, IPointerEnterHandler, IPointerExit
 
     public override void OnSelect()
     {
+        if(sCharacterGrabController.isGrabbing)
+        return;
+
         //Debug.Log("On Select on Box");
         ui_Select.SetActive(true);
 
@@ -349,7 +354,7 @@ public class sBox : sInteractive, iClickable, IPointerEnterHandler, IPointerExit
     {
         //Debug.Log("Mouse entered the box object of " + this.gameObject.name);
 
-        if (isWithinOpenRange)
+        if (isWithinOpenRange && !sCharacterGrabController.isGrabbing)
             ui_Img.SetActive(true);
         //Cursor.SetCursor(boxSelectMouseImage, new Vector2(10, 10), CursorMode.Auto);
     }
@@ -362,6 +367,7 @@ public class sBox : sInteractive, iClickable, IPointerEnterHandler, IPointerExit
             ui_Img.SetActive(false);
         //Cursor.SetCursor()
     }
+
 
     /*
     private void OnTriggerEnter(Collider other)

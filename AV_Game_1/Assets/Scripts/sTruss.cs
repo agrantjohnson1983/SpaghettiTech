@@ -44,6 +44,4 @@ public class sTruss : sRigGear
     {
         sRiggingManager.riggingManger.trussList.Add(this);
     }
-
-
 }

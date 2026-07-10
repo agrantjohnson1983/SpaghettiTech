@@ -125,7 +125,10 @@ public class sTruckHatch : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.CompareTag("Player"))
+        if (sTruck.isLoaded)
+            return;
+
+        if (other.CompareTag("Player"))
         {
             canvasUI.SetActive(true);
         }
@@ -133,6 +136,9 @@ public class sTruckHatch : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
+        if (sTruck.isLoaded)
+            return;
+
         if (other.CompareTag("Player"))
         {
             canvasUI.SetActive(false);
@@ -144,6 +150,9 @@ public class sTruckHatch : MonoBehaviour
         animator.SetTrigger("Close");
 
         sTruck.isLoaded = true;
+
+        Destroy(canvasUI.gameObject);
+
         // truck drives off and then scene changes...
     }
 

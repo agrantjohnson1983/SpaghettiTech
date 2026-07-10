@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class sRecruiter : MonoBehaviour
 {
+    public static bool isRecruiting = false;
     public canvasGameplay canvasGameplay;
 
     // Start is called before the first frame update
@@ -20,8 +21,9 @@ public class sRecruiter : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player"))
+        if (other.CompareTag("Player") && !isRecruiting)
         {
+            isRecruiting = true;
             canvasGameplay.ToggleHireScreen();
         }
     }

@@ -16,17 +16,23 @@ public class sTruck : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        if(GameManager.gm.GetGameMode() == eGameMode.gig)
+        {
+            
+        }
     }
 
     public void Drive()
     {
         animator.SetTrigger("Drive");
+
+        sGigManager.gigManagerGlobal.TruckDrive();
     }
 
+    // This is getting called by an animator event
     public void SceneChange()
     {
-        SceneManager.LoadScene("TestLevel");
+        GameManager.gm.StartGig();
     }
 
     private void OnTriggerEnter(Collider other)
@@ -35,11 +41,19 @@ public class sTruck : MonoBehaviour
         {
             Debug.Log("Triggering player entering truck");
             _player.ToggleTruckCamera(true, this.transform, camMoveTransform, 0.5f, camOffset);
+            return;
+        }
+
+        else
+        {
+            Debug.Log("Adding " + other.gameObject + " to gig mgr");
+            sGigManager.gigManagerGlobal.AddItemToGig(other.gameObject);
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
+        
         if (other.TryGetComponent<sPlayerCharacter>(out sPlayerCharacter _player))
         {
             Debug.Log("Triggering player exiting truck");
