@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 34e176bf69da1154e862280e5ee0b7a0, type: 3}
+  m_Name: SO_BoxData_Cables
+  m_EditorClassIdentifier: 
+  boxName: CABLES
+  boxPrefab: {fileID: 3163874987475164060, guid: aef872b0b996ca14e81ae968c9fa1435, type: 3}
+  modelScale: {x: 2, y: 1, z: 1}
+  autoScaleRingUI: 1
+  ringUIScaleOverride: 2
+  numberOfSlots: 4
+  startingItemData:
+  - {fileID: 11400000, guid: 0cf5a45ea37f9054dbe3be9fb61e5ede, type: 2}
+  - {fileID: 11400000, guid: 9013ed674375fb345b246d7b0d09f029, type: 2}
+  - {fileID: 11400000, guid: 0cf5a45ea37f9054dbe3be9fb61e5ede, type: 2}
+  useDynamicZOffset: 1
+  materialBoxClosed: {fileID: 2100000, guid: 444ab64ad61724c4299878e7d27f14ae, type: 2}
+  materialBoxOpen: {fileID: 2100000, guid: 8d7b5c4f6f36fc649a6756747661b6f5, type: 2}
+  materialBoxEmpty: {fileID: 2100000, guid: 7b499c35b7ef4304e8e9004dfcff65af, type: 2}
+  boxSelectMouseImage: {fileID: 2800000, guid: 45db45742eae5ad4396692f502813120, type: 3}
+  UI_ToggleDistance: 5
+  ui_Img_Offset: {x: 0.85, y: 1, z: -2.5}
+  ui_Text_Offset: {x: 0, y: 2, z: 0}
+  inventoryPanelOffset: {x: 0, y: 5, z: 0}

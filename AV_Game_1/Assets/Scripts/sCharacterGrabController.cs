@@ -395,23 +395,25 @@ public class sCharacterGrabController : MonoBehaviour, iRequireHands
 
     private void OnTriggerExit(Collider other)
     {
-        if(other.gameObject.TryGetComponent<iGrabbable>(out iGrabbable _grabbable) && grabbable != null)
+        if (other.gameObject.TryGetComponent<iGrabbable>(out iGrabbable _grabbable) && grabbable != null)
         {
-            if(_grabbable == grabbable)
+            if (_grabbable == grabbable)
             {
-                //Debug.Log("Grabbable has exited trigger");
+                if (isGrabbing)
+                {
+                    // Actively holding this object — don't clear references,
+                    // just stop showing the popup. Let GrabReset() (on key-up)
+                    // be the only thing that destroys the joint and clears state.
+                    soUI.ToggleControlsPopup(null);
+                    return;
+                }
 
-                //grabbable.OffSelect();
-
+                // Not grabbing yet, just hovered off it — safe to clear
                 grabbable.OffSelect();
-
                 grabbable = null;
-
                 interactiveObject = null;
-
                 soUI.ToggleControlsPopup(null);
             }
-
             else
             {
                 _grabbable.OffSelect();

@@ -21,10 +21,15 @@ public class sPlayerCharacter : MonoBehaviour
 
     Camera camera;
 
+    Vector3 camPos;
+    Quaternion camRot;
+
     public int handsNumber = 2;
     public List<handBehavior> handsList;
 
     handBehavior hand;
+
+    bool isInTruckMode = false;
 
     // Use this class for future hand behaviors
     public class handBehavior
@@ -165,6 +170,79 @@ public class sPlayerCharacter : MonoBehaviour
     {
         camera.gameObject.SetActive(_isOn);
     }
+
+    Coroutine truckCamRoutine;
+
+    public void ToggleTruckCamera(bool _isOn, Transform _truckLocation, Transform _camMoveLocation, float _moveTime, Vector3 _offset)
+    {
+        // Ignore duplicate calls - already in the requested state
+        if (_isOn == isInTruckMode)
+        {
+            Debug.LogWarning($"ToggleTruckCamera({_isOn}) ignored - already in that state.");
+            return;
+        }
+
+        isInTruckMode = _isOn;
+
+        if (truckCamRoutine != null)
+            StopCoroutine(truckCamRoutine);
+
+        if (_isOn)
+        {
+            camPos = camera.transform.localPosition;
+            camRot = camera.transform.localRotation;
+
+            camera.transform.SetParent(null);
+
+            truckCamRoutine = StartCoroutine(TruckCamMovementWorld(0.5f, _camMoveLocation.position + _offset, true));
+        }
+
+        else
+        {
+            camera.transform.SetParent(this.gameObject.transform);
+            camera.transform.localRotation = camRot;
+
+            truckCamRoutine = StartCoroutine(TruckCamMovementLocal(_moveTime, camPos));
+        }
+    }
+
+    // Used only while unparented (entry) — world space lerp is correct here
+    IEnumerator TruckCamMovementWorld(float _time, Vector3 _endPos, bool _isOn)
+    {
+        float _counter = 0f;
+        Vector3 startPos = camera.transform.position;
+
+        while (_counter < _time)
+        {
+            camera.transform.position = Vector3.Lerp(startPos, _endPos, _counter / _time);
+            _counter += Time.deltaTime;
+            yield return null;
+        }
+
+        camera.transform.position = _endPos; // snap, same pattern as sCharacterMover fix
+
+        if (_isOn)
+            camera.transform.LookAt(this.transform);
+    }
+
+    // Used only while parented (exit) — local space lerp tracks the moving player
+    IEnumerator TruckCamMovementLocal(float _time, Vector3 _endLocalPos)
+    {
+        float _counter = 0f;
+        Vector3 startLocalPos = camera.transform.localPosition;
+
+        while (_counter < _time)
+        {
+            camera.transform.localPosition = Vector3.Lerp(startLocalPos, _endLocalPos, _counter / _time);
+            _counter += Time.deltaTime;
+            yield return null;
+        }
+
+        Debug.Log($"Reset complete. localPosition = {camera.transform.localPosition}, expected = {_endLocalPos}");
+
+        // camera.transform.localPosition = _endLocalPos; // snap to guarantee exact reset
+    }
+
 
     // This will reset a hand and trigger the UI
     public void ResetHand(int[] _indexArray)

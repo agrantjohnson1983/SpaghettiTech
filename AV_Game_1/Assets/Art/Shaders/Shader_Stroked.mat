@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Shader_Stroked
-  m_Shader: {fileID: 4800000, guid: 7a1560c6caca5ea4e8f8ffcbb655d3ce, type: 3}
+  m_Shader: {fileID: 4800000, guid: 94c045a01432afc4b9a5ccf3417fbb7f, type: 3}
   m_ValidKeywords: []
   m_InvalidKeywords:
   - _SHOWFACEEDGES_ON
@@ -43,13 +43,13 @@ Material:
     - _BUILTIN_QueueOffset: 0
     - _EdgeThickness: 1.5
     - _OutlineThickness: 0.1
-    - _OutlineWidth: 0.0409
+    - _OutlineWidth: 0.0152
     - _OutlineWidthMode: 0
     - _PulseSpeed: 0
     - _QueueControl: 0
     - _QueueOffset: 0
     - _ShowFaceEdges: 1
-    - _Size: 0
+    - _Size: 0.02
     m_Colors:
     - _BaseColor: {r: 0, g: 0, b: 0, a: 1}
     - _Color: {r: 0, g: 0, b: 0, a: 0}

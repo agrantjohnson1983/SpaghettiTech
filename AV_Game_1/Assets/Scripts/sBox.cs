@@ -29,7 +29,7 @@ public class sBox : sInteractive, iClickable, IPointerEnterHandler, IPointerExit
 
     int pickOffset = 0;
 
-    
+
 
     //public GameObject ui_Ring;
     public float UI_ToggleDistance = 5f;
@@ -42,6 +42,9 @@ public class sBox : sInteractive, iClickable, IPointerEnterHandler, IPointerExit
     public GameObject pModel;
 
     public Texture2D boxSelectMouseImage;
+
+    // Data asset this box was spawned/initialized from (null if placed manually in-scene)
+    public SO_BoxData boxData;
 
     // Start is called before the first frame update
     private void Awake()
@@ -58,18 +61,87 @@ public class sBox : sInteractive, iClickable, IPointerEnterHandler, IPointerExit
         //ui_Ring.SetActive(false);
     }
 
+    // Called by sBoxSpawner right after Instantiate. Applies all data-driven
+    // fields (materials, slots, offsets, scale) from the given SO_BoxData.
+    public void Initialize(SO_BoxData data)
+    {
+        if (data == null)
+        {
+            Debug.LogWarning($"sBox.Initialize called with null data on {gameObject.name}");
+            return;
+        }
+
+        boxData = data;
+
+        numberOfSlots = data.numberOfSlots;
+        itemData = new List<SO_ItemData>(data.startingItemData);
+
+        materialBoxClosed = data.materialBoxClosed;
+        materialBoxOpen = data.materialBoxOpen;
+        materialBoxEmpty = data.materialBoxEmpty;
+        boxSelectMouseImage = data.boxSelectMouseImage;
+
+        UI_ToggleDistance = data.UI_ToggleDistance;
+        ui_Img_Offset = data.ui_Img_Offset;
+        ui_Text_Offset = data.ui_Text_Offset;
+        inventoryPanelOffset = data.inventoryPanelOffset;
+
+        ApplyScale(data);
+
+        // Make sure the model starts on the closed material to match the fresh state
+        if (pModel != null && materialBoxClosed != null)
+            pModel.GetComponent<MeshRenderer>().material = materialBoxClosed;
+    }
+
+    void ApplyScale(SO_BoxData data)
+    {
+        if (pModel != null)
+            pModel.transform.localScale = data.modelScale;
+
+        float ringScale = data.autoScaleRingUI
+            ? Mathf.Max(data.modelScale.x, data.modelScale.z)
+            : data.ringUIScaleOverride;
+
+        if (ui_Select != null)
+            ui_Select.transform.localScale = Vector3.one * ringScale;
+    }
+
     private void Update()
     {
-        if(!isEmpty && GameManager.gm.ReturnCurrentPlayer() != null)
-        DetectPlayer();
+        if (!isEmpty && GameManager.gm.ReturnCurrentPlayer() != null)
+            DetectPlayer();
 
         //if(ui_Ring)
         //{
-            //Debug.Log("Offsetting Ring UI");
-             
-            ui_Img.gameObject.transform.position = this.gameObject.transform.position + ui_Img_Offset;
-            ui_Text.gameObject.transform.position = this.gameObject.transform.position + ui_Text_Offset;
+        //Debug.Log("Offsetting Ring UI");
+
+        ui_Img.gameObject.transform.position = this.gameObject.transform.position + ui_Img_Offset;
+        ui_Text.gameObject.transform.position = this.gameObject.transform.position + ui_Text_Offset;
         //}
+    }
+
+    // Recalculates the panel offset's z-sign each time the box opens, based on
+    // where the player currently is relative to the box, so the panel always
+    // opens on the far side from the player (top-down: greater player z -> negative
+    // offset, lesser player z -> positive offset). x/y magnitudes come from the data asset.
+    Vector3 GetInventoryPanelOffset()
+    {
+        Vector3 offset = inventoryPanelOffset;
+
+        bool dynamicEnabled = boxData == null || boxData.useDynamicZOffset;
+
+        if (dynamicEnabled)
+        {
+            var playerObj = GameManager.gm.ReturnCurrentPlayer();
+
+            if (playerObj != null)
+            {
+                float zMagnitude = Mathf.Abs(offset.z);
+                offset.z = (playerObj.transform.position.z > this.transform.position.z) ? -zMagnitude : zMagnitude;
+            }
+        }
+
+        return offset;
     }
 
     public void TriggerOpenBox()
@@ -77,38 +149,40 @@ public class sBox : sInteractive, iClickable, IPointerEnterHandler, IPointerExit
         //base.TriggerAction(_actionObj, _toolToUse);
         //Debug.Log("Box Open Triggered");
 
-            if(numberOfSlots > 0)
-            {
+        if (numberOfSlots > 0)
+        {
             //Debug.Log("Opening Box");
 
-                inventory = Instantiate(pBoxInventoryPanel, this.transform.position + inventoryPanelOffset, Quaternion.identity).GetComponent<sInventory>();
+            Vector3 panelOffset = GetInventoryPanelOffset();
 
-                inventory.gameObject.transform.parent = this.transform;
+            inventory = Instantiate(pBoxInventoryPanel, this.transform.position + panelOffset, Quaternion.identity).GetComponent<sInventory>();
 
-                inventory.SetBox(this);
+            inventory.gameObject.transform.parent = this.transform;
 
-                inventory.SetInventory(itemData.ToArray());
+            inventory.SetBox(this);
 
-                //pModel.GetComponent<MeshRenderer>().material = materialBoxOpen;
+            inventory.SetInventory(itemData.ToArray());
 
-                textMPAbove.SetText("OPEN");
+            //pModel.GetComponent<MeshRenderer>().material = materialBoxOpen;
 
-                //ui_Ring.GetComponentInChildren<MeshRenderer>().material.color = Color.yellow;
+            textMPAbove.SetText("OPEN");
 
-                ui_Text.SetActive(false);
+            //ui_Ring.GetComponentInChildren<MeshRenderer>().material.color = Color.yellow;
 
-                ui_Img.SetActive(false);
+            ui_Text.SetActive(false);
 
-                ui_Select.SetActive(false);
+            ui_Img.SetActive(false);
 
-                //GameManager.gm.ReturnCurrentPlayer().ReturnGrabController().grabPopupText.
-            }
+            ui_Select.SetActive(false);
 
-            else
-            {
-                //EmptyBox();
-                
-            }
+            //GameManager.gm.ReturnCurrentPlayer().ReturnGrabController().grabPopupText.
+        }
+
+        else
+        {
+            //EmptyBox();
+
+        }
     }
 
     public void CloseBox()
@@ -126,7 +200,7 @@ public class sBox : sInteractive, iClickable, IPointerEnterHandler, IPointerExit
             Destroy(inventory.gameObject);
             inventory = null;
         }
-        
+
 
         textMPAbove.SetText("CLOSED");
 
@@ -149,7 +223,7 @@ public class sBox : sInteractive, iClickable, IPointerEnterHandler, IPointerExit
         //Debug.Log("Removing Item at index: " + _index);
         itemData.RemoveAt(_index);
 
-        
+
         //itemData.Sort();
     }
 
@@ -178,9 +252,9 @@ public class sBox : sInteractive, iClickable, IPointerEnterHandler, IPointerExit
     // This gets called when a player clicks the box
     public void OnClick()
     {
-        if(isWithinOpenRange && !isEmpty && !isOpen)
+        if (isWithinOpenRange && !isEmpty && !isOpen)
         {
-            
+
             //if (!isOpen)
             //{
 
@@ -199,28 +273,28 @@ public class sBox : sInteractive, iClickable, IPointerEnterHandler, IPointerExit
                 isOpen = true;
                 TriggerOpenBox();
             }
-                
+
             //}
 
             //else
             //{
             //    isOpen = false;
             //    CloseBox();
-           // }
-        }   
+            // }
+        }
     }
-    
+
     // this checks distance between the box and player and toggles on/off UI ring
     void DetectPlayer()
     {
         // Checks if the player is less than the distance of the UI toggle distance and if so turns on the UI
-        if(Vector3.Distance(this.transform.position, GameManager.gm.ReturnCurrentPlayer().transform.position) < UI_ToggleDistance)
+        if (Vector3.Distance(this.transform.position, GameManager.gm.ReturnCurrentPlayer().transform.position) < UI_ToggleDistance)
         {
             isWithinOpenRange = true;
 
             //ui_Img.SetActive(true);
-            if(!isOpen)
-            ui_Text.SetActive(true);
+            if (!isOpen)
+                ui_Text.SetActive(true);
             //ui_Ring.SetActive(!iGrabbable.IsGrabbed);
         }
 
@@ -242,7 +316,7 @@ public class sBox : sInteractive, iClickable, IPointerEnterHandler, IPointerExit
 
     public override void OnGrab()
     {
-        Debug.Log("Box On Grab Triggered");
+        //Debug.Log("Box On Grab Triggered");
         iGrabbable.IsGrabbed = true;
         //ui_Ring.SetActive(false);
         ui_Select.SetActive(false);
@@ -251,7 +325,7 @@ public class sBox : sInteractive, iClickable, IPointerEnterHandler, IPointerExit
 
     public override void OffGrab()
     {
-        Debug.Log("Box Off Grab Triggered");
+        //Debug.Log("Box Off Grab Triggered");
         iGrabbable.IsGrabbed = false;
         //ui_Select.SetActive(true);
     }
@@ -273,16 +347,16 @@ public class sBox : sInteractive, iClickable, IPointerEnterHandler, IPointerExit
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        Debug.Log("Mouse entered the box object of " + this.gameObject.name);
+        //Debug.Log("Mouse entered the box object of " + this.gameObject.name);
 
-        if(isWithinOpenRange)
-        ui_Img.SetActive(true);
+        if (isWithinOpenRange)
+            ui_Img.SetActive(true);
         //Cursor.SetCursor(boxSelectMouseImage, new Vector2(10, 10), CursorMode.Auto);
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        Debug.Log("Mouse has exited box " + this.gameObject.name);
+        //Debug.Log("Mouse has exited box " + this.gameObject.name);
 
         if (eventData.fullyExited)
             ui_Img.SetActive(false);

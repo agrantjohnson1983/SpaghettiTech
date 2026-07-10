@@ -8539,6 +8539,8 @@ MonoBehaviour:
   popupControlsOffset: {x: 0, y: -2, z: 0}
   hiringPanel: {fileID: 2354503220172782524}
   hiringButton: {fileID: 3455187009029146259}
+  timeUI: {fileID: 0}
+  moneyUI: {fileID: 0}
   startingMoney: 10007
   currentMoneyText: {fileID: 679118458977851280}
   toolbelt: {fileID: 5997632923541780899}

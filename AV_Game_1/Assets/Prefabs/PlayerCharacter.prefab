@@ -648,7 +648,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   soUI: {fileID: 11400000, guid: 2b96b6b1405722c48a474d361c95f00a, type: 2}
   transformGrab: {fileID: 5730748812189424264}
-  grabPopupText: Press SPACE To Grab
+  grabPopupText: Hold SPACE To Grab
   _numberOfHandsNeeded: 2
   _handUseSprite: {fileID: 21300000, guid: 30fb249038deab346906bab79c0ecd6f, type: 3}
 --- !u!114 &6254593303513223787

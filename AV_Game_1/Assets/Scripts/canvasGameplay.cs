@@ -56,7 +56,13 @@ public class canvasGameplay : MonoBehaviour
     public GameObject hiringPanel, hiringButton;
     bool isHiring = false;
 
+    // TIME
+
+    public GameObject timeUI;
+
     // MONEY STUFF
+
+    public GameObject moneyUI;
     public float startingMoney = 1000;
     float currentMoney;
     public Text currentMoneyText;
@@ -72,6 +78,10 @@ public class canvasGameplay : MonoBehaviour
     public GameObject toolbeltToolButton;
 
     public List<GameObject> toolButtonsList;
+
+    // WAREHOUSE
+
+    public GameObject startScreen;
 
     private void OnEnable()
     {
@@ -358,6 +368,13 @@ public class canvasGameplay : MonoBehaviour
         GameManager.gm.SwitchActivePlayer(1);
     }
 
+    public void OnStart()
+    {
+        //hiringPanel.SetActive(isHiring);
+        startScreen.SetActive(false);
+        GameManager.gm.ToggleHiringCamera(false);
+    }
+
     public void ToggleHireScreen()
     {
         isHiring = !isHiring;
@@ -367,6 +384,7 @@ public class canvasGameplay : MonoBehaviour
         hiringPanel.SetActive(isHiring);
 
         blueprintsButton.SetActive(!isHiring);
+
         characterPanel.SetActive(!isHiring);
 
         toolbelt.SetActive(!isHiring);

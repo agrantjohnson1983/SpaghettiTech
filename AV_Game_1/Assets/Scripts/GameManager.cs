@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum eGameMode { none, frontEnd, warehouse, gig }
+
 public class GameManager : MonoBehaviour
 {
     public static GameManager gm;
@@ -22,10 +24,16 @@ public class GameManager : MonoBehaviour
 
     public GameObject cameraHiring, cameraBlueprint;
 
+    public eGameMode startingGameMode;
+
+    eGameMode currentGameMode;
+
     public bool isDoingTut = false;
     private void Awake()
     {
         gm = this;
+
+        SetGameMode(startingGameMode);
     }
 
     // Start is called before the first frame update
@@ -39,9 +47,9 @@ public class GameManager : MonoBehaviour
 
         playerCharacters = new List<sPlayerCharacter>();
 
-        cameraBlueprint.SetActive(false);
+        
 
-        canvasGameplay.ToggleHireScreen();    
+        //canvasGameplay.ToggleHireScreen();    
     }
 
     // Update is called once per frame
@@ -50,6 +58,35 @@ public class GameManager : MonoBehaviour
         if(Input.GetKeyDown(KeyCode.Tab))
         {
             SwitchActivePlayer(1);
+        }
+    }
+
+    public void SetGameMode(eGameMode _gameMode)
+    {
+        currentGameMode = _gameMode;
+
+        switch (currentGameMode)
+        {
+            case eGameMode.frontEnd:
+
+                break;
+
+            case eGameMode.warehouse:
+
+                cameraBlueprint.SetActive(false);
+                canvasGameplay.characterPanel.SetActive(false);
+                canvasGameplay.moneyUI.SetActive(false);
+                canvasGameplay.timeUI.SetActive(false);
+                canvasGameplay.toolbelt.SetActive(false);
+                canvasGameplay.blueprintsButton.SetActive(false);
+
+                break;
+
+            case eGameMode.gig:
+
+
+                break;
+
         }
     }
 
@@ -118,6 +155,11 @@ public class GameManager : MonoBehaviour
             playerCharacters[activePlayerIndex].SetToCurrentPlayer();
             //playerCharacters[activePlayerIndex].CharacterControlsToggle(!_isOn);
         }
+
+        else
+        {
+            Debug.LogWarning("Player characters are null!");
+        }
         
     }
 
@@ -151,5 +193,13 @@ public class GameManager : MonoBehaviour
     public Canvas ReturnCanvasWorldSpace()
     {
         return canvasWorldSpace;
+    }
+
+    public void KillPlayers()
+    {
+        for (int i = 0; i < playerCharacters.Count; i++)
+        {
+            Destroy(playerCharacters[i]);
+        }
     }
 }
