@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class sConnectionSource : MonoBehaviour
 {
@@ -33,10 +34,19 @@ public class sConnectionSource : MonoBehaviour
 
     public uTextPopupSpawn uTextPopup;
 
+    public float totalPower = 100f;
+
+    float currentPower;
+
+    public Image powerUI;
 
     // Start is called before the first frame update
     void Start()
     {
+        currentPower = totalPower;
+
+        UpdatePowerUI(currentPower);
+
         pluggableList = new List<GameObject>();
         //numberOfPlugsOpen = plugInLocations.Length;
 
@@ -47,6 +57,11 @@ public class sConnectionSource : MonoBehaviour
         rb = GetComponent<Rigidbody>();
 
         //joint = GetComponent<FixedJoint>();
+    }
+
+    void UpdatePowerUI(float _currentPower)
+    {
+        powerUI.fillAmount = currentPower / totalPower;
     }
 
     // This spawns the connection plate which all of the input channels

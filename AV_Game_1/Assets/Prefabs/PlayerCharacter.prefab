@@ -209,6 +209,7 @@ GameObject:
   - component: {fileID: 4174687813778331257}
   - component: {fileID: 8416830006361018297}
   - component: {fileID: 4174687813778331256}
+  - component: {fileID: 80192506}
   m_Layer: 7
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -298,6 +299,39 @@ AudioListener:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4174687813778331259}
   m_Enabled: 1
+--- !u!114 &80192506
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4174687813778331259}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a79441f348de89743a2939f4d699eac1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_RenderShadows: 1
+  m_RequiresDepthTextureOption: 2
+  m_RequiresOpaqueTextureOption: 2
+  m_CameraType: 0
+  m_Cameras: []
+  m_RendererIndex: -1
+  m_VolumeLayerMask:
+    serializedVersion: 2
+    m_Bits: 1
+  m_VolumeTrigger: {fileID: 0}
+  m_VolumeFrameworkUpdateModeOption: 2
+  m_RenderPostProcessing: 0
+  m_Antialiasing: 0
+  m_AntialiasingQuality: 2
+  m_StopNaN: 0
+  m_Dithering: 0
+  m_ClearDepth: 1
+  m_AllowXRRendering: 1
+  m_RequiresDepthTexture: 0
+  m_RequiresColorTexture: 0
+  m_Version: 2
 --- !u!1 &4174687813809144922
 GameObject:
   m_ObjectHideFlags: 0
@@ -517,9 +551,9 @@ GameObject:
   - component: {fileID: 1365413362}
   - component: {fileID: 4174687814180632293}
   - component: {fileID: 4174687814180632315}
-  - component: {fileID: 6550518059305728465}
   - component: {fileID: 6254593303513223787}
   - component: {fileID: 4579584320167969265}
+  - component: {fileID: 1433647710}
   m_Layer: 7
   m_Name: PlayerCharacter
   m_TagString: Player
@@ -634,23 +668,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   soUI: {fileID: 11400000, guid: 2b96b6b1405722c48a474d361c95f00a, type: 2}
   popupControlText: Left Click For Action
---- !u!114 &6550518059305728465
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4174687814180632294}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8c787d43f1cff4e46b7c29aa7ba087f3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  soUI: {fileID: 11400000, guid: 2b96b6b1405722c48a474d361c95f00a, type: 2}
-  transformGrab: {fileID: 5730748812189424264}
-  grabPopupText: Hold SPACE To Grab
-  _numberOfHandsNeeded: 2
-  _handUseSprite: {fileID: 21300000, guid: 30fb249038deab346906bab79c0ecd6f, type: 3}
 --- !u!114 &6254593303513223787
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -682,6 +699,24 @@ MonoBehaviour:
   mask_Clickable:
     serializedVersion: 2
     m_Bits: 128
+--- !u!114 &1433647710
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4174687814180632294}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: acca6fb6d53664e419da2fc3c65f6dc4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  model: {fileID: 4174687813809144922}
+  soUI: {fileID: 11400000, guid: 2b96b6b1405722c48a474d361c95f00a, type: 2}
+  transformGrab: {fileID: 5730748812189424264}
+  grabPopupText: Hold SPACE to Grab
+  throwPromptText: Left CLICK to Throw
+  throwPower: 10
 --- !u!1 &4174687814354459210
 GameObject:
   m_ObjectHideFlags: 0

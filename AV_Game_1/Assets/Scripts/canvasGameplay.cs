@@ -372,7 +372,7 @@ public class canvasGameplay : MonoBehaviour
     {
         //hiringPanel.SetActive(isHiring);
         startScreen.SetActive(false);
-        GameManager.gm.ToggleHiringCamera(false);
+        GameManager.gm.ToggleOrbitCamera(false);
     }
 
     public void ToggleHireScreen()
@@ -389,7 +389,7 @@ public class canvasGameplay : MonoBehaviour
 
         toolbelt.SetActive(!isHiring);
 
-        GameManager.gm.ToggleHiringCamera(isHiring);
+        GameManager.gm.ToggleOrbitCamera(isHiring);
 
         if (!isHiring)
         {

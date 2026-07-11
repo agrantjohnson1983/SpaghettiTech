@@ -30,7 +30,7 @@ public class sMouseClickController : MonoBehaviour, iClickable
         if (Input.GetMouseButtonDown(0) && !sCharacterGrabController.isGrabbing)
         {
             // creats a ray at the mouse position
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            Ray ray = cam.ScreenPointToRay(Input.mousePosition);
 
             // reference to a raycast hit
             RaycastHit hit;

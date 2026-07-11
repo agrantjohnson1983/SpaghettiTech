@@ -52,32 +52,35 @@ public class sPlayerCharacter : MonoBehaviour
         //playerGlobal = this;
 
         camera = GetComponentInChildren<Camera>();
-    }
 
-    // Start is called before the first frame update
-    void Start()
-    {
         actionController = GetComponent<sCharacterActionController>();
         movementController = GetComponent<sCharacterMovementController>();
         grabController = GetComponent<sCharacterGrabController>();
         toolHandler = GetComponent<sToolHandler>();
         mouseClickController = GetComponent<sMouseClickController>();
+    }
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        
 
         gm = GameManager.gm;
 
         // Sets first player spawned active
-        if(gm.ReturnPlayerList().Count <= 0)
-        {
-            //gm.ToggleOverheadCamera(false);
+        if(gm!=null)
+            if(gm.ReturnPlayerList().Count <= 0)
+            {
+                //gm.ToggleOverheadCamera(false);
 
-            CharacterControlsToggle(false);
-        }
+                CharacterControlsToggle(false);
+            }
 
-        else
-        {
+            else
+            {
             
-            CharacterControlsToggle(false);
-        }
+                CharacterControlsToggle(false);
+            }
 
         // adds to the GM's list of players
         gm.AddCharacterToList(this);
@@ -245,101 +248,101 @@ public class sPlayerCharacter : MonoBehaviour
 
 
     // This will reset a hand and trigger the UI
-    public void ResetHand(int[] _indexArray)
-    {
-        //Debug.Log("Resetting hand");
+    //public void ResetHand(int[] _indexArray)
+    //{
+    //    //Debug.Log("Resetting hand");
 
-        for (int i = 0; i < _indexArray.Length; i++)
-        {
-            if (_indexArray[i] > 0)
-            {
-                handsList[_indexArray[i]].SetHand(false);   
-            }
-        }
+    //    for (int i = 0; i < _indexArray.Length; i++)
+    //    {
+    //        if (_indexArray[i] > 0)
+    //        {
+    //            handsList[_indexArray[i]].SetHand(false);   
+    //        }
+    //    }
 
-        soUI.TriggerItemHeldImage(null, _indexArray);
-    }
+    //    soUI.TriggerItemHeldImage(null, _indexArray);
+    //}
 
     // This will set a hand to use and trigger the UI
-    public void SetHand(Sprite _itemSprite, int[] _indexArray)
-    {
-        //Debug.Log("Setting hand");
+    //public void SetHand(Sprite _itemSprite, int[] _indexArray)
+    //{
+    //    //Debug.Log("Setting hand");
 
-        for (int i = 0; i < _indexArray.Length-1; i++)
-        {
-            handsList[_indexArray[i]].SetHand(true);    
-        }
+    //    for (int i = 0; i < _indexArray.Length-1; i++)
+    //    {
+    //        handsList[_indexArray[i]].SetHand(true);    
+    //    }
 
-        soUI.TriggerItemHeldImage(_itemSprite, _indexArray);
-    }
+    //    soUI.TriggerItemHeldImage(_itemSprite, _indexArray);
+    //}
 
 
     // Returns -1 if hands are full.  This only checks a hand but does not set anything
-    public int[] CheckHands(int _numberOfHandsNeeded)
-    {
-        //Debug.Log("Checking hands with " + _numberOfHandsNeeded + " number of hands needed");
+    //public int[] CheckHands(int _numberOfHandsNeeded)
+    //{
+    //    //Debug.Log("Checking hands with " + _numberOfHandsNeeded + " number of hands needed");
 
-        int[] handsUsedIndexArray = new int[_numberOfHandsNeeded];
+    //    int[] handsUsedIndexArray = new int[_numberOfHandsNeeded];
 
-        //bool canUse = false;
-        //handBehavior tempHand = null;
+    //    //bool canUse = false;
+    //    //handBehavior tempHand = null;
 
-        // Set to -1 by default
-        //int _tempIndex = -1;
+    //    // Set to -1 by default
+    //    //int _tempIndex = -1;
 
-        //Debug.Log("Hands Index Array has length of " + handsUsedIndexArray.Length);
+    //    //Debug.Log("Hands Index Array has length of " + handsUsedIndexArray.Length);
 
-        //Debug.Log("Hands List Count = " + handsList.Count);
+    //    //Debug.Log("Hands List Count = " + handsList.Count);
 
-        if(handsList == null)
-        {
-            Debug.Log("Hands List Null");
-        }
+    //    if(handsList == null)
+    //    {
+    //        Debug.Log("Hands List Null");
+    //    }
 
-        // -1 for the 0 offset
-        for (int i = 0; i < handsList.Count; i++)
-        {
+    //    // -1 for the 0 offset
+    //    for (int i = 0; i < handsList.Count; i++)
+    //    {
 
-            bool canUse = true;
+    //        bool canUse = true;
 
-           // Debug.Log("Running check on hand list index of " + i);
+    //       // Debug.Log("Running check on hand list index of " + i);
 
-            // Checks if a hand is available to use
-            if(!handsList[i].ReturnIsBeingUsed())
-            {
-                //canUse = true;
-                //handsArray[i].SetHand(true);
-                //handsArray[i].SetSprite(_itemSprite);
-                //soUI.TriggerItemHeldImage(_itemSprite, i);
-                //tempHand = handsArray[i];
-                if(handsUsedIndexArray == null)
-                {
-                    Debug.Log("HandsUsedIndexArray is null");
-                }
+    //        // Checks if a hand is available to use
+    //        if(!handsList[i].ReturnIsBeingUsed())
+    //        {
+    //            //canUse = true;
+    //            //handsArray[i].SetHand(true);
+    //            //handsArray[i].SetSprite(_itemSprite);
+    //            //soUI.TriggerItemHeldImage(_itemSprite, i);
+    //            //tempHand = handsArray[i];
+    //            if(handsUsedIndexArray == null)
+    //            {
+    //                Debug.Log("HandsUsedIndexArray is null");
+    //            }
 
-                //Debug.Log("Temp hand set to hand number " + i);
-                //_tempIndex = i;
-                handsUsedIndexArray[i] = i;
-                //return tempHand;
-            }
+    //            //Debug.Log("Temp hand set to hand number " + i);
+    //            //_tempIndex = i;
+    //            handsUsedIndexArray[i] = i;
+    //            //return tempHand;
+    //        }
 
-            else
-            {
-                handsUsedIndexArray[i] = -1;
-                soUI.ToggleControlsPopup("HANDS FULL");
-                canUse = false;
-            }
+    //        else
+    //        {
+    //            handsUsedIndexArray[i] = -1;
+    //            soUI.ToggleControlsPopup("HANDS FULL");
+    //            canUse = false;
+    //        }
 
             
-            //if(canUse == true)
-            //{
-             //   return null;
-            //}
-        }
+    //        //if(canUse == true)
+    //        //{
+    //         //   return null;
+    //        //}
+    //    }
 
 
-        return handsUsedIndexArray;
-    }
+    //    return handsUsedIndexArray;
+    //}
 
     public void ToggleMovement(bool _isOn)
     {

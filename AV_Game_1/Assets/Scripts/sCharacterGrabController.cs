@@ -3,15 +3,17 @@ using System.Collections.Generic;
 using System.Dynamic;
 using UnityEngine;
 
-public class sCharacterGrabController : MonoBehaviour, iRequireHands
+public class sCharacterGrabController : MonoBehaviour
 {
     sPlayerCharacter player;
 
+    public GameObject model;
+
     public SO_EventsUI soUI;
 
-    UnityEngine.GameObject interactiveObject;
+    GameObject interactiveObject;
 
-    UnityEngine.GameObject toolObject;
+    GameObject toolObject;
 
     iGrabbable grabbable = null;
 
@@ -27,49 +29,49 @@ public class sCharacterGrabController : MonoBehaviour, iRequireHands
 
     public string grabPopupText, throwPromptText;
 
-    public int _numberOfHandsNeeded;
-    public int NumberOfHandsNeeded
-    {
-        get
-        {
-            return _numberOfHandsNeeded;
-        }
+    //public int _numberOfHandsNeeded;
+    //public int NumberOfHandsNeeded
+    //{
+    //    get
+    //    {
+    //        return _numberOfHandsNeeded;
+    //    }
 
-        set
-        {
-            _numberOfHandsNeeded = value;
-        }
-    }
+    //    set
+    //    {
+    //        _numberOfHandsNeeded = value;
+    //    }
+    //}
 
-    List<int> _handIndexList;
+    //List<int> _handIndexList;
 
-    public List<int> HandIndexList
-    {
-        get
-        {
-            return _handIndexList;
-        }
+    //public List<int> HandIndexList
+    //{
+    //    get
+    //    {
+    //        return _handIndexList;
+    //    }
 
-        set
-        {
-            _handIndexList = value;
-        }
-    }
+    //    set
+    //    {
+    //        _handIndexList = value;
+    //    }
+    //}
 
-    public Sprite _handUseSprite;
+    //public Sprite _handUseSprite;
 
-    public Sprite HandUseSprite
-    {
-        get
-        {
-            return _handUseSprite;
-        }
+    //public Sprite HandUseSprite
+    //{
+    //    get
+    //    {
+    //        return _handUseSprite;
+    //    }
 
-        set
-        {
-            _handUseSprite = value;
-        }
-    }
+    //    set
+    //    {
+    //        _handUseSprite = value;
+    //    }
+    //}
 
     // THROWING
     public float throwPower = 10f;
@@ -82,7 +84,7 @@ public class sCharacterGrabController : MonoBehaviour, iRequireHands
         player = GetComponent<sPlayerCharacter>();
         //joint = GetComponent<ConfigurableJoint>();
 
-        HandIndexList = new List<int>();
+        //HandIndexList = new List<int>();
     }
 
     // Update is called once per frame
@@ -103,7 +105,9 @@ public class sCharacterGrabController : MonoBehaviour, iRequireHands
         // This handles the "let go" part of the grabbing
         if (Input.GetKeyUp(KeyCode.Space) && isGrabbing)
         {
+            //Debug.Log("Off Grab Control Triggered");
             GrabReset();
+
             canLetGo = false;
             waitingForSpaceRelease = true;
         }
@@ -153,23 +157,23 @@ public class sCharacterGrabController : MonoBehaviour, iRequireHands
             interactiveObject = null;
             isGrabbing = false;
             
-            // Checks if hand index list is null
-            if(HandIndexList != null)
-            {
-                // Checks the whole hand array.  Minus 1 cause it's a list to array.
-                for (int i = 0; i < HandIndexList.Count - 1; i++)
-                {
-                    // Resets Hand in player script based on the hand index array
-                    GameManager.gm.ReturnCurrentPlayer().ResetHand(HandIndexList.ToArray());
-                }
+            //// Checks if hand index list is null
+            //if(HandIndexList != null)
+            //{
+            //    // Checks the whole hand array.  Minus 1 cause it's a list to array.
+            //    for (int i = 0; i < HandIndexList.Count - 1; i++)
+            //    {
+            //        // Resets Hand in player script based on the hand index array
+            //        GameManager.gm.ReturnCurrentPlayer().ResetHand(HandIndexList.ToArray());
+            //    }
 
-                //Resets hand index list to null
-                HandIndexList = null;
-            }
+            //    //Resets hand index list to null
+            //    HandIndexList = null;
+            //}
         }
     }
 
-    void HandleGrabbing(UnityEngine.GameObject _collisionObj)
+    void HandleGrabbing(GameObject _collisionObj)
     {
         // Checks for a grabbable interface in collision
         if (_collisionObj.TryGetComponent<iGrabbable>(out iGrabbable _grabbable))
@@ -221,41 +225,41 @@ public class sCharacterGrabController : MonoBehaviour, iRequireHands
             }
 
 
-            bool bothHandsFree = true;
+            //bool bothHandsFree = true;
             int[] _tempIndexArray = new int[1] { -1 };
 
             //Debug.Log("Testttt");
             
             // Checks if the character is grabbing and if both hands are free and also if the grabbable can be grabbed
-            if (!isGrabbing && bothHandsFree && _grabbable.CanBeGrabbed)
+            if (!isGrabbing &&  _grabbable.CanBeGrabbed)
             {               
-                _tempIndexArray = GameManager.gm.ReturnCurrentPlayer().CheckHands(NumberOfHandsNeeded);
+                //_tempIndexArray = GameManager.gm.ReturnCurrentPlayer().CheckHands(NumberOfHandsNeeded);
 
-                // iterates through the hands array.  If it returns less than 0 then....
-                for (int i = 0; i < _tempIndexArray.Length; i++)
-                {
-                    if (_tempIndexArray[i] < 0)
-                    {
-                        Debug.Log("Temp Index is too small at position " + i.ToString() + " with value of " + _tempIndexArray[i].ToString());
-                        bothHandsFree = false;
-                    }
+                //// iterates through the hands array.  If it returns less than 0 then....
+                //for (int i = 0; i < _tempIndexArray.Length; i++)
+                //{
+                //    if (_tempIndexArray[i] < 0)
+                //    {
+                //        Debug.Log("Temp Index is too small at position " + i.ToString() + " with value of " + _tempIndexArray[i].ToString());
+                //        bothHandsFree = false;
+                //    }
 
-                    else
-                    {
-                        //Debug.Log("Temp index pos is greater than -1 at value of: " + _tempIndexArray[i]);
-                        //HandIndexList.Add(_tempIndexArray[i]);
-                    }
-                }
+                //    else
+                //    {
+                //        //Debug.Log("Temp index pos is greater than -1 at value of: " + _tempIndexArray[i]);
+                //        //HandIndexList.Add(_tempIndexArray[i]);
+                //    }
+                //}
 
-                if (!bothHandsFree)
-                {
-                    //Debug.Log("Both hands not free");
-                }
+                //if (!bothHandsFree)
+                //{
+                //    //Debug.Log("Both hands not free");
+                //}
 
-                else
-                {
-                    //Debug.Log("Both hands are free");
-                }
+                //else
+                //{
+                //    //Debug.Log("Both hands are free");
+                //}
 
                 //Debug.Log("Triggering Grab Popup Text");
 
@@ -271,7 +275,7 @@ public class sCharacterGrabController : MonoBehaviour, iRequireHands
             //Debug.Log("Testttt");
 
             // Checks for input to start Grab, if the player is grabbing already, if both hands are free and if the grabbable object is grabbed
-            if (!iGrabbable.IsGrabbed && !isGrabbing && !waitingForSpaceRelease && Input.GetKey(KeyCode.Space) && bothHandsFree)
+            if (!iGrabbable.IsGrabbed && !isGrabbing && !waitingForSpaceRelease && Input.GetKey(KeyCode.Space))
             {
                 //Debug.Log("Grab Key Detected and can grab");
 
@@ -287,10 +291,10 @@ public class sCharacterGrabController : MonoBehaviour, iRequireHands
                 //Debug.Log("Setting Hand to index of " + _tempIndex);
 
                 // This sets the hand in the current player script to used
-                GameManager.gm.ReturnCurrentPlayer().SetHand(HandUseSprite, _tempIndexArray);
+                //GameManager.gm.ReturnCurrentPlayer().SetHand(HandUseSprite, _tempIndexArray);
 
                 // Creates a new list of integers based on the number of hands returned by the player
-                HandIndexList = new List<int>(_tempIndexArray);
+                //HandIndexList = new List<int>(_tempIndexArray);
 
                 // Turns off the popup by sending a null
                 soUI.ToggleControlsPopup(throwPromptText);
@@ -382,7 +386,7 @@ public class sCharacterGrabController : MonoBehaviour, iRequireHands
     }
 
     // checks object held and triggers event ui to show connection held image
-    void PlugHoldCheck(UnityEngine.GameObject collisionObj)
+    void PlugHoldCheck(GameObject collisionObj)
     {
         if (collisionObj.TryGetComponent<iPluggable>(out iPluggable _pluggable))
         {
@@ -405,27 +409,29 @@ void TossGrabbedObject()
     // Grab a reference to the rigidbody before GrabReset() clears interactiveObject
     if (interactiveObject != null && interactiveObject.TryGetComponent<Rigidbody>(out Rigidbody _grabbedRB))
     {
-        // Cache the facing direction before GrabReset() runs
-        Vector3 _tossDirection = this.transform.forward;
+            // Cache the facing direction before GrabReset() runs
+            Vector3 _tossDirection = model.transform.forward + model.transform.up * 0.5f;
 
-        // Reuses your existing cleanup: destroys the FixedJoint,
-        // calls OffSelect/OffGrab, resets hands, clears state
-        
-        
+        // Destroy the joint manually first so the object is free to fly
         if(interactiveObject.TryGetComponent<FixedJoint>(out FixedJoint _joint))
             {
                 Destroy(_joint);
             }
-
-        Invoke("GrabReset", 0.5f);
-        
-        soUI.ToggleControlsPopup(null);
 
         waitingForSpaceRelease = true;
 
         _grabbedRB.velocity = _tossDirection * throwPower;
         // If you want a little arc instead of a flat throw:
         // _grabbedRB.velocity += Vector3.up * (throwPower * 0.2f);
+
+        // Reuses your existing cleanup: calls OffSelect/OffGrab, resets hands,
+        // clears state. Runs immediately now instead of via a delayed Invoke,
+        // so isGrabbing / iGrabbable.IsGrabbed can never get stranded true
+        // (which happened if this GameObject was disabled - e.g. switching
+        // characters - before the old 0.5s Invoke had a chance to fire).
+        GrabReset();
+
+        soUI.ToggleControlsPopup(null);
     }
     else
     {

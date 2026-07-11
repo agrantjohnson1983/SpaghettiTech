@@ -11,11 +11,14 @@ public class GameManager : MonoBehaviour
 
     public SO_EventsUI soUI;
 
-    public GameObject pCanvasGameplay;
+    public GameObject canvasGameplayObject;
     public canvasGameplay canvasGameplay;
 
-    public GameObject pCanvasWorldSpace;
+    public GameObject canvasWorldSpaceObject;
     Canvas canvasWorldSpace;
+
+    public GameObject canvasWarehouseObject;
+    public CanvasWarehouse canvasWarehouse;
 
     sPlayerCharacter currentPlayer;
 
@@ -23,7 +26,7 @@ public class GameManager : MonoBehaviour
 
     int activePlayerIndex = 0;
 
-    public GameObject cameraHiring, cameraBlueprint;
+    public GameObject cameraOrbit, cameraBlueprint;
 
     public eGameMode startingGameMode;
 
@@ -40,18 +43,20 @@ public class GameManager : MonoBehaviour
         DontDestroyOnLoad(this);
 
         SetGameMode(startingGameMode);
+
+        playerCharacters = new List<sPlayerCharacter>();
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        canvasGameplay = pCanvasGameplay.GetComponent<canvasGameplay>();
+        canvasGameplay = canvasGameplayObject.GetComponent<canvasGameplay>();
 
-        canvasWorldSpace = pCanvasWorldSpace.GetComponent<Canvas>();
+        canvasWorldSpace = canvasWorldSpaceObject.GetComponent<Canvas>();
         canvasWorldSpace.worldCamera = Camera.main;
        
 
-        playerCharacters = new List<sPlayerCharacter>();
+        
 
         
 
@@ -83,23 +88,29 @@ public class GameManager : MonoBehaviour
 
             case eGameMode.warehouse:
 
-                cameraBlueprint.SetActive(false);
-                canvasGameplay.characterPanel.SetActive(false);
-                canvasGameplay.moneyUI.SetActive(false);
-                canvasGameplay.timeUI.SetActive(false);
-                canvasGameplay.toolbelt.SetActive(false);
-                canvasGameplay.blueprintsButton.SetActive(false);
+                canvasGameplayObject.SetActive(false);
+                canvasWarehouseObject.SetActive(true);
+
+                //cameraBlueprint.SetActive(false);
+                //canvasGameplay.characterPanel.SetActive(false);
+                //canvasGameplay.moneyUI.SetActive(false);
+                //canvasGameplay.timeUI.SetActive(false);
+                //canvasGameplay.toolbelt.SetActive(false);
+                //canvasGameplay.blueprintsButton.SetActive(false);
 
                 break;
 
             case eGameMode.gig:
 
-                cameraBlueprint.SetActive(true);
-                canvasGameplay.characterPanel.SetActive(true);
-                canvasGameplay.moneyUI.SetActive(true);
-                canvasGameplay.timeUI.SetActive(true);
-                canvasGameplay.toolbelt.SetActive(true);
-                canvasGameplay.blueprintsButton.SetActive(true);
+                canvasGameplayObject.SetActive(true);
+                canvasWarehouseObject.SetActive(false);
+
+                //cameraBlueprint.SetActive(true);
+                //canvasGameplay.characterPanel.SetActive(true);
+                //canvasGameplay.moneyUI.SetActive(true);
+                //canvasGameplay.timeUI.SetActive(true);
+                //canvasGameplay.toolbelt.SetActive(true);
+                //canvasGameplay.blueprintsButton.SetActive(true);
 
                 break;
 
@@ -167,11 +178,11 @@ public class GameManager : MonoBehaviour
     */
 
 
-    public void ToggleHiringCamera(bool _isOn)
+    public void ToggleOrbitCamera(bool _isOn)
     {
-        cameraHiring.SetActive(_isOn);
+        cameraOrbit.SetActive(_isOn);
 
-        if(playerCharacters != null)
+        if(playerCharacters.Count > 0)
         {
             //SetCurrentPlayer(playerCharacters[activePlayerIndex]);
             playerCharacters[activePlayerIndex].SetToCurrentPlayer();
@@ -194,6 +205,7 @@ public class GameManager : MonoBehaviour
 
     public void AddCharacterToList(sPlayerCharacter _player)
     {
+        Debug.Log("Adding player character to GM list");
         playerCharacters.Add(_player);
     }
 
