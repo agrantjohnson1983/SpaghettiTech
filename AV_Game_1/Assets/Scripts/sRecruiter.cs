@@ -6,6 +6,7 @@ public class sRecruiter : MonoBehaviour
 {
     public static bool isRecruiting = false;
     public canvasGameplay canvasGameplay;
+    public CanvasWarehouse canvsWarehouse;
 
     // Start is called before the first frame update
     void Start()
@@ -24,7 +25,8 @@ public class sRecruiter : MonoBehaviour
         if (other.CompareTag("Player") && !isRecruiting)
         {
             isRecruiting = true;
-            canvasGameplay.ToggleHireScreen();
+            //canvasGameplay.ToggleHireScreen();
+            canvsWarehouse.ToggleHireScreen();
         }
     }
 /*

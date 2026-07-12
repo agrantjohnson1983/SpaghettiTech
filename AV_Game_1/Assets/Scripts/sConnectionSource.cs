@@ -64,6 +64,14 @@ public class sConnectionSource : MonoBehaviour
         powerUI.fillAmount = currentPower / totalPower;
     }
 
+    public void DrainPower(float _amount)
+    {
+        Debug.Log("Power Drain called - draining by " + _amount);
+
+        currentPower -= _amount;
+        UpdatePowerUI(currentPower);
+    }
+
     // This spawns the connection plate which all of the input channels
     void SpawnConnectionPlate()
     {
@@ -127,7 +135,7 @@ public class sConnectionSource : MonoBehaviour
         Debug.Log("Plug is connected at index of " + _index);
 
         // This sets the connectionSource of the plug to this.
-        pluggableList[_index].GetComponent<iPluggable>().SetConnection(this.gameObject);
+        pluggableList[_index].GetComponent<iPluggable>().SetConnection(this.gameObject, 0f);
     }
 
     // When a connection is clicked from connection plate - turns connection plate off
@@ -201,7 +209,7 @@ public class sConnectionSource : MonoBehaviour
                         pluggableList.Add(collision.gameObject);
 
                         // gives the pluggable a reference to this GO which will get a ref to this source behavior
-                        _pluggable.SetConnection(this.gameObject);
+                        _pluggable.SetConnection(this.gameObject, 0f);
 
                         // sets plug to available for plugin
                         _pluggable.SetPlugAvailable(true);
@@ -230,7 +238,7 @@ public class sConnectionSource : MonoBehaviour
                     pluggableList.Add(collision.gameObject);
 
                     // gives the pluggable a reference to this GO which will get a ref to this source behavior
-                    _pluggable.SetConnection(this.gameObject);
+                    _pluggable.SetConnection(this.gameObject, 0f);
 
                     // sets plug to available for plugin
                     _pluggable.SetPlugAvailable(true);

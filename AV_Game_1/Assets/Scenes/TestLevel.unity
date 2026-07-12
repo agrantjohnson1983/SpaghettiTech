@@ -5720,7 +5720,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!64 &795091571
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -8621,6 +8621,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 3163874987475164065, guid: b33106a5b77fede42bb377c78d17db80, type: 3}
   m_PrefabInstance: {fileID: 1889893837}
   m_PrefabAsset: {fileID: 0}
+--- !u!23 &961461152 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 5022729525306376303, guid: b33106a5b77fede42bb377c78d17db80, type: 3}
+  m_PrefabInstance: {fileID: 1889893837}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &970020967 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3163874987475164065, guid: 48e9059836d8b1d49b47342d2aecc516, type: 3}
@@ -9204,7 +9209,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1104302253
 Transform:
   m_ObjectHideFlags: 0
@@ -13691,6 +13696,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1141632259413988096}
     m_Modifications:
+    - target: {fileID: 2690858896691665127, guid: b33106a5b77fede42bb377c78d17db80, type: 3}
+      propertyPath: targetRenderer
+      value: 
+      objectReference: {fileID: 961461152}
     - target: {fileID: 3163874987475164060, guid: b33106a5b77fede42bb377c78d17db80, type: 3}
       propertyPath: m_Name
       value: Box_Cables_4_Slot

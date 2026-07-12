@@ -6,6 +6,10 @@ public class CanvasWarehouse : MonoBehaviour
 {
     public GameObject startScreen;
 
+    bool isHiring = false;
+
+    public GameObject hiringPanel;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -22,5 +26,16 @@ public class CanvasWarehouse : MonoBehaviour
     {
         startScreen.SetActive(false);
         GameManager.gm.ToggleOrbitCamera(false);
+    }
+
+    public void ToggleHireScreen()
+    {
+        isHiring = !isHiring;
+
+        //hiringButton.SetActive(!isHiring);
+
+        hiringPanel.SetActive(isHiring);
+
+        GameManager.gm.ToggleOrbitCamera(isHiring);
     }
 }

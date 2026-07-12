@@ -29,7 +29,7 @@ public interface iPluggable
 
     void PlugDisconnect();
 
-    void SetConnection(GameObject _connectionToSet);
+    void SetConnection(GameObject _connectionToSet, float _powerDrainAmount);
 
     void SetIndex(int _index);
 }

@@ -48,7 +48,7 @@ public class sCablePlug : sInteractive, iPluggable, iClickable
 
         set
         {
-            plugObj = value;
+            //plugObj = value;
         }
     }
 
@@ -177,6 +177,9 @@ public class sCablePlug : sInteractive, iPluggable, iClickable
                 // Toggles on supply objects
                 supply.TogglePoweredObjects(true);
 
+                // drains power
+                cablePlugOtherEnd.source.DrainPower(supply.powerDrainAmount);
+
                 // turns on connection UI
                 connectionUI.SetActive(true);
             }
@@ -186,6 +189,9 @@ public class sCablePlug : sInteractive, iPluggable, iClickable
             {
                 // Toggles on other end supply objects on
                 cablePlugOtherEnd.supply.TogglePoweredObjects(true);
+
+                // drains power
+                source.DrainPower(supply.powerDrainAmount);
 
                 // turns on connection UI
                 connectionUI.SetActive(true);
@@ -271,10 +277,15 @@ public class sCablePlug : sInteractive, iPluggable, iClickable
     // This will destroy fixed joints connected to player
     public void DestroyGrabJoint()
     {
+        if (this.gameObject.transform.parent.TryGetComponent<sCharacterGrabController>(out sCharacterGrabController _grabber))
+            _grabber.GrabReset();
+
         if (TryGetComponent<FixedJoint>(out FixedJoint joint))
             Destroy(joint);
         else
             Debug.Log("Trying to destroy fixed joint, but there ain't nun");
+
+        
     }
 
     // Destorys the plugs joint if there is one
@@ -343,19 +354,23 @@ public class sCablePlug : sInteractive, iPluggable, iClickable
     }
 
     // This gets used to set the connection source/supply for the plug that gets connected
-    public void SetConnection(GameObject _connectionToSet)
+    public void SetConnection(GameObject _connectionToSet, float _powerDrainAmount)
     {
 
         if(_connectionToSet.TryGetComponent<sConnectionSource>(out sConnectionSource _source))
         {
             //Debug.Log("Setting connection source");
             source = _source;
+
+            source.DrainPower(_powerDrainAmount);
         }
 
         else if(_connectionToSet.TryGetComponent<sConnectionSupply>(out sConnectionSupply _supply))
         {
             //Debug.Log("Setting connection supply");
             supply = _supply;
+
+
 
             PlugConnect();
         }

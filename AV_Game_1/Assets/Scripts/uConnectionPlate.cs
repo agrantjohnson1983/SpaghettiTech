@@ -35,7 +35,7 @@ public class uConnectionPlate : MonoBehaviour
             _tempInputChannel = Instantiate(pConnectionChannel, this.transform).GetComponent<sInputChannel>();
 
             // using i to set channel names
-            _tempInputChannel.SetChannel(i, connectedSprite, disconnectedSprite, i+1.ToString(), connectionsAvailablePanel);
+            _tempInputChannel.SetChannel(i, connectedSprite, disconnectedSprite, (i+1).ToString(), connectionsAvailablePanel);
 
             // adds channel to list
             inputChannelList.Add(_tempInputChannel);
@@ -124,7 +124,7 @@ public class uConnectionPlate : MonoBehaviour
             //Debug.Log("Plugging in at connection source");
 
             // This gives the plug a reference to the connection source
-            connectionSource.ReturnPluggableAvailableList()[_index].GetComponent<iPluggable>().SetConnection(connectionSource.gameObject);
+            connectionSource.ReturnPluggableAvailableList()[_index].GetComponent<iPluggable>().SetConnection(connectionSource.gameObject, 0f);
 
             // This connects the plug script
             connectionSource.ReturnPluggableAvailableList()[_index].GetComponent<iPluggable>().PlugConnect();

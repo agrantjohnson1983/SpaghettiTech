@@ -26,6 +26,8 @@ public class sCableSegmentHandler : MonoBehaviour
 
     //public Sprite
 
+    float powerDrainTotal = 0f;
+
     // Start is called before the first frame update
     void Start()
     {

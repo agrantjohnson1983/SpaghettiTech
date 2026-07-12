@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
+[RequireComponent(typeof(sObjectHighlighter))]
 public class sInteractive : MonoBehaviour, iGrabbable
 {
     protected Rigidbody rb;
@@ -76,13 +77,15 @@ public class sInteractive : MonoBehaviour, iGrabbable
     {
         get
         {
-            return transformGrab;
+            return _transformGrab;
         }
         set
         {
 
         }
     }
+
+    public Transform _transformGrab;
 
     public Vector3 _UI_offset;
     public Vector3 ui_offset

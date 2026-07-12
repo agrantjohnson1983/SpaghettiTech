@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class sConnectionSupply : MonoBehaviour
 {
-    ePlugType connectionType;
+    public ePlugType connectionType;
 
     public GameObject[] connectionObjects;
 
@@ -13,6 +13,8 @@ public class sConnectionSupply : MonoBehaviour
     bool isPluggedIn = false;
 
     Rigidbody rb;
+
+    public float powerDrainAmount = 10f;
 
     // Start is called before the first frame update
     void Start()
@@ -39,7 +41,7 @@ public class sConnectionSupply : MonoBehaviour
             isConnected = true;
 
             // Sets the connectinon supply in the pluggable
-            _pluggable.SetConnection(this.gameObject);
+            _pluggable.SetConnection(this.gameObject, powerDrainAmount);
 
             // Connects the pluggable game object by a joint
             ConnectPlugJoint(_pluggableObj);

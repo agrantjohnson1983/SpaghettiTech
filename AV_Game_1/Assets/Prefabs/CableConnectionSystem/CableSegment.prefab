@@ -65,7 +65,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 79fa967800f05c14a99613b3ed28f995, type: 2}
+  - {fileID: 2100000, guid: 024097677437c2c4b9bf6111f4fcbc8f, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -232,4 +232,5 @@ MonoBehaviour:
   itemTextMP: []
   textItem: 
   ui_Select: {fileID: 0}
+  _transformGrab: {fileID: 0}
   _UI_offset: {x: 0, y: 0, z: 0}

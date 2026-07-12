@@ -78,6 +78,13 @@ public class sCharacterGrabController : MonoBehaviour
 
     bool waitingForSpaceRelease = false;
 
+    // Tracks the specific FixedJoint this script creates for a grab, so
+    // cleanup only ever touches a joint this script owns. Never search the
+    // object for "a" FixedJoint via TryGetComponent - objects like cable
+    // pieces can already carry their own FixedJoint for unrelated purposes,
+    // and that search has no way to tell the two apart.
+    FixedJoint _grabJoint;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -95,8 +102,8 @@ public class sCharacterGrabController : MonoBehaviour
             waitingForSpaceRelease = false;
         }
 
-        if(canLetGo)
-        HandleGrabLetGo();
+        if (canLetGo)
+            HandleGrabLetGo();
         HandleGrabToss();
     }
 
@@ -137,14 +144,16 @@ public class sCharacterGrabController : MonoBehaviour
         {
             //Debug.Log("Grab Reset Triggered on " + interactiveObject.name);
 
-            if(interactiveObject.TryGetComponent<FixedJoint>(out FixedJoint _interactiveJoint))
+            if (_grabJoint != null)
             {
-                // Destroys the joint component only
-                Destroy(_interactiveJoint);
+                // Destroys only the joint this script created
+                Destroy(_grabJoint);
+                _grabJoint = null;
             }
 
             // De-selects the grabbable
             grabbable.OffSelect();
+            SetObjectHighlight(interactiveObject, false);
 
             // Triggers the off grab
             grabbable.OffGrab();
@@ -156,7 +165,7 @@ public class sCharacterGrabController : MonoBehaviour
             grabbable = null;
             interactiveObject = null;
             isGrabbing = false;
-            
+
             //// Checks if hand index list is null
             //if(HandIndexList != null)
             //{
@@ -179,14 +188,14 @@ public class sCharacterGrabController : MonoBehaviour
         if (_collisionObj.TryGetComponent<iGrabbable>(out iGrabbable _grabbable))
         {
             // If the collision is with the same grabbable then the function returns
-            if(_grabbable == grabbable && isGrabbing)
+            if (_grabbable == grabbable && isGrabbing)
             {
                 //Debug.Log("Grab handler found itself and is already grabbing");
                 return;
             }
 
             // Quick null check on the grabbable and interactive object
-            if(grabbable != null && interactiveObject != null)
+            if (grabbable != null && interactiveObject != null)
             {
                 // Checks if the current grabbable is closer than the new one triggered and if so sets it as the new grabbable
                 if (Vector3.Distance(this.gameObject.transform.position, interactiveObject.transform.position) > Vector3.Distance(this.gameObject.transform.position, _collisionObj.transform.position))
@@ -195,15 +204,17 @@ public class sCharacterGrabController : MonoBehaviour
 
                     // De-selects current grabbable
                     grabbable.OffSelect();
+                    SetObjectHighlight(interactiveObject, false);
 
                     // Sets new grabbable
                     grabbable = _grabbable;
-                    
+
                     // Sets interactive object
                     interactiveObject = _collisionObj;
 
                     // Selects the the grabbable
                     grabbable.OnSelect();
+                    SetObjectHighlight(interactiveObject, true);
                 }
 
                 else
@@ -222,6 +233,7 @@ public class sCharacterGrabController : MonoBehaviour
                 interactiveObject = _collisionObj;
 
                 grabbable.OnSelect();
+                SetObjectHighlight(interactiveObject, true);
             }
 
 
@@ -229,10 +241,10 @@ public class sCharacterGrabController : MonoBehaviour
             int[] _tempIndexArray = new int[1] { -1 };
 
             //Debug.Log("Testttt");
-            
+
             // Checks if the character is grabbing and if both hands are free and also if the grabbable can be grabbed
-            if (!isGrabbing &&  _grabbable.CanBeGrabbed)
-            {               
+            if (!isGrabbing && _grabbable.CanBeGrabbed)
+            {
                 //_tempIndexArray = GameManager.gm.ReturnCurrentPlayer().CheckHands(NumberOfHandsNeeded);
 
                 //// iterates through the hands array.  If it returns less than 0 then....
@@ -284,6 +296,7 @@ public class sCharacterGrabController : MonoBehaviour
 
                 // Turns off the select when grabbed?
                 grabbable.OffSelect();
+                SetObjectHighlight(interactiveObject, false);
 
                 // Toggles isGrabbing
                 isGrabbing = true;
@@ -310,47 +323,30 @@ public class sCharacterGrabController : MonoBehaviour
                 // Sets RB to this, which is on the player gameObject
                 _playerRB = this.gameObject.GetComponent<Rigidbody>();
 
-      
-                    if (interactiveObject.TryGetComponent<Rigidbody>(out Rigidbody _rb))
-                    {
-                        //_rb.constraints = RigidbodyConstraints.FreezeAll;
 
-                        //_rb.velocity = Vector3.zero;
+                if (interactiveObject.TryGetComponent<Rigidbody>(out Rigidbody _rb))
+                {
+                    //_rb.constraints = RigidbodyConstraints.FreezeAll;
 
-                        //_joint.connectedBody = _rb;
-                    }
+                    //_rb.velocity = Vector3.zero;
 
-                    if(interactiveObject.TryGetComponent<FixedJoint>(out FixedJoint _grabObjectJoint))
-                    {
-                        //_grabObjectJoint.
-                    }
+                    //_joint.connectedBody = _rb;
+                }
 
-                    else
-                    {
+                // Always create a fresh joint dedicated to this grab rather
+                // than searching the object for an existing FixedJoint - on
+                // cable pieces that already carry their own FixedJoint for
+                // the cable system's own connections, that search could
+                // grab the wrong joint and overwrite or destroy it later.
+                if (_grabJoint != null)
+                {
+                    Destroy(_grabJoint);
+                    _grabJoint = null;
+                }
 
-                    _grabObjectJoint = interactiveObject.AddComponent<FixedJoint>();
-
-                    }
-
-                    if (_grabObjectJoint.connectedBody == null)
-                    {
-                        _grabObjectJoint.connectedBody = _playerRB;
-                        _grabObjectJoint.enablePreprocessing = false;
-                    }
-                   
-
-                    else
-                    {
-
-                    }
-                        //_grabObjectJoint.
-
-                        //_grabObjectJoint.xMotion = ConfigurableJointMotion.Locked;
-                        //_grabObjectJoint.yMotion = ConfigurableJointMotion.Locked;
-                        //_grabObjectJoint.zMotion = ConfigurableJointMotion.Locked;
-                        //_grabObject.transform.parent = _transform;
-
-                        //_grabObject.transform.position 
+                _grabJoint = interactiveObject.AddComponent<FixedJoint>();
+                _grabJoint.connectedBody = _playerRB;
+                _grabJoint.enablePreprocessing = false;
             }
 
             else
@@ -360,15 +356,15 @@ public class sCharacterGrabController : MonoBehaviour
 
             //Debug.Log("Mid Test");
 
-                    //GetComponent<sCharacterActionController>().SetGrabbable(_grabbable);
-                    //if (!hasTool)
-                    //    ToolCheck(_collision);
+            //GetComponent<sCharacterActionController>().SetGrabbable(_grabbable);
+            //if (!hasTool)
+            //    ToolCheck(_collision);
 
-                    PlugHoldCheck(_collisionObj);
+            PlugHoldCheck(_collisionObj);
 
-                    StartCoroutine(LetGoDelay());
-                    
-                    //return;
+            StartCoroutine(LetGoDelay());
+
+            //return;
         }
 
         else
@@ -377,12 +373,22 @@ public class sCharacterGrabController : MonoBehaviour
             //Debug.Log("No keyboard input, grabbable is already grabbed or is already grabbing or both hands aren't free");
         }
 
-            //Debug.Log("End of Handle Grabbing Function");
+        //Debug.Log("End of Handle Grabbing Function");
     }
 
     public bool ReturnIsGrabbing()
     {
         return isGrabbing;
+    }
+
+    // Toggles the sObjectHighlighter component on a grabbable object, if it has one.
+    // Safe to call on objects that do not have a highlighter attached.
+    void SetObjectHighlight(GameObject _obj, bool _on)
+    {
+        if (_obj != null && _obj.TryGetComponent<sObjectHighlighter>(out sObjectHighlighter _highlighter))
+        {
+            _highlighter.SetHighlight(_on);
+        }
     }
 
     // checks object held and triggers event ui to show connection held image
@@ -397,47 +403,48 @@ public class sCharacterGrabController : MonoBehaviour
     }
 
     void HandleGrabToss()
-{
-    if (Input.GetMouseButtonDown(0) && isGrabbing)
     {
-        TossGrabbedObject();
+        if (Input.GetMouseButtonDown(0) && isGrabbing)
+        {
+            TossGrabbedObject();
+        }
     }
-}
 
-void TossGrabbedObject()
-{
-    // Grab a reference to the rigidbody before GrabReset() clears interactiveObject
-    if (interactiveObject != null && interactiveObject.TryGetComponent<Rigidbody>(out Rigidbody _grabbedRB))
+    void TossGrabbedObject()
     {
+        // Grab a reference to the rigidbody before GrabReset() clears interactiveObject
+        if (interactiveObject != null && interactiveObject.TryGetComponent<Rigidbody>(out Rigidbody _grabbedRB))
+        {
             // Cache the facing direction before GrabReset() runs
             Vector3 _tossDirection = model.transform.forward + model.transform.up * 0.5f;
 
-        // Destroy the joint manually first so the object is free to fly
-        if(interactiveObject.TryGetComponent<FixedJoint>(out FixedJoint _joint))
+            // Destroy only the joint this script created, not any joint search result
+            if (_grabJoint != null)
             {
-                Destroy(_joint);
+                Destroy(_grabJoint);
+                _grabJoint = null;
             }
 
-        waitingForSpaceRelease = true;
+            waitingForSpaceRelease = true;
 
-        _grabbedRB.velocity = _tossDirection * throwPower;
-        // If you want a little arc instead of a flat throw:
-        // _grabbedRB.velocity += Vector3.up * (throwPower * 0.2f);
+            _grabbedRB.velocity = _tossDirection * throwPower;
+            // If you want a little arc instead of a flat throw:
+            // _grabbedRB.velocity += Vector3.up * (throwPower * 0.2f);
 
-        // Reuses your existing cleanup: calls OffSelect/OffGrab, resets hands,
-        // clears state. Runs immediately now instead of via a delayed Invoke,
-        // so isGrabbing / iGrabbable.IsGrabbed can never get stranded true
-        // (which happened if this GameObject was disabled - e.g. switching
-        // characters - before the old 0.5s Invoke had a chance to fire).
-        GrabReset();
+            // Reuses your existing cleanup: calls OffSelect/OffGrab, resets hands,
+            // clears state. Runs immediately now instead of via a delayed Invoke,
+            // so isGrabbing / iGrabbable.IsGrabbed can never get stranded true
+            // (which happened if this GameObject was disabled - e.g. switching
+            // characters - before the old 0.5s Invoke had a chance to fire).
+            GrabReset();
 
-        soUI.ToggleControlsPopup(null);
+            soUI.ToggleControlsPopup(null);
+        }
+        else
+        {
+            GrabReset();
+        }
     }
-    else
-    {
-        GrabReset();
-    }
-}
 
     private void OnTriggerEnter(Collider other)
     {
@@ -457,18 +464,19 @@ void TossGrabbedObject()
             {
                 if (isGrabbing)
                 {
-                    Debug.Log("Trigger Exit from grabbing");
-                    // Actively holding this object — don't clear references,
+                    //Debug.Log("Trigger Exit from grabbing");
+                    // Actively holding this object - don't clear references,
                     // just stop showing the popup. Let GrabReset() (on key-up)
                     // be the only thing that destroys the joint and clears state.
                     //soUI.ToggleControlsPopup(null);
                     return;
                 }
 
-                Debug.Log("Trigger Exit from grabbing");
+                //Debug.Log("Trigger Exit from grabbing");
 
-                // Not grabbing yet, just hovered off it — safe to clear
+                // Not grabbing yet, just hovered off it - safe to clear
                 grabbable.OffSelect();
+                SetObjectHighlight(interactiveObject, false);
                 grabbable = null;
                 interactiveObject = null;
                 soUI.ToggleControlsPopup(null);
@@ -476,6 +484,7 @@ void TossGrabbedObject()
             else
             {
                 _grabbable.OffSelect();
+                SetObjectHighlight(other.gameObject, false);
             }
         }
     }
