@@ -36,6 +36,6 @@ public class CanvasWarehouse : MonoBehaviour
 
         hiringPanel.SetActive(isHiring);
 
-        GameManager.gm.ToggleOrbitCamera(isHiring);
+        //GameManager.gm.ToggleOrbitCamera(isHiring);
     }
 }

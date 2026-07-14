@@ -269,6 +269,7 @@ MonoBehaviour:
   _typeRig: 2
   _grabTriggersAction: 0
   _UI_offset: {x: 0, y: 0, z: 0}
+  _itemData: {fileID: 11400000, guid: b5f3f2061c0fbdb498b7d8f83aaeeec8, type: 2}
   motorRaiseTime: 5
   motorRaiseSpeed: 1
 --- !u!120 &7353685729362514304

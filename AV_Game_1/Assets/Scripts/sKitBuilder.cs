@@ -38,7 +38,9 @@ public class sKitBuilder : MonoBehaviour
         if(itemList.Count == 0)
             return;
 
-        SO_BoxData _newBox = new SO_BoxData();
+        ScriptableObject _tempObj = ScriptableObject.CreateInstance(typeof(SO_BoxData));
+
+        SO_BoxData _newBox = ((SO_BoxData)_tempObj);
 
         _newBox.numberOfSlots = itemList.Count;
 

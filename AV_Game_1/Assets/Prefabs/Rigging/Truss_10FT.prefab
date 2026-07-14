@@ -527,6 +527,7 @@ MonoBehaviour:
   _typeRig: 0
   _grabTriggersAction: 0
   _UI_offset: {x: -2, y: 0, z: 0}
+  _itemData: {fileID: 11400000, guid: 0d1ec27d852e8154a88ad403a0dc6c8f, type: 2}
 --- !u!1 &7356087589029471213
 GameObject:
   m_ObjectHideFlags: 0

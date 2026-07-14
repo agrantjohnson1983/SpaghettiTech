@@ -8,33 +8,27 @@ public class sRecruiter : MonoBehaviour
     public canvasGameplay canvasGameplay;
     public CanvasWarehouse canvsWarehouse;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player") && !isRecruiting)
         {
+            Debug.Log("Toggling hiring screen on");
+
             isRecruiting = true;
             //canvasGameplay.ToggleHireScreen();
             canvsWarehouse.ToggleHireScreen();
         }
     }
-/*
+
     private void OnTriggerExit(Collider other)
     {
-        if (other.CompareTag("Player"))
+        if (other.CompareTag("Player") && isRecruiting)
         {
-            canvasUI.SetActive(false);
+            Debug.Log("Toggling hiring screen off");
+
+            isRecruiting = false;
+            canvsWarehouse.ToggleHireScreen();
         }
-    }*/
+    }
 }

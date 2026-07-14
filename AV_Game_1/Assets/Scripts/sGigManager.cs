@@ -9,7 +9,9 @@ public class sGigManager : MonoBehaviour
 
     //public List<SO_BoxData> boxDataList;
 
-    public List<GameObject> itemDataList, workerList;
+    public List<GameObject> itemsLoadedObjectList, workersHiredList;
+
+    public List<SO_ItemData> itemsLoadedDataList, itemsNeededDataList;
 
     void OnEnable()
     {
@@ -35,20 +37,43 @@ public class sGigManager : MonoBehaviour
 
     private void Start()
     {
-        //boxDataList = new List<SO_BoxData>();
-        itemDataList  = new List<GameObject>();
+        itemsLoadedObjectList  = new List<GameObject>();
 
-        workerList = new List<GameObject>();
+        workersHiredList = new List<GameObject>();
+
+        itemsLoadedDataList = new List<SO_ItemData>();
+
+        itemsNeededDataList = new List<SO_ItemData>();
     }
 
-    public void AddItemToGig(GameObject _ItemData)
+    public void SetItemsNeededForGig(List<SO_ItemData> itemData)
     {
-        if (CheckForItemDupes(_ItemData))
+        itemsNeededDataList = itemData;
+    }
+
+    public List<SO_ItemData> GetItemsNeededDataList()
+    {
+        return itemsNeededDataList;
+    }
+
+    public List<SO_ItemData> GetItemsLoadedDataList()
+    {
+        return itemsLoadedDataList;
+    }
+
+    public void AddItemToGig(GameObject _ItemObject)
+    {
+        if (CheckForItemDupes(_ItemObject))
             return;
 
-        DontDestroyOnLoad(_ItemData);
+        DontDestroyOnLoad(_ItemObject);
 
-        itemDataList.Add(_ItemData);
+        itemsLoadedObjectList.Add(_ItemObject);
+
+        if(_ItemObject.TryGetComponent<iLoadable>(out iLoadable _loadable))
+        {
+            itemsLoadedDataList.Add(_loadable.ItemData);
+        }
     }
 
     public void AddWorkerToGig(GameObject _WorkerData)
@@ -58,16 +83,16 @@ public class sGigManager : MonoBehaviour
 
         DontDestroyOnLoad(_WorkerData);
 
-        workerList.Add(_WorkerData);
+        workersHiredList.Add(_WorkerData);
     }
 
     bool CheckForWorkerDupes(GameObject _workerData)
     {
         bool isADupe = false;
 
-        for (int i = 0; i < workerList.Count; i++)
+        for (int i = 0; i < workersHiredList.Count; i++)
         {
-            if (_workerData == workerList[i])
+            if (_workerData == workersHiredList[i])
             {
                 isADupe = true;
             }
@@ -80,9 +105,9 @@ public class sGigManager : MonoBehaviour
     {
         bool isADupe = false;
 
-        for (int i = 0; i < itemDataList.Count; i++)
+        for (int i = 0; i < itemsLoadedObjectList.Count; i++)
         {
-            if(_ItemData == itemDataList[i])
+            if(_ItemData == itemsLoadedObjectList[i])
             {
                 isADupe = true;
             }
@@ -93,20 +118,15 @@ public class sGigManager : MonoBehaviour
 
     public void TruckDrive()
     {
-        for (int i = 0; i < itemDataList.Count; i++)
+        for (int i = 0; i < itemsLoadedObjectList.Count; i++)
         {
-            itemDataList[i].SetActive(false);
+            itemsLoadedObjectList[i].SetActive(false);
         }
 
-        for (int i = 0; i < workerList.Count; i++)
+        for (int i = 0; i < workersHiredList.Count; i++)
         {
-            workerList[i].SetActive(false);
+            workersHiredList[i].SetActive(false);
         }
-    }
-
-    public List<GameObject>ReturnItems()
-    {
-        return itemDataList;
     }
 
     void OnSceneLoad(Scene scene, LoadSceneMode mode)
@@ -121,16 +141,16 @@ public class sGigManager : MonoBehaviour
 
     void StartGig()
     {
-        for (int i = 0; i < itemDataList.Count; i++)
+        for (int i = 0; i < itemsLoadedObjectList.Count; i++)
         {
             // TO DO - Set location to truck
 
-            itemDataList[i].SetActive(true);
+            itemsLoadedObjectList[i].SetActive(true);
         }
 
-        for (int i = 0; i < workerList.Count; i++)
+        for (int i = 0; i < workersHiredList.Count; i++)
         {
-            workerList[i].SetActive(true);
+            workersHiredList[i].SetActive(true);
         }
     }
 }

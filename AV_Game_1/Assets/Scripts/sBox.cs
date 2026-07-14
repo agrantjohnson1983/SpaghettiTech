@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class sBox : sInteractive, iClickable, IPointerEnterHandler, IPointerExitHandler
+public class sBox : sInteractive, iClickable, IPointerEnterHandler, IPointerExitHandler, iLoadable
 {
     GameManager gm;
 
@@ -15,7 +15,7 @@ public class sBox : sInteractive, iClickable, IPointerEnterHandler, IPointerExit
 
     public int numberOfSlots;
 
-    public List<SO_ItemData> itemData;
+    public List<SO_ItemData> boxedItemDataList;
 
     //GameObject tempInventoryObj;
 
@@ -28,8 +28,6 @@ public class sBox : sInteractive, iClickable, IPointerEnterHandler, IPointerExit
     bool isEmpty = false;
 
     int pickOffset = 0;
-
-
 
     //public GameObject ui_Ring;
     public float UI_ToggleDistance = 5f;
@@ -46,11 +44,15 @@ public class sBox : sInteractive, iClickable, IPointerEnterHandler, IPointerExit
     // Data asset this box was spawned/initialized from (null if placed manually in-scene)
     public SO_BoxData boxData;
 
+    // TO DO - Box needs to generate it's own SO Data
+
+    public SO_ItemData ItemData { get { return _itemData; } set { _itemData = value; } }
+
+    SO_ItemData _itemData;
+
     // Start is called before the first frame update
     private void Awake()
     {
-        //pModel.GetComponent<MeshRenderer>().material = materialBoxClosed;
-
         gm = GameManager.gm;
 
         ui_Select.SetActive(false);
@@ -58,7 +60,6 @@ public class sBox : sInteractive, iClickable, IPointerEnterHandler, IPointerExit
         ui_Img.SetActive(false);
 
         ui_Text.SetActive(false);
-        //ui_Ring.SetActive(false);
     }
 
     // Called by sBoxSpawner right after Instantiate. Applies all data-driven
@@ -74,7 +75,18 @@ public class sBox : sInteractive, iClickable, IPointerEnterHandler, IPointerExit
         boxData = data;
 
         numberOfSlots = data.numberOfSlots;
-        itemData = new List<SO_ItemData>(data.startingItemData);
+
+        boxedItemDataList = new List<SO_ItemData>(data.startingItemData);
+
+        ScriptableObject _itemData = ScriptableObject.CreateInstance(typeof(SO_ItemData));
+
+        ItemData = ((SO_ItemData)_itemData);
+
+        ItemData.prefabItem = this.gameObject;
+
+        ItemData.itemName = "Box";
+
+        //ItemData.prefabItem = this.gameObject;
 
         //materialBoxClosed = data.materialBoxClosed;
         //materialBoxOpen = data.materialBoxOpen;
@@ -161,7 +173,7 @@ public class sBox : sInteractive, iClickable, IPointerEnterHandler, IPointerExit
 
             inventory.SetBox(this);
 
-            inventory.SetInventory(itemData.ToArray());
+            inventory.SetInventory(boxedItemDataList.ToArray());
 
             //pModel.GetComponent<MeshRenderer>().material = materialBoxOpen;
 
@@ -221,7 +233,7 @@ public class sBox : sInteractive, iClickable, IPointerEnterHandler, IPointerExit
     void RemoveItemData(int _index)
     {
         //Debug.Log("Removing Item at index: " + _index);
-        itemData.RemoveAt(_index);
+        boxedItemDataList.RemoveAt(_index);
 
 
         //itemData.Sort();

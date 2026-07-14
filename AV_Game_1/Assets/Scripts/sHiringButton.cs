@@ -3,15 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Events;
+using TMPro;
 
 public class sHiringButton : MonoBehaviour
 {
     sHiringScreen hiringScreen;
 
     public Image characterImage;
-    public Text characterNameText;
-    public Text characterStats;
-    public Text costText;
+    public TextMeshProUGUI characterNameText;
+    public TextMeshProUGUI characterStats;
+    public TextMeshProUGUI costText;
     public float costToHire;
 
     //GameObject pCharacter;

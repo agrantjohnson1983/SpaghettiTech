@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class sRigGear : MonoBehaviour, iRiggable, iGrabbable
+public class sRigGear : MonoBehaviour, iRiggable, iGrabbable, iLoadable
 {
     public SO_EventsUI eventsUI;
 
@@ -114,6 +114,10 @@ public class sRigGear : MonoBehaviour, iRiggable, iGrabbable
             _UI_offset = value;
         }
     }
+
+    public SO_ItemData ItemData { get { return _itemData; } set { _itemData = value; } }
+
+    public SO_ItemData _itemData;
     // Start is called before the first frame update
 
     private void Start()
