@@ -35,4 +35,14 @@ public class sHiringScreen : MonoBehaviour
 
         return characterData[randomIndex];
     }
+
+    public void Close()
+    {
+        this.gameObject.GetComponent<Animator>().SetTrigger("Close");
+    }
+
+    public void OnPanelClose()
+    {
+        this.gameObject.SetActive(false);
+    }
 }

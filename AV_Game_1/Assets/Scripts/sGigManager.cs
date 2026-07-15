@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using TMPro;
 
 public class sGigManager : MonoBehaviour
 {
@@ -12,6 +13,10 @@ public class sGigManager : MonoBehaviour
     public List<GameObject> itemsLoadedObjectList, workersHiredList;
 
     public List<SO_ItemData> itemsLoadedDataList, itemsNeededDataList;
+
+    SO_GigData currentGig;
+
+    public TextMeshProUGUI textCurrentGig;
 
     void OnEnable()
     {
@@ -44,6 +49,15 @@ public class sGigManager : MonoBehaviour
         itemsLoadedDataList = new List<SO_ItemData>();
 
         itemsNeededDataList = new List<SO_ItemData>();
+    }
+
+    public void SetCurrentGig(SO_GigData _gigData)
+    {
+        currentGig = _gigData;
+
+        SetItemsNeededForGig(currentGig.itemsNeededForGigList);
+
+        textCurrentGig.text = "Current Gig: " + currentGig.gigName;
     }
 
     public void SetItemsNeededForGig(List<SO_ItemData> itemData)
@@ -109,6 +123,7 @@ public class sGigManager : MonoBehaviour
         {
             if(_ItemData == itemsLoadedObjectList[i])
             {
+                Debug.Log("Dupe found with " + _ItemData + " and " + itemsLoadedObjectList[i]);
                 isADupe = true;
             }
         }

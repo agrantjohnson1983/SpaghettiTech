@@ -1,12 +1,21 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
+
 
 public class sComputer : MonoBehaviour
 {
     public GameObject gigSelectScreen;
 
     bool isOnSelectScreen = false;
+
+    public TextMeshProUGUI textCurrentGig;
+
+    private void Start()
+    {
+        textCurrentGig.text = "Current Gig : UNEMPLOYED - GET A GIG ASSHOLE!";
+    }
 
     void ToggleSelectScreen(bool _isOn)
     {

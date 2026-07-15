@@ -6,7 +6,7 @@ public class sRecruiter : MonoBehaviour
 {
     public static bool isRecruiting = false;
     public canvasGameplay canvasGameplay;
-    public CanvasWarehouse canvsWarehouse;
+    public CanvasWarehouse canvasWarehouse;
 
 
     private void OnTriggerEnter(Collider other)
@@ -17,7 +17,7 @@ public class sRecruiter : MonoBehaviour
 
             isRecruiting = true;
             //canvasGameplay.ToggleHireScreen();
-            canvsWarehouse.ToggleHireScreen();
+            canvasWarehouse.ToggleHireScreen();
         }
     }
 
@@ -28,7 +28,7 @@ public class sRecruiter : MonoBehaviour
             Debug.Log("Toggling hiring screen off");
 
             isRecruiting = false;
-            canvsWarehouse.ToggleHireScreen();
+            canvasWarehouse.ToggleHireScreen();
         }
     }
 }

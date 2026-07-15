@@ -32,7 +32,7 @@ public class sTruck : MonoBehaviour
 
             for (int i = 0; i < _tempItemObjectList.Count; i++)
             {
-                _tempItemObjectList[i].transform.position = this.transform.position * Random.insideUnitCircle;
+                _tempItemObjectList[i].transform.position = this.transform.position + Random.insideUnitSphere;
             }
         }
     }
@@ -68,37 +68,32 @@ public class sTruck : MonoBehaviour
 
             for (int i = 0; i < itemNeededDataList.Count; i++)
             {
-                uTruckItem _tempItem;
-                _tempItem = Instantiate(pItemNeededForGigUI, transformItemNeeded).GetComponent<uTruckItem>();
-                _tempItem.SetTruckItemUI(itemLoadedDataList[i]);
+                GameObject _obj = Instantiate(pItemNeededForGigUI, transformItemNeeded);
+                instantiatedNeededUI.Add(_obj);
+                _obj.GetComponent<uTruckItem>().SetTruckItemUI(itemNeededDataList[i]);
             }
 
             for (int i = 0; i < itemLoadedDataList.Count; i++)
             {
-                uTruckItem _tempItem;
-                _tempItem = Instantiate(pItemLoadedUI, transformItemLoaded).GetComponent<uTruckItem>();
-                _tempItem.SetTruckItemUI(itemLoadedDataList[i]);
+                GameObject _obj = Instantiate(pItemLoadedUI, transformItemLoaded);
+                instantiatedLoadedUI.Add(_obj);
+                _obj.GetComponent<uTruckItem>().SetTruckItemUI(itemLoadedDataList[i]);
             }
         }
     }
 
+    List<GameObject> instantiatedNeededUI = new List<GameObject>();
+    List<GameObject> instantiatedLoadedUI = new List<GameObject>();
+
     void ClearUI()
     {
-        if(itemLoadedDataList != null)
-            for (int i = itemLoadedDataList.Count; i >= 1; i--)
-            {
-                Debug.Log("Destorying item loaded data at index " + i);
-                itemLoadedDataList.RemoveAt(i);
-                Destroy(itemLoadedDataList[i]);
-            }
+        for (int i = 0; i < instantiatedNeededUI.Count; i++)
+            Destroy(instantiatedNeededUI[i]);
+        instantiatedNeededUI.Clear();
 
-        if(itemNeededDataList != null)
-            for (int i = itemNeededDataList.Count; i >= 1; i--)
-            {
-                Debug.Log("Destorying item needed data at index " + i);
-                itemNeededDataList.RemoveAt(i);
-                Destroy(itemNeededDataList[i]);
-            }
+        for (int i = 0; i < instantiatedLoadedUI.Count; i++)
+            Destroy(instantiatedLoadedUI[i]);
+        instantiatedLoadedUI.Clear();
     }
 
     private void OnTriggerEnter(Collider other)

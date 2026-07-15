@@ -34,6 +34,10 @@ public class uGigButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     public void OnClick()
     {
         Debug.Log("Gig Button was clicked");
+
+        sGigManager.gigManagerGlobal.SetCurrentGig(gigData);
+
+        this.transform.parent.gameObject.SetActive(false);
     }
 
     public void OnPointerEnter(PointerEventData eventData)
