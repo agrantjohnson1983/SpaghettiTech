@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class canvasGameplay : MonoBehaviour
 {
@@ -65,7 +66,7 @@ public class canvasGameplay : MonoBehaviour
     public GameObject moneyUI;
     public float startingMoney = 1000;
     float currentMoney;
-    public Text currentMoneyText;
+    public TextMeshProUGUI currentMoneyText;
 
     // TOOLBELT STUFF
 
@@ -82,6 +83,12 @@ public class canvasGameplay : MonoBehaviour
     // WAREHOUSE
 
     public GameObject startScreen;
+
+    private void Awake()
+    {
+        //if (GameManager.gm.canvasGameplay.gameObject != this.gameObject)
+        //    Destroy(this.gameObject);
+    }
 
     private void OnEnable()
     {
@@ -158,7 +165,7 @@ public class canvasGameplay : MonoBehaviour
 
         else
         {
-            playerPos = GameManager.gm.ReturnCurrentPlayer().transform.position;
+            playerPos = sPlayerCharacter.playerCharacterGlobal.transform.position;
             popupControls.SetActive(true);
             popupControlsText.text = _popupText;
             popupControlsText.gameObject.transform.position = Camera.main.WorldToScreenPoint(playerPos + popupControlsOffset);
@@ -360,19 +367,26 @@ public class canvasGameplay : MonoBehaviour
 
     public void OnArrowLeft()
     {
-        GameManager.gm.SwitchActivePlayer(-1);
+        //GameManager.gm.SwitchActivePlayer(-1);
     }
 
     public void OnArrowRight()
     {
-        GameManager.gm.SwitchActivePlayer(1);
+        //GameManager.gm.SwitchActivePlayer(1);
     }
 
     public void OnStart()
     {
         //hiringPanel.SetActive(isHiring);
         startScreen.SetActive(false);
-        GameManager.gm.ToggleOrbitCamera(false);
+
+        //GameManager.gm.ToggleOrbitCamera(false);
+
+        popupControls.SetActive(false);
+
+        GameManager.gm.ToggleBlueprintCamera(false);
+
+        sPlayerCharacter.playerCharacterGlobal.CharacterControlsToggle(true);
     }
 
     public void ToggleHireScreen()

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -50,6 +51,8 @@ public class sBox : sInteractive, iClickable, IPointerEnterHandler, IPointerExit
 
     SO_ItemData _itemData;
 
+    public float boxTextFontSize = 0.05f;
+
     // Start is called before the first frame update
     private void Awake()
     {
@@ -59,7 +62,11 @@ public class sBox : sInteractive, iClickable, IPointerEnterHandler, IPointerExit
 
         ui_Img.SetActive(false);
 
+        ui_Text.GetComponent<TextMeshProUGUI>().fontSize = boxTextFontSize;
+
         ui_Text.SetActive(false);
+
+
     }
 
     // Called by sBoxSpawner right after Instantiate. Applies all data-driven
@@ -120,7 +127,7 @@ public class sBox : sInteractive, iClickable, IPointerEnterHandler, IPointerExit
 
     private void Update()
     {
-        if (!isEmpty && GameManager.gm.ReturnCurrentPlayer() != null)
+        if (!isEmpty && sPlayerCharacter.playerCharacterGlobal != null)
             DetectPlayer();
 
         //if(ui_Ring)
@@ -144,7 +151,7 @@ public class sBox : sInteractive, iClickable, IPointerEnterHandler, IPointerExit
 
         if (dynamicEnabled)
         {
-            var playerObj = GameManager.gm.ReturnCurrentPlayer();
+            var playerObj = sPlayerCharacter.playerCharacterGlobal;
 
             if (playerObj != null)
             {
@@ -264,8 +271,13 @@ public class sBox : sInteractive, iClickable, IPointerEnterHandler, IPointerExit
     // This gets called when a player clicks the box
     public void OnClick()
     {
-        if (isWithinOpenRange && !isEmpty && !isOpen)
+        Debug.Log(gameObject.name + " OnClick called. isWithinOpenRange=" + isWithinOpenRange + " isEmpty=" + isEmpty + " isOpen=" + isOpen);
+
+
+        if (isWithinOpenRange && !isEmpty && !isOpen && !iGrabbable.IsGrabbed)
         {
+
+            //Debug.Log(gameObject.name + " OnClick called. isWithinOpenRange=" + isWithinOpenRange + " isEmpty=" + isEmpty + " isOpen=" + isOpen);
 
             //if (!isOpen)
             //{
@@ -300,7 +312,7 @@ public class sBox : sInteractive, iClickable, IPointerEnterHandler, IPointerExit
     void DetectPlayer()
     {
         // Checks if the player is less than the distance of the UI toggle distance and if so turns on the UI
-        if (Vector3.Distance(this.transform.position, GameManager.gm.ReturnCurrentPlayer().transform.position) < UI_ToggleDistance)
+        if (Vector3.Distance(this.transform.position, sPlayerCharacter.playerCharacterGlobal.transform.position) < UI_ToggleDistance)
         {
             isWithinOpenRange = true;
 

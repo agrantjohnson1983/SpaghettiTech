@@ -19,6 +19,12 @@ public class CanvasWarehouse : MonoBehaviour
 
     float money;
 
+    private void Awake()
+    {
+        //if (GameManager.gm.canvasGameplay.gameObject != this.gameObject)
+        //    Destroy(this.gameObject);
+    }
+
     private void OnEnable()
     {
         soUI.characterHire.AddListener(OnCharacterHire);

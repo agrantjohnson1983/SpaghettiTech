@@ -4,16 +4,18 @@ using UnityEngine;
 
 public class sMouseClickController : MonoBehaviour, iClickable
 {
-    Camera cam;
+    
     public LayerMask mask_Clickable;
-    bool isActive = false;
+    //bool isActive = false;
     sPlayerCharacter player;
+
+    Camera cam;
 
     // Start is called before the first frame update
     void Start()
     {
         player = GetComponent<sPlayerCharacter>();
-        cam = Camera.main;
+        
     }
 
     // Update is called once per frame
@@ -29,6 +31,15 @@ public class sMouseClickController : MonoBehaviour, iClickable
         // When a user clicks the left mouse button down and character isn't grabbing
         if (Input.GetMouseButtonDown(0) && !sCharacterGrabController.isGrabbing)
         {
+            cam = Camera.main;
+
+            if (cam == null)
+            {
+                Debug.Log("Cam was null - no clicky");
+                return;
+            }
+                
+
             // creats a ray at the mouse position
             Ray ray = cam.ScreenPointToRay(Input.mousePosition);
 
@@ -56,7 +67,7 @@ public class sMouseClickController : MonoBehaviour, iClickable
     // Use this to turn on and off the click controller//
     public void ToggleMouseClickController(bool _isOn)
     {
-        isActive = _isOn;
+        //isActive = _isOn;
     }
 
     // This should change to player clicked on - This should maybe be moved to the sPlayer script, so that this script can be turned off for inactive characters
@@ -64,16 +75,16 @@ public class sMouseClickController : MonoBehaviour, iClickable
     {
         Debug.Log(gameObject.name + " was clicked - this should switch to this player");
 
-        // Turns off current player
-        GameManager.gm.ReturnCurrentPlayer().CharacterControlsToggle(false);
+        //// Turns off current player
+        //GameManager.gm.ReturnCurrentPlayer().CharacterControlsToggle(false);
 
-        // Switches current player index to this one
-        GameManager.gm.SwitchActivePlayerIndex(player.GetIndex());
+        //// Switches current player index to this one
+        //GameManager.gm.SwitchActivePlayerIndex(player.GetIndex());
 
-        // Sets player that gets clicked to current one - also toggles on the controls
-        player.SetToCurrentPlayer();
+        //// Sets player that gets clicked to current one - also toggles on the controls
+        //player.SetToCurrentPlayer();
 
-        // Sets Camera
-        GameManager.gm.ReturnCanvasWorldSpace().worldCamera = Camera.main;
+        //// Sets Camera
+        //GameManager.gm.ReturnCanvasWorldSpace().worldCamera = Camera.main;
     }
 }

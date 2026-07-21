@@ -15,7 +15,7 @@ public class sTruck : MonoBehaviour
 
     public GameObject canvasLoaded;
 
-    public GameObject pItemNeededForGigUI, pItemLoadedUI;
+    public GameObject pTruckItemUI;
 
     public Transform transformItemNeeded, transformItemLoaded;
 
@@ -56,29 +56,50 @@ public class sTruck : MonoBehaviour
 
         if(_isOn)
         {
-            ClearUI();
+            Dictionary<SO_ItemData, int> needed =
+            sGigManager.gigManagerGlobal.GetNeededItemCounts();
 
-            itemLoadedDataList = new List<SO_ItemData>();
+            Dictionary<SO_ItemData, int> loaded =
+                sGigManager.gigManagerGlobal.GetLoadedItemCounts();
 
-            itemLoadedDataList = sGigManager.gigManagerGlobal.GetItemsLoadedDataList();
-
-            itemNeededDataList = new List<SO_ItemData>();
-
-            itemNeededDataList = sGigManager.gigManagerGlobal.GetItemsNeededDataList();
-
-            for (int i = 0; i < itemNeededDataList.Count; i++)
+            foreach (var pair in needed)
             {
-                GameObject _obj = Instantiate(pItemNeededForGigUI, transformItemNeeded);
-                instantiatedNeededUI.Add(_obj);
-                _obj.GetComponent<uTruckItem>().SetTruckItemUI(itemNeededDataList[i]);
+                GameObject obj = Instantiate(pTruckItemUI, transformItemNeeded);
+
+                instantiatedNeededUI.Add(obj);
+
+                uTruckItem ui = obj.GetComponent<uTruckItem>();
+
+                ui.SetTruckItemUI(pair.Key);
+
+                int loadedCount = loaded.TryGetValue(pair.Key, out int count)
+                    ? count
+                    : 0;
+
+                ui.SetQuantity(count, pair.Value);
             }
 
-            for (int i = 0; i < itemLoadedDataList.Count; i++)
-            {
-                GameObject _obj = Instantiate(pItemLoadedUI, transformItemLoaded);
-                instantiatedLoadedUI.Add(_obj);
-                _obj.GetComponent<uTruckItem>().SetTruckItemUI(itemLoadedDataList[i]);
-            }
+            //itemLoadedDataList = new List<SO_ItemData>();
+
+            //itemLoadedDataList = sGigManager.gigManagerGlobal.GetItemsLoadedDataList();
+
+            //itemNeededDataList = new List<SO_ItemData>();
+
+            //itemNeededDataList = sGigManager.gigManagerGlobal.GetItemsNeededDataList();
+
+            //for (int i = 0; i < itemNeededDataList.Count; i++)
+            //{
+            //    GameObject _obj = Instantiate(pItemNeededForGigUI, transformItemNeeded);
+            //    instantiatedNeededUI.Add(_obj);
+            //    _obj.GetComponent<uTruckItem>().SetTruckItemUI(itemNeededDataList[i]);
+            //}
+
+            //for (int i = 0; i < itemLoadedDataList.Count; i++)
+            //{
+            //    GameObject _obj = Instantiate(pItemLoadedUI, transformItemLoaded);
+            //    instantiatedLoadedUI.Add(_obj);
+            //    _obj.GetComponent<uTruckItem>().SetTruckItemUI(itemLoadedDataList[i]);
+            //}
         }
     }
 

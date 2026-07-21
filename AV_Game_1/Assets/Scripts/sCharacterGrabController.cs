@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Dynamic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class sCharacterGrabController : MonoBehaviour
 {
@@ -92,6 +93,33 @@ public class sCharacterGrabController : MonoBehaviour
         //joint = GetComponent<ConfigurableJoint>();
 
         //HandIndexList = new List<int>();
+    }
+
+    private void OnEnable()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    private void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    // isGrabbing is static, so it survives a scene load (only a full domain
+    // reload clears it, not SceneManager.LoadScene). If a grab was active,
+    // or mid-cleanup, when a scene change happened - e.g. GameManager.StartGig()
+    // calling SceneManager.LoadScene - the old interactiveObject/joint get
+    // destroyed by the unload before GrabReset() ever runs, and isGrabbing
+    // is left stuck true forever, blocking every grab attempt from then on.
+    // Force a clean reset on every scene load so nothing can carry over.
+    private void OnSceneLoaded(Scene _scene, LoadSceneMode _mode)
+    {
+        isGrabbing = false;
+        waitingForSpaceRelease = false;
+        canLetGo = false;
+        grabbable = null;
+        interactiveObject = null;
+        _grabJoint = null;
     }
 
     // Update is called once per frame

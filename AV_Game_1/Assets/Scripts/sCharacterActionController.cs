@@ -115,7 +115,7 @@ public class sCharacterActionController : MonoBehaviour
 
             if(_actionable.HasAction)
             {
-                soUI.ToggleControlsPopup(popupControlText);
+                //soUI.ToggleControlsPopup(popupControlText);
             }
         }
     }
@@ -147,7 +147,7 @@ public class sCharacterActionController : MonoBehaviour
             if(actionable == _actionable)
             {
                 if(actionable.HasAction)
-                soUI.ToggleControlsPopup(null);
+                //soUI.ToggleControlsPopup(null);
 
                 isTouchingActionable = false;
 

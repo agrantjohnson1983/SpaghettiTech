@@ -95,7 +95,7 @@ GameObject:
   - component: {fileID: 1453645381262695696}
   - component: {fileID: 8475362855462495187}
   m_Layer: 0
-  m_Name: MotorController_Setup
+  m_Name: Setup_MotorController
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -135,10 +135,16 @@ MonoBehaviour:
   hasAction: 0
   offset: {x: 0, y: 1, z: 0}
   rigType: 3
+  toolNeeded: 0
   _toolTypeNeeded: 1
   textSetup: {fileID: 8844641472681299470}
   _UI_offset: {x: 0, y: 0, z: 0}
-  uiEvents: {fileID: 11400000, guid: 2b96b6b1405722c48a474d361c95f00a, type: 2}
+  setupIndex: -1
+  requireNeighborsSetup: 0
+  neighborTrussIndexA: -1
+  neighborTrussIndexB: -1
+  soUI: {fileID: 11400000, guid: 2b96b6b1405722c48a474d361c95f00a, type: 2}
+  actionObject: {fileID: 0}
 --- !u!65 &8475362855462495187
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -267,10 +273,16 @@ MonoBehaviour:
   hasAction: 0
   offset: {x: 2.16, y: 0.5, z: 0}
   rigType: 0
+  toolNeeded: 0
   _toolTypeNeeded: 1
   textSetup: {fileID: 0}
   _UI_offset: {x: 0, y: 0, z: 0}
-  uiEvents: {fileID: 11400000, guid: 2b96b6b1405722c48a474d361c95f00a, type: 2}
+  setupIndex: -1
+  requireNeighborsSetup: 1
+  neighborTrussIndexA: -1
+  neighborTrussIndexB: -1
+  soUI: {fileID: 0}
+  actionObject: {fileID: 0}
 --- !u!1 &8468445531994352861
 GameObject:
   m_ObjectHideFlags: 0

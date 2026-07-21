@@ -76,6 +76,9 @@ public class sToolHandler : MonoBehaviour, iRequireHands
 
     public SO_ItemData CheckIfHasTool(eToolType _toolType)
     {
+        if (toolHeldItemDataList.Count == 0)
+            return null;
+
         SO_ItemData _tempTool = toolHeldItemDataList[0];
 
         //bool hasCorrectTool = false;

@@ -12,11 +12,12 @@ public class sGigManager : MonoBehaviour
 
     public List<GameObject> itemsLoadedObjectList, workersHiredList;
 
-    public List<SO_ItemData> itemsLoadedDataList, itemsNeededDataList;
+    public List<SO_ItemData> itemsNeededDataList;
 
     SO_GigData currentGig;
 
     public TextMeshProUGUI textCurrentGig;
+
 
     void OnEnable()
     {
@@ -46,7 +47,7 @@ public class sGigManager : MonoBehaviour
 
         workersHiredList = new List<GameObject>();
 
-        itemsLoadedDataList = new List<SO_ItemData>();
+        //itemsLoadedDataList = new List<SO_ItemData>();
 
         itemsNeededDataList = new List<SO_ItemData>();
     }
@@ -55,24 +56,69 @@ public class sGigManager : MonoBehaviour
     {
         currentGig = _gigData;
 
-        SetItemsNeededForGig(currentGig.itemsNeededForGigList);
+        //SetItemsNeededForGig(currentGig.itemsNeededForGigList);
 
         textCurrentGig.text = "Current Gig: " + currentGig.gigName;
     }
 
-    public void SetItemsNeededForGig(List<SO_ItemData> itemData)
+    public Dictionary<SO_ItemData, int> GetNeededItemCounts()
     {
-        itemsNeededDataList = itemData;
+        Dictionary<SO_ItemData, int> counts = new();
+
+        foreach (var item in currentGig.itemsNeededForGigList)
+        {
+            if (item == null)
+                continue;
+
+            counts.TryAdd(item, 0);
+            counts[item]++;
+        }
+
+        return counts;
     }
 
-    public List<SO_ItemData> GetItemsNeededDataList()
+    public Dictionary<SO_ItemData, int> GetLoadedItemCounts()
     {
-        return itemsNeededDataList;
-    }
+        Dictionary<SO_ItemData, int> counts = new();
 
-    public List<SO_ItemData> GetItemsLoadedDataList()
-    {
-        return itemsLoadedDataList;
+        foreach (GameObject obj in itemsLoadedObjectList)
+        {
+            if (obj == null)
+                continue;
+
+            //------------------------------------
+            // BOX
+            //------------------------------------
+
+            if (obj.TryGetComponent<sBox>(out sBox box))
+            {
+                foreach (var item in box.boxedItemDataList)
+                {
+                    if (item == null)
+                        continue;
+
+                    counts.TryAdd(item, 0);
+                    counts[item]++;
+                }
+
+                continue;
+            }
+
+            //------------------------------------
+            // NORMAL ITEM
+            //------------------------------------
+
+            if (obj.TryGetComponent<iLoadable>(out iLoadable loadable))
+            {
+                if (loadable.ItemData == null)
+                    continue;
+
+                counts.TryAdd(loadable.ItemData, 0);
+                counts[loadable.ItemData]++;
+            }
+        }
+
+        return counts;
     }
 
     public void AddItemToGig(GameObject _ItemObject)
@@ -84,10 +130,10 @@ public class sGigManager : MonoBehaviour
 
         itemsLoadedObjectList.Add(_ItemObject);
 
-        if(_ItemObject.TryGetComponent<iLoadable>(out iLoadable _loadable))
-        {
-            itemsLoadedDataList.Add(_loadable.ItemData);
-        }
+        //if(_ItemObject.TryGetComponent<iLoadable>(out iLoadable _loadable))
+        //{
+        //    itemsLoadedDataList.Add(_loadable.ItemData);
+        //}
     }
 
     public void AddWorkerToGig(GameObject _WorkerData)
@@ -150,6 +196,7 @@ public class sGigManager : MonoBehaviour
 
         if (GameManager.gm.GetGameMode() == eGameMode.gig)
         {
+            Debug.Log("Starting Gig");
             StartGig();
         }
     }

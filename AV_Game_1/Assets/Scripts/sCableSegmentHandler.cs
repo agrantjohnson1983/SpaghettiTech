@@ -156,7 +156,7 @@ public class sCableSegmentHandler : MonoBehaviour
     {
         //Debug.Log("Cable connection complete - cable is now connected at location " + _tranform.position.ToString());
 
-        GameManager.gm.ReturnCurrentPlayer().ReturnGrabController().GrabReset();
+        sPlayerCharacter.playerCharacterGlobal.ReturnGrabController().GrabReset();
 
         //this.gameObject.transform.position = _tranform.position;
         //this.gameObject.transform.rotation = _tranform.rotation;

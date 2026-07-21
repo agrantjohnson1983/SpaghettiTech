@@ -185,6 +185,7 @@ GameObject:
   - component: {fileID: 132296091980329256}
   - component: {fileID: 3163874987475164061}
   - component: {fileID: 3163874987475164066}
+  - component: {fileID: 2690858896691665127}
   m_Layer: 7
   m_Name: Box_Cables_4_Slot
   m_TagString: Untagged
@@ -278,17 +279,15 @@ MonoBehaviour:
   - {fileID: 4827032076767576494}
   textItem: CABLES
   ui_Select: {fileID: 7207851875643422336}
+  _transformGrab: {fileID: 0}
   _UI_offset: {x: 0, y: 0, z: 0}
   pBoxInventoryPanel: {fileID: 7989476311432266672, guid: fef9c6bea0e7b3e439dbe3a8d9a64c22, type: 3}
+  inventoryPanelOffset: {x: 0, y: 5, z: 0}
   numberOfSlots: 4
-  itemData:
-  - {fileID: 11400000, guid: 0cf5a45ea37f9054dbe3be9fb61e5ede, type: 2}
-  - {fileID: 11400000, guid: 9013ed674375fb345b246d7b0d09f029, type: 2}
-  - {fileID: 11400000, guid: 9013ed674375fb345b246d7b0d09f029, type: 2}
+  boxedItemDataList: []
   materialBoxClosed: {fileID: 2100000, guid: 444ab64ad61724c4299878e7d27f14ae, type: 2}
   materialBoxOpen: {fileID: 2100000, guid: 8d7b5c4f6f36fc649a6756747661b6f5, type: 2}
   materialBoxEmpty: {fileID: 2100000, guid: 7b499c35b7ef4304e8e9004dfcff65af, type: 2}
-  inventoryPanelOffset: {x: 0, y: 5, z: 0}
   UI_ToggleDistance: 5
   ui_Img: {fileID: 5723692159834679811}
   ui_Text: {fileID: 322570559115254276}
@@ -296,6 +295,28 @@ MonoBehaviour:
   ui_Text_Offset: {x: 0, y: 2, z: 0}
   pModel: {fileID: 7405690288297066526}
   boxSelectMouseImage: {fileID: 2800000, guid: 45db45742eae5ad4396692f502813120, type: 3}
+  boxData: {fileID: 0}
+--- !u!114 &2690858896691665127
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3163874987475164060}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a88d3fc466c15264e9c273dd3d3f18a5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mode: 2
+  targetRenderer: {fileID: 5022729525306376303}
+  tintColor: {r: 1, g: 0.85, b: 0.2, a: 1}
+  tintEmissionIntensity: 1.5
+  emissionColorProperty: _EmissionColor
+  outlineColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+  outlineWidth: 0.02
+  outlineWidthProperty: _OutlineWidth
+  outlineColorProperty: _OutlineColor
 --- !u!1 &4352374421192502972
 GameObject:
   m_ObjectHideFlags: 0
@@ -1595,6 +1616,10 @@ PrefabInstance:
       value: CLICK TO OPEN
       objectReference: {fileID: 0}
     - target: {fileID: 5308932741514568324, guid: 90062c54f25c7c7428a930ef03996f33, type: 3}
+      propertyPath: m_fontSize
+      value: 0.05
+      objectReference: {fileID: 0}
+    - target: {fileID: 5308932741514568324, guid: 90062c54f25c7c7428a930ef03996f33, type: 3}
       propertyPath: m_fontColor.b
       value: 0
       objectReference: {fileID: 0}
@@ -1605,6 +1630,10 @@ PrefabInstance:
     - target: {fileID: 5308932741514568324, guid: 90062c54f25c7c7428a930ef03996f33, type: 3}
       propertyPath: m_fontColor.r
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5308932741514568324, guid: 90062c54f25c7c7428a930ef03996f33, type: 3}
+      propertyPath: m_fontSizeBase
+      value: 0.05
       objectReference: {fileID: 0}
     - target: {fileID: 5308932741514568324, guid: 90062c54f25c7c7428a930ef03996f33, type: 3}
       propertyPath: m_fontColor32.rgba

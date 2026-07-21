@@ -46,9 +46,9 @@ public class sDriver : MonoBehaviour
 
         truck.Drive();
 
-        Camera.main.gameObject.transform.SetParent(null);
+        //Camera.main.gameObject.transform.SetParent(null);
 
-        Destroy(player);
+        
         //GameManager.gm.KillPlayers();
 
         // TO DO - Add text/feedback for fail

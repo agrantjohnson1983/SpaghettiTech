@@ -95,7 +95,7 @@ GameObject:
   - component: {fileID: 1453645381262695696}
   - component: {fileID: 3997499335703791035}
   m_Layer: 0
-  m_Name: Motor_Setup
+  m_Name: Setup_Motor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -138,7 +138,8 @@ MonoBehaviour:
   _toolTypeNeeded: 1
   textSetup: {fileID: 8844641472681299470}
   _UI_offset: {x: 0, y: 0, z: 0}
-  uiEvents: {fileID: 11400000, guid: 2b96b6b1405722c48a474d361c95f00a, type: 2}
+  soUI: {fileID: 11400000, guid: 2b96b6b1405722c48a474d361c95f00a, type: 2}
+  actionObject: {fileID: 0}
 --- !u!65 &3997499335703791035
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -270,7 +271,8 @@ MonoBehaviour:
   _toolTypeNeeded: 1
   textSetup: {fileID: 0}
   _UI_offset: {x: 0, y: 0, z: 0}
-  uiEvents: {fileID: 11400000, guid: 2b96b6b1405722c48a474d361c95f00a, type: 2}
+  soUI: {fileID: 0}
+  actionObject: {fileID: 0}
 --- !u!1 &8468445531994352861
 GameObject:
   m_ObjectHideFlags: 0
@@ -382,7 +384,7 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 3623944162
+    rgba: 4278255586
   m_fontColor: {r: 0.88712335, g: 1, b: 0, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3

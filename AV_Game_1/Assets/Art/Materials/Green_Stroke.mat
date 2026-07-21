@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Green
+  m_Name: Green_Stroke
   m_Shader: {fileID: 4800000, guid: 01cf4d91b0b4bf048bc19f5662e093a4, type: 3}
   m_ValidKeywords: []
   m_InvalidKeywords:

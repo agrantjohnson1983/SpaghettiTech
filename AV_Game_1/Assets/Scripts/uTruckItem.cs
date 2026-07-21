@@ -1,14 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
+//using UnityEngine.UIElements;
 
 public class uTruckItem : MonoBehaviour
 {
-    public Image itemImage;
+    public Image itemImage, background;
 
     public TextMeshProUGUI textTruckItem;
+
+    public TextMeshProUGUI textItemAmount;
 
     public void SetTruckItemUI(SO_ItemData _itemData)
     {
@@ -17,5 +20,14 @@ public class uTruckItem : MonoBehaviour
         itemImage.sprite = _itemData.itemSprite;
 
         textTruckItem.text = _itemData.itemName;
+    }
+
+    public void SetQuantity(int loaded, int needed)
+    {
+        textItemAmount.text = $"{loaded}/{needed}";
+
+        background.color = loaded >= needed
+            ? Color.green
+            : Color.white;
     }
 }

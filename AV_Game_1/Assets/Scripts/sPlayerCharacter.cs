@@ -6,6 +6,8 @@ public class sPlayerCharacter : MonoBehaviour
 {
     GameManager gm;
 
+    public static sPlayerCharacter playerCharacterGlobal;
+
     // this is used to switch betweeen players
     int index;
 
@@ -49,7 +51,26 @@ public class sPlayerCharacter : MonoBehaviour
 
     private void Awake()
     {
-        //playerGlobal = this;
+        if (playerCharacterGlobal == null)
+        {
+            playerCharacterGlobal = this;
+            DontDestroyOnLoad(this.gameObject);
+        }
+
+        else if (playerCharacterGlobal != this)
+        {
+            // This is a duplicate (e.g. a test player already placed in a
+            // newly loaded scene while the persisted one survives from
+            // before). Destroy() is deferred to end of frame, so without
+            // the early return AND deactivating the object here, Awake()
+            // keeps running on this doomed instance and Start() still
+            // fires later this same frame - which was calling
+            // gm.AddCharacterToList(this) and adding a soon-to-be-destroyed
+            // player into GameManager's list before it disappeared.
+            Destroy(this.gameObject);
+            gameObject.SetActive(false);
+            return;
+        }
 
         camera = GetComponentInChildren<Camera>();
 
@@ -63,30 +84,35 @@ public class sPlayerCharacter : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        // Safety net matching the Awake() guard - if this somehow isn't the
+        // surviving global instance, don't run any of the registration logic
+        if (playerCharacterGlobal != this)
+        {
+            return;
+        }
 
         gm = GameManager.gm;
 
-        // Sets first player spawned active
-        if(gm!=null)
-            if(gm.ReturnPlayerList().Count <= 0)
-            {
-                //gm.ToggleOverheadCamera(false);
+        //// Sets first player spawned active
+        //if (gm != null)
+        //    if (gm.ReturnPlayerList().Count <= 0)
+        //    {
+        //        //gm.ToggleOverheadCamera(false);
 
-                CharacterControlsToggle(false);
-            }
+        //        CharacterControlsToggle(false);
+        //    }
 
-            else
-            {
-            
-                CharacterControlsToggle(false);
-            }
+        //    else
+        //    {
 
-        // adds to the GM's list of players
-        gm.AddCharacterToList(this);
+        //        CharacterControlsToggle(false);
+        //    }
 
-        // Sets the index to the list index -1 to match array start
-        SetIndex(gm.ReturnPlayerList().Count - 1);
+        //// adds to the GM's list of players
+        //gm.AddCharacterToList(this);
+
+        //// Sets the index to the list index -1 to match array start
+        //SetIndex(gm.ReturnPlayerList().Count - 1);
 
         //handsList = new List<handBehavior>(handsNumber);
 
@@ -131,20 +157,20 @@ public class sPlayerCharacter : MonoBehaviour
         return grabController;
     }
 
-    // Sets this instance to the current player in the GameManager and turns on the controlls
-    public void SetToCurrentPlayer()
-    {
-        gm.SetCurrentPlayer(this);
+    //// Sets this instance to the current player in the GameManager and turns on the controlls
+    //public void SetToCurrentPlayer()
+    //{
+    //    gm.SetCurrentPlayer(this);
 
-        CharacterControlsToggle(true);
-    }
+    //    CharacterControlsToggle(true);
+    //}
 
     // This toggles the controls on/off for a character
     public void CharacterControlsToggle(bool _isOn)
     {
         // Toggles control scripts
-        movementController.enabled = _isOn;       
-        grabController.enabled = _isOn;     
+        movementController.enabled = _isOn;
+        grabController.enabled = _isOn;
         actionController.enabled = _isOn;
         toolHandler.enabled = _isOn;
 
@@ -157,11 +183,11 @@ public class sPlayerCharacter : MonoBehaviour
         camera.gameObject.SetActive(_isOn);
 
         // Changes the UI based on character data
-        if(_isOn)
-        soUI.TriggerCharacterChange(characterData);
+        if (_isOn)
+            soUI.TriggerCharacterChange(characterData);
 
         // Resets grabbing
-        if(grabController.ReturnIsGrabbing())
+        if (grabController.ReturnIsGrabbing())
         {
             grabController.GrabReset();
         }
@@ -333,7 +359,7 @@ public class sPlayerCharacter : MonoBehaviour
     //            canUse = false;
     //        }
 
-            
+
     //        //if(canUse == true)
     //        //{
     //         //   return null;
@@ -348,5 +374,5 @@ public class sPlayerCharacter : MonoBehaviour
     {
         movementController.enabled = _isOn;
     }
-        
+
 }

@@ -56,6 +56,14 @@ public class sRiggingManager : MonoBehaviour
 
     public Transform trussTransform, motorTransform;
 
+    // Tracks which truss setup slot (by index into trussSetupLocations)
+    // has been rigged, and by which physical truss piece. Populated by
+    // sRiggingSetupSpot.RegisterTrussPiece once a truss piece finishes
+    // being set. Bolt setup spots query this by index (since they are
+    // spawned dynamically and cannot hold a direct inspector reference
+    // to a truss piece that does not exist yet).
+    GameObject[] rigidTrussPieces;
+
     //public List<>
 
 
@@ -91,6 +99,8 @@ public class sRiggingManager : MonoBehaviour
         motorList = new List<sMotor>();
         motorControllerList = new List<sMotorController>();
 
+        rigidTrussPieces = new GameObject[trussSetupLocations.Length];
+
         //SetRiggingNumbers(3, 2, 2, 0, 0);
         SpawnSetupObjects();
     }
@@ -106,10 +116,17 @@ public class sRiggingManager : MonoBehaviour
 
             trussSetupsList.Add(tempObj);
 
+            // Tell this spot which truss slot index it represents, so it
+            // can register itself with the manager once rigged.
+            if (tempObj.TryGetComponent(out sRiggingSetupSpot trussSpotScript))
+            {
+                trussSpotScript.setupIndex = i;
+            }
+
             // Turns off all objects during tutorial so you only do them one at a time vs all at once
-            if(GameManager.gm.isDoingTut)
-            tempObj.SetActive(false);
-            
+            if (GameManager.gm.isDoingTut)
+                tempObj.SetActive(false);
+
         }
 
         for (int i = 0; i < boltingLocations.Length; i++)
@@ -118,6 +135,16 @@ public class sRiggingManager : MonoBehaviour
             tempObj = Instantiate(pBoltSetup, boltingLocations[i]);
 
             boltingSetupsList.Add(tempObj);
+
+            // Assumes a linear rig layout where bolt spot i joins truss
+            // slots i and i + 1. If the rig layout is not a straight
+            // line matching this array order, this mapping needs to
+            // change to whatever actually determines adjacency.
+            if (tempObj.TryGetComponent(out sRiggingSetupSpot boltSpotScript))
+            {
+                boltSpotScript.neighborTrussIndexA = i;
+                boltSpotScript.neighborTrussIndexB = i + 1;
+            }
 
             // Turns off all objects during tutorial so you only do them one at a time vs all at once
             if (GameManager.gm.isDoingTut)
@@ -164,23 +191,72 @@ public class sRiggingManager : MonoBehaviour
 
     }
 
+    // Called by a truss sRiggingSetupSpot once its truss piece finishes
+    // being rigged, so bolt spots gating on this slot can query it.
+    public void RegisterTrussPiece(int _index, GameObject _trussPiece)
+    {
+        if (_index < 0 || _index >= rigidTrussPieces.Length)
+        {
+            Debug.LogWarning("sRiggingManager.RegisterTrussPiece index out of range: " + _index);
+            return;
+        }
+
+        rigidTrussPieces[_index] = _trussPiece;
+
+        NotifyBoltSpotsToRecheck();
+    }
+
+    // A truss slot just filled. If a bolt spot depending on it already
+    // has the player standing inside its trigger zone (waiting), it
+    // would otherwise stay stuck inactive since OnTriggerEnter will not
+    // fire again on its own. This gives each live bolt spot a chance to
+    // re-evaluate and activate itself.
+    void NotifyBoltSpotsToRecheck()
+    {
+        foreach (GameObject boltSpotObj in boltingSetupsList)
+        {
+            if (boltSpotObj != null && boltSpotObj.TryGetComponent(out sRiggingSetupSpot boltSpotScript))
+            {
+                boltSpotScript.RecheckNeighborReadiness();
+            }
+        }
+    }
+
+    // True if a truss slot index is either out of range (meaning there
+    // is no truss expected at that position, e.g. the end of the rig)
+    // or has already been rigged.
+    public bool IsTrussIndexRigged(int _index)
+    {
+        if (_index < 0 || _index >= rigidTrussPieces.Length)
+        {
+            return true;
+        }
+
+        return rigidTrussPieces[_index] != null;
+    }
+
+    public bool AreNeighboringTrussSet(int _trussIndexA, int _trussIndexB)
+    {
+        return IsTrussIndexRigged(_trussIndexA) && IsTrussIndexRigged(_trussIndexB);
+    }
+
     public void RigSet(eTypeRigSetup _type)
     {
-        switch(_type)
+        switch (_type)
         {
             case eTypeRigSetup.truss:
                 {
 
                     activeIndexTrussSetup++;
 
-                    if(activeIndexTrussSetup < trussSetupsList.Count)
-                    trussSetupsList[activeIndexTrussSetup].SetActive(true);
+                    if (activeIndexTrussSetup < trussSetupsList.Count)
+                        trussSetupsList[activeIndexTrussSetup].SetActive(true);
 
                     else
                     {
                         Debug.Log("Truss setup is complete");
 
-                        
+
 
                         // Turns off all objects during tutorial so you only do them one at a time vs all at once
                         if (GameManager.gm.isDoingTut)
@@ -191,15 +267,15 @@ public class sRiggingManager : MonoBehaviour
                         else
                         {
                             soUI.InstructionsRiggingTrigger("Truss setup complete");
-                        }    
-                            
+                        }
+
                     }
 
                     break;
                 }
 
             case eTypeRigSetup.bolts:
-            {
+                {
                     activeIndexBoltSetup++;
 
                     Debug.Log("One piece bolted!");
@@ -219,7 +295,7 @@ public class sRiggingManager : MonoBehaviour
                     }
 
                     break;
-            }
+                }
 
             case eTypeRigSetup.motor:
                 {
@@ -298,7 +374,7 @@ public class sRiggingManager : MonoBehaviour
     {
         Debug.Log("Connecting Motors to Truss");
 
-        foreach(sTruss _truss in trussList)
+        foreach (sTruss _truss in trussList)
         {
             FixedJoint joint;
 
@@ -308,7 +384,7 @@ public class sRiggingManager : MonoBehaviour
 
             rb.constraints = RigidbodyConstraints.None;
 
-            joint =_truss.gameObject.AddComponent<FixedJoint>();
+            joint = _truss.gameObject.AddComponent<FixedJoint>();
 
             joint.connectedBody = motorList[0].GetComponent<Rigidbody>();
 
@@ -346,7 +422,7 @@ public class sRiggingManager : MonoBehaviour
     // This toggles the motor on and decides which direction it will go
     void GoMotor(bool _goUp)
     {
-        if(_goUp)
+        if (_goUp)
         {
             MotorsOn();
         }
