@@ -12,6 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ea3149329bd95140a54094d05705c40, type: 3}
   m_Name: item_Sub
   m_EditorClassIdentifier: 
+  index: 0
+  numberOfHandsNeeded: 0
   itemName: Sub
   itemSprite: {fileID: 21300000, guid: 874d8401331ede14087e8d8d486ddda6, type: 3}
   prefabItem: {fileID: 2478308911573553551, guid: 80c0964a2c234624f874b9ff6e905734, type: 3}
+  typeOfTool: 1

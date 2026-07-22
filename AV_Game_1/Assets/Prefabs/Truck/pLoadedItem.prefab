@@ -439,5 +439,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemImage: {fileID: 8853910390101468014}
+  background: {fileID: 758691238751375435}
   textTruckItem: {fileID: 3465403551770860258}
   textItemAmount: {fileID: 836407683200937338}

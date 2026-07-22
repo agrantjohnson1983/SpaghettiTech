@@ -11,4 +11,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/TestLevel.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
+  - enabled: 1
+    path: Assets/Scenes/CoffeeShop.unity
+    guid: 02f44e4a1947824459fcf6c64c146054
+  - enabled: 1
+    path: Assets/Scenes/WarehouseHub.unity
+    guid: fa634df3e174b7c408ae0124aa8b3104
   m_configObjects: {}

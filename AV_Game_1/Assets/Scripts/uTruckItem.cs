@@ -7,6 +7,8 @@ using UnityEngine.UI;
 
 public class uTruckItem : MonoBehaviour
 {
+    public string itemName;
+
     public Image itemImage, background;
 
     public TextMeshProUGUI textTruckItem;
@@ -17,6 +19,8 @@ public class uTruckItem : MonoBehaviour
     {
         Debug.Log("Setting truck item with " + _itemData);
 
+        itemName = _itemData.itemName;
+
         itemImage.sprite = _itemData.itemSprite;
 
         textTruckItem.text = _itemData.itemName;
@@ -24,6 +28,8 @@ public class uTruckItem : MonoBehaviour
 
     public void SetQuantity(int loaded, int needed)
     {
+        Debug.Log("Setting quanity to " + loaded + "/" + needed + " for " + itemName);
+
         textItemAmount.text = $"{loaded}/{needed}";
 
         background.color = loaded >= needed

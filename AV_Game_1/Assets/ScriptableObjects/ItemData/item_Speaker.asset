@@ -12,6 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ea3149329bd95140a54094d05705c40, type: 3}
   m_Name: item_Speaker
   m_EditorClassIdentifier: 
+  index: 0
+  numberOfHandsNeeded: 0
   itemName: Speaker
   itemSprite: {fileID: 21300000, guid: 02800fb9cff14da47a04572790384d8b, type: 3}
   prefabItem: {fileID: 1572003561386411356, guid: 2e9f440aa598abd4c85fa67a2ef65aaf, type: 3}
+  typeOfTool: 1

@@ -12,11 +12,13 @@ public class sGigManager : MonoBehaviour
 
     public List<GameObject> itemsLoadedObjectList, workersHiredList;
 
-    public List<SO_ItemData> itemsNeededDataList;
+    //public List<SO_ItemData> itemsNeededDataList, itemsLoadedDataList;
 
     SO_GigData currentGig;
 
     public TextMeshProUGUI textCurrentGig;
+
+    bool hasAGig = false;
 
 
     void OnEnable()
@@ -49,11 +51,16 @@ public class sGigManager : MonoBehaviour
 
         //itemsLoadedDataList = new List<SO_ItemData>();
 
-        itemsNeededDataList = new List<SO_ItemData>();
+        //itemsNeededDataList = new List<SO_ItemData>();
     }
 
     public void SetCurrentGig(SO_GigData _gigData)
     {
+        if (_gigData == null)
+            return;
+
+        hasAGig = true;
+
         currentGig = _gigData;
 
         //SetItemsNeededForGig(currentGig.itemsNeededForGigList);
@@ -92,7 +99,7 @@ public class sGigManager : MonoBehaviour
 
             if (obj.TryGetComponent<sBox>(out sBox box))
             {
-                foreach (var item in box.boxedItemDataList)
+                foreach (SO_ItemData item in box.boxedItemDataList)
                 {
                     if (item == null)
                         continue;
@@ -121,14 +128,16 @@ public class sGigManager : MonoBehaviour
         return counts;
     }
 
-    public void AddItemToGig(GameObject _ItemObject)
+    public void AddItemToGig(GameObject _itemObject )
     {
-        if (CheckForItemDupes(_ItemObject))
+        if (CheckForItemDupes(_itemObject))
             return;
 
-        DontDestroyOnLoad(_ItemObject);
+        itemsLoadedObjectList.Add(_itemObject);
 
-        itemsLoadedObjectList.Add(_ItemObject);
+        DontDestroyOnLoad(_itemObject);
+
+        //itemsLoadedObjectList.Add(_ItemObject);
 
         //if(_ItemObject.TryGetComponent<iLoadable>(out iLoadable _loadable))
         //{
@@ -214,5 +223,10 @@ public class sGigManager : MonoBehaviour
         {
             workersHiredList[i].SetActive(true);
         }
+    }
+
+    public bool CheckIfHasAGig()
+    {
+        return hasAGig;
     }
 }

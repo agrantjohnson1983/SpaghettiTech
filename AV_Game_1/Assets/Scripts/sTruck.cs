@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using TMPro;
 
 public class sTruck : MonoBehaviour
 {
@@ -17,13 +18,25 @@ public class sTruck : MonoBehaviour
 
     public GameObject pTruckItemUI;
 
-    public Transform transformItemNeeded, transformItemLoaded;
+    public Transform transformItemUI;
 
-    List<SO_ItemData> itemNeededDataList, itemLoadedDataList;
+    List<GameObject> instantiatedNeededUI = new List<GameObject>();
+
+    bool isInTruck = false;
+
+    bool isUpdatingUI = false;
+
+    public TextMeshProUGUI textLoaded;
+    public string textLoadedMessage = "LOADED!";
+
+    public GameObject textHatchClose;
+    //List<SO_ItemData> itemNeededDataList, itemLoadedDataList;
 
     // Start is called before the first frame update
     void Start()
     {
+        instantiatedNeededUI = new List<GameObject>();
+
         HandleTruckUI(false);
 
         if(GameManager.gm.GetGameMode() == eGameMode.gig)
@@ -32,7 +45,7 @@ public class sTruck : MonoBehaviour
 
             for (int i = 0; i < _tempItemObjectList.Count; i++)
             {
-                _tempItemObjectList[i].transform.position = this.transform.position + Random.insideUnitSphere;
+                _tempItemObjectList[i].transform.position = this.transform.position + Random.insideUnitSphere + Vector3.up;
             }
         }
     }
@@ -48,14 +61,21 @@ public class sTruck : MonoBehaviour
     public void SceneChange()
     {
         GameManager.gm.StartGig();
+
+        
     }
 
     void HandleTruckUI(bool _isOn)
     {
+        isUpdatingUI = true;
+
         canvasLoaded.SetActive(_isOn);
 
         if(_isOn)
         {
+            // checks to see if you have all items - will get toggled to false if not
+            bool hasAll = true;
+
             Dictionary<SO_ItemData, int> needed =
             sGigManager.gigManagerGlobal.GetNeededItemCounts();
 
@@ -64,7 +84,9 @@ public class sTruck : MonoBehaviour
 
             foreach (var pair in needed)
             {
-                GameObject obj = Instantiate(pTruckItemUI, transformItemNeeded);
+                Debug.Log("Spawning truck UI");
+
+                GameObject obj = Instantiate(pTruckItemUI, transformItemUI);
 
                 instantiatedNeededUI.Add(obj);
 
@@ -77,6 +99,22 @@ public class sTruck : MonoBehaviour
                     : 0;
 
                 ui.SetQuantity(count, pair.Value);
+
+                if((count/pair.Value) < 1)
+                {
+                    int numberNeeded = pair.Value - count;
+
+                    Debug.Log("Still need to get " + numberNeeded + " " + pair.Key + "s");
+                    hasAll = false;
+                }
+            }
+
+            if(hasAll)
+            {
+                Debug.Log("LET'S GO MOFO!");
+                textLoaded.text = textLoadedMessage;
+                textLoaded.color = Color.green;
+                textHatchClose.SetActive(true);
             }
 
             //itemLoadedDataList = new List<SO_ItemData>();
@@ -101,45 +139,68 @@ public class sTruck : MonoBehaviour
             //    _obj.GetComponent<uTruckItem>().SetTruckItemUI(itemLoadedDataList[i]);
             //}
         }
+
+        else
+        {
+            ClearUI();
+        }
+
+        isUpdatingUI = false;
     }
 
-    List<GameObject> instantiatedNeededUI = new List<GameObject>();
-    List<GameObject> instantiatedLoadedUI = new List<GameObject>();
+    
+    //List<GameObject> instantiatedLoadedUI = new List<GameObject>();
 
     void ClearUI()
     {
+        Debug.Log("Clearing UI");
+
         for (int i = 0; i < instantiatedNeededUI.Count; i++)
             Destroy(instantiatedNeededUI[i]);
         instantiatedNeededUI.Clear();
 
-        for (int i = 0; i < instantiatedLoadedUI.Count; i++)
+        /*for (int i = 0; i < instantiatedLoadedUI.Count; i++)
             Destroy(instantiatedLoadedUI[i]);
-        instantiatedLoadedUI.Clear();
+        instantiatedLoadedUI.Clear();*/
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.TryGetComponent<sPlayerCharacter>(out sPlayerCharacter _player))
+        if(other.TryGetComponent<sPlayerCharacter>(out sPlayerCharacter _player) && !isInTruck)
         {
             Debug.Log("Triggering player entering truck");
+            isInTruck = true;
+
             _player.ToggleTruckCamera(true, this.transform, camMoveTransform, 0.5f, camOffset);
-            HandleTruckUI(true);
+
+            if (sGigManager.gigManagerGlobal.CheckIfHasAGig())
+                HandleTruckUI(true);
             return;
         }
 
-        else
+        // Checks boxes for SO_Items and adds them to gig list
+        else if(other.TryGetComponent<sBox>(out sBox _box))
         {
-            Debug.Log("Adding " + other.gameObject + " to gig mgr");
-            sGigManager.gigManagerGlobal.AddItemToGig(other.gameObject);
+            if(_box.boxedItemDataList != null)
+            {
+                sGigManager.gigManagerGlobal.AddItemToGig(_box.gameObject);
+            }
         }
+
+        else if(other.TryGetComponent<iLoadable>(out iLoadable _loadable))
+            {
+                sGigManager.gigManagerGlobal.AddItemToGig(other.gameObject);
+                //sGigManager.gigManagerGlobal.AddItemToGig(other.gameObject);
+            }
     }
 
     private void OnTriggerExit(Collider other)
     {
         
-        if (other.TryGetComponent<sPlayerCharacter>(out sPlayerCharacter _player))
+        if (other.TryGetComponent<sPlayerCharacter>(out sPlayerCharacter _player) && isInTruck)
         {
             Debug.Log("Triggering player exiting truck");
+            isInTruck = false;
             _player.ToggleTruckCamera(false, this.transform, null, 0.5f, camOffset);
             HandleTruckUI(false);
         }

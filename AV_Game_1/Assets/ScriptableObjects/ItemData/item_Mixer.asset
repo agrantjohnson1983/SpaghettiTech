@@ -12,6 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ea3149329bd95140a54094d05705c40, type: 3}
   m_Name: item_Mixer
   m_EditorClassIdentifier: 
+  index: 0
+  numberOfHandsNeeded: 0
   itemName: Mixer
   itemSprite: {fileID: 21300000, guid: 874d8401331ede14087e8d8d486ddda6, type: 3}
   prefabItem: {fileID: 1010491932096922409, guid: b43a132b95f55e34ab9d831f4bc173d9, type: 3}
+  typeOfTool: 1
