@@ -53,6 +53,8 @@ public class sBox : sInteractive, iClickable, IPointerEnterHandler, IPointerExit
 
     public float boxTextFontSize = 0.05f;
 
+    bool isBeingThrown = false;
+
     // Start is called before the first frame update
     private void Awake()
     {
@@ -352,8 +354,13 @@ public class sBox : sInteractive, iClickable, IPointerEnterHandler, IPointerExit
     public override void OffGrab()
     {
         //Debug.Log("Box Off Grab Triggered");
-        iGrabbable.IsGrabbed = false;
+        Invoke("GrabReset", 0.5f);
         //ui_Select.SetActive(true);
+    }
+
+    void GrabReset()
+    {
+        iGrabbable.IsGrabbed = false;
     }
 
     public override void OnSelect()

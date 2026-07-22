@@ -190,7 +190,7 @@ public class GameManager : MonoBehaviour
 
         //ToggleOrbitCamera(true);
 
-        SceneManager.LoadScene("TestLevel");
+        SceneManager.LoadScene(sGigManager.gigManagerGlobal.GetGigScene());
     }
 
     // This is used to change the index manually outside of the TAB button or arrow buttons - mostly when a player gets clicked

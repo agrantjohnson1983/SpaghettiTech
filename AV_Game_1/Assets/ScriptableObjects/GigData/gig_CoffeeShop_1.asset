@@ -21,5 +21,5 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 870c39174443ee44ca14e5dc0c6c2070, type: 2}
   - {fileID: 11400000, guid: 7df0d6e787123d54d955b650f8c7bbbc, type: 2}
   - {fileID: 11400000, guid: 7df0d6e787123d54d955b650f8c7bbbc, type: 2}
-  sceneNameToLoad: 
+  sceneNameToLoad: CoffeeShop
   gigPay: 50

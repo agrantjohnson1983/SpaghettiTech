@@ -20,6 +20,8 @@ public class sGigManager : MonoBehaviour
 
     bool hasAGig = false;
 
+    //string gigSceneToLoad = null;
+
 
     void OnEnable()
     {
@@ -66,6 +68,14 @@ public class sGigManager : MonoBehaviour
         //SetItemsNeededForGig(currentGig.itemsNeededForGigList);
 
         textCurrentGig.text = "Current Gig: " + currentGig.gigName;
+    }
+
+    public string GetGigScene()
+    {
+        if (currentGig != null)
+            return currentGig.sceneNameToLoad;
+        else
+            return null;
     }
 
     public Dictionary<SO_ItemData, int> GetNeededItemCounts()

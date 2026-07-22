@@ -28,6 +28,8 @@ public class sTruckHatch : MonoBehaviour
 
     public Vector3 _UI_offset;
 
+    public GameObject textTruckCloseHatch;
+
     public Vector3 ui_offset
     {
         get
@@ -150,6 +152,8 @@ public class sTruckHatch : MonoBehaviour
         animator.SetTrigger("Close");
 
         sTruck.isLoaded = true;
+
+        textTruckCloseHatch.SetActive(false);
 
         Destroy(canvasUI.gameObject);
 

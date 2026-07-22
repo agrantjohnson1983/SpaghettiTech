@@ -14,7 +14,7 @@ public class sComputer : MonoBehaviour
 
     private void Start()
     {
-        textCurrentGig.text = "Current Gig : UNEMPLOYED - GET A GIG ASSHOLE!";
+        textCurrentGig.text = "UNEMPLOYED - GET A GIG ASSHOLE!";
     }
 
     void ToggleSelectScreen(bool _isOn)
