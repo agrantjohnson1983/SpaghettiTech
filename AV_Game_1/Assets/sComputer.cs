@@ -6,15 +6,35 @@ using TMPro;
 
 public class sComputer : MonoBehaviour
 {
+    public static sComputer computerGlobal;
+
     public GameObject gigSelectScreen;
 
     bool isOnSelectScreen = false;
 
-    public TextMeshProUGUI textCurrentGig;
+    public TMP_Text[] textCurrentGig;
+
+    public string noGigText = "UNEMPLOYED - GET A GIG ASSHOLE!";
+
+    private void Awake()
+    {
+        if (computerGlobal == null)
+            computerGlobal = this;
+        else
+            Destroy(this.gameObject);
+    }
 
     private void Start()
     {
-        textCurrentGig.text = "UNEMPLOYED - GET A GIG ASSHOLE!";
+        SetText(noGigText);
+    }
+
+    public void SetText(string _text)
+    {
+        foreach(TMP_Text t in textCurrentGig)
+        {
+            t.text = _text;
+        }
     }
 
     void ToggleSelectScreen(bool _isOn)

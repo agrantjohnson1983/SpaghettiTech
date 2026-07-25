@@ -117,10 +117,22 @@ public class sRiggingManager : MonoBehaviour
             trussSetupsList.Add(tempObj);
 
             // Tell this spot which truss slot index it represents, so it
-            // can register itself with the manager once rigged.
-            if (tempObj.TryGetComponent(out sRiggingSetupSpot trussSpotScript))
+            // can register itself with the manager once rigged. Uses
+            // GetComponentInChildren rather than TryGetComponent/
+            // GetComponent since sRiggingSetupSpot may live on a child
+            // of the prefab root rather than the root itself.
+            sRiggingSetupSpot trussSpotScript = tempObj.GetComponentInChildren<sRiggingSetupSpot>(true);
+
+            if (trussSpotScript != null)
             {
                 trussSpotScript.setupIndex = i;
+
+                Debug.Log("[RiggingManager] Assigned setupIndex " + i + " to " + trussSpotScript.name
+                    + " (instance id " + trussSpotScript.GetInstanceID() + ")");
+            }
+            else
+            {
+                Debug.LogWarning("pTrussSetup prefab has no sRiggingSetupSpot component anywhere in its hierarchy: " + tempObj.name);
             }
 
             // Turns off all objects during tutorial so you only do them one at a time vs all at once
@@ -140,10 +152,16 @@ public class sRiggingManager : MonoBehaviour
             // slots i and i + 1. If the rig layout is not a straight
             // line matching this array order, this mapping needs to
             // change to whatever actually determines adjacency.
-            if (tempObj.TryGetComponent(out sRiggingSetupSpot boltSpotScript))
+            sRiggingSetupSpot boltSpotScript = tempObj.GetComponentInChildren<sRiggingSetupSpot>();
+
+            if (boltSpotScript != null)
             {
                 boltSpotScript.neighborTrussIndexA = i;
                 boltSpotScript.neighborTrussIndexB = i + 1;
+            }
+            else
+            {
+                Debug.LogWarning("pBoltSetup prefab has no sRiggingSetupSpot component anywhere in its hierarchy: " + tempObj.name);
             }
 
             // Turns off all objects during tutorial so you only do them one at a time vs all at once
@@ -203,6 +221,8 @@ public class sRiggingManager : MonoBehaviour
 
         rigidTrussPieces[_index] = _trussPiece;
 
+        Debug.Log("[RiggingManager] Registered truss piece at index " + _index + ": " + _trussPiece.name);
+
         NotifyBoltSpotsToRecheck();
     }
 
@@ -237,7 +257,207 @@ public class sRiggingManager : MonoBehaviour
 
     public bool AreNeighboringTrussSet(int _trussIndexA, int _trussIndexB)
     {
-        return IsTrussIndexRigged(_trussIndexA) && IsTrussIndexRigged(_trussIndexB);
+        bool aRigged = IsTrussIndexRigged(_trussIndexA);
+        bool bRigged = IsTrussIndexRigged(_trussIndexB);
+
+        Debug.Log("[RiggingManager] Checking neighbors - index " + _trussIndexA + " rigged: " + aRigged
+            + ", index " + _trussIndexB + " rigged: " + bRigged);
+
+        return aRigged && bRigged;
+    }
+
+    [Header("Debug/Testing")]
+    // When true, bolt spots skip opening the drag-and-drop minigame
+    // entirely and complete instantly the moment their neighbor/tool
+    // gates pass. Toggleable live in Play mode. Leave off for normal
+    // play.
+    public bool debugBypassBoltMinigame = false;
+
+    [Header("Truss Weld Joints")]
+    // Left at infinity for now - once the weight-limit system is in,
+    // these should be driven by the truss's rated capacity so an
+    // overloaded joint genuinely snaps under real physics stress
+    // instead of being blocked by a manual check.
+    public float trussJointBreakForce = Mathf.Infinity;
+    public float trussJointBreakTorque = Mathf.Infinity;
+
+    // Called once a bolt spot finishes, connecting the two truss pieces
+    // it was gating on with a FixedJoint anchored at the bolt spot's
+    // world position. Requires both neighbor slots to already be
+    // rigged (which FinishSetup only calls this after, since the bolt
+    // spot could not have activated otherwise).
+    public void WeldTrussNeighbors(int _indexA, int _indexB, Vector3 _weldWorldPosition)
+    {
+        if (_indexA < 0 || _indexA >= rigidTrussPieces.Length
+            || _indexB < 0 || _indexB >= rigidTrussPieces.Length)
+        {
+            // One side is out of range - the edge of the rig, nothing
+            // to weld against.
+            return;
+        }
+
+        GameObject trussA = rigidTrussPieces[_indexA];
+        GameObject trussB = rigidTrussPieces[_indexB];
+
+        if (trussA == null || trussB == null)
+        {
+            Debug.LogWarning("WeldTrussNeighbors called before both truss slots were rigged: "
+                + _indexA + ", " + _indexB);
+            return;
+        }
+
+        Rigidbody rbA = trussA.GetComponent<Rigidbody>();
+        Rigidbody rbB = trussB.GetComponent<Rigidbody>();
+
+        if (rbA == null || rbB == null)
+        {
+            Debug.LogWarning("Truss pieces are missing a Rigidbody - cannot weld: " + trussA.name + ", " + trussB.name);
+            return;
+        }
+
+        FixedJoint joint = trussA.AddComponent<FixedJoint>();
+        joint.connectedBody = rbB;
+        joint.anchor = trussA.transform.InverseTransformPoint(_weldWorldPosition);
+        joint.autoConfigureConnectedAnchor = true;
+        joint.breakForce = trussJointBreakForce;
+        joint.breakTorque = trussJointBreakTorque;
+
+        Debug.Log("[RiggingManager] Welded truss " + trussA.name + " to " + trussB.name + " at bolt spot");
+    }
+
+    [Header("Truss Weight Limit")]
+    // Single total limit for the whole truss run for now. Split into
+    // per-motor capacity later if needed.
+    public float trussWeightLimit = 500f;
+
+    // Which rig types actually hang weight off the truss, as opposed to
+    // floor stands that do not load it. Editable here rather than
+    // hardcoded so items can be added/removed without touching code.
+    public List<eTypeRigSetup> weightBearingRigTypes = new List<eTypeRigSetup>
+    {
+        eTypeRigSetup.lightingStand,
+        eTypeRigSetup.speakerStand,
+        eTypeRigSetup.videoScreenStand
+    };
+
+    float currentTrussWeight = 0f;
+
+    public float CurrentTrussWeight
+    {
+        get
+        {
+            return currentTrussWeight;
+        }
+    }
+
+    bool trussHasFailed = false;
+
+    public bool TrussHasFailed
+    {
+        get
+        {
+            return trussHasFailed;
+        }
+    }
+
+    // Called from iRiggable.RiggingObjectComplete whenever any piece of
+    // gear finishes being rigged. Only tallies types listed in
+    // weightBearingRigTypes - floor stands and other non-truss types
+    // are ignored.
+    public void RegisterTrussWeight(eTypeRigSetup _type, SO_ItemData _itemData)
+    {
+        if (trussHasFailed)
+        {
+            return;
+        }
+
+        if (!weightBearingRigTypes.Contains(_type))
+        {
+            return;
+        }
+
+        if (_itemData == null)
+        {
+            Debug.LogWarning("RegisterTrussWeight called with null ItemData for type " + _type);
+            return;
+        }
+
+        // ASSUMPTION: SO_ItemData has a public float weight field. If
+        // the actual field/property is named differently, this is the
+        // only line that needs to change.
+        currentTrussWeight += _itemData.weight;
+
+        Debug.Log("[RiggingManager] Truss weight now " + currentTrussWeight + " / " + trussWeightLimit
+            + " (added " + _itemData.weight + " from " + _type + ")");
+
+        if (currentTrussWeight > trussWeightLimit)
+        {
+            TriggerTrussOverloadFailure();
+        }
+    }
+
+    // Real structural consequence for overload: destroys every joint on
+    // every truss piece (both the truss-to-truss welds from bolting and
+    // the truss-to-motor connection from ConnectMotorsToTruss) and
+    // re-enables gravity, so the whole assembly actually drops rather
+    // than just being blocked from accepting more weight.
+    void TriggerTrussOverloadFailure()
+    {
+        trussHasFailed = true;
+
+        Debug.Log("[RiggingManager] TRUSS OVERLOADED - failing joints, truss is dropping");
+
+        foreach (sTruss _truss in trussList)
+        {
+            if (_truss == null)
+            {
+                continue;
+            }
+
+            FixedJoint[] joints = _truss.GetComponents<FixedJoint>();
+
+            foreach (FixedJoint _joint in joints)
+            {
+                Destroy(_joint);
+            }
+
+            Rigidbody rb = _truss.GetComponent<Rigidbody>();
+
+            if (rb != null)
+            {
+                rb.constraints = RigidbodyConstraints.None;
+                rb.useGravity = true;
+                rb.isKinematic = false;
+            }
+        }
+
+        if (soUI != null)
+        {
+            soUI.InstructionsRiggingTrigger("The truss is overloaded and has failed!");
+        }
+    }
+
+    // Right-click this component's header in the inspector during Play
+    // mode to add test weight without needing lights/speakers/screens
+    // fully wired into the rigging flow yet. Bypasses ItemData entirely
+    // so it does not depend on SO_ItemData's actual weight field name.
+    [ContextMenu("Debug - Add 100 Truss Weight")]
+    void DebugAddTestWeight()
+    {
+        if (trussHasFailed)
+        {
+            Debug.Log("[RiggingManager] (DEBUG) Truss has already failed - ignoring.");
+            return;
+        }
+
+        currentTrussWeight += 100f;
+
+        Debug.Log("[RiggingManager] (DEBUG) Truss weight now " + currentTrussWeight + " / " + trussWeightLimit);
+
+        if (currentTrussWeight > trussWeightLimit)
+        {
+            TriggerTrussOverloadFailure();
+        }
     }
 
     public void RigSet(eTypeRigSetup _type)
@@ -436,6 +656,8 @@ public class sRiggingManager : MonoBehaviour
     // This actually moves the motors after they are turned on
     void MotorsOn()
     {
+        Debug.Log("Attempting to raise motors");
+
         for (int i = 0; i < motorList.Count; i++)
         {
             motorList[i].StartMotorRaise();

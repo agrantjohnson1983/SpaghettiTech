@@ -34,6 +34,6 @@ public class uTruckItem : MonoBehaviour
 
         background.color = loaded >= needed
             ? Color.green
-            : Color.white;
+            : Color.yellow;
     }
 }

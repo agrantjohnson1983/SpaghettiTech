@@ -239,7 +239,7 @@ public class canvasGameplay : MonoBehaviour
 
         if(_time == 0)
         {
-            Debug.Log("Stopping Task Gauge");
+            //Debug.Log("Stopping Task Gauge");
 
             //StopCoroutine(TaskGauge(0));
 
@@ -272,7 +272,7 @@ public class canvasGameplay : MonoBehaviour
             yield return null;
         }
 
-        Debug.Log("Task Gauge has completed");
+        //Debug.Log("Task Gauge has completed");
 
         taskGauge.fillAmount = 0f;
     }

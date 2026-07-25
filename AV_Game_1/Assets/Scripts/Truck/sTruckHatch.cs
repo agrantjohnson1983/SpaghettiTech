@@ -30,6 +30,8 @@ public class sTruckHatch : MonoBehaviour
 
     public GameObject textTruckCloseHatch;
 
+    public GameObject truckHatchPhysical;
+
     public Vector3 ui_offset
     {
         get
@@ -119,12 +121,6 @@ public class sTruckHatch : MonoBehaviour
         canvasUI.SetActive(false);
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     private void OnTriggerEnter(Collider other)
     {
         if (sTruck.isLoaded || !sGigManager.gigManagerGlobal.CheckIfHasAGig())
@@ -149,11 +145,15 @@ public class sTruckHatch : MonoBehaviour
 
     public void OnLetsGo()
     {
+        GetComponent<MeshRenderer>().enabled = true;
+
         animator.SetTrigger("Close");
 
         sTruck.isLoaded = true;
 
         textTruckCloseHatch.SetActive(false);
+
+        truckHatchPhysical.SetActive(false);
 
         Destroy(canvasUI.gameObject);
 

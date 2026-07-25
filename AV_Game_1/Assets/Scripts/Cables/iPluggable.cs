@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum ePlugType { power, NONE }
+public enum ePlugType { power, XLR, DMX, HDMI, SDI, rca, NONE }
 public interface iPluggable
 {
     GameObject plugObj { get; set; }

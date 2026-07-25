@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using TMPro;
+using UnityEngine.Events;
 
 public class sGigManager : MonoBehaviour
 {
@@ -20,12 +21,15 @@ public class sGigManager : MonoBehaviour
 
     bool hasAGig = false;
 
+    UnityEvent<SO_GigData> gigEvent;
+
     //string gigSceneToLoad = null;
 
 
     void OnEnable()
     {
         SceneManager.sceneLoaded += OnSceneLoad;
+
     }
 
     void OnDisable()
@@ -43,6 +47,9 @@ public class sGigManager : MonoBehaviour
 
         gigManagerGlobal = this;
         DontDestroyOnLoad(this.gameObject); // only the real singleton persists
+
+        if (gigEvent == null)
+            gigEvent = new UnityEvent<SO_GigData>();
     }
 
     private void Start()
@@ -68,6 +75,8 @@ public class sGigManager : MonoBehaviour
         //SetItemsNeededForGig(currentGig.itemsNeededForGigList);
 
         textCurrentGig.text = "Current Gig: " + currentGig.gigName;
+
+        sComputer.computerGlobal.SetText("Current Gig: " + currentGig.gigName);
     }
 
     public string GetGigScene()

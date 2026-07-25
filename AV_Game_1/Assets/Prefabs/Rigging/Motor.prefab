@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 1919278606072451812}
   - component: {fileID: 3718484736094858331}
   - component: {fileID: 767193290416148025}
+  - component: {fileID: 4887012004023009106}
   m_Layer: 0
   m_Name: Text (TMP)
   m_TagString: Untagged
@@ -172,6 +173,23 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_renderer: {fileID: 3718484736094858331}
   m_maskType: 0
+--- !u!114 &4887012004023009106
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5551158216892869975}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cfc376057cfdc6744b5c9d1cfe761dd5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  type: 0
+  lockX: 0
+  lockY: 0
+  lockZ: 0
+  lookAtOffset: {x: 0, y: 0, z: 0}
 --- !u!1 &7353685729362514316
 GameObject:
   m_ObjectHideFlags: 0
@@ -270,6 +288,8 @@ MonoBehaviour:
   _grabTriggersAction: 0
   _UI_offset: {x: 0, y: 0, z: 0}
   _itemData: {fileID: 11400000, guid: b5f3f2061c0fbdb498b7d8f83aaeeec8, type: 2}
+  heightToRaise: 50
+  workingHeight: 20
   motorRaiseTime: 5
   motorRaiseSpeed: 1
 --- !u!120 &7353685729362514304
@@ -431,7 +451,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: d78d20cbb7eb7744aa4ee4bb69d3c74e, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

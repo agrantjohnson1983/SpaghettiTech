@@ -24,6 +24,17 @@ public class sCharacterMovementController : MonoBehaviour
 
     Rigidbody rb;
 
+    [Header("Sprint")]
+    public float sprintMultiplier = 2f;
+    private bool isSprinting;
+
+    [Header("Ground Check")]
+    public float groundCheckDistance = 0.6f;
+    public LayerMask groundMask = -1;
+
+    private RaycastHit groundHit;
+    private bool isGrounded;
+
     //
     //GameObject grabObject;
     //bool isGrabbing = false;
@@ -44,6 +55,9 @@ public class sCharacterMovementController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // Checks ground
+        CheckGround();
+
         // Controller Input
         GetInput();
 
@@ -75,6 +89,10 @@ public class sCharacterMovementController : MonoBehaviour
 
         float totalSpeed = characterSpeed;
 
+        if (isSprinting)
+        {
+            totalSpeed *= sprintMultiplier;
+        }
 
         // Turn Handler
         direction = new Vector3(inputVelocity.x, 0.0f, inputVelocity.y);
@@ -85,7 +103,32 @@ public class sCharacterMovementController : MonoBehaviour
         characterModel.transform.rotation = Quaternion.Euler(0.0f, targetAngle, 0.0f);
 
         // Movement
-        rb.velocity = new Vector3(inputVelocity.x * totalSpeed, 0, inputVelocity.y * totalSpeed);
+        //rb.velocity = new Vector3(inputVelocity.x * totalSpeed, 0, inputVelocity.y * totalSpeed);
+
+        // Movement for ramps/inclines
+
+        Vector3 moveDirection = new Vector3(inputVelocity.x, 0f, inputVelocity.y);
+
+        if (isGrounded)
+        {
+            moveDirection = Vector3.ProjectOnPlane(moveDirection, groundHit.normal);
+        }
+
+        rb.velocity = new Vector3(
+            moveDirection.x * totalSpeed,
+            rb.velocity.y,
+            moveDirection.z * totalSpeed
+            );
+    }
+
+    void CheckGround()
+    {
+        isGrounded = Physics.Raycast(
+            transform.position + Vector3.up * 0.1f,
+            Vector3.down,
+            out groundHit,
+            groundCheckDistance,
+            groundMask);
     }
 
     void GetInput()
@@ -93,6 +136,9 @@ public class sCharacterMovementController : MonoBehaviour
         //CHARACTER MOVEMENT
         inputVelocity = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
         inputVelocity.Normalize();
+
+        // Sprint
+        isSprinting = Input.GetKey(KeyCode.LeftShift);
 
         CheckDash();
 

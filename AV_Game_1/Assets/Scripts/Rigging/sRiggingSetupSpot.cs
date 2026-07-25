@@ -188,12 +188,14 @@ public class sRiggingSetupSpot : MonoBehaviour, iActionable
     }
 
     // Gate that actually controls whether actionObject (the bolt
-    // minigame canvas, for bolt spots) is allowed to switch on.
+    // minigame canvas, for bolt spots) is allowed to switch on. Every
+    // outcome is logged distinctly so it is obvious from the console
+    // which gate is actually blocking activation.
     void TryActivateActionObject(GameObject _playerObj)
     {
         if (!NeighborsAreReady())
         {
-            Debug.Log("Neighboring truss pieces are not rigged yet - blocking bolt minigame activation");
+            Debug.Log("[" + this.name + "] Blocked - neighboring truss pieces not rigged yet");
 
             if (textSetup != null)
             {
@@ -207,9 +209,18 @@ public class sRiggingSetupSpot : MonoBehaviour, iActionable
 
         if (toolNeeded && ToolCheck(_playerObj) == false)
         {
+            Debug.Log("[" + this.name + "] Blocked - player missing required tool (" + ToolTypeNeeded + ")");
             return;
         }
 
+        if (rigType == eTypeRigSetup.bolts && sRiggingManager.riggingManger.debugBypassBoltMinigame)
+        {
+            Debug.Log("[" + this.name + "] DEBUG bypass enabled - skipping bolt minigame, completing instantly");
+            FinishSetup();
+            return;
+        }
+
+        Debug.Log("[" + this.name + "] Neighbors ready and tool check passed - activating action object");
         actionObject.SetActive(true);
     }
 
@@ -262,6 +273,13 @@ public class sRiggingSetupSpot : MonoBehaviour, iActionable
         Debug.Log("Action Task Complete");
 
         //actionObject.SetActive(false);
+
+        if (rigType == eTypeRigSetup.bolts)
+        {
+            // Bolting complete - physically weld the two truss pieces
+            // this spot connects, anchored at the bolt spot itself.
+            sRiggingManager.riggingManger.WeldTrussNeighbors(neighborTrussIndexA, neighborTrussIndexB, this.transform.position);
+        }
 
         sRiggingManager.riggingManger.RigSet(rigType);
 
@@ -320,6 +338,9 @@ public class sRiggingSetupSpot : MonoBehaviour, iActionable
                                 // Let the manager know this truss slot is
                                 // filled, so any bolt spots gating on
                                 // setupIndex can now proceed.
+                                Debug.Log("[" + this.name + "] (instance id " + this.GetInstanceID()
+                                    + ") colliding with setupIndex = " + setupIndex);
+
                                 sRiggingManager.riggingManger.RegisterTrussPiece(setupIndex, other.gameObject);
 
                                 Destroy(this.gameObject);

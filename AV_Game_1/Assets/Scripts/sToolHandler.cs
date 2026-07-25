@@ -91,7 +91,7 @@ public class sToolHandler : MonoBehaviour, iRequireHands
                 {
                     _tempTool = toolHeldItemDataList[i];
 
-                    Debug.Log("Tool check - has correct type of tool!  Returning tool");// + toolHeldList[i].name);
+                    //Debug.Log("Tool check - has correct type of tool!  Returning tool");// + toolHeldList[i].name);
                     //hasCorrectTool = true;
 
                     return _tempTool;

@@ -44,7 +44,7 @@ public class sCharacterActionController : MonoBehaviour
                 {
                     isDoingAction = true;
 
-                    Debug.Log("Action triggered on " + actionable.ToString());
+                    //Debug.Log("Action triggered on " + actionable.ToString());
 
                     actionable.TriggerAction(interactiveObject, itemData);
                 }   
@@ -56,7 +56,7 @@ public class sCharacterActionController : MonoBehaviour
                 {
                     isDoingAction = false;
 
-                    Debug.Log("Action Stopped in  " + interactiveObject.name);
+                    //Debug.Log("Action Stopped in  " + interactiveObject.name);
 
                     actionable.StopAction();
                 }
@@ -68,7 +68,7 @@ public class sCharacterActionController : MonoBehaviour
             {
                 isDoingAction = false;
 
-                Debug.Log("Action Stopped on  " + actionable);
+                //Debug.Log("Action Stopped on  " + actionable);
 
                 actionable.StopAction();      
             }
@@ -82,7 +82,7 @@ public class sCharacterActionController : MonoBehaviour
             {
                 isDoingAction = false;
 
-                Debug.Log("Action Stopped with " + actionable.ToString());
+                //Debug.Log("Action Stopped with " + actionable.ToString());
 
                 actionable.StopAction();
             }
@@ -105,7 +105,7 @@ public class sCharacterActionController : MonoBehaviour
             // Checks if the tool isn't null
             if(tempToolData != null)
             {
-                Debug.Log("Item data set from " + tempToolData.name);
+                //Debug.Log("Item data set from " + tempToolData.name);
 
                 // Sets the item data to the tools item data
                 itemData = tempToolData;

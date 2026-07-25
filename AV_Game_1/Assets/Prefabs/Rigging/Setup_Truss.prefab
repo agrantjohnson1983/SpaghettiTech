@@ -44,7 +44,7 @@ GameObject:
   - component: {fileID: 7131308150519788971}
   - component: {fileID: 1941078748956721423}
   - component: {fileID: 901397488754581636}
-  - component: {fileID: 6466823663695320738}
+  - component: {fileID: 2468936761807450687}
   m_Layer: 0
   m_Name: Text (TMP)
   m_TagString: Untagged
@@ -226,7 +226,7 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &6466823663695320738
+--- !u!114 &2468936761807450687
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -235,10 +235,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 4713933340783718862}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2415b53ad8672fe40809e9171ce33679, type: 3}
+  m_Script: {fileID: 11500000, guid: cfc376057cfdc6744b5c9d1cfe761dd5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  positionOffset: {x: 0, y: 0, z: 0}
+  type: 0
+  lockX: 0
+  lockY: 0
+  lockZ: 0
+  lookAtOffset: {x: 0, y: 0, z: 0}
 --- !u!1 &5190185500421664092
 GameObject:
   m_ObjectHideFlags: 0

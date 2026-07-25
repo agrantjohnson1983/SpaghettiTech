@@ -13,23 +13,60 @@ public class sKitBuilder : MonoBehaviour
 
     public GameObject pBox;
 
-    public TextMeshProUGUI spawnText;
+    public TMP_Text spawnText, uiTitle;
 
-    
+    public GameObject pButtonKit;
+    public Transform buttonPanel;
+
+    public List<SO_ItemData> itemsInKit;
+
+    bool isOn = false;
 
     // Start is called before the first frame update
     void Start()
     {
         canvasKit.SetActive(false);
 
+        uiTitle.text = kitName;
+
+        SetBoxItems(itemsInKit);
+
         itemList = new List<SO_ItemData>();
+    }
+
+    void SetBoxItems(List<SO_ItemData> _itemList)
+    {
+        // iterates through item list
+        foreach(SO_ItemData _item in _itemList)
+        {
+            // spawns button to panel and checks for button kit
+            if (Instantiate(pButtonKit, buttonPanel).TryGetComponent<uKitButton>(out uKitButton kitButton))
+            {
+                // sets button with SO
+                kitButton.SetButton(_item);
+            }
+            else
+            {
+                Debug.LogWarning("No uKitButton found on pButtonKit!");
+            }
+        }
     }
 
     public void AddToBox(SO_ItemData _itemToAdd)
     {
         itemList.Add(_itemToAdd);
 
-        spawnText.text = spawnText.text + " and " + _itemToAdd.itemName;
+        if(itemList.Count > 1)
+        {
+            spawnText.text = spawnText.text + " and " + _itemToAdd.itemName;
+        }
+
+        else
+        {
+            spawnText.text = spawnText.text + _itemToAdd.itemName;
+        }
+
+        
 
     }
 
@@ -95,16 +132,20 @@ public class sKitBuilder : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.CompareTag("Player"))
+        if(other.CompareTag("Player") && !isOn)
         {
+            isOn = true;
+            Debug.Log("Turning on kit UI for " + kitName);
             canvasKit.SetActive(true);
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.CompareTag("Player"))
+        if (other.CompareTag("Player") && isOn)
         {
+            isOn = false;
+            Debug.Log("Turning off kit UI for " + kitName);
             canvasKit.SetActive(false);
         }
     }

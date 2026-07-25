@@ -17,4 +17,7 @@ public class SO_ItemData : ScriptableObject
     public GameObject prefabItem;
 
     public eToolType typeOfTool;
+
+    // Used by both truck loading and truss rigging weight limits.
+    public float weight;
 }
