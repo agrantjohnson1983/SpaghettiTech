@@ -5,10 +5,6 @@ using UnityEngine.UI;
 
 public class sConnectionSource : MonoBehaviour
 {
-    //public Transform[] plugInLocations;
-
-    //public sPlug[] plugs;
-
     public ePlugType typeOfConnection;
 
     int numberOfPlugsOpen;
@@ -18,14 +14,20 @@ public class sConnectionSource : MonoBehaviour
     bool connectionCanvasOpen = false;
     bool connectionAvailableCanvasOpen = false;
 
+    // connection plate image - this shows the type of connection
     public Sprite connectionPlateImage;
 
+    // prefabs for connection panel and connection avail panel
     public GameObject pConnectionPanel, pConnectionAvailablePanel;
 
+    // this holds all the connections for receiving the source
     uConnectionPlate connectionPlate;
 
+    // this panel shows the "connections available" which spawns an image you click and drag to the connection plate
+    // and a line renderer follows
     uConnectionsAvailablePanel connectionsAvailablePlate;
 
+    // the list of pluggables that collide with source
     public List<GameObject> pluggableList;
 
     Rigidbody rb;
@@ -34,42 +36,41 @@ public class sConnectionSource : MonoBehaviour
 
     public uTextPopupSpawn uTextPopup;
 
-    public float totalPower = 100f;
 
-    float currentPower;
+    // METER - this can be used for a variety of devices
+    public float meterTotal = 100f;
 
-    public Image powerUI;
+    float meterCurrent;
+
+    public Image meterUI;
 
     // Start is called before the first frame update
     void Start()
     {
-        currentPower = totalPower;
+        meterCurrent = meterTotal;
 
-        UpdatePowerUI(currentPower);
+        UpdateMeterUI(meterCurrent);
 
         pluggableList = new List<GameObject>();
-        //numberOfPlugsOpen = plugInLocations.Length;
 
         SpawnConnectionPlate();
 
         SpawnConnectionsAvailablePanel();
 
         rb = GetComponent<Rigidbody>();
-
-        //joint = GetComponent<FixedJoint>();
     }
 
-    void UpdatePowerUI(float _currentPower)
+    void UpdateMeterUI(float _currentPower)
     {
-        powerUI.fillAmount = currentPower / totalPower;
+        meterUI.fillAmount = meterCurrent / meterTotal;
     }
 
     public void DrainPower(float _amount)
     {
         Debug.Log("Power Drain called - draining by " + _amount);
 
-        currentPower -= _amount;
-        UpdatePowerUI(currentPower);
+        meterCurrent -= _amount;
+        UpdateMeterUI(meterCurrent);
     }
 
     // This spawns the connection plate which all of the input channels

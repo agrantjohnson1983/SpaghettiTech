@@ -239,7 +239,7 @@ public class sRiggingSetupSpot : MonoBehaviour, iActionable
 
     public void StopAction()
     {
-        Debug.Log("Stopping Action Tasking Cortoutine");
+        //Debug.Log("Stopping Action Tasking Cortoutine");
 
         StopCoroutine(ActionTasking());
 
@@ -257,7 +257,7 @@ public class sRiggingSetupSpot : MonoBehaviour, iActionable
 
     IEnumerator ActionTasking()
     {
-        Debug.Log("Starting Action Tasking");
+        //Debug.Log("Starting Action Tasking");
 
 
 
@@ -270,7 +270,7 @@ public class sRiggingSetupSpot : MonoBehaviour, iActionable
 
     public void FinishSetup()
     {
-        Debug.Log("Action Task Complete");
+        //Debug.Log("Action Task Complete");
 
         //actionObject.SetActive(false);
 
@@ -345,6 +345,11 @@ public class sRiggingSetupSpot : MonoBehaviour, iActionable
 
                                 Destroy(this.gameObject);
                             }
+                            else
+                            {
+                                Debug.Log("[" + this.name + "] Truss " + other.gameObject.name
+                                    + " collided but iRiggable.Enabled is false - setup spot will not complete");
+                            }
 
                             break;
 
@@ -363,6 +368,11 @@ public class sRiggingSetupSpot : MonoBehaviour, iActionable
                                 other.gameObject.GetComponent<sRigGear>().enabled = false;
 
                                 Destroy(this.gameObject);
+                            }
+                            else
+                            {
+                                Debug.Log("[" + this.name + "] Motor " + other.gameObject.name
+                                    + " collided but iRiggable.Enabled is false - setup spot will not complete");
                             }
 
                             break;
@@ -383,6 +393,11 @@ public class sRiggingSetupSpot : MonoBehaviour, iActionable
 
                                 Destroy(this.gameObject);
                             }
+                            else
+                            {
+                                Debug.Log("[" + this.name + "] MotorController " + other.gameObject.name
+                                    + " collided but iRiggable.Enabled is false - setup spot will not complete");
+                            }
 
                             break;
                         }
@@ -391,7 +406,8 @@ public class sRiggingSetupSpot : MonoBehaviour, iActionable
 
             else
             {
-                Debug.Log("Wrong setup spot type");
+                Debug.Log("[" + this.name + "] Wrong setup spot type - spot expects " + rigType
+                    + " but " + other.gameObject.name + " is " + _riggable.TypeRig);
             }
 
         }

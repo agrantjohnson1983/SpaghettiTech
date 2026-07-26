@@ -82,14 +82,18 @@ public class sRiggingManager : MonoBehaviour
 
     }
 
+    // Moved here from Start(). Unity guarantees every object's Awake()
+    // runs before any object's Start() runs, but does NOT guarantee
+    // Start() order between different GameObjects. Since sMotor,
+    // sTruss, etc. add themselves to these lists during their own
+    // Start(), initializing (and resetting) those same lists in this
+    // manager's Start() risked wiping out entries if a gear piece's
+    // Start() happened to run first in a given play session - an
+    // intermittent, session-dependent bug. Awake() closes that gap.
     private void Awake()
     {
         riggingManger = this;
-    }
 
-    // Start is called before the first frame update
-    void Start()
-    {
         boltingSetupsList = new List<GameObject>();
         trussSetupsList = new List<GameObject>();
         motorSetupList = new List<GameObject>();
@@ -100,7 +104,11 @@ public class sRiggingManager : MonoBehaviour
         motorControllerList = new List<sMotorController>();
 
         rigidTrussPieces = new GameObject[trussSetupLocations.Length];
+    }
 
+    // Start is called before the first frame update
+    void Start()
+    {
         //SetRiggingNumbers(3, 2, 2, 0, 0);
         SpawnSetupObjects();
     }
@@ -656,8 +664,6 @@ public class sRiggingManager : MonoBehaviour
     // This actually moves the motors after they are turned on
     void MotorsOn()
     {
-        Debug.Log("Attempting to raise motors");
-
         for (int i = 0; i < motorList.Count; i++)
         {
             motorList[i].StartMotorRaise();

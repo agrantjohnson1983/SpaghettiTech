@@ -20,6 +20,15 @@ public class sMotor : sRigGear
 
     public float motorRaiseSpeed = 10f;
 
+    // Optional fixed point representing the physical ceiling/rig
+    // mount the chain hangs from. If left unassigned, the chain's top
+    // defaults to directly above the motor's ground position at
+    // heightToRaise, so the chain visually shortens to nothing as the
+    // motor reaches the ceiling.
+    public Transform chainAnchorPoint;
+
+    Vector3 cachedChainTopPosition;
+
     bool chainsUp = false;
 
     bool isMoving = false;
@@ -33,6 +42,56 @@ public class sMotor : sRigGear
 
     eMotorRaiseStage currentStage = eMotorRaiseStage.AtGround;
 
+    // Ground-level Y position recorded once the motor is actually
+    // rigged into its setup spot (not at scene start, since it may
+    // spawn somewhere other than its final ground/rig position).
+    float groundHeight;
+
+    bool hasRecordedGroundHeight;
+
+    // Hooks additional motor-specific setup into the moment this piece
+    // actually gets rigged (iRiggable.SetRigging already moved it to
+    // its setup spot's position before setting IsSet = true). This is
+    // where the chain becomes visible and the motor switches over to
+    // being driven kinematically for the controlled raise.
+    public override bool IsSet
+    {
+        get
+        {
+            return base.IsSet;
+        }
+
+        set
+        {
+            base.IsSet = value;
+
+            if (value)
+            {
+                RecordGroundHeightIfNeeded();
+
+                if (rb != null)
+                {
+                    // Once rigged, this motor is driven by MovePosition
+                    // rather than physics forces. Kinematic is required
+                    // for MovePosition to interpolate correctly and for
+                    // the FixedJoint connecting the truss to this
+                    // motor's Rigidbody (added later by
+                    // ConnectMotorsToTruss) to reliably follow it,
+                    // rather than fighting a dynamic body being
+                    // teleported by a raw Transform assignment.
+                    rb.isKinematic = true;
+                }
+
+                SetChainsLine();
+
+                if (lineChain != null)
+                {
+                    lineChain.enabled = true;
+                }
+            }
+        }
+    }
+
     private void OnEnable()
     {
 
@@ -43,21 +102,31 @@ public class sMotor : sRigGear
     {
         rb = GetComponent<Rigidbody>();
 
+        if (rb == null)
+        {
+            Debug.LogWarning("[" + this.name + "] sMotor has no Rigidbody component - motor raise will not move it.", this);
+        }
+
         lineChain = GetComponent<LineRenderer>();
 
+        if (lineChain == null)
+        {
+            Debug.LogWarning("[" + this.name + "] sMotor has no LineRenderer component - chain visual will not show.", this);
+        }
+        else
+        {
+            // Hidden until the motor is actually rigged into a setup
+            // spot - see IsSet override.
+            lineChain.enabled = false;
+        }
+
         sRiggingManager.riggingManger.motorList.Add(this);
-
-        RecordGroundHeightIfNeeded();
-
-        //SetChainsLine();
-
-        //StartMotorRaise();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (isMoving)
+        if (isMoving && lineChain != null)
         {
             lineChain.SetPosition(0, this.gameObject.transform.position);
         }
@@ -80,6 +149,14 @@ public class sMotor : sRigGear
     // ceiling are no-ops.
     public void StartMotorRaise()
     {
+        Debug.Log("[" + this.name + "] StartMotorRaise called - currentStage = " + currentStage + ", isMoving = " + isMoving);
+
+        if (rb == null)
+        {
+            Debug.LogWarning("[" + this.name + "] Cannot raise - no Rigidbody assigned.", this);
+            return;
+        }
+
         if (isMoving)
         {
             return;
@@ -101,48 +178,46 @@ public class sMotor : sRigGear
 
             case eMotorRaiseStage.AtCeiling:
                 {
-                    Debug.Log("Motor is already at ceiling height.");
+                    Debug.Log("[" + this.name + "] Motor is already at ceiling height.");
                     break;
                 }
         }
     }
 
-    // _targetHeight is an absolute height above the motor's starting
-    // ground position (not a delta from the current position), so
+    // _targetHeight is an absolute height above the motor's ground
+    // position (not a delta from the current position), so
     // workingHeight and heightToRaise can both be authored as simple
-    // "height above ground" values in the inspector.
+    // "height above ground" values in the inspector. Uses
+    // Rigidbody.MovePosition rather than Transform assignment so the
+    // FixedJoint connecting the truss to this motor follows correctly.
     IEnumerator MotorRaiseMovement(float _targetHeight, eMotorRaiseStage _resultingStage)
     {
-        Debug.Log("Raising Motor toward " + _resultingStage);
+        Debug.Log("[" + this.name + "] Raising motor toward " + _resultingStage);
 
         isMoving = true;
 
         float counter = 0f;
 
-        Vector3 startPos = rb.transform.position;
+        Vector3 startPos = rb.position;
 
         Vector3 destination = new Vector3(startPos.x, groundHeight + _targetHeight, startPos.z);
 
         while (counter < motorRaiseTime)
         {
-            rb.gameObject.transform.position = Vector3.Lerp(startPos, destination, (counter / motorRaiseTime));
+            rb.MovePosition(Vector3.Lerp(startPos, destination, (counter / motorRaiseTime)));
 
             counter += Time.deltaTime;
 
             yield return null;
         }
 
-        rb.gameObject.transform.position = destination;
+        rb.MovePosition(destination);
 
         currentStage = _resultingStage;
         isMoving = false;
+
+        Debug.Log("[" + this.name + "] Reached " + _resultingStage);
     }
-
-    // Ground-level Y position recorded on first use as the reference
-    // point that workingHeight/heightToRaise are measured from.
-    float groundHeight;
-
-    bool hasRecordedGroundHeight;
 
     void RecordGroundHeightIfNeeded()
     {
@@ -153,13 +228,26 @@ public class sMotor : sRigGear
         }
     }
 
-    // This sets the chains to start before the motor moves
+    // Sets up the chain line: point 0 tracks the motor's current
+    // (moving) position, point 1 is the fixed anchor at the top - either
+    // chainAnchorPoint if assigned, or directly above the motor's ground
+    // position at heightToRaise, so the chain visually shortens to zero
+    // length as the motor reaches the ceiling.
     void SetChainsLine()
     {
-        lineChain.SetVertexCount(2);
+        if (lineChain == null)
+        {
+            return;
+        }
+
+        lineChain.positionCount = 2;
+
+        cachedChainTopPosition = chainAnchorPoint != null
+            ? chainAnchorPoint.position
+            : new Vector3(transform.position.x, groundHeight + heightToRaise, transform.position.z);
 
         lineChain.SetPosition(0, this.gameObject.transform.position);
-        lineChain.SetPosition(1, this.gameObject.transform.position + Vector3.up * 50f);
+        lineChain.SetPosition(1, cachedChainTopPosition);
     }
 
     // This sets the height the motor will raise to (the final ceiling

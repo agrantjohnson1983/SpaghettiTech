@@ -228,7 +228,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   uiEvents: {fileID: 0}
   _taskTime: 0
-  _toolTypeNeeded: 0
+  _toolTypeNeeded: 1
   textMPAbove: {fileID: 0}
   itemTextMP: []
   textItem: 

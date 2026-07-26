@@ -13,7 +13,7 @@ public class sRigGear : MonoBehaviour, iRiggable, iGrabbable, iLoadable
     bool _isSet = false;
 
     public bool _grabTriggersAction;
-    
+
     public bool CanBeGrabbed
     {
         get;
@@ -36,7 +36,10 @@ public class sRigGear : MonoBehaviour, iRiggable, iGrabbable, iLoadable
         }
     }
 
-    public bool IsSet
+    // Virtual so subclasses (e.g. sMotor) can hook additional behavior
+    // into the moment a piece actually gets rigged, without duplicating
+    // rigging logic that already lives in iRiggable.SetRigging.
+    public virtual bool IsSet
     {
         get
         {
@@ -129,7 +132,7 @@ public class sRigGear : MonoBehaviour, iRiggable, iGrabbable, iLoadable
 
     void Init()
     {
-        switch(TypeRig)
+        switch (TypeRig)
         {
             case eTypeRigSetup.truss:
                 {

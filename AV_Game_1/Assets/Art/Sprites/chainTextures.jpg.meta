@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: ad2d7b5ad37c34f489b8ecbd1a507188
+guid: 2e36a7174cf73084aaf8131033b97170
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -51,7 +51,7 @@ TextureImporter:
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
-  alphaIsTransparency: 1
+  alphaIsTransparency: 0
   spriteTessellationDetail: -1
   textureType: 0
   textureShape: 1
@@ -100,38 +100,68 @@ TextureImporter:
     overridden: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 3
-    buildTarget: WebGL
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: chain-PNG-seamless-free-thumb23_0
+      name: chainTextures_normal
       rect:
         serializedVersion: 2
         x: 0
-        y: 366
-        width: 800
-        height: 99
-      alignment: 4
-      pivot: {x: 0, y: 0.5}
+        y: 0
+        width: 233
+        height: 960
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 9a96f5c175bd85041aa517b61aafb3dc
-      internalID: 2137156510
+      spriteID: 380fab0d74008344782b6d6e667f46a3
+      internalID: -738919459
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: chainTextures_base
+      rect:
+        serializedVersion: 2
+        x: 236
+        y: 0
+        width: 234
+        height: 960
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fa321d82272058148b14f7900713fc2a
+      internalID: -849459375
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: chainTextures_alpha
+      rect:
+        serializedVersion: 2
+        x: 470
+        y: 0
+        width: 236
+        height: 960
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 24b82a56aeedef8459214082871ff905
+      internalID: -1642523431
       vertices: []
       indices: 
       edges: []
@@ -139,7 +169,7 @@ TextureImporter:
     outline: []
     physicsShape: []
     bones: []
-    spriteID: d9b64c15074391e48bae0d34378b116a
+    spriteID: 06e718de069c5c148a69ab3c6af3725f
     internalID: 0
     vertices: []
     indices: 
@@ -147,7 +177,9 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      chain-PNG-seamless-free-thumb23_0: 2137156510
+      chainTextures_alpha: -1642523431
+      chainTextures_normal: -738919459
+      chainTextures_base: -849459375
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

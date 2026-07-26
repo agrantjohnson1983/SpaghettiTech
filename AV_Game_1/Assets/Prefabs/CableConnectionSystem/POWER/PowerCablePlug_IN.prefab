@@ -266,7 +266,7 @@ GameObject:
   - component: {fileID: 2832203603644126362}
   - component: {fileID: 8763718407497670506}
   m_Layer: 7
-  m_Name: CablePlug_IN
+  m_Name: PowerCablePlug_IN
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
