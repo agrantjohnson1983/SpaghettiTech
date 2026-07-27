@@ -208,9 +208,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pConnectionChannel: {fileID: 6542256099807183617, guid: 8d0499f032f1fee4e9a3a5dd8dee388b, type: 3}
-  numberOfChannels: 16
-  connectedSprite: {fileID: 813020616, guid: 2ce83a4af89c15246aa3431ece97d0f4, type: 3}
-  disconnectedSprite: {fileID: 813020616, guid: 2ce83a4af89c15246aa3431ece97d0f4, type: 3}
+  numberOfChannels: 2
+  connectedSprite: {fileID: 21300000, guid: b305179a2ade8a94498419f58b5821a3, type: 3}
+  disconnectedSprite: {fileID: 21300000, guid: 254eda08396841c489da701261048e24, type: 3}
 --- !u!1 &4136564788637470676
 GameObject:
   m_ObjectHideFlags: 0
@@ -318,7 +318,7 @@ GameObject:
   - component: {fileID: 5021267142730780109}
   - component: {fileID: 928287497577340382}
   m_Layer: 5
-  m_Name: PanelConnectionPlate
+  m_Name: PowerPanelConnectionPlate_2_Channel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -343,8 +343,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 4.5}
-  m_SizeDelta: {x: 250, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 60, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &928287497577340382
 CanvasRenderer:

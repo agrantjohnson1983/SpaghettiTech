@@ -8,6 +8,8 @@ public class sPlayerCharacter : MonoBehaviour
 
     public static sPlayerCharacter playerCharacterGlobal;
 
+    public GameObject model;
+
     // this is used to switch betweeen players
     int index;
 

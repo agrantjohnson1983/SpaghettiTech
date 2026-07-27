@@ -273,7 +273,7 @@ public class sConnectionSource : MonoBehaviour
 
             //Debug.Log("Pluggable List count is: " + pluggableList.Count);
         }
-
+/*
         // Checks for a collision with a player
         if(collision.gameObject.CompareTag("Player"))
         {
@@ -320,16 +320,64 @@ public class sConnectionSource : MonoBehaviour
                 //else
                     //Debug.Log("Pluggable Available List is null");
             }            
-        }
+        }*/
     }
 
     // Collision Exit even needed if we are using joints?
 
-    
-    private void OnCollisionExit(Collision collision)
+    private void OnTriggerEnter(Collider other)
     {
-        // Checks for a collision with the player
-        if (collision.gameObject.CompareTag("Player"))
+        if (other.gameObject.CompareTag("Player"))
+        {
+            if (pluggableList.Count <= 0)
+            {
+                Debug.Log("No pluggables in list");
+                return;
+            }
+
+            // Checks the connection canvas is not open
+            if (!connectionCanvasOpen && pluggableList.Count > 0)
+            {
+                //Debug.Log("Opening Connection Plate Canvas");
+
+                // Sets bool to true to open
+                connectionCanvasOpen = true;
+
+                // Turns on the connection plate canvas object
+                connectionPlate.gameObject.transform.parent.gameObject.SetActive(true);
+            }
+
+            // Checks to see if connections avail is not open
+            if (!connectionAvailableCanvasOpen && pluggableList.Count > 0)
+            {
+                //Debug.Log("Opening Connection Available Canvas");
+
+                // Sets bool to true to open
+                connectionAvailableCanvasOpen = true;
+
+                // Sets the connection avaiable plate to open
+                connectionsAvailablePlate.gameObject.SetActive(true);
+
+                // Checks that there's something in the pluggable list
+                //if (pluggableList.Count > 0)
+                //{
+                Debug.Log("Setting connections available list from pluggable list");
+                //connectionsAvailablePlate.DestroyAllButtons();
+
+                //Sets the connections abailable based on the pluggable list
+                connectionsAvailablePlate.SetConnectionsAvailable(pluggableList);
+                //}
+
+
+                //else
+                //Debug.Log("Pluggable Available List is null");
+            }
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.gameObject.CompareTag("Player"))
         {
             // Checks i the connection canvas is open AND if the connection plate doesn't have anything plugged in, otherwise will stay open
             if (connectionCanvasOpen && connectionPlate.ReturnHasAPlugPlugged() == false)
@@ -357,6 +405,12 @@ public class sConnectionSource : MonoBehaviour
                 connectionsAvailablePlate.gameObject.SetActive(false);
             }
         }
+    }
+
+    private void OnCollisionExit(Collision collision)
+    {
+        // Checks for a collision with the player
+        
     }
 
     

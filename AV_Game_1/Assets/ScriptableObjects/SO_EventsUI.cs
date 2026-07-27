@@ -22,7 +22,7 @@ public class SO_EventsUI : ScriptableObject
 
     public UnityEvent<string> controlsPopup;
 
-    public UnityEvent<float> characterHire;
+    public UnityEvent<SO_CrewProfile> crewHire;
 
     public UnityEvent<SO_ItemData> toolHeldImage;
 
@@ -83,9 +83,9 @@ public class SO_EventsUI : ScriptableObject
             controlsPopup = new UnityEvent<string>();
         }
 
-        if(characterHire == null)
+        if(crewHire == null)
         {
-            characterHire = new UnityEvent<float>();
+            crewHire = new UnityEvent<SO_CrewProfile>();
         }
 
         if(toolHeldImage == null)
@@ -150,9 +150,9 @@ public class SO_EventsUI : ScriptableObject
         controlsPopup.Invoke(_popupText);
     }
 
-    public void TriggerCharacterHire(float _cost)
+    public void TriggerCrewHire(SO_CrewProfile _crew)
     {
-        characterHire.Invoke(_cost);
+        crewHire.Invoke(_crew);
     }
 
     public void TriggerToolChange(SO_ItemData _itemData)

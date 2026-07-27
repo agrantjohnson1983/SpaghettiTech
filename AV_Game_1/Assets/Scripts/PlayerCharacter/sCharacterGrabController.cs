@@ -372,9 +372,13 @@ public class sCharacterGrabController : MonoBehaviour
                     _grabJoint = null;
                 }
 
+                StartCoroutine(GrabMovement());
+
                 _grabJoint = interactiveObject.AddComponent<FixedJoint>();
                 _grabJoint.connectedBody = _playerRB;
                 _grabJoint.enablePreprocessing = false;
+
+                
             }
 
             else
@@ -404,6 +408,30 @@ public class sCharacterGrabController : MonoBehaviour
         //Debug.Log("End of Handle Grabbing Function");
     }
 
+    IEnumerator GrabMovement()
+    {
+        Vector3 startingPos = sPlayerCharacter.playerCharacterGlobal.model.transform.position;
+        Vector3 endPos = interactiveObject.transform.position;
+
+        Vector3 localPos = sPlayerCharacter.playerCharacterGlobal.model.transform.localPosition;
+
+        Quaternion startingRot = sPlayerCharacter.playerCharacterGlobal.transform.rotation;
+        Quaternion endRot = transformGrab.rotation;
+
+        float counter = 0f;
+
+        while (counter < 0.25f)
+        {
+            sPlayerCharacter.playerCharacterGlobal.model.transform.position = Vector3.Lerp(startingPos, endPos, (counter / 0.25f));
+            sPlayerCharacter.playerCharacterGlobal.model.transform.LookAt(interactiveObject.transform);
+
+            counter += Time.deltaTime;
+
+            yield return null;
+        }
+
+        sPlayerCharacter.playerCharacterGlobal.model.transform.localPosition = localPos;
+    }
     public bool ReturnIsGrabbing()
     {
         return isGrabbing;

@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5ea3149329bd95140a54094d05705c40, type: 3}
-  m_Name: item_PowerCable_20ft
+  m_Name: item_PowerCable_10ft
   m_EditorClassIdentifier: 
   index: 0
   numberOfHandsNeeded: 1
-  itemName: Power Ed 20'
+  itemName: Power Ed 10'
   itemSprite: {fileID: 21300000, guid: 920bdd9aaec08f441ab2a8f4cc0bcaf3, type: 3}
-  prefabItem: {fileID: 7794338550508641806, guid: 6cce5caaf6f37924588fe78b3f5132db, type: 3}
+  prefabItem: {fileID: 7794338550508641806, guid: 9013a6322b3fc0c46b6cdbf05f32a95d, type: 3}
   typeOfTool: 1
   weight: 0

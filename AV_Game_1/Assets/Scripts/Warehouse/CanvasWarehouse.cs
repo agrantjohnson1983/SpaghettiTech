@@ -27,13 +27,13 @@ public class CanvasWarehouse : MonoBehaviour
 
     private void OnEnable()
     {
-        soUI.characterHire.AddListener(OnCharacterHire);
+        soUI.crewHire.AddListener(OnCharacterHire);
     }
 
    
     private void OnDisable()
     {
-        soUI.characterHire.RemoveListener(OnCharacterHire);
+        soUI.crewHire.RemoveListener(OnCharacterHire);
     }
 
     // Start is called before the first frame update
@@ -42,9 +42,11 @@ public class CanvasWarehouse : MonoBehaviour
         hiringPanel.SetActive(false);
     }
 
-    private void OnCharacterHire(float _amount)
+    private void OnCharacterHire(SO_CrewProfile _crew)
     {
+        Debug.Log("You hired " + _crew.crewName);
 
+        
     }
 
     public void OnStartButton()

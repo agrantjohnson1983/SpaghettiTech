@@ -20,3 +20,5 @@ MonoBehaviour:
   lightingSkill: 0
   videoSkill: 0
   experience: 5
+  hireCost: 50
+  pCrew: {fileID: 4174687814180632294, guid: 1c8a1f43bafe44845bcf4295a1457bcf, type: 3}

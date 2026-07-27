@@ -107,7 +107,7 @@ public class canvasGameplay : MonoBehaviour
 
         soUI.controlsPopup.AddListener(TogglePopup);
 
-        soUI.characterHire.AddListener(ChangeMoney);
+        soUI.crewHire.AddListener(HireCrew);
 
         soUI.toolHeldImage.AddListener(AddToolToBelt);
     }
@@ -126,7 +126,7 @@ public class canvasGameplay : MonoBehaviour
 
         soUI.controlsPopup.RemoveListener(TogglePopup);
 
-        soUI.characterHire.RemoveListener(ChangeMoney);
+        soUI.crewHire.RemoveListener(HireCrew);
 
         soUI.toolHeldImage.RemoveListener(AddToolToBelt);
     }
@@ -472,6 +472,11 @@ public class canvasGameplay : MonoBehaviour
         }
 
         blueprintSetupText.text = blueprintTextName[activeBlueprintIndex];
+    }
+
+    void HireCrew (SO_CrewProfile _crew)
+    {
+        ChangeMoney(_crew.hireCost);
     }
 
     // This takes in an amount and adds it to the money

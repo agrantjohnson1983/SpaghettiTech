@@ -1093,7 +1093,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   selectionRing: {fileID: 1067386413958949141}
   state: 0
-  profile: {fileID: 0}
+  profile: {fileID: 11400000, guid: b1a5ec04fa220af4ab79b423b53e511f, type: 2}
   currentCommand: 0
   workDuration: 3
 --- !u!1 &4174687814354459210

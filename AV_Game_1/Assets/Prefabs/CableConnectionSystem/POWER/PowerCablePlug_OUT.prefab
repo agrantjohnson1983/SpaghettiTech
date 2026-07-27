@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 154540888769047084}
   - component: {fileID: 3920014214491440884}
   - component: {fileID: 6412148491422344610}
+  - component: {fileID: 2356328135492510696}
   m_Layer: 7
   m_Name: PowerCablePlug_OUT
   m_TagString: Untagged
@@ -49,7 +50,7 @@ SphereCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.92
+  m_Radius: 0.75
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!135 &1773537283602780057
 SphereCollider:
@@ -62,7 +63,7 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 1.09
+  m_Radius: 1
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!54 &154540888769047084
 Rigidbody:
@@ -79,7 +80,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 112
-  m_CollisionDetection: 2
+  m_CollisionDetection: 3
 --- !u!153 &3920014214491440884
 ConfigurableJoint:
   m_ObjectHideFlags: 0
@@ -195,6 +196,7 @@ MonoBehaviour:
   itemTextMP: []
   textItem: 
   ui_Select: {fileID: 0}
+  _transformGrab: {fileID: 0}
   _UI_offset: {x: 0, y: 0, z: 0}
   textPopup: {fileID: 11400000, guid: 5ecd37f9e7581824fbdb05b506ea589c, type: 2}
   _connectionSprite: {fileID: 21300000, guid: 5c0a4a20d4dc4eb4780931bedf000e85, type: 3}
@@ -203,6 +205,27 @@ MonoBehaviour:
   disconnectForce: 50
   _typePlug: 0
   connectionUI: {fileID: 5347425028193266899}
+--- !u!114 &2356328135492510696
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4774520748497140430}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a88d3fc466c15264e9c273dd3d3f18a5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mode: 2
+  targetRenderer: {fileID: 0}
+  tintColor: {r: 1, g: 0.85, b: 0.2, a: 1}
+  tintEmissionIntensity: 1.5
+  emissionColorProperty: _EmissionColor
+  outlineColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+  outlineWidth: 0.02
+  outlineWidthProperty: _OutlineWidth
+  outlineColorProperty: _OutlineColor
 --- !u!1 &4774520749273181793
 GameObject:
   m_ObjectHideFlags: 0

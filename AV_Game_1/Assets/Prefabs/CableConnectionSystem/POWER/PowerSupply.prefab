@@ -348,7 +348,7 @@ GameObject:
   - component: {fileID: 8827248635309606656}
   - component: {fileID: 3273937208022904293}
   m_Layer: 0
-  m_Name: ConnectionSupplyPower
+  m_Name: PowerSupply
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -383,7 +383,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e0d68d0a38105a4990d3374d16cfc7f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  connectionType: 0
   connectionObjects: []
+  powerDrainAmount: 10
+  plugInTransform: {fileID: 2855785439237539091}
 --- !u!65 &3161352179769158402
 BoxCollider:
   m_ObjectHideFlags: 0

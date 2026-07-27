@@ -30,4 +30,8 @@ public class SO_CrewProfile : ScriptableObject
 
     [Header("Progression")]
     public int experience;
+
+    public float hireCost = 50f;
+
+    public GameObject pCrew;
 }

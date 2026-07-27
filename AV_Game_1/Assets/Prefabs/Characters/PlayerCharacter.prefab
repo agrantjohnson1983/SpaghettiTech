@@ -24,7 +24,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2299634059601714935}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.25, z: 0.5}
+  m_LocalPosition: {x: 0, y: 0.25, z: 1.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -615,14 +615,14 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4174687814180632294}
   serializedVersion: 2
-  m_Mass: 1
+  m_Mass: 5
   m_Drag: 0
   m_AngularDrag: 0.05
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 116
-  m_CollisionDetection: 0
+  m_Constraints: 112
+  m_CollisionDetection: 2
 --- !u!114 &1365413362
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -635,6 +635,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a0d0e1275cc3094fa5f577051b49d2a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  model: {fileID: 4174687813809144922}
   characterData: {fileID: 11400000, guid: b809d4cd6179c664785ae07a6a2666bf, type: 2}
   soUI: {fileID: 11400000, guid: 2b96b6b1405722c48a474d361c95f00a, type: 2}
   handsNumber: 2
@@ -654,6 +655,11 @@ MonoBehaviour:
   smoothTime: 0.05
   dashPower: 5
   characterModel: {fileID: 4174687813809144922}
+  sprintMultiplier: 2
+  groundCheckDistance: 0.6
+  groundMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
 --- !u!114 &4174687814180632315
 MonoBehaviour:
   m_ObjectHideFlags: 0

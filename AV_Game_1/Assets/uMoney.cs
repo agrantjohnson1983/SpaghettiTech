@@ -31,12 +31,17 @@ public class uMoney : MonoBehaviour
 
     private void OnEnable()
     {
-        soUI.characterHire.AddListener(MoneyChange);
+        soUI.crewHire.AddListener(CrewHire);
     }
 
     private void OnDisable()
     {
-        soUI.characterHire.RemoveListener(MoneyChange);
+        soUI.crewHire.RemoveListener(CrewHire);
+    }
+
+    void CrewHire(SO_CrewProfile _crew)
+    {
+        MoneyChange(-_crew.hireCost);
     }
 
     void MoneyChange(float _amount)

@@ -16,6 +16,10 @@ public class sConnectionSupply : MonoBehaviour
 
     public float powerDrainAmount = 10f;
 
+    public Transform plugInTransform;
+
+    public Vector3 connectionOffset = new Vector3(1, 0, 0);
+
     // Start is called before the first frame update
     void Start()
     {
@@ -44,7 +48,7 @@ public class sConnectionSupply : MonoBehaviour
             _pluggable.SetConnection(this.gameObject, powerDrainAmount);
 
             // Connects the pluggable game object by a joint
-            ConnectPlugJoint(_pluggableObj);
+            
 
             //_plugCable.PlugConnect()
 
@@ -81,6 +85,8 @@ public class sConnectionSupply : MonoBehaviour
         joint = _plugObject.AddComponent<HingeJoint>();
 
         joint.connectedBody = rb;
+
+       
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -97,6 +103,13 @@ public class sConnectionSupply : MonoBehaviour
             {
                 Debug.Log("Cable Plugged In to " + this.gameObject.name);
 
+                collision.gameObject.transform.position = plugInTransform.position + connectionOffset;
+
+                collision.gameObject.transform.rotation = Quaternion.Euler(new Vector3(0, 90, 0));
+
+                //collision.gameObject.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
+
+                ConnectPlugJoint(_pluggable.plugObj);
                 // Sets the connection supply on the plug
                 //_pluggable.SetConnection(this.gameObject);
             }

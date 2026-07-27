@@ -155,6 +155,7 @@ MonoBehaviour:
   characterStats: {fileID: 4187639279581535319}
   costText: {fileID: 4746758976439143649}
   costToHire: 0
+  crewProfile: {fileID: 11400000, guid: b1a5ec04fa220af4ab79b423b53e511f, type: 2}
   soUI: {fileID: 11400000, guid: 2b96b6b1405722c48a474d361c95f00a, type: 2}
 --- !u!1 &1620853932805829722
 GameObject:
