@@ -6,6 +6,8 @@ public class sCablePlug : sInteractive, iPluggable, iClickable
 {
     public uTextPopupSpawn textPopup;
 
+    //public GameObject canvasUI;
+
     Collider collider;
 
     sCablePlug cablePlugOtherEnd;
@@ -512,11 +514,22 @@ public class sCablePlug : sInteractive, iPluggable, iClickable
 
     }
 
+
     public void SetIndex(int _index)
     {
         Debug.Log("Plug is getting index set to " + _index);
 
         Index = _index;
+    }
+
+    public override void OnSelect()
+    {
+        if (IsPluggedIn || !CanBeGrabbed)
+            return;
+
+        base.OnSelect();
+
+        Debug.Log("Plug was selected: " + this);
     }
 
     /*

@@ -5,43 +5,54 @@ public class sJobManager : MonoBehaviour
 {
     public static sJobManager instance;
 
-    List<IJobProvider> providers = new List<IJobProvider>();
+    public List<sCrewJob> availableJobs = new();
 
-    void Awake()
+    public Transform testTarget;
+
+    private void Awake()
     {
         instance = this;
     }
 
-    public void RegisterProvider(IJobProvider provider)
+    private void Start()
     {
-        if (!providers.Contains(provider))
-            providers.Add(provider);
+        availableJobs.Add(
+    new sCrewJob(
+        CrewJobType.BuildTruss,
+        testTarget.transform
+    )
+);
     }
 
-    public void UnregisterProvider(IJobProvider provider)
+    public void AddJob(sCrewJob job)
     {
-        providers.Remove(provider);
+        if (!availableJobs.Contains(job))
+            availableJobs.Add(job);
     }
 
     public sCrewJob GetJob(CrewJobType type)
     {
-        foreach (IJobProvider provider in providers)
+        foreach (sCrewJob job in availableJobs)
         {
-            foreach (sCrewJob job in provider.GetAvailableJobs())
-            {
-                if (!job.assigned &&
-                    !job.completed &&
-                    job.jobType == type)
-                {
-                    job.assigned = true;
+            if (job.jobType != type)
+                continue;
 
-                    provider.OnJobAccepted(job);
+            if (job.assigned)
+                continue;
 
-                    return job;
-                }
-            }
+            if (job.completed)
+                continue;
+
+            job.assigned = true;
+
+            return job;
         }
 
         return null;
+    }
+
+    public void RemoveJob(sCrewJob job)
+    {
+        availableJobs.Remove(job);
     }
 }

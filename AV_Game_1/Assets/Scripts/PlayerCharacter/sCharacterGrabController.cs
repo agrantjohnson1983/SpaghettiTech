@@ -28,7 +28,8 @@ public class sCharacterGrabController : MonoBehaviour
 
     public Transform transformGrab;
 
-    public string grabPopupText, throwPromptText;
+    public string grabControlText, throwControlText;
+    
 
     //public int _numberOfHandsNeeded;
     //public int NumberOfHandsNeeded
@@ -194,6 +195,8 @@ public class sCharacterGrabController : MonoBehaviour
             interactiveObject = null;
             isGrabbing = false;
 
+            soUI.TriggerControlsPopup("", "Throw");
+
             //// Checks if hand index list is null
             //if(HandIndexList != null)
             //{
@@ -304,7 +307,7 @@ public class sCharacterGrabController : MonoBehaviour
                 //Debug.Log("Triggering Grab Popup Text");
 
                 // Sets grab UI text
-                soUI.ToggleControlsPopup(grabPopupText);
+                soUI.TriggerControlsPopup(grabControlText, "Grab");
             }
 
             //else
@@ -337,8 +340,10 @@ public class sCharacterGrabController : MonoBehaviour
                 // Creates a new list of integers based on the number of hands returned by the player
                 //HandIndexList = new List<int>(_tempIndexArray);
 
+                soUI.TriggerControlsPopup("", "Grab");
+
                 // Turns off the popup by sending a null
-                soUI.ToggleControlsPopup(throwPromptText);
+                soUI.TriggerControlsPopup(throwControlText, "Throw");
 
                 // Sets the interactive object
                 interactiveObject = _collisionObj;
@@ -494,7 +499,7 @@ public class sCharacterGrabController : MonoBehaviour
             // characters - before the old 0.5s Invoke had a chance to fire).
             GrabReset();
 
-            soUI.ToggleControlsPopup(null);
+            
         }
         else
         {
@@ -535,7 +540,7 @@ public class sCharacterGrabController : MonoBehaviour
                 SetObjectHighlight(interactiveObject, false);
                 grabbable = null;
                 interactiveObject = null;
-                soUI.ToggleControlsPopup(null);
+                soUI.TriggerControlsPopup("", "Grab");
             }
             else
             {

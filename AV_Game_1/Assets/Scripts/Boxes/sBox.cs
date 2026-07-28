@@ -34,8 +34,8 @@ public class sBox : sInteractive, iClickable, IPointerEnterHandler, IPointerExit
     public float UI_ToggleDistance = 5f;
     bool isWithinOpenRange = false;
 
-    public GameObject ui_Img, ui_Text;
-
+    public GameObject ui_Img;
+    
     public Vector3 ui_Img_Offset, ui_Text_Offset;
 
     public GameObject pModel;
@@ -55,6 +55,8 @@ public class sBox : sInteractive, iClickable, IPointerEnterHandler, IPointerExit
 
     bool isBeingThrown = false;
 
+    public SO_EventsUI soUI;
+
     // Start is called before the first frame update
     private void Awake()
     {
@@ -64,9 +66,9 @@ public class sBox : sInteractive, iClickable, IPointerEnterHandler, IPointerExit
 
         ui_Img.SetActive(false);
 
-        ui_Text.GetComponent<TextMeshProUGUI>().fontSize = boxTextFontSize;
+        //ui_Text.GetComponent<TextMeshProUGUI>().fontSize = boxTextFontSize;
 
-        ui_Text.SetActive(false);
+        //ui_Text.SetActive(false);
 
 
     }
@@ -137,7 +139,7 @@ public class sBox : sInteractive, iClickable, IPointerEnterHandler, IPointerExit
         //Debug.Log("Offsetting Ring UI");
 
         ui_Img.gameObject.transform.position = this.gameObject.transform.position + ui_Img_Offset;
-        ui_Text.gameObject.transform.position = this.gameObject.transform.position + ui_Text_Offset;
+        //ui_Text.gameObject.transform.position = this.gameObject.transform.position + ui_Text_Offset;
         //}
     }
 
@@ -190,7 +192,7 @@ public class sBox : sInteractive, iClickable, IPointerEnterHandler, IPointerExit
 
             //ui_Ring.GetComponentInChildren<MeshRenderer>().material.color = Color.yellow;
 
-            ui_Text.SetActive(false);
+            //ui_Text.SetActive(false);
 
             ui_Img.SetActive(false);
 
@@ -227,7 +229,7 @@ public class sBox : sInteractive, iClickable, IPointerEnterHandler, IPointerExit
 
         //ui_Ring.GetComponentInChildren<MeshRenderer>().material.color = Color.green;
 
-        ui_Text.SetActive(true);
+        //ui_Text.SetActive(true);
 
         ui_Img.SetActive(true);
     }
@@ -263,7 +265,7 @@ public class sBox : sInteractive, iClickable, IPointerEnterHandler, IPointerExit
 
         //ui_Ring.SetActive(false);
         //ui_Ring.GetComponentInChildren<MeshRenderer>().material.color = Color.red;
-        ui_Text.SetActive(false);
+        //ui_Text.SetActive(false);
 
         ui_Img.SetActive(false);
 
@@ -319,8 +321,8 @@ public class sBox : sInteractive, iClickable, IPointerEnterHandler, IPointerExit
             isWithinOpenRange = true;
 
             //ui_Img.SetActive(true);
-            if (!isOpen)
-                ui_Text.SetActive(true);
+            //if (!isOpen)
+                //ui_Text.SetActive(true);
             //ui_Ring.SetActive(!iGrabbable.IsGrabbed);
         }
 
@@ -331,7 +333,7 @@ public class sBox : sInteractive, iClickable, IPointerEnterHandler, IPointerExit
             isWithinOpenRange = false;
 
             //ui_Img.SetActive(false);
-            ui_Text.SetActive(false);
+            //ui_Text.SetActive(false);
 
             //ui_Ring.SetActive(false);
 
@@ -371,7 +373,11 @@ public class sBox : sInteractive, iClickable, IPointerEnterHandler, IPointerExit
         //Debug.Log("On Select on Box");
         ui_Select.SetActive(true);
 
+        soUI.TriggerControlsPopup("F", "Open");
+
         //base.OnSelect();
+
+        
     }
 
     public override void OffSelect()
@@ -379,6 +385,8 @@ public class sBox : sInteractive, iClickable, IPointerEnterHandler, IPointerExit
         //Debug.Log("Off Select on Box");
         ui_Select.SetActive(false);
         //base.OnSelect();
+
+        soUI.TriggerControlsPopup("", "Open");
     }
 
     public void OnPointerEnter(PointerEventData eventData)

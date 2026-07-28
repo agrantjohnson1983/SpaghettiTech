@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using System.Diagnostics.Tracing;
 
 [RequireComponent(typeof(sObjectHighlighter))]
 public class sInteractive : MonoBehaviour, iGrabbable
@@ -28,6 +29,8 @@ public class sInteractive : MonoBehaviour, iGrabbable
     public string textItem;
 
     public GameObject ui_Select;
+
+    bool canBeSelected = true;
 
     public float TaskTime
     {
@@ -130,11 +133,26 @@ public class sInteractive : MonoBehaviour, iGrabbable
     public virtual void OffGrab()
     {
         IsGrabbed = false;
+        canBeSelected = false;
+        StartCoroutine(GrabSelectCooldown());
+    }
+
+    IEnumerator GrabSelectCooldown()
+    {
+        float counter = 0f;
+
+        while(counter < 1f)
+        {
+            counter += Time.deltaTime;
+            yield return null;
+        }
+
+        canBeSelected = true;
     }
 
     public virtual void OnSelect()
     {
-        if(ui_Select != null)
+        if(ui_Select != null && !sPlayerCharacter.playerCharacterGlobal.ReturnGrabController().ReturnIsGrabbing() && canBeSelected)
         {
             ui_Select.SetActive(true);
         }

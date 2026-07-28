@@ -9,6 +9,7 @@ public class canvasGameplay : MonoBehaviour
     // MOVE THIS TO SPAWN OVER ITEMS THAT HAVE TASK GAUGES
     public Image taskGauge;
 
+    // EVENTS UI
     public SO_EventsUI soUI;
 
     // CHARACTER STUFF
@@ -26,7 +27,6 @@ public class canvasGameplay : MonoBehaviour
     //public Transform connectionPlatesTransform;
 
     // INSTRUCTIONS STUFF
-
     public Text textInstructionsRigging, textInstructionsAudio, textInstructionsVideo, textInstructionsLighting;
     public string startingInstructionsRigging, startingInstructionsAudio, startingInstructionsVideo, startingInstructionsLighting;
 
@@ -49,27 +49,24 @@ public class canvasGameplay : MonoBehaviour
     public GameObject motorController;
 
     // CONTROLS POPUP - This is used mostly for the grabbable and actionable interfaces.
-    public GameObject popupControls;
-    public Text popupControlsText;
-    public Vector3 popupControlsOffset;
+    public Transform popupControlsTransform;
+    public GameObject pPopupControls;
+    Dictionary<string, GameObject> popupDictionary;
 
     // HIRING STUFF
     public GameObject hiringPanel, hiringButton;
     bool isHiring = false;
 
     // TIME
-
     public GameObject timeUI;
 
     // MONEY STUFF
-
     public GameObject moneyUI;
     public float startingMoney = 1000;
     float currentMoney;
     public TextMeshProUGUI currentMoneyText;
 
     // TOOLBELT STUFF
-
     public GameObject toolbelt, toolbeltGrid, toolbeltArrow;
     bool isHoldingTool = false;
     public Image toolHeld;
@@ -81,7 +78,6 @@ public class canvasGameplay : MonoBehaviour
     public List<GameObject> toolButtonsList;
 
     // WAREHOUSE
-
     public GameObject startScreen;
 
     private void Awake()
@@ -139,7 +135,9 @@ public class canvasGameplay : MonoBehaviour
         //ChangeHandImage(null, true);
         //ChangeHandImage(null, false);
 
-        TogglePopup(null);
+        popupDictionary = new Dictionary<string, GameObject>();
+
+        //TogglePopup(null);
         //ChangeHandImage(null, null);
 
         //hiringPanel.SetActive(false);
@@ -154,22 +152,80 @@ public class canvasGameplay : MonoBehaviour
         tooldHeldText.text = "";
     }
 
-    void TogglePopup(string _popupText)
+    void TogglePopup(string _controlText, string _actionText)
     {
-        Vector3 playerPos;
+        GameObject tempObj;
 
-        if(_popupText == null)
+        // checks for "" which will destroy the object based on the action text sent
+        if (_controlText == "")
         {
-            popupControls.SetActive(false);
+            if (popupDictionary.Count == 0)
+                return;
+
+            // checks dictionary for action text and outputs game object if found
+            if(popupDictionary.TryGetValue(_actionText, out tempObj))
+            {
+                popupDictionary.Remove(_actionText);
+                Destroy(tempObj);
+            }
+
+            else
+            {
+                Debug.LogWarning("Destroy message was sent but no dictionary key found for " + _actionText);
+            }
+
+            return;
+        }
+
+        //Debug.Log("Toggle popup triggered for " + _actionText);
+
+        if(popupDictionary.ContainsKey(_actionText))
+        {
+            //Debug.Log("Dictionary already contains " + _actionText + " this must be a duplicate");
+
+            return;
         }
 
         else
         {
-            playerPos = sPlayerCharacter.playerCharacterGlobal.transform.position;
-            popupControls.SetActive(true);
-            popupControlsText.text = _popupText;
-            popupControlsText.gameObject.transform.position = Camera.main.WorldToScreenPoint(playerPos + popupControlsOffset);
+            // spawns object
+            tempObj = Instantiate(pPopupControls, popupControlsTransform);
+
+            // adds to dictionary
+            popupDictionary.Add(_actionText, tempObj);
+
+            // popup controls ref
+            uPopupControls popupControls;
+
+            // looks for the pupcontrols
+            if (tempObj.TryGetComponent<uPopupControls>(out popupControls))
+            {
+                // sets popup
+                popupControls.SetPopup(_controlText, _actionText);
+            }
+
+            else
+            {
+                Debug.LogWarning("No uPopup controls found on the spawned object");
+            }
         }
+
+        
+
+        //Vector3 playerPos;
+
+        //if(_popupText == null)
+        //{
+        //    popupControls.SetActive(false);
+        //}
+
+        //else
+        //{
+        //    playerPos = sPlayerCharacter.playerCharacterGlobal.transform.position;
+        //    popupControls.SetActive(true);
+        //    popupControlsText.text = _popupText;
+        //    popupControlsText.gameObject.transform.position = Camera.main.WorldToScreenPoint(playerPos + popupControlsOffset);
+        //}
     }
 
     void ChangeCharacter(SO_CharacterData _characterData)
@@ -382,7 +438,7 @@ public class canvasGameplay : MonoBehaviour
 
         //GameManager.gm.ToggleOrbitCamera(false);
 
-        popupControls.SetActive(false);
+        //popupControls.SetActive(false);
 
         GameManager.gm.ToggleBlueprintCamera(false);
 

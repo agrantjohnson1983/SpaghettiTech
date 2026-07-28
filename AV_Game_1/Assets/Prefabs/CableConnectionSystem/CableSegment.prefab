@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 2129447627930602482}
   - component: {fileID: 6492810003150308212}
   - component: {fileID: 2113718777816738100}
+  - component: {fileID: 4397814352984774744}
   m_Layer: 0
   m_Name: CableSegment
   m_TagString: Untagged
@@ -256,3 +257,19 @@ MonoBehaviour:
   outlineWidth: 0.02
   outlineWidthProperty: _OutlineWidth
   outlineColorProperty: _OutlineColor
+--- !u!114 &4397814352984774744
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8070728173176958547}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e28a5259dd34b85428488721fd898c1b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  IsTaped: 0
+  meshRenderer: {fileID: 2657328428099782872}
+  cableCollider: {fileID: 5433915085193044538}
+  rb: {fileID: 8755546000451587282}

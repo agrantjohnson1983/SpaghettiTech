@@ -20,7 +20,7 @@ public class SO_EventsUI : ScriptableObject
     public UnityEvent<bool> motorControlTrigger;
     public UnityEvent motorControlStop;
 
-    public UnityEvent<string> controlsPopup;
+    public UnityEvent<string,string> controlsPopup;
 
     public UnityEvent<SO_CrewProfile> crewHire;
 
@@ -80,7 +80,7 @@ public class SO_EventsUI : ScriptableObject
 
         if(controlsPopup == null)
         {
-            controlsPopup = new UnityEvent<string>();
+            controlsPopup = new UnityEvent<string, string>();
         }
 
         if(crewHire == null)
@@ -145,9 +145,9 @@ public class SO_EventsUI : ScriptableObject
         motorControlStop.Invoke();
     }
 
-    public void ToggleControlsPopup(string _popupText)
+    public void TriggerControlsPopup(string _controlsText, string _actionText)
     {
-        controlsPopup.Invoke(_popupText);
+        controlsPopup.Invoke(_controlsText, _actionText);
     }
 
     public void TriggerCrewHire(SO_CrewProfile _crew)

@@ -239,7 +239,7 @@ public class sRiggingSetupSpot : MonoBehaviour, iActionable
 
     public void StopAction()
     {
-        //Debug.Log("Stopping Action Tasking Cortoutine");
+        Debug.Log("Stopping Action Tasking Cortoutine");
 
         StopCoroutine(ActionTasking());
 
@@ -257,7 +257,7 @@ public class sRiggingSetupSpot : MonoBehaviour, iActionable
 
     IEnumerator ActionTasking()
     {
-        //Debug.Log("Starting Action Tasking");
+        Debug.Log("Starting Action Tasking");
 
 
 
@@ -270,22 +270,33 @@ public class sRiggingSetupSpot : MonoBehaviour, iActionable
 
     public void FinishSetup()
     {
-        //Debug.Log("Action Task Complete");
+        Debug.Log("[" + this.name + "] FinishSetup called - Action Task Complete");
 
         //actionObject.SetActive(false);
 
         if (rigType == eTypeRigSetup.bolts)
         {
+            Debug.Log("[" + this.name + "] FinishSetup step 1 - welding truss neighbors "
+                + neighborTrussIndexA + " and " + neighborTrussIndexB);
+
             // Bolting complete - physically weld the two truss pieces
             // this spot connects, anchored at the bolt spot itself.
             sRiggingManager.riggingManger.WeldTrussNeighbors(neighborTrussIndexA, neighborTrussIndexB, this.transform.position);
+
+            Debug.Log("[" + this.name + "] FinishSetup step 1 complete");
         }
 
+        Debug.Log("[" + this.name + "] FinishSetup step 2 - calling RigSet(" + rigType + ")");
+
         sRiggingManager.riggingManger.RigSet(rigType);
+
+        Debug.Log("[" + this.name + "] FinishSetup step 2 complete");
 
         //GameManager.gm.ReturnCurrentPlayer().ToggleMovement(true);
 
         sPlayerCharacter.playerCharacterGlobal.ToggleMovement(true);
+
+        Debug.Log("[" + this.name + "] FinishSetup step 3 complete - destroying setup spot");
 
         Destroy(this.gameObject);
     }

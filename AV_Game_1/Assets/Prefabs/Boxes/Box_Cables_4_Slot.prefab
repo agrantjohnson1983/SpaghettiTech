@@ -294,8 +294,10 @@ MonoBehaviour:
   ui_Img_Offset: {x: 0.85, y: 1, z: -2.5}
   ui_Text_Offset: {x: 0, y: 2, z: 0}
   pModel: {fileID: 7405690288297066526}
-  boxSelectMouseImage: {fileID: 2800000, guid: 45db45742eae5ad4396692f502813120, type: 3}
+  boxSelectMouseImage: {fileID: 2800000, guid: 8bf01251be4cbcc4283405886810eaf9, type: 3}
   boxData: {fileID: 0}
+  boxTextFontSize: 0.05
+  soUI: {fileID: 11400000, guid: 2b96b6b1405722c48a474d361c95f00a, type: 2}
 --- !u!114 &2690858896691665127
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1638,6 +1640,10 @@ PrefabInstance:
     - target: {fileID: 5308932741514568324, guid: 90062c54f25c7c7428a930ef03996f33, type: 3}
       propertyPath: m_fontColor32.rgba
       value: 4278251775
+      objectReference: {fileID: 0}
+    - target: {fileID: 8911207947660909446, guid: 90062c54f25c7c7428a930ef03996f33, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 90062c54f25c7c7428a930ef03996f33, type: 3}

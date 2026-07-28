@@ -15,6 +15,9 @@ public class sCrewMember : MonoBehaviour
     [Header("Crew Profile")]
     public SO_CrewProfile profile;
 
+    [Header("Crew Data")]
+    public sCrewData crewData = new();
+
     public bool IsSelected { get; private set; }
 
     public CrewCommand currentCommand;
@@ -23,6 +26,9 @@ public class sCrewMember : MonoBehaviour
 
     float workTimer;
     public float workDuration = 3f;
+
+    [Header("Event Channels")]
+    public SO_JobCompletedEventChannel jobCompletedEvent;
 
     void Awake()
     {
@@ -135,6 +141,8 @@ public class sCrewMember : MonoBehaviour
 
     void LookForWork()
     {
+        //Debug.Log($"{name}: Looking for work...");
+
         if (currentJob != null)
             return;
 
@@ -149,6 +157,11 @@ public class sCrewMember : MonoBehaviour
 
         sCrewJob job =
             sJobManager.instance.GetJob(desiredJob);
+
+        if (job == null)
+            Debug.Log("No job found.");
+        else
+            Debug.Log($"Found job: {job.jobType}");
 
 
         if (job != null)
@@ -213,6 +226,14 @@ public class sCrewMember : MonoBehaviour
         currentJob.state = CrewJobState.Complete;
 
         currentJob.completed = true;
+
+        JobEventData data = new JobEventData
+        {
+            crewMember = this,
+            job = currentJob
+        };
+
+        jobCompletedEvent.Raise(data);
 
         currentJob = null;
 
