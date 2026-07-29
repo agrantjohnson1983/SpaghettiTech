@@ -55,7 +55,7 @@ public class sBox : sInteractive, iClickable, IPointerEnterHandler, IPointerExit
 
     bool isBeingThrown = false;
 
-    public SO_EventsUI soUI;
+    
 
     // Start is called before the first frame update
     private void Awake()
@@ -74,6 +74,7 @@ public class sBox : sInteractive, iClickable, IPointerEnterHandler, IPointerExit
         //ui_Text.GetComponent<TextMeshProUGUI>().fontSize = boxTextFontSize;
 
         //ui_Text.SetActive(false);
+
 
 
     }
@@ -185,7 +186,11 @@ public class sBox : sInteractive, iClickable, IPointerEnterHandler, IPointerExit
 
             //inventory = Instantiate(pBoxInventoryPanel, this.transform.position + panelOffset, Quaternion.identity).GetComponent<sInventory>();
 
+            sPlayerCharacter.playerCharacterGlobal.ToggleMovement(false);
+
             inventoryPanel.gameObject.SetActive(true);
+
+            rb.constraints = RigidbodyConstraints.FreezeAll;
 
             //inventory.gameObject.transform.parent = this.transform;
 
@@ -225,7 +230,11 @@ public class sBox : sInteractive, iClickable, IPointerEnterHandler, IPointerExit
         //if(!isEmpty)
         //pModel.GetComponent<MeshRenderer>().material = materialBoxClosed;
 
+        rb.constraints = startingConstraints;
+
         inventoryPanel.SetActive(false);
+
+        sPlayerCharacter.playerCharacterGlobal.ToggleMovement(true);
 
         //if (inventory != null)
         //{

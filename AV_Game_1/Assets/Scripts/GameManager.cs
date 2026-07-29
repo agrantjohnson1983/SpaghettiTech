@@ -16,8 +16,8 @@ public class GameManager : MonoBehaviour
     public GameObject canvasGameplayObject;
     public canvasGameplay canvasGameplay;
 
-    public GameObject canvasWorldSpaceObject;
-    Canvas canvasWorldSpace;
+    //public GameObject canvasWorldSpaceObject;
+    //Canvas canvasWorldSpace;
 
     public GameObject canvasWarehouseObject;
     public CanvasWarehouse canvasWarehouse;
@@ -56,7 +56,7 @@ public class GameManager : MonoBehaviour
             // scene's live canvas rather than a stale reference to
             // whatever scene it first spawned in.
             gm.canvasGameplayObject = this.canvasGameplayObject;
-            gm.canvasWorldSpaceObject = this.canvasWorldSpaceObject;
+            //gm.canvasWorldSpaceObject = this.canvasWorldSpaceObject;
             gm.canvasWarehouseObject = this.canvasWarehouseObject;
 
             gm.RefreshCanvasReferences();
@@ -78,8 +78,8 @@ public class GameManager : MonoBehaviour
     {
         canvasGameplay = canvasGameplayObject.GetComponent<canvasGameplay>();
 
-        canvasWorldSpace = canvasWorldSpaceObject.GetComponent<Canvas>();
-        canvasWorldSpace.worldCamera = Camera.main;
+        //canvasWorldSpace = canvasWorldSpaceObject.GetComponent<Canvas>();
+        //canvasWorldSpace.worldCamera = Camera.main;
 
         if (canvasWarehouseObject != null)
         {

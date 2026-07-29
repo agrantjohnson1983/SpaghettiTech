@@ -8,6 +8,7 @@ using System.Diagnostics.Tracing;
 public class sInteractive : MonoBehaviour, iGrabbable
 {
     protected Rigidbody rb;
+    protected RigidbodyConstraints startingConstraints;
 
     public SO_EventsUI soUI;
 
@@ -121,6 +122,8 @@ public class sInteractive : MonoBehaviour, iGrabbable
         }
 
         rb = GetComponent<Rigidbody>();
+
+        startingConstraints = rb.constraints;
 
         CanBeGrabbed = true;
     }

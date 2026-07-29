@@ -53,9 +53,11 @@ public class sConnectionSource : MonoBehaviour
 
         pluggableList = new List<GameObject>();
 
+        SpawnConnectionsAvailablePanel();
+
         SpawnConnectionPlate();
 
-        SpawnConnectionsAvailablePanel();
+ 
 
         rb = GetComponent<Rigidbody>();
     }

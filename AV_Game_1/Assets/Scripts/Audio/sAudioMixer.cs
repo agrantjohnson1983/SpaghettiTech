@@ -4,15 +4,30 @@ using UnityEngine;
 
 public class sAudioMixer : sAudioGear
 {
-    // Start is called before the first frame update
-    void Start()
+    public GameObject mixerMiniGame;
+
+    bool isPlayingMinigame = false;
+
+    // TO DO - add in a world canvas controller with single button "START MIXING"
+    // START MIXING will toggle on mini game and lock player movement
+    // There should be an "END" button in the mixer game
+
+    private void OnTriggerEnter(Collider other)
     {
-        
+        if(other.CompareTag("Player") && !isPlayingMinigame)
+        {
+            isPlayingMinigame = true;
+            mixerMiniGame.SetActive(true);
+        }
     }
 
-    // Update is called once per frame
-    void Update()
+    private void OnTriggerExit(Collider other)
     {
-        
+        if (other.CompareTag("Player") && isPlayingMinigame)
+        {
+            isPlayingMinigame = false;
+            mixerMiniGame.SetActive(false);
+        }
     }
+
 }
