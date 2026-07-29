@@ -27,11 +27,19 @@ public class sMotor : sRigGear
     // motor reaches the ceiling.
     public Transform chainAnchorPoint;
 
+    // Optional point marking exactly where on the motor model the
+    // chain should visually start (e.g. a mounting bracket child
+    // transform), in case the model's pivot is not at that spot.
+    // Defaults to this transform if unassigned.
+    public Transform chainRootPoint;
+
     Vector3 cachedChainTopPosition;
 
     bool chainsUp = false;
 
     bool isMoving = false;
+
+    bool isRigged = false;
 
     enum eMotorRaiseStage
     {
@@ -79,8 +87,20 @@ public class sMotor : sRigGear
                     // ConnectMotorsToTruss) to reliably follow it,
                     // rather than fighting a dynamic body being
                     // teleported by a raw Transform assignment.
+                    //
+                    // SetRigging (iRiggable's default implementation)
+                    // set constraints to FreezeAll when this motor was
+                    // first placed. That was never cleared, and
+                    // FreezePosition constraints were clamping/undoing
+                    // MovePosition every step - the motor would appear
+                    // to move mid-raise then snap back to its frozen
+                    // position, dragging the jointed truss back with
+                    // it. Must be cleared here.
                     rb.isKinematic = true;
+                    rb.constraints = RigidbodyConstraints.None;
                 }
+
+                isRigged = true;
 
                 SetChainsLine();
 
@@ -123,12 +143,24 @@ public class sMotor : sRigGear
         sRiggingManager.riggingManger.motorList.Add(this);
     }
 
-    // Update is called once per frame
+    // Update is called once per frame. The chain line is kept live
+    // every frame once rigged (not just while actively moving), so it
+    // is always correct regardless of what else might move the motor
+    // or the anchor point, and works identically for both raising and
+    // lowering.
     void Update()
     {
-        if (isMoving && lineChain != null)
+        if (isRigged && lineChain != null)
         {
-            lineChain.SetPosition(0, this.gameObject.transform.position);
+            lineChain.SetPosition(0, GetChainRootPosition());
+
+            // Anchor point itself could move if it is a transform the
+            // level designer repositions - keep it live too rather than
+            // relying only on the cached value from SetChainsLine.
+            if (chainAnchorPoint != null)
+            {
+                lineChain.SetPosition(1, chainAnchorPoint.position);
+            }
         }
     }
 
@@ -184,15 +216,58 @@ public class sMotor : sRigGear
         }
     }
 
+    // Mirror of StartMotorRaise for the down control. From the ceiling,
+    // drops back to working height. From working height, drops back to
+    // ground. Already at ground is a no-op. Reuses the same movement
+    // coroutine since it is just "move to an absolute target height",
+    // regardless of direction.
+    public void StartMotorLower()
+    {
+        Debug.Log("[" + this.name + "] StartMotorLower called - currentStage = " + currentStage + ", isMoving = " + isMoving);
+
+        if (rb == null)
+        {
+            Debug.LogWarning("[" + this.name + "] Cannot lower - no Rigidbody assigned.", this);
+            return;
+        }
+
+        if (isMoving)
+        {
+            return;
+        }
+
+        switch (currentStage)
+        {
+            case eMotorRaiseStage.AtCeiling:
+                {
+                    StartCoroutine(MotorRaiseMovement(workingHeight, eMotorRaiseStage.AtWorkingHeight));
+                    break;
+                }
+
+            case eMotorRaiseStage.AtWorkingHeight:
+                {
+                    StartCoroutine(MotorRaiseMovement(0f, eMotorRaiseStage.AtGround));
+                    break;
+                }
+
+            case eMotorRaiseStage.AtGround:
+                {
+                    Debug.Log("[" + this.name + "] Motor is already at ground.");
+                    break;
+                }
+        }
+    }
+
     // _targetHeight is an absolute height above the motor's ground
     // position (not a delta from the current position), so
-    // workingHeight and heightToRaise can both be authored as simple
-    // "height above ground" values in the inspector. Uses
+    // workingHeight, heightToRaise, and ground (0) can all be authored
+    // as simple "height above ground" values. Uses
     // Rigidbody.MovePosition rather than Transform assignment so the
-    // FixedJoint connecting the truss to this motor follows correctly.
+    // FixedJoint connecting the truss to this motor follows correctly,
+    // in both directions.
     IEnumerator MotorRaiseMovement(float _targetHeight, eMotorRaiseStage _resultingStage)
     {
-        Debug.Log("[" + this.name + "] Raising motor toward " + _resultingStage);
+        Debug.Log("[" + this.name + "] Moving motor toward " + _resultingStage);
 
         isMoving = true;
 
@@ -228,6 +303,11 @@ public class sMotor : sRigGear
         }
     }
 
+    Vector3 GetChainRootPosition()
+    {
+        return chainRootPoint != null ? chainRootPoint.position : this.gameObject.transform.position;
+    }
+
     // Sets up the chain line: point 0 tracks the motor's current
     // (moving) position, point 1 is the fixed anchor at the top - either
     // chainAnchorPoint if assigned, or directly above the motor's ground
@@ -241,12 +321,13 @@ public class sMotor : sRigGear
         }
 
         lineChain.positionCount = 2;
+        lineChain.useWorldSpace = true;
 
         cachedChainTopPosition = chainAnchorPoint != null
             ? chainAnchorPoint.position
             : new Vector3(transform.position.x, groundHeight + heightToRaise, transform.position.z);
 
-        lineChain.SetPosition(0, this.gameObject.transform.position);
+        lineChain.SetPosition(0, GetChainRootPosition());
         lineChain.SetPosition(1, cachedChainTopPosition);
     }
 

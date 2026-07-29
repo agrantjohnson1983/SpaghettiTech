@@ -19,3 +19,4 @@ MonoBehaviour:
   prefabItem: {fileID: 7794338550508641806, guid: 156b68ba759564b46bbb8f8a95f07a0b, type: 3}
   typeOfTool: 1
   weight: 0
+  description: it's an XLR cable.... what else do you want?

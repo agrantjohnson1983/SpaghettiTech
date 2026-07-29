@@ -8,7 +8,7 @@ public class sBox : sInteractive, iClickable, IPointerEnterHandler, IPointerExit
 {
     GameManager gm;
 
-    public GameObject pBoxInventoryPanel;
+    public GameObject inventoryPanel;
 
     public Vector3 inventoryPanelOffset;
 
@@ -66,6 +66,11 @@ public class sBox : sInteractive, iClickable, IPointerEnterHandler, IPointerExit
 
         ui_Img.SetActive(false);
 
+        inventory = inventoryPanel.GetComponent<sInventory>();
+
+        inventory.SetBox(this);
+
+        inventory.SetInventory(boxedItemDataList.ToArray());
         //ui_Text.GetComponent<TextMeshProUGUI>().fontSize = boxTextFontSize;
 
         //ui_Text.SetActive(false);
@@ -178,13 +183,15 @@ public class sBox : sInteractive, iClickable, IPointerEnterHandler, IPointerExit
 
             Vector3 panelOffset = GetInventoryPanelOffset();
 
-            inventory = Instantiate(pBoxInventoryPanel, this.transform.position + panelOffset, Quaternion.identity).GetComponent<sInventory>();
+            //inventory = Instantiate(pBoxInventoryPanel, this.transform.position + panelOffset, Quaternion.identity).GetComponent<sInventory>();
 
-            inventory.gameObject.transform.parent = this.transform;
+            inventoryPanel.gameObject.SetActive(true);
 
-            inventory.SetBox(this);
+            //inventory.gameObject.transform.parent = this.transform;
 
-            inventory.SetInventory(boxedItemDataList.ToArray());
+            //inventory.SetBox(this);
+
+            //inventory.SetInventory(boxedItemDataList.ToArray());
 
             //pModel.GetComponent<MeshRenderer>().material = materialBoxOpen;
 
@@ -218,11 +225,15 @@ public class sBox : sInteractive, iClickable, IPointerEnterHandler, IPointerExit
         //if(!isEmpty)
         //pModel.GetComponent<MeshRenderer>().material = materialBoxClosed;
 
-        if (inventory != null)
-        {
-            Destroy(inventory.gameObject);
-            inventory = null;
-        }
+        inventoryPanel.SetActive(false);
+
+        //if (inventory != null)
+        //{
+        //    inventory.ResetInventory();
+
+        //    Destroy(inventory.gameObject);
+        //    //inventory = null;
+        //}
 
 
         textMPAbove.SetText("CLOSED");
@@ -234,17 +245,17 @@ public class sBox : sInteractive, iClickable, IPointerEnterHandler, IPointerExit
         ui_Img.SetActive(true);
     }
 
-    public void InventoryItemPick(int _index)
+    /*public void InventoryItemPick(int _index)
     {
         numberOfSlots--;
 
-        RemoveItemData(_index);
-    }
+        //RemoveItemData(_index);
+    }*/
 
-    void RemoveItemData(int _index)
+    public void RemoveItemData(SO_ItemData _ItemData)
     {
         //Debug.Log("Removing Item at index: " + _index);
-        boxedItemDataList.RemoveAt(_index);
+        boxedItemDataList.Remove(_ItemData);
 
 
         //itemData.Sort();
@@ -371,6 +382,7 @@ public class sBox : sInteractive, iClickable, IPointerEnterHandler, IPointerExit
         return;
 
         //Debug.Log("On Select on Box");
+        if(!isOpen)
         ui_Select.SetActive(true);
 
         soUI.TriggerControlsPopup("F", "Open");

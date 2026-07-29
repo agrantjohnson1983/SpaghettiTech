@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System;
 
 public class canvasGameplay : MonoBehaviour
 {
@@ -80,6 +81,8 @@ public class canvasGameplay : MonoBehaviour
     // WAREHOUSE
     public GameObject startScreen;
 
+    public TMP_Text textMessageMain;
+
     private void Awake()
     {
         //if (GameManager.gm.canvasGameplay.gameObject != this.gameObject)
@@ -106,6 +109,8 @@ public class canvasGameplay : MonoBehaviour
         soUI.crewHire.AddListener(HireCrew);
 
         soUI.toolHeldImage.AddListener(AddToolToBelt);
+
+        soUI.messageEvent.AddListener(MessageSend);
     }
 
     private void OnDisable()
@@ -125,6 +130,34 @@ public class canvasGameplay : MonoBehaviour
         soUI.crewHire.RemoveListener(HireCrew);
 
         soUI.toolHeldImage.RemoveListener(AddToolToBelt);
+
+        soUI.messageEvent.RemoveListener(MessageSend);
+    }
+
+    private void MessageSend(string _message, float _time)
+    {
+        // turn alpha on
+        textMessageMain.CrossFadeAlpha(1, 0f, false);
+
+        // set message
+        textMessageMain.text = _message;
+
+        // slowly fade alpha out
+        textMessageMain.CrossFadeAlpha(0, _time, false);
+
+        //textMessageMain.CrossFadeColor()
+    }
+
+    IEnumerator MessageFade(float _time)
+    {
+        float counter = 0f;
+
+        while (counter < _time)
+        {
+            
+            counter += Time.deltaTime;
+            yield return null;
+        }
     }
 
     // Start is called before the first frame update
@@ -150,6 +183,9 @@ public class canvasGameplay : MonoBehaviour
         toolbeltGrid.SetActive(false);
         toolbeltArrow.SetActive(false);
         tooldHeldText.text = "";
+
+        // turns off message at start
+        MessageSend("", 0f);
     }
 
     void TogglePopup(string _controlText, string _actionText)
@@ -439,6 +475,8 @@ public class canvasGameplay : MonoBehaviour
         //GameManager.gm.ToggleOrbitCamera(false);
 
         //popupControls.SetActive(false);
+
+        soUI.TriggerMessage("GAME START!", 3f);
 
         GameManager.gm.ToggleBlueprintCamera(false);
 

@@ -231,6 +231,7 @@ GameObject:
   - component: {fileID: 3836737184643312485}
   - component: {fileID: 161504330837982362}
   - component: {fileID: 8892608224421137613}
+  - component: {fileID: 7434928067196926374}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -342,6 +343,50 @@ MonoBehaviour:
   roleText: {fileID: 8271423099952708622}
   skillText: {fileID: 7458854752551296199}
   bg: {fileID: 332721785960848942}
+--- !u!114 &7434928067196926374
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 951196415719509982}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0953d848858f17c4ba2994e2d70dc07a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animationType: 1
+  playOnStart: 1
+  loop: 0
+  duration: 1
+  delay: 0
+  amount: 1.2
+  moveOffset: {x: 0, y: 50, z: 0}
+  rotationAxis: {x: 0, y: 0, z: 1}
+  ease:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &1067386413958949141
 GameObject:
   m_ObjectHideFlags: 0
@@ -1094,8 +1139,20 @@ MonoBehaviour:
   selectionRing: {fileID: 1067386413958949141}
   state: 0
   profile: {fileID: 11400000, guid: b1a5ec04fa220af4ab79b423b53e511f, type: 2}
+  crewData:
+    crewID: 
+    crewName: New Stagehand
+    stats:
+      strength: 5
+      speed: 5
+      attitude: 5
+      dexterity: 5
+      endurance: 5
+      energy: 5
+    currentEnergy: 100
   currentCommand: 0
   workDuration: 3
+  jobCompletedEvent: {fileID: 0}
 --- !u!1 &4174687814354459210
 GameObject:
   m_ObjectHideFlags: 0

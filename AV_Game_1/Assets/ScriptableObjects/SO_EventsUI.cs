@@ -26,6 +26,8 @@ public class SO_EventsUI : ScriptableObject
 
     public UnityEvent<SO_ItemData> toolHeldImage;
 
+    public UnityEvent<string, float> messageEvent;
+
     private void OnEnable()
     {
         if(instructionsRiggingEvent == null)
@@ -91,6 +93,11 @@ public class SO_EventsUI : ScriptableObject
         if(toolHeldImage == null)
         {
             toolHeldImage = new UnityEvent<SO_ItemData>();
+        }
+
+        if (messageEvent == null)
+        {
+            messageEvent = new UnityEvent<string, float>();
         }
     }
 
@@ -158,5 +165,10 @@ public class SO_EventsUI : ScriptableObject
     public void TriggerToolChange(SO_ItemData _itemData)
     {
         toolHeldImage.Invoke(_itemData);
+    }
+
+    public void TriggerMessage(string _message, float _time)
+    {
+        messageEvent.Invoke(_message, _time);
     }
 }

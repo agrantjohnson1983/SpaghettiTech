@@ -29,7 +29,8 @@ public class sCharacterGrabController : MonoBehaviour
     public Transform transformGrab;
 
     public string grabControlText, throwControlText;
-    
+
+    public SO_VFXEventChannel vfxChannel;
 
     //public int _numberOfHandsNeeded;
     //public int NumberOfHandsNeeded
@@ -415,6 +416,8 @@ public class sCharacterGrabController : MonoBehaviour
 
     IEnumerator GrabMovement()
     {
+        vfxChannel?.Raise(VFXType.Pickup, transform.position, Quaternion.identity);
+
         Vector3 startingPos = sPlayerCharacter.playerCharacterGlobal.model.transform.position;
         Vector3 endPos = interactiveObject.transform.position;
 
@@ -487,6 +490,8 @@ public class sCharacterGrabController : MonoBehaviour
             }
 
             waitingForSpaceRelease = true;
+
+            vfxChannel?.Raise(VFXType.Pickup, transform.position, Quaternion.identity);
 
             _grabbedRB.velocity = _tossDirection * throwPower;
             // If you want a little arc instead of a flat throw:

@@ -469,6 +469,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a88d3fc466c15264e9c273dd3d3f18a5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  fadeSpeed: 10
+  pulseAmount: 0.15
+  pulseSpeed: 4
   mode: 2
   targetRenderer: {fileID: 0}
   tintColor: {r: 1, g: 0.85, b: 0.2, a: 1}
@@ -694,6 +697,55 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1a43100896005fe49ac42d325666a4a2, type: 3}
+--- !u!1 &3079916987654423823 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8609541800806531320, guid: 1a43100896005fe49ac42d325666a4a2, type: 3}
+  m_PrefabInstance: {fileID: 6756855785699280375}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &7873340021583348127
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3079916987654423823}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0953d848858f17c4ba2994e2d70dc07a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animationType: 1
+  playOnStart: 1
+  loop: 0
+  duration: 1
+  delay: 0
+  amount: 1.2
+  moveOffset: {x: 0, y: 50, z: 0}
+  rotationAxis: {x: 0, y: 0, z: 1}
+  ease:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!224 &8483609396325936368 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 2918043687223716103, guid: 1a43100896005fe49ac42d325666a4a2, type: 3}

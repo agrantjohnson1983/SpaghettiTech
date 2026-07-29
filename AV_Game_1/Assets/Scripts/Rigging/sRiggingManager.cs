@@ -323,6 +323,22 @@ public class sRiggingManager : MonoBehaviour
             return;
         }
 
+        // Guard against welding the same pair twice (e.g. if
+        // FinishSetup fires more than once for the same bolt spot) -
+        // a duplicate FixedJoint on an already-connected pair adds
+        // nothing but redundant constraint solving.
+        FixedJoint[] existingJoints = trussA.GetComponents<FixedJoint>();
+
+        foreach (FixedJoint _existing in existingJoints)
+        {
+            if (_existing.connectedBody == rbB)
+            {
+                Debug.LogWarning("[RiggingManager] Skipped duplicate weld - " + trussA.name
+                    + " is already jointed to " + trussB.name);
+                return;
+            }
+        }
+
         FixedJoint joint = trussA.AddComponent<FixedJoint>();
         joint.connectedBody = rbB;
         joint.anchor = trussA.transform.InverseTransformPoint(_weldWorldPosition);
@@ -468,6 +484,61 @@ public class sRiggingManager : MonoBehaviour
         }
     }
 
+    // Right-click this component's header in the inspector during Play
+    // mode, at the moment the truss overshoots/resets, to dump exact
+    // position, joint, and constraint state for every truss and motor.
+    [ContextMenu("Debug - Log Truss And Motor State")]
+    void DebugLogTrussAndMotorState()
+    {
+        Debug.Log("[RiggingManager] (DEBUG) --- Motor state ---");
+
+        foreach (sMotor _motor in motorList)
+        {
+            if (_motor == null)
+            {
+                continue;
+            }
+
+            Rigidbody motorRb = _motor.GetComponent<Rigidbody>();
+
+            Debug.Log("[RiggingManager] (DEBUG) Motor " + _motor.name
+                + " position = " + _motor.transform.position
+                + ", rb.position = " + (motorRb != null ? motorRb.position.ToString() : "NO RIGIDBODY")
+                + ", isKinematic = " + (motorRb != null ? motorRb.isKinematic.ToString() : "n/a")
+                + ", constraints = " + (motorRb != null ? motorRb.constraints.ToString() : "n/a"));
+        }
+
+        Debug.Log("[RiggingManager] (DEBUG) --- Truss state ---");
+
+        foreach (sTruss _truss in trussList)
+        {
+            if (_truss == null)
+            {
+                continue;
+            }
+
+            Rigidbody trussRb = _truss.GetComponent<Rigidbody>();
+
+            FixedJoint[] joints = _truss.GetComponents<FixedJoint>();
+
+            string jointSummary = joints.Length == 0 ? "NONE" : "";
+
+            foreach (FixedJoint _joint in joints)
+            {
+                string connectedName = _joint.connectedBody != null ? _joint.connectedBody.name : "NULL";
+                jointSummary += "[connectedBody=" + connectedName + ", anchor=" + _joint.anchor + "] ";
+            }
+
+            Debug.Log("[RiggingManager] (DEBUG) Truss " + _truss.name
+                + " position = " + _truss.transform.position
+                + ", rb.position = " + (trussRb != null ? trussRb.position.ToString() : "NO RIGIDBODY")
+                + ", isKinematic = " + (trussRb != null ? trussRb.isKinematic.ToString() : "n/a")
+                + ", useGravity = " + (trussRb != null ? trussRb.useGravity.ToString() : "n/a")
+                + ", constraints = " + (trussRb != null ? trussRb.constraints.ToString() : "n/a")
+                + ", joints = " + jointSummary);
+        }
+    }
+
     public void RigSet(eTypeRigSetup _type)
     {
         switch (_type)
@@ -602,22 +673,70 @@ public class sRiggingManager : MonoBehaviour
     {
         Debug.Log("Connecting Motors to Truss");
 
+        if (motorList.Count == 0)
+        {
+            Debug.LogWarning("ConnectMotorsToTruss called with an empty motorList - no truss pieces connected.");
+            return;
+        }
+
         foreach (sTruss _truss in trussList)
         {
-            FixedJoint joint;
+            if (_truss == null)
+            {
+                continue;
+            }
 
-            Rigidbody rb;
+            Rigidbody rb = _truss.gameObject.GetComponent<Rigidbody>();
 
-            rb = _truss.gameObject.GetComponent<Rigidbody>();
+            if (rb == null)
+            {
+                continue;
+            }
 
             rb.constraints = RigidbodyConstraints.None;
 
-            joint = _truss.gameObject.AddComponent<FixedJoint>();
+            // Connect to the nearest motor rather than always
+            // motorList[0], so each motor supports the truss segment
+            // physically closest to it instead of every piece being
+            // yoked to a single motor regardless of position - which
+            // was over-constraining the joint system whenever there is
+            // more than one motor.
+            sMotor nearestMotor = FindNearestMotor(_truss.transform.position);
 
-            joint.connectedBody = motorList[0].GetComponent<Rigidbody>();
+            if (nearestMotor == null)
+            {
+                continue;
+            }
 
+            FixedJoint joint = _truss.gameObject.AddComponent<FixedJoint>();
+            joint.connectedBody = nearestMotor.GetComponent<Rigidbody>();
 
+            Debug.Log("[RiggingManager] Connected " + _truss.name + " to nearest motor " + nearestMotor.name);
         }
+    }
+
+    sMotor FindNearestMotor(Vector3 _position)
+    {
+        sMotor nearest = null;
+        float nearestDist = float.MaxValue;
+
+        foreach (sMotor _motor in motorList)
+        {
+            if (_motor == null)
+            {
+                continue;
+            }
+
+            float dist = Vector3.Distance(_position, _motor.transform.position);
+
+            if (dist < nearestDist)
+            {
+                nearestDist = dist;
+                nearest = _motor;
+            }
+        }
+
+        return nearest;
     }
 
     // This is used for tutorial purposes
@@ -657,16 +776,84 @@ public class sRiggingManager : MonoBehaviour
 
         else
         {
-            // down
+            MotorsDown();
         }
     }
 
     // This actually moves the motors after they are turned on
     void MotorsOn()
     {
+        ValidateMotorSync();
+
         for (int i = 0; i < motorList.Count; i++)
         {
             motorList[i].StartMotorRaise();
+        }
+    }
+
+    // Mirror of MotorsOn for the down control. Each motor drops back
+    // one stage at a time (ceiling -> working height -> ground).
+    void MotorsDown()
+    {
+        ValidateMotorSync();
+
+        for (int i = 0; i < motorList.Count; i++)
+        {
+            motorList[i].StartMotorLower();
+        }
+    }
+
+    // Truss pieces are welded into one rigid chain (bolts) and each
+    // piece is jointed to its nearest motor. That only stays physically
+    // consistent if every motor sharing a rigid run moves by the exact
+    // same amount at the exact same rate - otherwise the weld joints
+    // and the motor joints fight each other every physics step, which
+    // shows up as erratic overshoot/snap-back during the raise. This
+    // does not block the raise, it just surfaces a clear warning naming
+    // the mismatched motor and field so it is easy to catch and fix in
+    // the inspector.
+    void ValidateMotorSync()
+    {
+        if (motorList.Count <= 1)
+        {
+            return;
+        }
+
+        sMotor reference = motorList[0];
+
+        if (reference == null)
+        {
+            return;
+        }
+
+        for (int i = 1; i < motorList.Count; i++)
+        {
+            sMotor _motor = motorList[i];
+
+            if (_motor == null)
+            {
+                continue;
+            }
+
+            if (!Mathf.Approximately(_motor.workingHeight, reference.workingHeight))
+            {
+                Debug.LogWarning("[RiggingManager] " + _motor.name + ".workingHeight (" + _motor.workingHeight
+                    + ") does not match " + reference.name + ".workingHeight (" + reference.workingHeight
+                    + ") - motors sharing a rigid truss run should raise identical amounts.");
+            }
+
+            if (!Mathf.Approximately(_motor.heightToRaise, reference.heightToRaise))
+            {
+                Debug.LogWarning("[RiggingManager] " + _motor.name + ".heightToRaise (" + _motor.heightToRaise
+                    + ") does not match " + reference.name + ".heightToRaise (" + reference.heightToRaise + ").");
+            }
+
+            if (!Mathf.Approximately(_motor.motorRaiseTime, reference.motorRaiseTime))
+            {
+                Debug.LogWarning("[RiggingManager] " + _motor.name + ".motorRaiseTime (" + _motor.motorRaiseTime
+                    + ") does not match " + reference.name + ".motorRaiseTime (" + reference.motorRaiseTime
+                    + ") - mismatched raise duration will desync motors mid-raise even if heights match.");
+            }
         }
     }
 

@@ -20,4 +20,7 @@ public class SO_ItemData : ScriptableObject
 
     // Used by both truck loading and truss rigging weight limits.
     public float weight;
+
+    [TextArea]
+    public string description;
 }

@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 8920342334968382047}
   - component: {fileID: 2720983161077597314}
   - component: {fileID: 1284804315790987599}
+  - component: {fileID: 3592971678497147855}
   m_Layer: 5
   m_Name: ButtonCharacterHire
   m_TagString: Untagged
@@ -157,6 +158,50 @@ MonoBehaviour:
   costToHire: 0
   crewProfile: {fileID: 11400000, guid: b1a5ec04fa220af4ab79b423b53e511f, type: 2}
   soUI: {fileID: 11400000, guid: 2b96b6b1405722c48a474d361c95f00a, type: 2}
+--- !u!114 &3592971678497147855
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1571973459886880503}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0953d848858f17c4ba2994e2d70dc07a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animationType: 0
+  playOnStart: 1
+  loop: 1
+  duration: 1
+  delay: 0
+  amount: 1.2
+  moveOffset: {x: 0, y: 50, z: 0}
+  rotationAxis: {x: 0, y: 0, z: 1}
+  ease:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &1620853932805829722
 GameObject:
   m_ObjectHideFlags: 0

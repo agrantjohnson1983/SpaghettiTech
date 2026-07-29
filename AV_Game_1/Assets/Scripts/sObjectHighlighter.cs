@@ -13,6 +13,19 @@ public class sObjectHighlighter : MonoBehaviour
         Both
     }
 
+    [Header("Animation")]
+    public float fadeSpeed = 10f;
+
+    [Range(0f, 1f)]
+    public float pulseAmount = 0.15f;
+
+    public float pulseSpeed = 4f;
+
+    float currentHighlight = 0f;
+    float targetHighlight = 0f;
+
+    Vector3 initialScale;
+
     [Header("Mode")]
     public HighlightMode mode = HighlightMode.Both;
 
@@ -47,9 +60,68 @@ public class sObjectHighlighter : MonoBehaviour
         }
 
         _mpb = new MaterialPropertyBlock();
+
+        initialScale = transform.localScale;
     }
 
-    public void SetHighlight(bool _on)
+    void Update()
+    {
+        if (targetRenderer == null)
+            return;
+
+        currentHighlight = Mathf.MoveTowards(
+            currentHighlight,
+            targetHighlight,
+            fadeSpeed * Time.deltaTime);
+
+        targetRenderer.GetPropertyBlock(_mpb);
+
+        float pulse = 1f;
+
+        if (currentHighlight > 0.001f)
+        {
+            pulse = 1f +
+                Mathf.Sin(Time.time * pulseSpeed) * pulseAmount;
+        }
+
+        if (mode == HighlightMode.Tint || mode == HighlightMode.Both)
+        {
+            Color emission =
+                tintColor *
+                tintEmissionIntensity *
+                currentHighlight *
+                pulse;
+
+            _mpb.SetColor(emissionColorProperty, emission);
+        }
+
+        if (mode == HighlightMode.Outline || mode == HighlightMode.Both)
+        {
+            _mpb.SetFloat(
+                outlineWidthProperty,
+                outlineWidth * currentHighlight);
+
+            _mpb.SetColor(
+                outlineColorProperty,
+                outlineColor);
+        }
+
+        targetRenderer.SetPropertyBlock(_mpb);
+
+        float scalePulse =
+    1f + currentHighlight * 0.02f;
+
+        transform.localScale =
+            initialScale * scalePulse;
+    }
+
+    public void SetHighlight(bool on)
+    {
+        _isHighlighted = on;
+        targetHighlight = on ? 1f : 0f;
+    }
+
+    /*public void SetHighlight(bool _on)
     {
         if (targetRenderer == null)
         {
@@ -98,7 +170,7 @@ public class sObjectHighlighter : MonoBehaviour
         }
 
         targetRenderer.SetPropertyBlock(_mpb);
-    }
+    }*/
 
     public bool IsHighlighted()
     {

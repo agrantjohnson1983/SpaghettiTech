@@ -169,7 +169,7 @@ GameObject:
   - component: {fileID: 2986294265656068542}
   - component: {fileID: 4490120479586000883}
   - component: {fileID: 70737926623382551}
-  - component: {fileID: 7587607812387521082}
+  - component: {fileID: 7193569540127189506}
   m_Layer: 5
   m_Name: ButtonConnectionAvailable
   m_TagString: Untagged
@@ -307,23 +307,47 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   connectionImage: {fileID: 7380192435216011035}
   connectionNumberText: {fileID: 4388710412154542101}
---- !u!95 &7587607812387521082
-Animator:
-  serializedVersion: 4
+--- !u!114 &7193569540127189506
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6800337258022624276}
   m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 0286f9830f79a13418b9295013c8e2f1, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0953d848858f17c4ba2994e2d70dc07a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animationType: 6
+  playOnStart: 1
+  loop: 1
+  duration: 1
+  delay: 0
+  amount: 1.2
+  moveOffset: {x: 0, y: 50, z: 0}
+  rotationAxis: {x: 0, y: 0, z: 1}
+  ease:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4

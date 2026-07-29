@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &2580736059987280778
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3045034924852729306}
+  m_Layer: 0
+  m_Name: chainsAnchor
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3045034924852729306
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2580736059987280778}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.5, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7353685729362514318}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5551158216892869975
 GameObject:
   m_ObjectHideFlags: 0
@@ -18,7 +49,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1919278606072451812
 RectTransform:
   m_ObjectHideFlags: 0
@@ -225,6 +256,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7353685730963997908}
+  - {fileID: 3045034924852729306}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -387,10 +419,10 @@ MonoBehaviour:
   _UI_offset: {x: 0, y: 0, z: 0}
   _itemData: {fileID: 11400000, guid: b5f3f2061c0fbdb498b7d8f83aaeeec8, type: 2}
   heightToRaise: 50
-  workingHeight: 20
+  workingHeight: 5
   motorRaiseTime: 5
   motorRaiseSpeed: 1
-  chainAnchorPoint: {fileID: 0}
+  chainAnchorPoint: {fileID: 3045034924852729306}
 --- !u!114 &5498856241094026430
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -403,6 +435,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a88d3fc466c15264e9c273dd3d3f18a5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  fadeSpeed: 10
+  pulseAmount: 0.15
+  pulseSpeed: 4
   mode: 2
   targetRenderer: {fileID: 7353685730963997911}
   tintColor: {r: 1, g: 0.85, b: 0.2, a: 1}

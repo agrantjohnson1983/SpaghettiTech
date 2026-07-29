@@ -18,7 +18,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &529446027370824007
 RectTransform:
   m_ObjectHideFlags: 0
@@ -369,6 +369,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a88d3fc466c15264e9c273dd3d3f18a5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  fadeSpeed: 10
+  pulseAmount: 0.15
+  pulseSpeed: 4
   mode: 2
   targetRenderer: {fileID: 3273298072257027560}
   tintColor: {r: 1, g: 0.85, b: 0.2, a: 1}
