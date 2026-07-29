@@ -9,7 +9,7 @@ public class sInteractive : MonoBehaviour, iGrabbable
 {
     protected Rigidbody rb;
 
-    public SO_EventsUI uiEvents;
+    public SO_EventsUI soUI;
 
     bool _isGrabbed = false;
 
@@ -152,17 +152,23 @@ public class sInteractive : MonoBehaviour, iGrabbable
 
     public virtual void OnSelect()
     {
-        if(ui_Select != null && !sPlayerCharacter.playerCharacterGlobal.ReturnGrabController().ReturnIsGrabbing() && canBeSelected)
+        if(!sPlayerCharacter.playerCharacterGlobal.ReturnGrabController().ReturnIsGrabbing() && canBeSelected)
         {
-            ui_Select.SetActive(true);
+            if(ui_Select!=null)
+                ui_Select.SetActive(true);
+
+            if(soUI!=null)
+                soUI.TriggerControlsPopup("SPACE", "Grab");
         }
     }
 
     public virtual void OffSelect()
     {
-        if(ui_Select != null)
-        {
+
+        if(ui_Select!=null)
             ui_Select.SetActive(false);
-        }
+
+        if(soUI!=null)
+            soUI.TriggerControlsPopup("", "Grab");
     }
 }

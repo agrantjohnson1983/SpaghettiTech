@@ -413,7 +413,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d6d5e8a316f07fb40bb55e4f5c2beb54, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  eventsUI: {fileID: 11400000, guid: 2b96b6b1405722c48a474d361c95f00a, type: 2}
+  soUI: {fileID: 11400000, guid: 2b96b6b1405722c48a474d361c95f00a, type: 2}
   _typeRig: 2
   _grabTriggersAction: 0
   _UI_offset: {x: 0, y: 0, z: 0}
@@ -423,6 +423,7 @@ MonoBehaviour:
   motorRaiseTime: 5
   motorRaiseSpeed: 1
   chainAnchorPoint: {fileID: 3045034924852729306}
+  chainRootPoint: {fileID: 3045034924852729306}
 --- !u!114 &5498856241094026430
 MonoBehaviour:
   m_ObjectHideFlags: 0

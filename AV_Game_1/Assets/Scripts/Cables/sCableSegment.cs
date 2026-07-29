@@ -5,14 +5,8 @@ using UnityEngine;
 public class sCableSegment : sInteractive
 {
     // Start is called before the first frame update
-    void Start()
+    public override void Start()
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        base.Start();
     }
 }

@@ -5,7 +5,7 @@ using UnityEngine.UI;
 public class uPopupControls : MonoBehaviour
 {
     public Image BG;
-    public Text textControl, textAction;
+    public TMP_Text textControl, textAction;
 
     // Start is called before the first frame update
     public void SetPopup(string _textControl, string _textAction)

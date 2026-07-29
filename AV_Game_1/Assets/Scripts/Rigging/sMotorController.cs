@@ -40,14 +40,14 @@ public class sMotorController : sRigGear
     private void OnTriggerEnter(Collider other)
     {
         if (IsSet && other.gameObject.CompareTag("Player"))
-            eventsUI.ToggleMotorControlDisplay(true);
+            soUI.ToggleMotorControlDisplay(true);
     }
 
 
     private void OnTriggerExit(Collider other)
     {
         if (IsSet && other.gameObject.CompareTag("Player"))
-            eventsUI.ToggleMotorControlDisplay(false);
+            soUI.ToggleMotorControlDisplay(false);
     }
 
 }

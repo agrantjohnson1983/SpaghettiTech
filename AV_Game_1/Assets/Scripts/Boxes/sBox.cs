@@ -300,6 +300,7 @@ public class sBox : sInteractive, iClickable, IPointerEnterHandler, IPointerExit
             if (inventory == null)
             {
                 isOpen = true;
+                
                 TriggerOpenBox();
             }
 
@@ -383,7 +384,7 @@ public class sBox : sInteractive, iClickable, IPointerEnterHandler, IPointerExit
 
         //Debug.Log("On Select on Box");
         if(!isOpen)
-        ui_Select.SetActive(true);
+            ui_Select.SetActive(true);
 
         soUI.TriggerControlsPopup("F", "Open");
 

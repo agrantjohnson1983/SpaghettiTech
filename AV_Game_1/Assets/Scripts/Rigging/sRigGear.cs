@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class sRigGear : MonoBehaviour, iRiggable, iGrabbable, iLoadable
 {
-    public SO_EventsUI eventsUI;
+    public SO_EventsUI soUI;
 
     public eTypeRigSetup _typeRig;
 
@@ -14,13 +14,15 @@ public class sRigGear : MonoBehaviour, iRiggable, iGrabbable, iLoadable
 
     public bool _grabTriggersAction;
 
+    bool _canBeGrabed;
+
     public bool CanBeGrabbed
     {
-        get;
-        set;
+        get { return _canBeGrabed; }
+        set {  _canBeGrabed = value; }
     }
 
-    bool enabled = true;
+    //bool enabled = true;
 
     public bool Enabled
 
@@ -183,10 +185,15 @@ public class sRigGear : MonoBehaviour, iRiggable, iGrabbable, iLoadable
     public void OnSelect()
     {
         //throw new System.NotImplementedException();
+
+        if (CanBeGrabbed)
+            soUI.TriggerControlsPopup("SPACE", "Grab");
+            
     }
 
     public void OffSelect()
     {
         //throw new System.NotImplementedException();
+            soUI.TriggerControlsPopup("", "Grab");
     }
 }
