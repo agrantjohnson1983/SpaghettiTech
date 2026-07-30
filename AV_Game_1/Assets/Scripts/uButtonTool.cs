@@ -7,8 +7,6 @@ public class uButtonTool : MonoBehaviour
 {
     canvasGameplay CanvasGameplay;
 
-    int index;
-
     public Image toolImage;
     public Text toolText;
 
@@ -22,11 +20,6 @@ public class uButtonTool : MonoBehaviour
         CanvasGameplay = GetComponentInParent<canvasGameplay>();
     }
 
-    public void SetIndex(int _index)
-    {
-        index = _index;
-    }
-
     public void SetButton(SO_ItemData _itemData)
     {
         itemData = _itemData;
@@ -38,7 +31,7 @@ public class uButtonTool : MonoBehaviour
 
     public void OnClick()
     {
-        CanvasGameplay.OnToolClick(itemData, index);
+        CanvasGameplay.OnToolClick(itemData);
         
         CanvasGameplay.ToggleToolbelt(false);
 

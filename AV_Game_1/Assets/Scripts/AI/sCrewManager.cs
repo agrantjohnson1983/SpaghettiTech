@@ -9,12 +9,25 @@ public class sCrewManager : MonoBehaviour
 
     public float formationSpacing = 1.5f;
 
+    [Header("Selection Box")]
+    [SerializeField] sSelectionBoxUI selectionBox;
+
+    [SerializeField] float dragThreshold = 10f;
+
+    bool isDragging;
+
+    Vector2 dragStart;
+
+    List<sCrewMember> allCrew = new();
+
     void Update()
     {
-        if (Input.GetMouseButtonDown(0))
-        {
-            SelectCrew();
-        }
+        //if (Input.GetMouseButtonDown(0))
+        //{
+        //    SelectCrew();
+        //}
+
+        HandleSelection();
 
         if (Input.GetMouseButtonDown(1))
         {
@@ -24,6 +37,101 @@ public class sCrewManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             AssignCommand(CrewCommand.Rigging);
+        }
+    }
+
+    public void RegisterCrew(sCrewMember crew)
+    {
+        if (!allCrew.Contains(crew))
+            allCrew.Add(crew);
+    }
+
+    public void UnregisterCrew(sCrewMember crew)
+    {
+        allCrew.Remove(crew);
+    }
+
+    void HandleSelection()
+    {
+        if (Input.GetMouseButtonDown(0))
+        {
+            dragStart = Input.mousePosition;
+            isDragging = false;
+        }
+
+        if (Input.GetMouseButton(0))
+        {
+            if (!isDragging)
+            {
+                if (Vector2.Distance(dragStart, Input.mousePosition) > dragThreshold)
+                {
+                    isDragging = true;
+                    selectionBox.Begin(dragStart);
+                }
+            }
+
+            if (isDragging)
+            {
+                selectionBox.UpdateBox(Input.mousePosition);
+            }
+        }
+
+        if (Input.GetMouseButtonUp(0))
+        {
+            if (isDragging)
+            {
+                selectionBox.Hide();
+                BoxSelectCrew(dragStart, Input.mousePosition);
+            }
+            else
+            {
+                SelectCrew();
+            }
+        }
+    }
+
+    void BoxSelectCrew(Vector2 start, Vector2 end)
+    {
+        bool shiftHeld =
+            Input.GetKey(KeyCode.LeftShift) ||
+            Input.GetKey(KeyCode.RightShift);
+
+        if (!shiftHeld)
+            DeselectAll();
+
+        Rect rect = new Rect(
+            Mathf.Min(start.x, end.x),
+            Mathf.Min(start.y, end.y),
+            Mathf.Abs(start.x - end.x),
+            Mathf.Abs(start.y - end.y)
+        );
+
+        sCrewMember[] crewMembers = FindObjectsOfType<sCrewMember>();
+
+        foreach (sCrewMember crew in allCrew)
+        {
+            Vector3 screenPos =
+                Camera.main.WorldToScreenPoint(
+                    crew.transform.position
+                );
+
+            if (screenPos.z < 0)
+                continue;
+
+
+            // Give characters a little selection padding
+            Rect expandedRect = new Rect(
+                rect.x - 25,
+                rect.y - 25,
+                rect.width + 50,
+                rect.height + 50
+            );
+
+
+            if (expandedRect.Contains(screenPos))
+            {
+                SelectCrew(crew);
+            }
         }
     }
 

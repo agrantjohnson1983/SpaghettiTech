@@ -159,6 +159,11 @@ public class sPlayerCharacter : MonoBehaviour
         return grabController;
     }
 
+    public sToolHandler ReturnToolHandler()
+    {
+        return toolHandler;
+    }
+
     //// Sets this instance to the current player in the GameManager and turns on the controlls
     //public void SetToCurrentPlayer()
     //{

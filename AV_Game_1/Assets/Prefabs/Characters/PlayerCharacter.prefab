@@ -551,9 +551,10 @@ GameObject:
   - component: {fileID: 1365413362}
   - component: {fileID: 4174687814180632293}
   - component: {fileID: 4174687814180632315}
-  - component: {fileID: 6254593303513223787}
   - component: {fileID: 4579584320167969265}
   - component: {fileID: 1433647710}
+  - component: {fileID: 6254593303513223787}
+  - component: {fileID: 394833884008854746}
   m_Layer: 7
   m_Name: PlayerCharacter
   m_TagString: Player
@@ -652,14 +653,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   characterSpeed: 10
-  smoothTime: 0.05
-  dashPower: 5
-  characterModel: {fileID: 4174687813809144922}
   sprintMultiplier: 2
-  groundCheckDistance: 0.6
   groundMask:
     serializedVersion: 2
     m_Bits: 4294967295
+  groundCheckDistance: 0.6
+  maxSlopeAngle: 45
+  gravityMultiplier: 3
+  stickToGroundForce: 10
+  dashPower: 5
+  characterModel: {fileID: 4174687813809144922}
 --- !u!114 &4174687814180632315
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -673,23 +676,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   soUI: {fileID: 11400000, guid: 2b96b6b1405722c48a474d361c95f00a, type: 2}
-  popupControlText: Left Click For Action
---- !u!114 &6254593303513223787
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4174687814180632294}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 110e612cf272ae14181f3057d477afb5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  transformToolbelt: {fileID: 1428646127320412927}
-  soUI: {fileID: 11400000, guid: 2b96b6b1405722c48a474d361c95f00a, type: 2}
-  _numberOfHandsNeeded: 0
-  _handUseSprite: {fileID: 0}
+  popupControlText: CLICK
 --- !u!114 &4579584320167969265
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -720,9 +707,49 @@ MonoBehaviour:
   model: {fileID: 4174687813809144922}
   soUI: {fileID: 11400000, guid: 2b96b6b1405722c48a474d361c95f00a, type: 2}
   transformGrab: {fileID: 5730748812189424264}
-  grabPopupText: Hold SPACE to Grab
-  throwPromptText: Left CLICK to Throw
+  grabControlText: 
+  throwControlText: 
+  vfxChannel: {fileID: 11400000, guid: 2e677f6310e0cd24e8679be3f3361b8f, type: 2}
   throwPower: 10
+--- !u!114 &6254593303513223787
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4174687814180632294}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 110e612cf272ae14181f3057d477afb5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  transformToolbelt: {fileID: 1428646127320412927}
+  soUI: {fileID: 11400000, guid: 2b96b6b1405722c48a474d361c95f00a, type: 2}
+  _numberOfHandsNeeded: 0
+  _handUseSprite: {fileID: 0}
+  tapeTool: {fileID: 394833884008854746}
+--- !u!114 &394833884008854746
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4174687814180632294}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 81e8d0ad72fc3344c9108c7ac368594c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerCamera: {fileID: 0}
+  tapeStripPrefab: {fileID: 524739208723810389, guid: 56e5221b746c6704bbfa0c9595857258, type: 3}
+  floorLayer:
+    serializedVersion: 2
+    m_Bits: 512
+  rayDistance: 100
+  tapeCheckRadius: 0.75
+  cableLayer:
+    serializedVersion: 2
+    m_Bits: 128
 --- !u!1 &4174687814354459210
 GameObject:
   m_ObjectHideFlags: 0

@@ -598,9 +598,33 @@ public class canvasGameplay : MonoBehaviour
         toolHeld.sprite = _sprite;
     }
 
-    public void OnToolClick(SO_ItemData _itemData, int _index)
+    public void OnToolClick(SO_ItemData _itemData)
     {
         Debug.Log("Tool Item Clicked");
+
+        sPlayerCharacter.playerCharacterGlobal.ReturnToolHandler().GoTool(_itemData);
+    }
+
+    void SetToolHeld(SO_ItemData _itemData)
+    {
+        isHoldingTool = true;
+        toolHeld.sprite = _itemData.itemSprite;
+        tooldHeldText.text = _itemData.itemName;
+    }
+
+    bool CheckIfInToolBelt(uButtonTool _tool)
+    {
+        bool isInBelt = false;
+
+        for (int i = 0; i < toolButtonsList.Count; i++)
+        {
+            if(_tool == toolButtonsList[i])
+            {
+                isInBelt = true;
+            }
+        }
+
+        return isInBelt;
     }
 
     public void AddToolToBelt(SO_ItemData _itemData)
@@ -608,10 +632,10 @@ public class canvasGameplay : MonoBehaviour
         // if no tool is held then it changes the held tool;
         if(!isHoldingTool)
         {
-            isHoldingTool = true;
-            toolHeld.sprite = _itemData.itemSprite;
-            tooldHeldText.text = _itemData.itemName;
+            
         }
+
+        SetToolHeld(_itemData);
 
         // Spawns toolbelt button and adds it to list
         GameObject tempObject = Instantiate(toolbeltToolButton, toolbeltPanel);
@@ -624,7 +648,7 @@ public class canvasGameplay : MonoBehaviour
 
         toolButtonsList.Add(tempObject);
 
-        buttonTool.SetIndex(toolButtonsList.Count);
+        //buttonTool.SetIndex(toolButtonsList.Count);
 
         Debug.Log("Setting Tool to index " + toolButtonsList.Count);
     }

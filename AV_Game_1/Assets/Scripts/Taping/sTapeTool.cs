@@ -26,6 +26,14 @@ public class sTapeTool : MonoBehaviour
     private HashSet<sTapeSegment> previewSegments = new();
 
 
+    private void OnEnable()
+    {
+        if(playerCamera == null)
+        {
+            playerCamera = Camera.main;
+        }
+    }
+
     void Update()
     {
         HandleInput();

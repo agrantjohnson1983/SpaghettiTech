@@ -16,6 +16,7 @@ public class sToolHandler : MonoBehaviour, iRequireHands
 
     List<SO_ItemData> toolHeldItemDataList;
 
+    SO_ItemData currentToolItem = null;
 
     // Hands stuff
     public int _numberOfHandsNeeded;
@@ -59,6 +60,7 @@ public class sToolHandler : MonoBehaviour, iRequireHands
         set { }
     }
 
+    public sTapeTool tapeTool;
     
 
     // Start is called before the first frame update
@@ -71,6 +73,8 @@ public class sToolHandler : MonoBehaviour, iRequireHands
 
         //toolObj = null;
         toolHeldItemDataList = new List<SO_ItemData>();
+
+        tapeTool.enabled = false;
         //toolList = new List<SO_ItemData>();
     }
 
@@ -130,80 +134,57 @@ public class sToolHandler : MonoBehaviour, iRequireHands
         toolHeldItemDataList.RemoveAt(_index);
     }
 
+    public void GoTool(SO_ItemData _itemData)
+    {
+        // triggers UI change
+        soUI.TriggerToolChange(_itemData);
+
+        // turns off all current tools, then turns back on one tool
+        ToolsOff();
+
+        // turns tool on, etc.
+        switch(_itemData.typeOfTool)
+        {
+            case eToolType.NONE:
+
+                break;
+
+            case eToolType.ratchet:
+
+                break;
+
+            case eToolType.tape:
+
+                tapeTool.enabled = true;
+
+                break;
+        }
+    }
+
+    void ToolsOff()
+    {
+        tapeTool.enabled = false;
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if(other.gameObject.TryGetComponent<sTool>(out sTool _tool))
         {
-            Debug.Log("Collided with a tool: " + _tool);
-
-            //bool handFree = true;
-            //int[] _tempIndexArray;// = new int[NumberOfHandsNeeded];
-
-            //umberOfHandsNeeded = _tool.itemData.numberOfHandsNeeded;
-            HandUseSprite = _tool.itemData.itemSprite;
-            //toolItemData = _tool.itemData;
-            
-            /*
-            _tempIndexArray = GameManager.gm.ReturnCurrentPlayer().CheckHands(NumberOfHandsNeeded);
-            int handCounter = 0;
-
-            for (int i = 0; i < _tempIndexArray.Length; i++)
-            {
-                if (_tempIndexArray[i] < 0)
-                {
-                    Debug.Log("Temp Index is too small at position " + i.ToString() + " with value of " + _tempIndexArray[i].ToString());
-                    handCounter++;
-                    if (handCounter == _tempIndexArray.Length)
-                    {
-                        Debug.Log("Hand counter says no hands are free!");
-                        handFree = false;
-                    }
-                    //handFree = false;
-                }
-
-                else
-                {
-                    //HandIndexList.Add(_tempIndexArray[i]);
-                }
-            }
-
-            if (!handFree)
-            {
-                Debug.Log("No hand free");
-            }
-
-            */
+            //Debug.Log("Collided with a tool: " + _tool);
 
             // has no tool and grabs a tool - and has hand free
             if (toolHeldItemDataList != null)//  && handFree)
             {
 
-                //toolItemData = _tool.itemData;
-                // Sets grab UI text
-                //soUI.ToggleControlsPopup(grabPopupText, _collisionObj.transform.position + grabbable.ui_offset);
+                //Debug.Log("Tool Acquired to belt");
 
-                //GameManager.gm.ReturnCurrentPlayer().SetHand(HandUseSprite, _tempIndexArray);
-                //HandIndexList = new List<int>(_tempIndexArray);
-
-                Debug.Log("Tool Acquired to belt");
-
+                // adds to list
                 toolHeldItemDataList.Add(_tool.itemData);
 
-                soUI.TriggerToolChange(_tool.itemData);
+                // activates item
+                GoTool(_tool.itemData);
 
                 Destroy(other.gameObject);
-
-                //toolObj = other.gameObject;
-
-                //eventsUI.TriggerItemHeldImage(_tool.itemData.itemSprite);
-                //GameManager.gm.ReturnCurrentPlayer().CheckHands(toolItemData.itemSprite, toolItemData.numberOfHandsNeeded);
-
-                //_tool.itemData.prefabItem.SetActive(false);
-
-
-                //toolObj.transform.parent = transformToolbelt;
-                //other.gameObject.SetActive(false);
-                //Destroy(other.gameObject);
             }
 
 

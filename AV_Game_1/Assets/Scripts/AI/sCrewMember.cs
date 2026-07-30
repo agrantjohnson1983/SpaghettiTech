@@ -38,6 +38,22 @@ public class sCrewMember : MonoBehaviour
             selectionRing.SetActive(false);
     }
 
+    private void Start()
+    {
+        sCrewManager manager = FindObjectOfType<sCrewManager>();
+
+        if (manager != null)
+            manager.RegisterCrew(this);
+    }
+
+    private void OnDestroy()
+    {
+        sCrewManager manager = FindObjectOfType<sCrewManager>();
+
+        if (manager != null)
+            manager.UnregisterCrew(this);
+    }
+
     void Update()
     {
         //Debug.Log("Current State is " + state);

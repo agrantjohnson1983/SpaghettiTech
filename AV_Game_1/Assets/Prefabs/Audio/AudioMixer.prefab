@@ -3505,6 +3505,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1010491932096922408}
   - component: {fileID: 8257670072846601991}
+  - component: {fileID: 900901528576738967}
   - component: {fileID: 6296547470781838806}
   m_Layer: 0
   m_Name: AudioMixer
@@ -3546,6 +3547,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   typeAudio: 2
   mixerMiniGame: {fileID: 3680957386276849272}
+--- !u!114 &900901528576738967
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1010491932096922409}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 838dba647ab78e24388add180025f9ce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sourceStereoClip: {fileID: 8300000, guid: 47411515fe3643a428692a2af50030e1, type: 3}
+  leftChannelSource: {fileID: 0}
+  rightChannelSource: {fileID: 0}
 --- !u!65 &6296547470781838806
 BoxCollider:
   m_ObjectHideFlags: 0
