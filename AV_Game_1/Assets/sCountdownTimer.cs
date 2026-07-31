@@ -36,6 +36,20 @@ public class sCountdownTimer : MonoBehaviour
     public float Normalized => Mathf.Clamp01(timeRemaining / duration);
     public bool IsRunning => running;
 
+    public UnityEvent OnTimerStarted;
+    public UnityEvent OnSequenceFinished;
+
+    public string FormattedTime
+    {
+        get
+        {
+            int minutes = Mathf.FloorToInt(timeRemaining / 60);
+            int seconds = Mathf.FloorToInt(timeRemaining % 60);
+            return $"{minutes:00}:{seconds:00}";
+        }
+    }
+
+
     private void OnEnable()
     {
         ResetTimer();
@@ -76,6 +90,13 @@ public class sCountdownTimer : MonoBehaviour
     public void StartTimer()
     {
         running = true;
+        OnTimerStarted?.Invoke();
+    }
+
+    public void StartTimer(float seconds)
+    {
+        duration = seconds;
+        RestartTimer();
     }
 
     public void PauseTimer()
@@ -120,12 +141,7 @@ public class sCountdownTimer : MonoBehaviour
 
     private void UpdateUI()
     {
-        if (timerText == null)
-            return;
-
-        int minutes = Mathf.FloorToInt(timeRemaining / 60);
-        int seconds = Mathf.FloorToInt(timeRemaining % 60);
-
-        timerText.text = $"{minutes:00}:{seconds:00}";
+        if (timerText != null)
+            timerText.text = FormattedTime;
     }
 }

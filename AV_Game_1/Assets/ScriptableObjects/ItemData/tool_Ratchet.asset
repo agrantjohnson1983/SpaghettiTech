@@ -9,12 +9,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5ea3149329bd95140a54094d05705c40, type: 3}
-  m_Name: item_Ratchet
+  m_Script: {fileID: 11500000, guid: 6e9903a9fcf98b547a0168f35c8f30a9, type: 3}
+  m_Name: tool_Ratchet
   m_EditorClassIdentifier: 
   index: 0
-  numberOfHandsNeeded: 2
+  numberOfHandsNeeded: 0
   itemName: Ratchet
   itemSprite: {fileID: -368943477, guid: acd05b8cd2d9beb45b820740928fa843, type: 3}
   prefabItem: {fileID: 5428049608754613346, guid: 9c712260188bfeb4595db57e1db2ec59, type: 3}
+  weight: 0
+  description: Ratchety ratcherson
   typeOfTool: 0

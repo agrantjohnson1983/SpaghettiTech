@@ -478,7 +478,7 @@ public class canvasGameplay : MonoBehaviour
 
         soUI.TriggerMessage("GAME START!", 3f);
 
-        GameManager.gm.ToggleBlueprintCamera(false);
+        GameManager.gm.StartGameplay();
 
         sPlayerCharacter.playerCharacterGlobal.CharacterControlsToggle(true);
     }
@@ -510,7 +510,7 @@ public class canvasGameplay : MonoBehaviour
     {
         blueprintsOpen = !blueprintsOpen;
 
-        GameManager.gm.ToggleBlueprintCamera(blueprintsOpen);
+        GameManager.gm.ToggleOverheadCamera(blueprintsOpen);
 
         if(!GameManager.gm.isDoingTut)
         {
@@ -598,14 +598,14 @@ public class canvasGameplay : MonoBehaviour
         toolHeld.sprite = _sprite;
     }
 
-    public void OnToolClick(SO_ItemData _itemData)
+    public void OnToolClick(SO_ToolData _toolData)
     {
         Debug.Log("Tool Item Clicked");
 
-        sPlayerCharacter.playerCharacterGlobal.ReturnToolHandler().GoTool(_itemData);
+        sPlayerCharacter.playerCharacterGlobal.ReturnToolHandler().GoTool(_toolData);
     }
 
-    void SetToolHeld(SO_ItemData _itemData)
+    void SetToolHeld(SO_ToolData _itemData)
     {
         isHoldingTool = true;
         toolHeld.sprite = _itemData.itemSprite;
@@ -627,7 +627,7 @@ public class canvasGameplay : MonoBehaviour
         return isInBelt;
     }
 
-    public void AddToolToBelt(SO_ItemData _itemData)
+    public void AddToolToBelt(SO_ToolData _toolData)
     {
         // if no tool is held then it changes the held tool;
         if(!isHoldingTool)
@@ -635,7 +635,7 @@ public class canvasGameplay : MonoBehaviour
             
         }
 
-        SetToolHeld(_itemData);
+        SetToolHeld(_toolData);
 
         // Spawns toolbelt button and adds it to list
         GameObject tempObject = Instantiate(toolbeltToolButton, toolbeltPanel);
@@ -644,7 +644,7 @@ public class canvasGameplay : MonoBehaviour
 
         buttonTool = tempObject.GetComponent<uButtonTool>();
 
-        buttonTool.SetButton(_itemData);
+        buttonTool.SetButton(_toolData);
 
         toolButtonsList.Add(tempObject);
 

@@ -247,7 +247,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 951196415719509982}
   m_LocalRotation: {x: 0.7071068, y: -0, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 0, z: 4.0657024}
+  m_LocalPosition: {x: 0, y: 0, z: 4.8157024}
   m_LocalScale: {x: 0.8131404, y: 0.8131402, z: 0.8131402}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -260,7 +260,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0.008065539, y: -0.0012887494}
+  m_AnchoredPosition: {x: 0.008065539, y: -0.0012888686}
   m_SizeDelta: {x: 2.92, y: 4.06}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!223 &6601227343810943257
@@ -396,6 +396,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 404144075875922863}
+  - component: {fileID: 2076333076}
   m_Layer: 0
   m_Name: ring_UI (1)
   m_TagString: Untagged
@@ -411,8 +412,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1067386413958949141}
   m_LocalRotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: -0.009919, y: -0.75, z: -0.001583}
-  m_LocalScale: {x: 1.2298, y: 1.2298, z: 1.2298}
+  m_LocalPosition: {x: 0, y: -1, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5557942916423850488}
@@ -420,6 +421,24 @@ Transform:
   m_Father: {fileID: 4174687814180632295}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2076333076
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1067386413958949141}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d073baf328e81a84f82390efacf24740, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ringRenderer: {fileID: 4766344516184414004}
+  idleMaterial: {fileID: 2100000, guid: 12c741c5c13ad1d41be5dd5cbdc43a56, type: 2}
+  selectedMaterial: {fileID: 2100000, guid: 5de6f94e257c76b4fa11c206fb09441e, type: 2}
+  previewMaterial: {fileID: 2100000, guid: 8d7b5c4f6f36fc649a6756747661b6f5, type: 2}
+  workingMaterial: {fileID: 2100000, guid: 1416cd65e60b09846af81b572bd99550, type: 2}
+  errorMaterial: {fileID: 2100000, guid: 7b499c35b7ef4304e8e9004dfcff65af, type: 2}
 --- !u!1 &1176759994448807417
 GameObject:
   m_ObjectHideFlags: 0
@@ -662,7 +681,7 @@ GameObject:
   - component: {fileID: 4174687813078836112}
   - component: {fileID: 4174687813078836119}
   - component: {fileID: 4174687813078836118}
-  m_Layer: 7
+  m_Layer: 0
   m_Name: Cube (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -745,7 +764,7 @@ GameObject:
   - component: {fileID: 4174687813647007834}
   - component: {fileID: 4174687813647007833}
   - component: {fileID: 4174687813647007832}
-  m_Layer: 7
+  m_Layer: 0
   m_Name: Capsule
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -826,7 +845,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4174687813809144923}
-  m_Layer: 7
+  m_Layer: 0
   m_Name: model
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -866,7 +885,7 @@ GameObject:
   - component: {fileID: 4174687813835436256}
   - component: {fileID: 4174687813835436262}
   - component: {fileID: 4174687813835436257}
-  m_Layer: 7
+  m_Layer: 0
   m_Name: Head (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -949,7 +968,7 @@ GameObject:
   - component: {fileID: 4174687813887566941}
   - component: {fileID: 4174687813887566931}
   - component: {fileID: 4174687813887566930}
-  m_Layer: 7
+  m_Layer: 0
   m_Name: Head (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1035,9 +1054,9 @@ GameObject:
   - component: {fileID: 4174687814180632314}
   - component: {fileID: 3782641740089427713}
   - component: {fileID: 3480967702516931248}
-  m_Layer: 7
+  m_Layer: 0
   m_Name: CrewCharacter
-  m_TagString: Player
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1120,8 +1139,8 @@ NavMeshAgent:
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
   m_AutoRepath: 1
-  m_Height: 2
-  m_BaseOffset: 0
+  m_Height: 2.84
+  m_BaseOffset: 0.93
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
 --- !u!114 &3480967702516931248
@@ -1136,7 +1155,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 78f6e774e9af75f4797d5cd771fc85fc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  selectionRing: {fileID: 1067386413958949141}
   state: 0
   profile: {fileID: 11400000, guid: b1a5ec04fa220af4ab79b423b53e511f, type: 2}
   crewData:
@@ -1152,7 +1170,8 @@ MonoBehaviour:
     currentEnergy: 100
   currentCommand: 0
   workDuration: 3
-  jobCompletedEvent: {fileID: 0}
+  jobCompletedEvent: {fileID: 11400000, guid: 3c46091adc440c84ba03bdbadcf18a55, type: 2}
+  selectionIndicator: {fileID: 2076333076}
 --- !u!1 &4174687814354459210
 GameObject:
   m_ObjectHideFlags: 0
@@ -1164,7 +1183,7 @@ GameObject:
   - component: {fileID: 4174687814354459211}
   - component: {fileID: 4174687814354459214}
   - component: {fileID: 4174687814354459209}
-  m_Layer: 7
+  m_Layer: 0
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1247,7 +1266,7 @@ GameObject:
   - component: {fileID: 4174687814551981140}
   - component: {fileID: 4174687814551981162}
   - component: {fileID: 4174687814551981141}
-  m_Layer: 7
+  m_Layer: 0
   m_Name: Head (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1330,7 +1349,7 @@ GameObject:
   - component: {fileID: 4174687814903938591}
   - component: {fileID: 4174687814903938589}
   - component: {fileID: 4174687814903938588}
-  m_Layer: 7
+  m_Layer: 0
   m_Name: Head
   m_TagString: Untagged
   m_Icon: {fileID: 0}

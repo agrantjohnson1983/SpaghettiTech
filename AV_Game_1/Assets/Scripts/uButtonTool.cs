@@ -11,7 +11,7 @@ public class uButtonTool : MonoBehaviour
     public Text toolText;
 
     public SO_EventsUI soUI;
-    SO_ItemData itemData;
+    SO_ToolData toolData;
 
     
 
@@ -20,18 +20,18 @@ public class uButtonTool : MonoBehaviour
         CanvasGameplay = GetComponentInParent<canvasGameplay>();
     }
 
-    public void SetButton(SO_ItemData _itemData)
+    public void SetButton(SO_ToolData _toolData)
     {
-        itemData = _itemData;
+        toolData = _toolData;
 
-        toolImage.sprite = _itemData.itemSprite;
+        toolImage.sprite = _toolData.itemSprite;
 
-        toolText.text = _itemData.itemName;
+        toolText.text = _toolData.itemName;
     }
 
     public void OnClick()
     {
-        CanvasGameplay.OnToolClick(itemData);
+        CanvasGameplay.OnToolClick(toolData);
         
         CanvasGameplay.ToggleToolbelt(false);
 

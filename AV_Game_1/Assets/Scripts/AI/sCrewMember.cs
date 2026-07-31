@@ -4,8 +4,8 @@ using UnityEngine.AI;
 [RequireComponent(typeof(NavMeshAgent))]
 public class sCrewMember : MonoBehaviour
 {
-    [Header("References")]
-    public GameObject selectionRing;
+    //[Header("References")]
+    //public GameObject selectionRing;
 
     [Header("Debug")]
     public CrewState state = CrewState.Idle;
@@ -30,12 +30,16 @@ public class sCrewMember : MonoBehaviour
     [Header("Event Channels")]
     public SO_JobCompletedEventChannel jobCompletedEvent;
 
+    public bool IsPreviewed { get; private set; }
+
+    public sCrewSelectionIndicator selectionIndicator;
+
     void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
 
-        if (selectionRing != null)
-            selectionRing.SetActive(false);
+        //if (selectionRing != null)
+        //    selectionRing.SetActive(false);
     }
 
     private void Start()
@@ -96,22 +100,47 @@ public class sCrewMember : MonoBehaviour
         }
     }
 
+    public void SetPreview(bool enabled)
+    {
+        IsPreviewed = enabled;
+
+
+        if (enabled)
+        {
+            selectionIndicator.ShowPreview();
+        }
+        else
+        {
+            if (IsSelected)
+                selectionIndicator.ShowSelected();
+            else
+                selectionIndicator.Hide();
+        }
+    }
+
     public void Select()
     {
-        Debug.Log("Crew memeber selected");
+        Debug.Log("Selecting crew: " + name);
 
         IsSelected = true;
 
-        if (selectionRing != null)
-            selectionRing.SetActive(true);
+        if (selectionIndicator != null)
+            selectionIndicator.ShowSelected();
+        else
+        {
+            Debug.LogWarning(name + " has no selection indicator assigned!");
+        }
     }
 
     public void Deselect()
     {
         IsSelected = false;
 
-        if (selectionRing != null)
-            selectionRing.SetActive(false);
+        if (!IsPreviewed)
+        {
+            if (selectionIndicator != null)
+                selectionIndicator.Hide();
+        }
     }
 
     public void MoveTo(Vector3 destination)

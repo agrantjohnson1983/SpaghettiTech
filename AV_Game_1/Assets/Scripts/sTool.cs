@@ -7,6 +7,6 @@ public class sTool : MonoBehaviour
 {
 
     // This holds all the info for the tool
-    public SO_ItemData itemData;
+    public SO_ToolData toolData;
 
 }

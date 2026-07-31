@@ -20,6 +20,8 @@ public class sCrewManager : MonoBehaviour
 
     List<sCrewMember> allCrew = new();
 
+    List<sCrewMember> previewCrew = new List<sCrewMember>();
+
     void Update()
     {
         //if (Input.GetMouseButtonDown(0))
@@ -51,6 +53,47 @@ public class sCrewManager : MonoBehaviour
         allCrew.Remove(crew);
     }
 
+    void UpdateSelectionPreview(Vector2 start, Vector2 end)
+    {
+        Rect rect = new Rect(
+            Mathf.Min(start.x, end.x),
+            Mathf.Min(start.y, end.y),
+            Mathf.Abs(start.x - end.x),
+            Mathf.Abs(start.y - end.y)
+        );
+
+
+        foreach (var crew in allCrew)
+        {
+            Vector3 screenPos =
+                Camera.main.WorldToScreenPoint(
+                    crew.transform.position
+                );
+
+
+            bool inside =
+                rect.Contains(screenPos);
+
+
+            if (inside)
+            {
+                if (!previewCrew.Contains(crew))
+                {
+                    previewCrew.Add(crew);
+                    crew.SetPreview(true);
+                }
+            }
+            else
+            {
+                if (previewCrew.Contains(crew))
+                {
+                    previewCrew.Remove(crew);
+                    crew.SetPreview(false);
+                }
+            }
+        }
+    }
+
     void HandleSelection()
     {
         if (Input.GetMouseButtonDown(0))
@@ -73,6 +116,11 @@ public class sCrewManager : MonoBehaviour
             if (isDragging)
             {
                 selectionBox.UpdateBox(Input.mousePosition);
+
+                UpdateSelectionPreview(
+                    dragStart,
+                    Input.mousePosition
+                );
             }
         }
 
@@ -81,13 +129,30 @@ public class sCrewManager : MonoBehaviour
             if (isDragging)
             {
                 selectionBox.Hide();
-                BoxSelectCrew(dragStart, Input.mousePosition);
+
+                ClearPreview();
+
+                BoxSelectCrew(
+                    dragStart,
+                    Input.mousePosition
+                );
             }
+
             else
             {
                 SelectCrew();
             }
         }
+    }
+
+    void ClearPreview()
+    {
+        foreach (var crew in previewCrew)
+        {
+            crew.SetPreview(false);
+        }
+
+        previewCrew.Clear();
     }
 
     void BoxSelectCrew(Vector2 start, Vector2 end)

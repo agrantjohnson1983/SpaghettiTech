@@ -19,11 +19,6 @@ public class sSelectionBoxUI : MonoBehaviour
 
     public void Begin(Vector2 screenPosition)
     {
-        Debug.Log(
-    "Screen: " + screenPosition +
-    " Canvas: " + startPosition
-);
-
         startPosition = ScreenToCanvas(screenPosition);
 
         boxRect.gameObject.SetActive(true);

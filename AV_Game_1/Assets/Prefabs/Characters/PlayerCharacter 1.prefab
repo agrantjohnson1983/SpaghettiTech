@@ -181,9 +181,9 @@ GameObject:
   - component: {fileID: 2450426245767801009}
   - component: {fileID: 2012776716820894630}
   - component: {fileID: 2012776716820894648}
-  - component: {fileID: 8416505087930365736}
   - component: {fileID: 2129175803242849458}
   - component: {fileID: 2450426245701803805}
+  - component: {fileID: 8416505087930365736}
   - component: {fileID: 8416505087930365737}
   m_Layer: 7
   m_Name: PlayerCharacter 1
@@ -307,22 +307,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   soUI: {fileID: 11400000, guid: 2b96b6b1405722c48a474d361c95f00a, type: 2}
   popupControlText: CLICK
---- !u!114 &8416505087930365736
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2012776716820894629}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 110e612cf272ae14181f3057d477afb5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  transformToolbelt: {fileID: 3589997433737811900}
-  soUI: {fileID: 11400000, guid: 2b96b6b1405722c48a474d361c95f00a, type: 2}
-  _numberOfHandsNeeded: 0
-  _handUseSprite: {fileID: 0}
 --- !u!114 &2129175803242849458
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -357,6 +341,23 @@ MonoBehaviour:
   throwControlText: CLICK
   vfxChannel: {fileID: 11400000, guid: 2e677f6310e0cd24e8679be3f3361b8f, type: 2}
   throwPower: 10
+--- !u!114 &8416505087930365736
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2012776716820894629}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 110e612cf272ae14181f3057d477afb5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  transformToolbelt: {fileID: 3589997433737811900}
+  soUI: {fileID: 11400000, guid: 2b96b6b1405722c48a474d361c95f00a, type: 2}
+  _numberOfHandsNeeded: 0
+  _handUseSprite: {fileID: 0}
+  tapeTool: {fileID: 0}
 --- !u!114 &8416505087930365737
 MonoBehaviour:
   m_ObjectHideFlags: 0

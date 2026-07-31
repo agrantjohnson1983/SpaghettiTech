@@ -74,7 +74,7 @@ public class sPlayerCharacter : MonoBehaviour
             return;
         }
 
-        camera = GetComponentInChildren<Camera>();
+        camera = GameManager.gm.cameraGameplay.GetComponentInChildren<Camera>();
 
         actionController = GetComponent<sCharacterActionController>();
         movementController = GetComponent<sCharacterMovementController>();

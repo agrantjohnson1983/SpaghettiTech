@@ -28,7 +28,7 @@ public class GameManager : MonoBehaviour
 
     int activePlayerIndex = 0;
 
-    public GameObject cameraOrbit, cameraBlueprint;
+    public GameObject cameraOrbit, cameraOverhead, cameraGameplay;
 
     public eGameMode startingGameMode;
 
@@ -116,11 +116,13 @@ public class GameManager : MonoBehaviour
         {
             case eGameMode.gig:
 
-                ToggleBlueprintCamera(true);
+                ToggleOverheadCamera(true);
 
                 break;
 
             case eGameMode.warehouse:
+
+                ToggleOrbitCamera(true);
 
                 break;
 
@@ -146,6 +148,8 @@ public class GameManager : MonoBehaviour
     public void SetGameMode(eGameMode _gameMode)
     {
         currentGameMode = _gameMode;
+
+        cameraGameplay.SetActive(false);
 
         switch (currentGameMode)
         {
@@ -191,6 +195,14 @@ public class GameManager : MonoBehaviour
         //ToggleOrbitCamera(true);
 
         SceneManager.LoadScene(sGigManager.gigManagerGlobal.GetGigScene());
+    }
+
+    public void StartGameplay()
+    {
+        ToggleOrbitCamera(false);
+        ToggleOverheadCamera(false);
+
+        cameraGameplay.SetActive(true);
     }
 
     // This is used to change the index manually outside of the TAB button or arrow buttons - mostly when a player gets clicked
@@ -252,6 +264,8 @@ public class GameManager : MonoBehaviour
     {
         cameraOrbit.SetActive(_isOn);
 
+        cameraGameplay.SetActive(!_isOn);
+
         sPlayerCharacter.playerCharacterGlobal.CharacterControlsToggle(!_isOn);
 
         //if(playerCharacters.Count > 0)
@@ -268,9 +282,11 @@ public class GameManager : MonoBehaviour
 
     }
 
-    public void ToggleBlueprintCamera(bool _isOn)
+    public void ToggleOverheadCamera(bool _isOn)
     {
-        cameraBlueprint.SetActive(_isOn);
+        cameraOverhead.SetActive(_isOn);
+
+        cameraGameplay.SetActive(!_isOn);
 
         sPlayerCharacter.playerCharacterGlobal.CharacterControlsToggle(!_isOn);
 

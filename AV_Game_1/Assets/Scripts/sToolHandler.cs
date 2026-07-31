@@ -14,9 +14,9 @@ public class sToolHandler : MonoBehaviour, iRequireHands
 
     //GameObject toolObj;
 
-    List<SO_ItemData> toolHeldItemDataList;
+    List<SO_ToolData> toolHeldItemDataList;
 
-    SO_ItemData currentToolItem = null;
+    SO_ToolData currentToolItem = null;
 
     // Hands stuff
     public int _numberOfHandsNeeded;
@@ -72,18 +72,18 @@ public class sToolHandler : MonoBehaviour, iRequireHands
         //toolItemData = null;
 
         //toolObj = null;
-        toolHeldItemDataList = new List<SO_ItemData>();
+        toolHeldItemDataList = new List<SO_ToolData>();
 
         tapeTool.enabled = false;
         //toolList = new List<SO_ItemData>();
     }
 
-    public SO_ItemData CheckIfHasTool(eToolType _toolType)
+    public SO_ToolData CheckIfHasTool(eToolType _toolType)
     {
         if (toolHeldItemDataList.Count == 0)
             return null;
 
-        SO_ItemData _tempTool = toolHeldItemDataList[0];
+        SO_ToolData _tempTool = toolHeldItemDataList[0];
 
         //bool hasCorrectTool = false;
 
@@ -117,7 +117,7 @@ public class sToolHandler : MonoBehaviour, iRequireHands
         return _tempTool;
     }
 
-    public List<SO_ItemData> ReturnToolHeldList()
+    public List<SO_ToolData> ReturnToolHeldList()
     {
         return toolHeldItemDataList;
     }
@@ -134,16 +134,16 @@ public class sToolHandler : MonoBehaviour, iRequireHands
         toolHeldItemDataList.RemoveAt(_index);
     }
 
-    public void GoTool(SO_ItemData _itemData)
+    public void GoTool(SO_ToolData _toolData)
     {
         // triggers UI change
-        soUI.TriggerToolChange(_itemData);
+        soUI.TriggerToolChange(_toolData);
 
         // turns off all current tools, then turns back on one tool
         ToolsOff();
 
         // turns tool on, etc.
-        switch(_itemData.typeOfTool)
+        switch(_toolData.typeOfTool)
         {
             case eToolType.NONE:
 
@@ -179,10 +179,12 @@ public class sToolHandler : MonoBehaviour, iRequireHands
                 //Debug.Log("Tool Acquired to belt");
 
                 // adds to list
-                toolHeldItemDataList.Add(_tool.itemData);
+                toolHeldItemDataList.Add(_tool.toolData);
 
-                // activates item
-                GoTool(_tool.itemData);
+                if (_tool.toolData != null)
+                    GoTool(_tool.toolData);
+                else
+                    Debug.LogWarning("No tool data for: " + _tool);
 
                 Destroy(other.gameObject);
             }

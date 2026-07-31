@@ -24,7 +24,7 @@ public class SO_EventsUI : ScriptableObject
 
     public UnityEvent<SO_CrewProfile> crewHire;
 
-    public UnityEvent<SO_ItemData> toolHeldImage;
+    public UnityEvent<SO_ToolData> toolHeldImage;
 
     public UnityEvent<string, float> messageEvent;
 
@@ -92,7 +92,7 @@ public class SO_EventsUI : ScriptableObject
 
         if(toolHeldImage == null)
         {
-            toolHeldImage = new UnityEvent<SO_ItemData>();
+            toolHeldImage = new UnityEvent<SO_ToolData>();
         }
 
         if (messageEvent == null)
@@ -162,9 +162,9 @@ public class SO_EventsUI : ScriptableObject
         crewHire.Invoke(_crew);
     }
 
-    public void TriggerToolChange(SO_ItemData _itemData)
+    public void TriggerToolChange(SO_ToolData _toolData)
     {
-        toolHeldImage.Invoke(_itemData);
+        toolHeldImage.Invoke(_toolData);
     }
 
     public void TriggerMessage(string _message, float _time)
