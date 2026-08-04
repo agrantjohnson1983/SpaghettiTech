@@ -20,13 +20,13 @@ public class sCableSegmentHandler : MonoBehaviour
 
     List<GameObject> cableList;
 
-    bool isConnected = false;
+    //bool isConnected = false;
 
     public Vector3 spawnOffset = new Vector3(0,1,0);
 
     //public Sprite
 
-    float powerDrainTotal = 0f;
+    //float powerDrainTotal = 0f;
 
     // Start is called before the first frame update
     void Start()

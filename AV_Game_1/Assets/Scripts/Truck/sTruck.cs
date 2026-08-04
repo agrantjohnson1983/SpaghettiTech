@@ -24,7 +24,7 @@ public class sTruck : MonoBehaviour
 
     bool isInTruck = false;
 
-    bool isUpdatingUI = false;
+    //bool isUpdatingUI;
 
     public TextMeshProUGUI textLoaded;
     public string textLoadedMessage = "LOADED!";
@@ -67,7 +67,7 @@ public class sTruck : MonoBehaviour
 
     void HandleTruckUI(bool _isOn)
     {
-        isUpdatingUI = true;
+        //isUpdatingUI = true;
 
         canvasLoaded.SetActive(_isOn);
 
@@ -145,7 +145,7 @@ public class sTruck : MonoBehaviour
             ClearUI();
         }
 
-        isUpdatingUI = false;
+        //isUpdatingUI = false;
     }
 
     
@@ -168,7 +168,7 @@ public class sTruck : MonoBehaviour
     {
         if(other.TryGetComponent<sPlayerCharacter>(out sPlayerCharacter _player) && !isInTruck)
         {
-            Debug.Log("Triggering player entering truck");
+            //Debug.Log("Triggering player entering truck");
             isInTruck = true;
 
             _player.ToggleTruckCamera(true, this.transform, camMoveTransform, 0.5f, camOffset);
@@ -199,7 +199,7 @@ public class sTruck : MonoBehaviour
         
         if (other.TryGetComponent<sPlayerCharacter>(out sPlayerCharacter _player) && isInTruck)
         {
-            Debug.Log("Triggering player exiting truck");
+            //Debug.Log("Triggering player exiting truck");
             isInTruck = false;
             _player.ToggleTruckCamera(false, this.transform, null, 0.5f, camOffset);
             HandleTruckUI(false);

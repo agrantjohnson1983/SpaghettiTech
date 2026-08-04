@@ -52,7 +52,7 @@ public class sInventoryItem : MonoBehaviour, IPointerEnterHandler,
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        Debug.Log("Inventory Item pointer enter");
+        //Debug.Log("Inventory Item pointer enter");
 
         //bg.color = hoverColor;
         toolTip?.SetActive(true);
@@ -60,7 +60,7 @@ public class sInventoryItem : MonoBehaviour, IPointerEnterHandler,
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        Debug.Log("Inventory Item pointer exit");
+        //Debug.Log("Inventory Item pointer exit");
 
         //bg.color = normalColor;
         toolTip?.SetActive(false);

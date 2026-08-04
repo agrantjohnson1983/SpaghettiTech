@@ -10,7 +10,7 @@ public class sCable : sInteractive
 
     sCableConnectionHandler connectionHandler;
 
-    Collider collider;
+    Collider collision;
 
     //Rigidbody rb;
 
@@ -31,11 +31,13 @@ public class sCable : sInteractive
     public Material materialConnected;
 
     // Start is called before the first frame update
-    void Start()
+    public override void Start()
     {
         //rb = GetComponent<Rigidbody>();
 
-        collider = GetComponent<Collider>();
+        base.Start();
+
+        collision = GetComponent<Collider>();
 
         startingPos = this.gameObject.transform.position;
 
@@ -119,7 +121,7 @@ public class sCable : sInteractive
 
         sPlayerCharacter.playerCharacterGlobal.ReturnGrabController().GrabReset();
 
-        collider.enabled = false;
+        collision.enabled = false;
 
         //rb.velocity = Vector3.zero;
 

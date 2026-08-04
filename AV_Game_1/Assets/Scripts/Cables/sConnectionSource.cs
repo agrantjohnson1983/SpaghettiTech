@@ -69,7 +69,7 @@ public class sConnectionSource : MonoBehaviour
 
     public void DrainPower(float _amount)
     {
-        Debug.Log("Power Drain called - draining by " + _amount);
+        //Debug.Log("Power Drain called - draining by " + _amount);
 
         meterCurrent -= _amount;
         UpdateMeterUI(meterCurrent);

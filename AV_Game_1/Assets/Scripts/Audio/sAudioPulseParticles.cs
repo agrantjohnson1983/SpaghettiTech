@@ -3,7 +3,7 @@ using UnityEngine;
 public class sAudioPulseParticles : MonoBehaviour
 {
     public AudioSource audioSource;
-    public ParticleSystem particleSystem;
+    public ParticleSystem particles;
 
     [Range(64, 8192)]
     public int qSamples = 1024;
@@ -43,14 +43,14 @@ public class sAudioPulseParticles : MonoBehaviour
 
     void TriggerPulse(float intensity)
     {
-        var emission = particleSystem.emission;
+        var emission = particles.emission;
 
         // Dynamically change emission rate based on the bass/beat peak
         int emitCount = Mathf.RoundToInt(intensity * multiplier);
-        particleSystem.Emit(emitCount);
+        particles.Emit(emitCount);
 
         // Optionally adjust the size of newly spawned particles dynamically
-        var main = particleSystem.main;
+        var main = particles.main;
         main.startSize = new ParticleSystem.MinMaxCurve(intensity * 2, intensity * 4);
     }
 }

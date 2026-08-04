@@ -29,8 +29,10 @@ public class sCamera : sInteractive, iActionable
     }
 
     // Start is called before the first frame update
-    void Start()
+    public override void Start()
     {
+        base.Start();
+
         cam = GetComponentInChildren<Camera>();
 
         cameraFPS.SetActive(false);

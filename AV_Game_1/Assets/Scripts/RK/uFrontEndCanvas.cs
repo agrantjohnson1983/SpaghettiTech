@@ -99,7 +99,7 @@ public class uFrontEndCanvas : MonoBehaviour
 
     public void UpdateHighScore()
     {
-        float highScore;
+        //float highScore;
 
         //highScore = gm.ReturnHighScore();
 

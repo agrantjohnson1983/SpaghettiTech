@@ -31,6 +31,8 @@ public class sMixerMinigame : MonoBehaviour
         midSlider.onValueChanged.AddListener(SetMid);
         trebleSlider.onValueChanged.AddListener(SetTreble);
         gainSlider.onValueChanged.AddListener(SetGain);
+
+        sAudioMixer.isMixing = true;
     }
 
     void GenerateTarget()
@@ -99,7 +101,7 @@ public class sMixerMinigame : MonoBehaviour
     {
         float quality = GetMixQuality();
 
-        Debug.Log("Mix quality has score of: " + quality);
+        //Debug.Log("Mix quality has score of: " + quality);
 
         if (quality < 85)
         {

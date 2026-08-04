@@ -18,7 +18,7 @@ public class sTruckHatch : MonoBehaviour
 
     bool _canTriggerAction; // this is for controls to check if an action can be triggered
 
-    bool hasBeenSet = false;
+    //bool hasBeenSet = false;
 
     //public eTypeRigSetup rigType;
 

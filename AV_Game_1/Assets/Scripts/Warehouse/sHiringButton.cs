@@ -70,7 +70,7 @@ public class sHiringButton : MonoBehaviour
         //Debug.Log("Character Button Clicked - spawning character");
 
         GameObject tempObj;
-        sPlayerCharacter tempPlayer;
+        //sPlayerCharacter tempPlayer;
 
         //tempObj = Instantiate(characterData.pCharacter);
 

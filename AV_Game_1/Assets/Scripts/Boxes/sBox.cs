@@ -28,7 +28,7 @@ public class sBox : sInteractive, iClickable, IPointerEnterHandler, IPointerExit
 
     bool isEmpty = false;
 
-    int pickOffset = 0;
+    //int pickOffset = 0;
 
     //public GameObject ui_Ring;
     public float UI_ToggleDistance = 5f;
@@ -53,7 +53,7 @@ public class sBox : sInteractive, iClickable, IPointerEnterHandler, IPointerExit
 
     public float boxTextFontSize = 0.05f;
 
-    bool isBeingThrown = false;
+    //bool isBeingThrown = false;
 
     
 

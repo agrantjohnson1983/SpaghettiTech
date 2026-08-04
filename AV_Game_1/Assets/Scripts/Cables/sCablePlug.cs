@@ -8,7 +8,7 @@ public class sCablePlug : sInteractive, iPluggable, iClickable
 
     //public GameObject canvasUI;
 
-    Collider collider;
+    //Collider collider;
 
     sCablePlug cablePlugOtherEnd;
 
@@ -126,7 +126,7 @@ public class sCablePlug : sInteractive, iPluggable, iClickable
 
         IsAvailableToPlugIn = false;
 
-        collider = GetComponent<Collider>();
+        //collider = GetComponent<Collider>();
 
         cableSegmentHandler = GetComponentInParent<sCableSegmentHandler>();
 
@@ -517,7 +517,7 @@ public class sCablePlug : sInteractive, iPluggable, iClickable
 
     public void SetIndex(int _index)
     {
-        Debug.Log("Plug is getting index set to " + _index);
+        //Debug.Log("Plug is getting index set to " + _index);
 
         Index = _index;
     }
@@ -529,7 +529,7 @@ public class sCablePlug : sInteractive, iPluggable, iClickable
 
         base.OnSelect();
 
-        Debug.Log("Plug was selected: " + this);
+        //Debug.Log("Plug was selected: " + this);
     }
 
     /*

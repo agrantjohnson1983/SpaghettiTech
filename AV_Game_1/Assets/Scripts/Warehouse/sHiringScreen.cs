@@ -19,7 +19,7 @@ public class sHiringScreen : MonoBehaviour
         for (int i = 0; i < numberOfHiresOnScreen; i++)
         {
             GameObject tempObj;
-            sPlayerCharacter tempPlayer;
+            //sPlayerCharacter tempPlayer;
 
             tempObj = Instantiate(characterHireButton, hiringScreenPanel);
 

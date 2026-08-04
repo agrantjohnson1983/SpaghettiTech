@@ -23,7 +23,7 @@ public class sPlayerCharacter : MonoBehaviour
     sToolHandler toolHandler;
     sMouseClickController mouseClickController;
 
-    Camera camera;
+    Camera cam;
 
     Vector3 camPos;
     Quaternion camRot;
@@ -74,7 +74,7 @@ public class sPlayerCharacter : MonoBehaviour
             return;
         }
 
-        camera = GameManager.gm.cameraGameplay.GetComponentInChildren<Camera>();
+        cam = GameManager.gm.cameraGameplay.GetComponentInChildren<Camera>();
 
         actionController = GetComponent<sCharacterActionController>();
         movementController = GetComponent<sCharacterMovementController>();
@@ -187,7 +187,7 @@ public class sPlayerCharacter : MonoBehaviour
         //mouseClickController.ToggleMouseClickController(_isOn);
 
         // turns camera on/off
-        camera.gameObject.SetActive(_isOn);
+        cam.gameObject.SetActive(_isOn);
 
         // Changes the UI based on character data
         if (_isOn)
@@ -204,7 +204,7 @@ public class sPlayerCharacter : MonoBehaviour
 
     public void ToggleCameraMain(bool _isOn)
     {
-        camera.gameObject.SetActive(_isOn);
+        cam.gameObject.SetActive(_isOn);
     }
 
     Coroutine truckCamRoutine;
@@ -225,18 +225,18 @@ public class sPlayerCharacter : MonoBehaviour
 
         if (_isOn)
         {
-            camPos = camera.transform.localPosition;
-            camRot = camera.transform.localRotation;
+            camPos = cam.transform.localPosition;
+            camRot = cam.transform.localRotation;
 
-            camera.transform.SetParent(null);
+            cam.transform.SetParent(null);
 
             truckCamRoutine = StartCoroutine(TruckCamMovementWorld(0.5f, _camMoveLocation.position + _offset, true));
         }
 
         else
         {
-            camera.transform.SetParent(this.gameObject.transform);
-            camera.transform.localRotation = camRot;
+            cam.transform.SetParent(this.gameObject.transform);
+            cam.transform.localRotation = camRot;
 
             truckCamRoutine = StartCoroutine(TruckCamMovementLocal(_moveTime, camPos));
         }
@@ -246,35 +246,35 @@ public class sPlayerCharacter : MonoBehaviour
     IEnumerator TruckCamMovementWorld(float _time, Vector3 _endPos, bool _isOn)
     {
         float _counter = 0f;
-        Vector3 startPos = camera.transform.position;
+        Vector3 startPos = cam.transform.position;
 
         while (_counter < _time)
         {
-            camera.transform.position = Vector3.Lerp(startPos, _endPos, _counter / _time);
+            cam.transform.position = Vector3.Lerp(startPos, _endPos, _counter / _time);
             _counter += Time.deltaTime;
             yield return null;
         }
 
-        camera.transform.position = _endPos; // snap, same pattern as sCharacterMover fix
+        cam.transform.position = _endPos; // snap, same pattern as sCharacterMover fix
 
         if (_isOn)
-            camera.transform.LookAt(this.transform);
+            cam.transform.LookAt(this.transform);
     }
 
     // Used only while parented (exit) — local space lerp tracks the moving player
     IEnumerator TruckCamMovementLocal(float _time, Vector3 _endLocalPos)
     {
         float _counter = 0f;
-        Vector3 startLocalPos = camera.transform.localPosition;
+        Vector3 startLocalPos = cam.transform.localPosition;
 
         while (_counter < _time)
         {
-            camera.transform.localPosition = Vector3.Lerp(startLocalPos, _endLocalPos, _counter / _time);
+            cam.transform.localPosition = Vector3.Lerp(startLocalPos, _endLocalPos, _counter / _time);
             _counter += Time.deltaTime;
             yield return null;
         }
 
-        Debug.Log($"Reset complete. localPosition = {camera.transform.localPosition}, expected = {_endLocalPos}");
+        Debug.Log($"Reset complete. localPosition = {cam.transform.localPosition}, expected = {_endLocalPos}");
 
         // camera.transform.localPosition = _endLocalPos; // snap to guarantee exact reset
     }

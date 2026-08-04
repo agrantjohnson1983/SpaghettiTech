@@ -10,8 +10,8 @@ public class sTapeSegment : MonoBehaviour
     GameObject tapeAnchor;
 
 
-    Collider collider;
-    MeshRenderer renderer;
+    Collider collision;
+    MeshRenderer rend;
 
     public Renderer segmentRenderer;
 
@@ -24,9 +24,9 @@ public class sTapeSegment : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
 
-        collider = GetComponent<Collider>();
+        collision = GetComponent<Collider>();
 
-        renderer = GetComponent<MeshRenderer>();
+        rend = GetComponent<MeshRenderer>();
 
         if (segmentRenderer == null)
             segmentRenderer = GetComponent<Renderer>();
@@ -104,9 +104,9 @@ public class sTapeSegment : MonoBehaviour
 
         rb.constraints = RigidbodyConstraints.FreezeAll;
 
-        collider.enabled = false;
+        collision.enabled = false;
 
-        renderer.enabled = false;
+        rend.enabled = false;
 
 
         Debug.Log(

@@ -6,7 +6,7 @@ public class sMotorController : sRigGear
 {
     GameObject canvasMotorController;
 
-    bool isShowingControls = false;
+    //bool isShowingControls = false;
 
     //bool isSetup;
 

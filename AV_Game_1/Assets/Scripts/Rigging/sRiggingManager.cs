@@ -23,10 +23,10 @@ public class sRiggingManager : MonoBehaviour
     int activeIndexMotorSetup = 0;
     int activeIndexMotorControllerSetup = 0;
 
-    bool trussDone = false;
-    bool motorsDone = false;
-    bool speakerStandsDone = false;
-    bool screenStandsDone = false;
+    //bool trussDone = false;
+    //bool motorsDone = false;
+    //bool speakerStandsDone = false;
+    //bool screenStandsDone = false;
 
     public Transform[] trussSetupLocations;
     public Transform[] boltingLocations;
@@ -135,8 +135,8 @@ public class sRiggingManager : MonoBehaviour
             {
                 trussSpotScript.setupIndex = i;
 
-                Debug.Log("[RiggingManager] Assigned setupIndex " + i + " to " + trussSpotScript.name
-                    + " (instance id " + trussSpotScript.GetInstanceID() + ")");
+                //Debug.Log("[RiggingManager] Assigned setupIndex " + i + " to " + trussSpotScript.name
+                 //   + " (instance id " + trussSpotScript.GetInstanceID() + ")");
             }
             else
             {

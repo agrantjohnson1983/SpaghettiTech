@@ -26,7 +26,7 @@ public class GameManager : MonoBehaviour
 
     List<sPlayerCharacter> playerCharacters;
 
-    int activePlayerIndex = 0;
+    //int activePlayerIndex = 0;
 
     public GameObject cameraOrbit, cameraOverhead, cameraGameplay;
 

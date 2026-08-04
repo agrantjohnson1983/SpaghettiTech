@@ -8,6 +8,15 @@ public class sAudioMixer : sAudioGear
 
     bool isPlayingMinigame = false;
 
+    public GameObject canvasMixer;
+
+    public static bool isMixing = false;
+
+    private void Start()
+    {
+        canvasMixer.SetActive(false);
+    }
+
     // TO DO - add in a world canvas controller with single button "START MIXING"
     // START MIXING will toggle on mini game and lock player movement
     // There should be an "END" button in the mixer game
@@ -17,7 +26,8 @@ public class sAudioMixer : sAudioGear
         if(other.CompareTag("Player") && !isPlayingMinigame)
         {
             isPlayingMinigame = true;
-            mixerMiniGame.SetActive(true);
+            //mixerMiniGame.SetActive(true);
+            canvasMixer.SetActive(true);
         }
     }
 
@@ -26,7 +36,8 @@ public class sAudioMixer : sAudioGear
         if (other.CompareTag("Player") && isPlayingMinigame)
         {
             isPlayingMinigame = false;
-            mixerMiniGame.SetActive(false);
+            //mixerMiniGame.SetActive(false);
+            canvasMixer.SetActive(false);
         }
     }
 

@@ -35,7 +35,7 @@ public class sMotor : sRigGear
 
     Vector3 cachedChainTopPosition;
 
-    bool chainsUp = false;
+    //bool chainsUp = false;
 
     bool isMoving = false;
 

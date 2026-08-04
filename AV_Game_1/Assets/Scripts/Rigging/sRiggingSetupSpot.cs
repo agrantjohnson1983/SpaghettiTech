@@ -13,7 +13,7 @@ public class sRiggingSetupSpot : MonoBehaviour, iActionable
 
     bool _canTriggerAction; // this is for controls to check if an action can be triggered
 
-    bool hasBeenSet = false;
+    //bool hasBeenSet = false;
 
     public eTypeRigSetup rigType;
 
@@ -239,7 +239,7 @@ public class sRiggingSetupSpot : MonoBehaviour, iActionable
 
     public void StopAction()
     {
-        Debug.Log("Stopping Action Tasking Cortoutine");
+        //Debug.Log("Stopping Action Tasking Cortoutine");
 
         StopCoroutine(ActionTasking());
 
@@ -257,7 +257,7 @@ public class sRiggingSetupSpot : MonoBehaviour, iActionable
 
     IEnumerator ActionTasking()
     {
-        Debug.Log("Starting Action Tasking");
+        //Debug.Log("Starting Action Tasking");
 
 
 
@@ -270,7 +270,7 @@ public class sRiggingSetupSpot : MonoBehaviour, iActionable
 
     public void FinishSetup()
     {
-        Debug.Log("[" + this.name + "] FinishSetup called - Action Task Complete");
+        //Debug.Log("[" + this.name + "] FinishSetup called - Action Task Complete");
 
         //actionObject.SetActive(false);
 

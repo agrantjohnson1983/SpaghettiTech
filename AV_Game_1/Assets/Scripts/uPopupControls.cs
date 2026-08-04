@@ -10,7 +10,7 @@ public class uPopupControls : MonoBehaviour
     // Start is called before the first frame update
     public void SetPopup(string _textControl, string _textAction)
     {
-        Debug.Log("setting controls popup for " + _textAction);
+        //Debug.Log("setting controls popup for " + _textAction);
 
         textControl.text = _textControl;
         textAction.text = _textAction;

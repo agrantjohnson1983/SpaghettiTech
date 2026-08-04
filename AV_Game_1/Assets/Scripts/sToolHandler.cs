@@ -16,7 +16,7 @@ public class sToolHandler : MonoBehaviour, iRequireHands
 
     List<SO_ToolData> toolHeldItemDataList;
 
-    SO_ToolData currentToolItem = null;
+    //SO_ToolData currentToolItem = null;
 
     // Hands stuff
     public int _numberOfHandsNeeded;
