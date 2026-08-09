@@ -27,7 +27,7 @@ public class uGigButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     {
         textGigName.text = gigData.gigName;
         textGigDescription.text = gigData.gigDescription;
-        textGigPay.text = "$"+ gigData.gigPay.ToString();
+        textGigPay.text = "$"+ gigData.basePay.ToString();
         gigImage.sprite = gigData.gigSprite;
     }
 

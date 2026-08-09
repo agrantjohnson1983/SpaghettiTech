@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class sLight : MonoBehaviour
+public class sLight : sRigGear
 {
     public GameObject[] poweredObjects
     {
@@ -15,16 +15,5 @@ public class sLight : MonoBehaviour
         get;
         set;
     }
-    // Start is called before the first frame update
-    void Start()
-    {
-        //TogglePoweredObjects(false);
-    }
 
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }

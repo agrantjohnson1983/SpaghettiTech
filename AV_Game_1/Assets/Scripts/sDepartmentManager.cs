@@ -1,0 +1,136 @@
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using UnityEngine;
+
+public enum eGigTask
+{
+    BuildRigging,
+    SetupAudio,
+    SetupLighting,
+    SetupVideo,
+    Power,
+    Cameras
+}
+
+public abstract class sDepartmentManager : MonoBehaviour
+{
+    public SO_EventsUI soUI;
+
+    [Header("Gig Task")]
+    //[SerializeField] protected string taskID;
+
+    [SerializeField] protected string departmentName;
+
+    [Range(0f, 1f)]
+    [SerializeField] protected float progress;
+
+    [SerializeField]
+    protected eGigTask taskID;
+
+
+    public bool IsComplete => progress >= 1f;
+
+    protected DepartmentStatus status = new DepartmentStatus();
+
+    public DepartmentStatus Status => status;
+
+    public virtual void Start()
+    {
+        Status.departmentName = departmentName;
+
+        sGigManager.gigManagerGlobal.RegisterDepartment(this);
+    }
+
+    public virtual void SetProgress(float value)
+    {
+        Debug.Log("Set progress called");
+
+        progress = Mathf.Clamp01(value);
+
+        UpdateGigManager();
+    }
+
+    protected virtual void UpdateGigManager()
+    {
+        Debug.Log("Updating Gig manager");
+
+        if (sGigManager.gigManagerGlobal == null)
+            return;
+
+        //sGigManager.gigManagerGlobal.SetTaskProgress(taskID.ToString(), progress);
+    }
+
+    public virtual void Complete()
+    {
+        SetProgress(1f);
+    }
+
+    public virtual void ResetDepartment()
+    {
+        progress = 0f;
+    }
+
+    public virtual float CalculateProgress()
+    {
+        return progress;
+    }
+
+    public void RefreshProgress()
+    {
+        Debug.Log("Refresh Progress called");
+        SetProgress(Status.Completion);
+    }
+}
+
+[System.Serializable]
+public class DepartmentStatus
+{
+    public string departmentName;
+
+    public List<ObjectiveStatus> objectives = new();
+
+    public float Completion
+    {
+        get
+        {
+            if (objectives.Count == 0)
+                return 0f;
+
+            float total = 0f;
+
+            foreach (ObjectiveStatus objective in objectives)
+            {
+                total += objective.Completion;
+            }
+
+            return total / objectives.Count;
+        }
+    }
+}
+
+[System.Serializable]
+public class ObjectiveStatus
+{
+    public string name;
+
+    public int completedItems;
+
+    public int totalItems;
+
+    public string statusText;
+
+    public float weight = 1f;
+
+    public float Completion
+    {
+        get
+        {
+            if (totalItems == 0)
+                return 0f;
+
+            return (float)completedItems / totalItems;
+        }
+    }
+
+    public bool IsComplete => Completion >= 1f;
+}

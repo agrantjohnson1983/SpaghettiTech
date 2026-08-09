@@ -858,6 +858,7 @@ MonoBehaviour:
   requireNeighborsSetup: 1
   neighborTrussIndexA: -1
   neighborTrussIndexB: -1
+  activeWorldYOffset: -1
   soUI: {fileID: 11400000, guid: 2b96b6b1405722c48a474d361c95f00a, type: 2}
   actionObject: {fileID: 5279895801752147457}
 --- !u!1 &4136385807488541477
@@ -1760,7 +1761,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 1678024060043591375, guid: 2a595979ac8049245ad0b5f31c26f20a, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 2a595979ac8049245ad0b5f31c26f20a, type: 3}
 --- !u!224 &5486553791918926313 stripped
 RectTransform:
@@ -1964,7 +1966,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 1678024060043591375, guid: 2a595979ac8049245ad0b5f31c26f20a, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 2a595979ac8049245ad0b5f31c26f20a, type: 3}
 --- !u!224 &6705767476681391749 stripped
 RectTransform:
@@ -2066,7 +2069,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 1678024060043591375, guid: 2a595979ac8049245ad0b5f31c26f20a, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 2a595979ac8049245ad0b5f31c26f20a, type: 3}
 --- !u!224 &7825268409370901927 stripped
 RectTransform:
@@ -2372,7 +2376,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 1678024060043591375, guid: 2a595979ac8049245ad0b5f31c26f20a, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 2a595979ac8049245ad0b5f31c26f20a, type: 3}
 --- !u!224 &4081291928530187309 stripped
 RectTransform:

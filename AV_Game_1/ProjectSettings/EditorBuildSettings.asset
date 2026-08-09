@@ -17,4 +17,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/WarehouseHub.unity
     guid: fa634df3e174b7c408ae0124aa8b3104
+  - enabled: 1
+    path: Assets/Scenes/Travel.unity
+    guid: dc5d00d1e9d74b54494f190df382aeab
   m_configObjects: {}

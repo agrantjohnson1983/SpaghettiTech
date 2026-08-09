@@ -60,7 +60,7 @@ public class sTruck : MonoBehaviour
     // This is getting called by an animator event
     public void SceneChange()
     {
-        GameManager.gm.StartGig();
+        GameManager.gm.StartTravel();
 
         
     }
@@ -68,6 +68,8 @@ public class sTruck : MonoBehaviour
     void HandleTruckUI(bool _isOn)
     {
         //isUpdatingUI = true;
+
+        Debug.Log("Setting Truck UI to: " + _isOn);
 
         canvasLoaded.SetActive(_isOn);
 
@@ -77,14 +79,15 @@ public class sTruck : MonoBehaviour
             bool hasAll = true;
 
             Dictionary<SO_ItemData, int> needed =
-            sGigManager.gigManagerGlobal.GetNeededItemCounts();
+                sGigManager.gigManagerGlobal.GetNeededItemCounts();
+            
 
             Dictionary<SO_ItemData, int> loaded =
                 sGigManager.gigManagerGlobal.GetLoadedItemCounts();
 
             foreach (var pair in needed)
             {
-                Debug.Log("Spawning truck UI");
+                //Debug.Log("Spawning truck UI");
 
                 GameObject obj = Instantiate(pTruckItemUI, transformItemUI);
 
@@ -104,7 +107,7 @@ public class sTruck : MonoBehaviour
                 {
                     int numberNeeded = pair.Value - count;
 
-                    Debug.Log("Still need to get " + numberNeeded + " " + pair.Key + "s");
+                    //Debug.Log("Still need to get " + numberNeeded + " " + pair.Key + "s");
                     hasAll = false;
                 }
             }
@@ -153,7 +156,7 @@ public class sTruck : MonoBehaviour
 
     void ClearUI()
     {
-        Debug.Log("Clearing UI");
+        //Debug.Log("Clearing UI");
 
         for (int i = 0; i < instantiatedNeededUI.Count; i++)
             Destroy(instantiatedNeededUI[i]);
@@ -171,7 +174,7 @@ public class sTruck : MonoBehaviour
             //Debug.Log("Triggering player entering truck");
             isInTruck = true;
 
-            _player.ToggleTruckCamera(true, this.transform, camMoveTransform, 0.5f, camOffset);
+            _player.ToggleTruckCamera(true, 0.5f);
 
             if (sGigManager.gigManagerGlobal.CheckIfHasAGig())
                 HandleTruckUI(true);
@@ -201,7 +204,7 @@ public class sTruck : MonoBehaviour
         {
             //Debug.Log("Triggering player exiting truck");
             isInTruck = false;
-            _player.ToggleTruckCamera(false, this.transform, null, 0.5f, camOffset);
+            _player.ToggleTruckCamera(false, 0.5f);
             HandleTruckUI(false);
         }
     }

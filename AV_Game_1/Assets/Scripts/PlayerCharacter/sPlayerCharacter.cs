@@ -1,3 +1,4 @@
+using Cinemachine;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -34,6 +35,10 @@ public class sPlayerCharacter : MonoBehaviour
     handBehavior hand;
 
     bool isInTruckMode = false;
+
+    CinemachineVirtualCamera vCam;
+
+    public Vector3 camOffset, camStart;
 
     // Use this class for future hand behaviors
     public class handBehavior
@@ -75,6 +80,8 @@ public class sPlayerCharacter : MonoBehaviour
         }
 
         cam = GameManager.gm.cameraGameplay.GetComponentInChildren<Camera>();
+
+        vCam = GetComponentInChildren<CinemachineVirtualCamera>();
 
         actionController = GetComponent<sCharacterActionController>();
         movementController = GetComponent<sCharacterMovementController>();
@@ -125,6 +132,10 @@ public class sPlayerCharacter : MonoBehaviour
         {
             handsList.Add(hand);
         }
+
+        camStart = vCam.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset;
+
+        Debug.Log("Cam start is " + camStart);
 
         //Debug.Log("Hands list initialized with a count of " + handsList.Count);
     }
@@ -186,6 +197,9 @@ public class sPlayerCharacter : MonoBehaviour
         //mouseClickController.enabled = _isOn;
         //mouseClickController.ToggleMouseClickController(_isOn);
 
+        if (cam == null)
+            cam = Camera.main;
+
         // turns camera on/off
         cam.gameObject.SetActive(_isOn);
 
@@ -209,7 +223,7 @@ public class sPlayerCharacter : MonoBehaviour
 
     Coroutine truckCamRoutine;
 
-    public void ToggleTruckCamera(bool _isOn, Transform _truckLocation, Transform _camMoveLocation, float _moveTime, Vector3 _offset)
+    public void ToggleTruckCamera(bool _isOn, float _moveTime)
     {
         // Ignore duplicate calls - already in the requested state
         if (_isOn == isInTruckMode)
@@ -230,7 +244,7 @@ public class sPlayerCharacter : MonoBehaviour
 
             cam.transform.SetParent(null);
 
-            truckCamRoutine = StartCoroutine(TruckCamMovementWorld(0.5f, _camMoveLocation.position + _offset, true));
+            truckCamRoutine = StartCoroutine(TruckCamMovementWorld(0.5f, true));
         }
 
         else
@@ -238,43 +252,77 @@ public class sPlayerCharacter : MonoBehaviour
             cam.transform.SetParent(this.gameObject.transform);
             cam.transform.localRotation = camRot;
 
-            truckCamRoutine = StartCoroutine(TruckCamMovementLocal(_moveTime, camPos));
+            truckCamRoutine = StartCoroutine(TruckCamMovementLocal(_moveTime, false));
         }
     }
 
     // Used only while unparented (entry) — world space lerp is correct here
-    IEnumerator TruckCamMovementWorld(float _time, Vector3 _endPos, bool _isOn)
+    IEnumerator TruckCamMovementWorld(float _time, bool _isOn)
     {
+        Debug.Log("Starting truck movement");
+
         float _counter = 0f;
-        Vector3 startPos = cam.transform.position;
+
+        Vector3 startPoint = new Vector3();
+        Vector3 endPoint = new Vector3();
+
+        if(_isOn)
+        {
+            startPoint = camStart;
+            endPoint = camOffset;
+        }
+
+        else
+        {
+            startPoint = camOffset;
+            endPoint = camStart;
+        }
+
+        var transposer = vCam.GetCinemachineComponent<CinemachineTransposer>();
 
         while (_counter < _time)
         {
-            cam.transform.position = Vector3.Lerp(startPos, _endPos, _counter / _time);
+            transposer.m_FollowOffset = Vector3.Lerp(startPoint, endPoint, _counter / _time);
             _counter += Time.deltaTime;
             yield return null;
         }
 
-        cam.transform.position = _endPos; // snap, same pattern as sCharacterMover fix
+        //cam.transform.position = _endPos; // snap, same pattern as sCharacterMover fix
 
-        if (_isOn)
-            cam.transform.LookAt(this.transform);
+        //if (_isOn)
+        //    cam.transform.LookAt(this.transform);
     }
 
     // Used only while parented (exit) — local space lerp tracks the moving player
-    IEnumerator TruckCamMovementLocal(float _time, Vector3 _endLocalPos)
+    IEnumerator TruckCamMovementLocal(float _time, bool _isOn)
     {
         float _counter = 0f;
-        Vector3 startLocalPos = cam.transform.localPosition;
+
+        Vector3 startPoint = new Vector3();
+        Vector3 endPoint = new Vector3();
+
+        if (_isOn)
+        {
+            startPoint = camStart;
+            endPoint = camOffset;
+        }
+
+        else
+        {
+            startPoint = camOffset;
+            endPoint = camStart;
+        }
+
+        var transposer = vCam.GetCinemachineComponent<CinemachineTransposer>();
 
         while (_counter < _time)
         {
-            cam.transform.localPosition = Vector3.Lerp(startLocalPos, _endLocalPos, _counter / _time);
+             transposer.m_FollowOffset = Vector3.Lerp(startPoint, endPoint, _counter / _time);
             _counter += Time.deltaTime;
             yield return null;
         }
 
-        Debug.Log($"Reset complete. localPosition = {cam.transform.localPosition}, expected = {_endLocalPos}");
+        //Debug.Log($"Reset complete. localPosition = {cam.transform.localPosition}, expected = {_endLocalPos}");
 
         // camera.transform.localPosition = _endLocalPos; // snap to guarantee exact reset
     }

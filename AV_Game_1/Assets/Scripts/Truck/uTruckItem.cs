@@ -17,7 +17,7 @@ public class uTruckItem : MonoBehaviour
 
     public void SetTruckItemUI(SO_ItemData _itemData)
     {
-        Debug.Log("Setting truck item with " + _itemData);
+        //Debug.Log("Setting truck item with " + _itemData);
 
         itemName = _itemData.itemName;
 
@@ -28,7 +28,7 @@ public class uTruckItem : MonoBehaviour
 
     public void SetQuantity(int loaded, int needed)
     {
-        Debug.Log("Setting quanity to " + loaded + "/" + needed + " for " + itemName);
+        //Debug.Log("Setting quanity to " + loaded + "/" + needed + " for " + itemName);
 
         textItemAmount.text = $"{loaded}/{needed}";
 

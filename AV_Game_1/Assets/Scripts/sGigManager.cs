@@ -5,17 +5,41 @@ using UnityEngine.SceneManagement;
 using TMPro;
 using UnityEngine.Events;
 
+[System.Serializable]
+public class GigStatus
+{
+    public string gigName;
+
+    public float overallProgress;
+
+    public List<DepartmentStatus> departments = new();
+
+    public int currentPhase;
+
+    public bool isComplete;
+}
+
+public enum GigPhase
+{
+    Warehouse,
+    LoadTruck,
+    Travel,
+    LoadIn,
+    Rigging,
+    Audio,
+    Lighting,
+    Video,
+    Showtime,
+    LoadOut,
+    ReturnHome,
+    Results
+}
+
 public class sGigManager : MonoBehaviour
 {
     public static sGigManager gigManagerGlobal;
 
-    //public List<SO_BoxData> boxDataList;
-
     public List<GameObject> itemsLoadedObjectList, workersHiredList;
-
-    //public List<SO_ItemData> itemsNeededDataList, itemsLoadedDataList;
-
-    SO_GigData currentGig;
 
     public TextMeshProUGUI textCurrentGig;
 
@@ -23,18 +47,45 @@ public class sGigManager : MonoBehaviour
 
     UnityEvent<SO_GigData> gigEvent;
 
-    //string gigSceneToLoad = null;
+    [SerializeField]
+    private SO_GigData currentGig;
+    public SO_GigData CurrentGig => currentGig;
 
+    //private Dictionary<string, GigTaskData> taskLookup = new();
+
+    //private Dictionary<string, float> taskProgress = new();
+
+    private int currentPhaseIndex = 0;
+
+    public SO_EventsUI soUI;
+
+    public List<sDepartmentManager> departmentManagersList = new List<sDepartmentManager>();
+
+    float progRigging, progAudio, progVideo, progLighting;
+
+    GigStatus currentStatus = new GigStatus();
+
+    public GigPhase CurrentPhase { get; private set; }
 
     void OnEnable()
     {
         SceneManager.sceneLoaded += OnSceneLoad;
+
+        soUI.progLighting.AddListener(UpdateLighting);
+        soUI.progAudio.AddListener(UpdateAudio);
+        soUI.progRigging.AddListener(UpdateRigging);
+        soUI.progVideo.AddListener(UpdateVideo);
 
     }
 
     void OnDisable()
     {
         SceneManager.sceneLoaded -= OnSceneLoad;
+
+        soUI.progLighting.RemoveListener(UpdateLighting);
+        soUI.progAudio.RemoveListener(UpdateAudio);
+        soUI.progRigging.RemoveListener(UpdateRigging);
+        soUI.progVideo.RemoveListener(UpdateVideo);
     }
 
     public void Awake()
@@ -61,22 +112,96 @@ public class sGigManager : MonoBehaviour
         //itemsLoadedDataList = new List<SO_ItemData>();
 
         //itemsNeededDataList = new List<SO_ItemData>();
+
+        
+    }
+
+    public void RegisterDepartment(
+    sDepartmentManager manager)
+    {
+        Debug.Log("registering dept " + manager);
+
+        if (!departmentManagersList.Contains(manager))
+        {
+            departmentManagersList.Add(manager);
+            
+        }
+            
+    }
+
+    public void SetPhase(GigPhase _phase)
+    {
+        CurrentPhase = _phase;
+
+        switch(CurrentPhase)
+        {
+            
+        }
+    }
+
+    void UpdateRigging(float _amount)
+    {
+        progRigging = _amount;
+
+        UpdateTotalProgress();
+    }
+
+    void UpdateAudio(float _amount)
+    {
+        progAudio = _amount;
+
+        UpdateTotalProgress();
+    }
+
+    void UpdateVideo(float _amount)
+    {
+        progVideo = _amount;
+
+        UpdateTotalProgress();
+    }
+
+    void UpdateLighting(float _amount)
+    {
+        progLighting = _amount;
+
+        UpdateTotalProgress();
+    }
+
+    void UpdateTotalProgress()
+    {
+        float total = progRigging + progAudio + progLighting + progVideo;
+
+        float totalDepts = departmentManagersList.Count;
+
+        total = total/totalDepts;
+
+        //Debug.Log("total gig progress is " + total);
+
+        soUI.TriggerProgOverall(total);
     }
 
     public void SetCurrentGig(SO_GigData _gigData)
     {
-        if (_gigData == null)
+        currentGig = _gigData;
+
+        if(currentGig == null)
+        {
+            Debug.LogWarning("Current Gig is null!");
             return;
+        }
 
         hasAGig = true;
 
-        currentGig = _gigData;
+        currentStatus.gigName = currentGig.gigName;
 
-        //SetItemsNeededForGig(currentGig.itemsNeededForGigList);
+        UpdateGigUI();
 
-        textCurrentGig.text = "Current Gig: " + currentGig.gigName;
 
-        sComputer.computerGlobal.SetText("Current Gig: " + currentGig.gigName);
+    }
+
+    void FinishGig()
+    {
+
     }
 
     public string GetGigScene()
@@ -91,7 +216,7 @@ public class sGigManager : MonoBehaviour
     {
         Dictionary<SO_ItemData, int> counts = new();
 
-        foreach (var item in currentGig.itemsNeededForGigList)
+        foreach (var item in currentGig.requiredItems)
         {
             if (item == null)
                 continue;
@@ -193,6 +318,8 @@ public class sGigManager : MonoBehaviour
     {
         bool isADupe = false;
 
+
+
         for (int i = 0; i < itemsLoadedObjectList.Count; i++)
         {
             if(_ItemData == itemsLoadedObjectList[i])
@@ -229,8 +356,14 @@ public class sGigManager : MonoBehaviour
         }
     }
 
+    
     void StartGig()
     {
+        //RegisterTasks();
+
+        currentPhaseIndex = 0;
+
+
         for (int i = 0; i < itemsLoadedObjectList.Count; i++)
         {
             // TO DO - Set location to truck
@@ -244,8 +377,126 @@ public class sGigManager : MonoBehaviour
         }
     }
 
+    //private void RegisterTasks()
+    //{
+    //    taskLookup.Clear();
+    //    taskProgress.Clear();
+
+    //    if (currentGig == null)
+    //        return;
+
+    //    foreach (var phase in currentGig.phases)
+    //    {
+    //        foreach (var task in phase.tasks)
+    //        {
+    //            if (taskLookup.ContainsKey(task.taskID))
+    //            {
+    //                Debug.LogWarning("Duplicate Task ID: " + task.taskID);
+    //                continue;
+    //            }
+
+    //            taskLookup.Add(task.taskID, task);
+    //            taskProgress.Add(task.taskID, 0f);
+    //        }
+    //    }
+    //}
+
+
+    //public void SetTaskProgress(string taskID, float progress)
+    //{
+    //    if (!taskProgress.ContainsKey(taskID))
+    //    {
+    //        Debug.LogWarning("Task not registered: " + taskID);
+    //        return;
+    //    }
+
+    //    progress = Mathf.Clamp01(progress);
+
+    //    taskProgress[taskID] = progress;
+    //}
+
+    //public float GetTaskProgress(string taskID)
+    //{
+    //    if (taskProgress.TryGetValue(taskID, out float progress))
+    //        return progress;
+
+    //    return 0f;
+    //}
+
+    //public bool IsTaskComplete(string taskID)
+    //{
+    //    return GetTaskProgress(taskID) >= 1f;
+    //}
+
+    //public float GetCurrentPhaseCompletion()
+    //{
+    //    if (currentGig == null)
+    //        return 0;
+
+    //    GigPhaseData phase = currentGig.phases[currentPhaseIndex];
+
+    //    if (phase.tasks.Count == 0)
+    //        return 1;
+
+    //    float total = 0;
+
+    //    foreach (var task in phase.tasks)
+    //    {
+    //        total += GetTaskProgress(task.taskID);
+    //    }
+
+    //    return total / phase.tasks.Count;
+    //}
+
+    //public float GetGigCompletion()
+    //{
+    //    if (taskProgress.Count == 0)
+    //        return 0;
+
+    //    float total = 0;
+
+    //    foreach (var task in taskProgress)
+    //    {
+    //        total += task.Value;
+    //    }
+
+    //    return total / taskProgress.Count;
+    //}
+
+    public void NextPhase()
+    {
+        currentPhaseIndex++;
+
+        if (currentPhaseIndex >= currentGig.phases.Count)
+        {
+            FinishGig();
+        }
+    }
+
     public bool CheckIfHasAGig()
     {
         return hasAGig;
+    }
+
+    void UpdateGigUI()
+    {
+        if (currentGig == null)
+            return;
+
+        textCurrentGig.text = $"Current Gig: {currentGig.gigName}";
+        sComputer.computerGlobal.SetText($"Current Gig: {currentGig.gigName}");
+    }
+
+    public float GetOverallProgress()
+    {
+        if (departmentManagersList.Count == 0)
+            return 0;
+
+        float total = 0;
+
+        foreach (var department in departmentManagersList)
+            total += department.Status.Completion;
+
+        return total / departmentManagersList.Count;
     }
 }

@@ -2,11 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class sToolHandler : MonoBehaviour, iRequireHands
+public class sToolHandler : MonoBehaviour
 {
     public Transform transformToolbelt;
 
     public SO_EventsUI soUI;
+
+    public SO_AudioEventChannel soAudio;
 
     sPlayerCharacter playerCharacter;
 
@@ -19,46 +21,46 @@ public class sToolHandler : MonoBehaviour, iRequireHands
     //SO_ToolData currentToolItem = null;
 
     // Hands stuff
-    public int _numberOfHandsNeeded;
-    public int NumberOfHandsNeeded
-    {
-        get
-        {
-            return _numberOfHandsNeeded;
-        }
+    //public int _numberOfHandsNeeded;
+    //public int NumberOfHandsNeeded
+    //{
+    //    get
+    //    {
+    //        return _numberOfHandsNeeded;
+    //    }
 
-        set
-        {
-            _numberOfHandsNeeded = value;
-        }
-    }
+    //    set
+    //    {
+    //        _numberOfHandsNeeded = value;
+    //    }
+    //}
 
-    List<int> _handIndexList;
+    //List<int> _handIndexList;
 
-    public List<int> HandIndexList
-    {
-        get
-        {
-            return _handIndexList;
-        }
+    //public List<int> HandIndexList
+    //{
+    //    get
+    //    {
+    //        return _handIndexList;
+    //    }
 
-        set
-        {
-            _handIndexList = value;
-        }
-    }
+    //    set
+    //    {
+    //        _handIndexList = value;
+    //    }
+    //}
 
-    public Sprite _handUseSprite;
+    //public Sprite _handUseSprite;
 
-    public Sprite HandUseSprite
-    {
-        get
-        {
-            return _handUseSprite;
-        }
+    //public Sprite HandUseSprite
+    //{
+    //    get
+    //    {
+    //        return _handUseSprite;
+    //    }
 
-        set { }
-    }
+    //    set { }
+    //}
 
     public sTapeTool tapeTool;
     
@@ -170,12 +172,46 @@ public class sToolHandler : MonoBehaviour, iRequireHands
     {
         if(other.gameObject.TryGetComponent<sTool>(out sTool _tool))
         {
+            if (soAudio != null)
+            {
+                Debug.Log("Sending audio trigger");
+                soAudio.Raise("pianoTrigger");
+            }
+
+            else
+            {
+                Debug.Log("so Audio is null");
+            }
             //Debug.Log("Collided with a tool: " + _tool);
+
+            // this is for Non toolbelt tools - like nuts and bolts
+            switch (_tool.toolData.typeOfTool)
+            {
+                case eToolType.NONE:
+
+                    break;
+
+                case eToolType.nut:
+
+                    soUI.TriggerNutPickup();
+                    Destroy(other.gameObject);
+
+                    return;
+                    //break;
+
+                case eToolType.bolt:
+
+                    soUI.TriggerBoltPickup();
+                    Destroy(other.gameObject);
+
+                    return;
+
+                    //break;
+            }
 
             // has no tool and grabs a tool - and has hand free
             if (toolHeldItemDataList != null)//  && handFree)
             {
-
                 //Debug.Log("Tool Acquired to belt");
 
                 // adds to list

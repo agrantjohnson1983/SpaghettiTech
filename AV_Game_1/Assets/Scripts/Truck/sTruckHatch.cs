@@ -123,7 +123,7 @@ public class sTruckHatch : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (sTruck.isLoaded || !sGigManager.gigManagerGlobal.CheckIfHasAGig())
+        if (!sTruck.isLoaded || !sGigManager.gigManagerGlobal.CheckIfHasAGig())
             return;
 
         if (other.CompareTag("Player"))
@@ -134,7 +134,7 @@ public class sTruckHatch : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if (sTruck.isLoaded || !sGigManager.gigManagerGlobal.CheckIfHasAGig())
+        if (!sTruck.isLoaded || !sGigManager.gigManagerGlobal.CheckIfHasAGig())
             return;
 
         if (other.CompareTag("Player"))

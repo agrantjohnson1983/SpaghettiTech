@@ -22,6 +22,8 @@ public class sKitBuilder : MonoBehaviour
 
     bool isOn = false;
 
+    string startingSpawnText;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -32,6 +34,8 @@ public class sKitBuilder : MonoBehaviour
         SetBoxItems(itemsInKit);
 
         itemList = new List<SO_ItemData>();
+
+        startingSpawnText = spawnText.text;
     }
 
     void SetBoxItems(List<SO_ItemData> _itemList)
@@ -95,18 +99,33 @@ public class sKitBuilder : MonoBehaviour
                 _newBox.startingItemData.Add(itemList[i]);
             }
 
-            SpawnBox(_newBox, this.transform.position + Random.onUnitSphere * 0.5f, Quaternion.identity);
+            Vector3 randomSpot = Random.onUnitSphere * 5;
+            randomSpot = new Vector3(randomSpot.x, 0f, randomSpot.z);
+
+            SpawnBox(_newBox, this.transform.position + randomSpot, Quaternion.identity);
         }
 
         else
         {
             for (int s = 0; s < itemList.Count; s++)
             {
-                Instantiate(itemList[s].prefabItem, this.transform.position + Random.onUnitSphere, Quaternion.identity);
+                Vector3 randomSpot = Random.onUnitSphere * 5;
+                randomSpot = new Vector3(randomSpot.x, 0f, randomSpot.z);
+
+                Instantiate(itemList[s].prefabItem, this.transform.position + randomSpot, Quaternion.identity);
             }
         }
 
-        Destroy(this.gameObject);
+        ResetKit();
+
+        //Destroy(this.gameObject);
+    }
+
+    void ResetKit()
+    {
+        itemList.Clear();
+        itemList = new List<SO_ItemData>();
+        spawnText.text = startingSpawnText;
     }
 
     sBox SpawnBox(SO_BoxData data, Vector3 position, Quaternion rotation)

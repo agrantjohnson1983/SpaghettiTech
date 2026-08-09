@@ -12,6 +12,8 @@ public class sInteractive : MonoBehaviour, iGrabbable
 
     public SO_EventsUI soUI;
 
+    public SO_AudioEventChannel soAudio;
+
     bool _isGrabbed = false;
 
     public float _taskTime;
@@ -131,6 +133,8 @@ public class sInteractive : MonoBehaviour, iGrabbable
     public virtual void OnGrab()
     {
         IsGrabbed = true;
+
+        
     }
 
     public virtual void OffGrab()

@@ -8,10 +8,6 @@ using Cinemachine;
 
 public class sOrbitalCamera : MonoBehaviour
 {
-    public TextMeshProUGUI textEnemyName;
-    public TextMeshProUGUI textEnemyDescription;
-    public Image iEnemyIcon;
-
     public Transform target;      // The object to orbit around
     public float rotSpeed = 1f;   // Rotation speed
     public float xSpread = 5f;    // Spread in the x-axis
@@ -30,6 +26,8 @@ public class sOrbitalCamera : MonoBehaviour
     private void Awake()
     {
         //inputs = new PlayerInputs();
+
+        target = sPlayerCharacter.playerCharacterGlobal.transform;
     }
 
     private void OnEnable()
@@ -81,42 +79,9 @@ public class sOrbitalCamera : MonoBehaviour
             Destroy(this.gameObject);
         }
     }
-
-    private void LateUpdate()
-    {
-        
-    }
-
-
     public void SetTarget(Transform _target)
     {
         target = _target;
         //transform.position = _target.position + new Vector3(offset, 0f, offset);
     }
-
-    public void SetEnemyStats(string _name, string _desciption, Sprite _sprite)
-    {
-        Debug.Log("Setting stats");
-
-        textEnemyName.text = _name;
-        textEnemyDescription.text = _desciption;
-        iEnemyIcon.sprite = _sprite;
-
-        Debug.Log("Stats setting complete");
-    }
-
-    /*
-    void CancelCinematic(InputAction.CallbackContext context)
-    {
-        if(context.performed && cancelOnAnyKey)
-        {
-            Debug.Log("Canceling cinematic triggered");
-
-            //GameManager.gm.EndCinematic();
-
-            Destroy(this.gameObject);
-        }
-        
-    }
-    */
 }

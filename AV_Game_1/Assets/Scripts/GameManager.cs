@@ -5,7 +5,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public enum eGameMode { none, frontEnd, warehouse, gig }
+public enum eGameMode { none, frontEnd, warehouse, gig, travel }
 
 public class GameManager : MonoBehaviour
 {
@@ -103,6 +103,7 @@ public class GameManager : MonoBehaviour
     private void OnEnable()
     {
         SceneManager.sceneLoaded += OnSceneLoad;
+        
     }
 
     private void OnDisable()
@@ -115,18 +116,29 @@ public class GameManager : MonoBehaviour
         switch (currentGameMode)
         {
             case eGameMode.gig:
-
+                
+                
                 ToggleOverheadCamera(true);
+                ToggleOrbitCamera(false);
 
                 break;
 
             case eGameMode.warehouse:
 
                 ToggleOrbitCamera(true);
+                ToggleOverheadCamera(false);
 
                 break;
 
             case eGameMode.frontEnd:
+
+                break;
+
+            case eGameMode.travel:
+
+                //Destroy(this.gameObject);
+
+
 
                 break;
         }
@@ -176,6 +188,10 @@ public class GameManager : MonoBehaviour
                 canvasGameplayObject.SetActive(true);
                 canvasWarehouseObject.SetActive(false);
 
+                canvasGameplay.moneyUI.SetActive(true);
+
+
+
                 //cameraBlueprint.SetActive(true);
                 //canvasGameplay.characterPanel.SetActive(true);
                 //canvasGameplay.moneyUI.SetActive(true);
@@ -185,14 +201,31 @@ public class GameManager : MonoBehaviour
 
                 break;
 
+            case eGameMode.travel:
+
+                canvasWarehouseObject.SetActive(false);
+
+                break;
+
         }
+    }
+
+    public void StartTravel()
+    {
+        SetGameMode(eGameMode.travel);
+
+        sPlayerCharacter.playerCharacterGlobal.ToggleMovement(false);
+
+        SceneManager.LoadScene("Travel");
     }
 
     public void StartGig()
     {
         SetGameMode(eGameMode.gig);
 
-        //ToggleOrbitCamera(true);
+        sPlayerCharacter.playerCharacterGlobal.ToggleMovement(true);
+
+        ToggleOverheadCamera(true);
 
         SceneManager.LoadScene(sGigManager.gigManagerGlobal.GetGigScene());
     }

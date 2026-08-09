@@ -12,14 +12,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4372c1aa4eb715143a76f557b97434dd, type: 3}
   m_Name: gig_CoffeeShop_1
   m_EditorClassIdentifier: 
+  gigID: 
   gigName: Coffee Shop
   gigSprite: {fileID: 21300000, guid: 9c0d6ec706e01ce448aea81584af092b, type: 3}
   gigDescription: You like cold brew?
-  itemsNeededForGigList:
-  - {fileID: 11400000, guid: 0cf5a45ea37f9054dbe3be9fb61e5ede, type: 2}
-  - {fileID: 11400000, guid: 0cf5a45ea37f9054dbe3be9fb61e5ede, type: 2}
-  - {fileID: 11400000, guid: 870c39174443ee44ca14e5dc0c6c2070, type: 2}
-  - {fileID: 11400000, guid: 7df0d6e787123d54d955b650f8c7bbbc, type: 2}
-  - {fileID: 11400000, guid: 7df0d6e787123d54d955b650f8c7bbbc, type: 2}
   sceneNameToLoad: CoffeeShop
-  gigPay: 50
+  basePay: 0
+  difficulty: 1
+  minimumCrew: 1
+  requiredItems:
+  - {fileID: 11400000, guid: 0cf5a45ea37f9054dbe3be9fb61e5ede, type: 2}
+  - {fileID: 11400000, guid: 0cf5a45ea37f9054dbe3be9fb61e5ede, type: 2}
+  - {fileID: 11400000, guid: 7df0d6e787123d54d955b650f8c7bbbc, type: 2}
+  - {fileID: 11400000, guid: 7df0d6e787123d54d955b650f8c7bbbc, type: 2}
+  - {fileID: 11400000, guid: 870c39174443ee44ca14e5dc0c6c2070, type: 2}
+  phases: []

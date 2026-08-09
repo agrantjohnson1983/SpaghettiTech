@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum eToolType { NONE, ratchet, tape, bolt, nut, }
+public enum eToolType { NONE, ratchet, tape, bolt, nut, crescent,  }
 public class sTool : MonoBehaviour
 {
 
