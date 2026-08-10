@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(sTapeTool))]
 public class sToolHandler : MonoBehaviour
 {
     public Transform transformToolbelt;
@@ -62,7 +63,7 @@ public class sToolHandler : MonoBehaviour
     //    set { }
     //}
 
-    public sTapeTool tapeTool;
+    sTapeTool tapeTool;
     
 
     // Start is called before the first frame update
@@ -75,6 +76,8 @@ public class sToolHandler : MonoBehaviour
 
         //toolObj = null;
         toolHeldItemDataList = new List<SO_ToolData>();
+
+        tapeTool = GetComponent<sTapeTool>();
 
         tapeTool.enabled = false;
         //toolList = new List<SO_ItemData>();

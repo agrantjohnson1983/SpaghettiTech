@@ -65,6 +65,7 @@ public class canvasGameplay : MonoBehaviour
 
     // WAREHOUSE
     public GameObject startScreen;
+    //public GameObject gigSelectScreen;
 
     public TMP_Text textMessageMain;
 
@@ -180,7 +181,7 @@ public class canvasGameplay : MonoBehaviour
 
             else
             {
-                Debug.LogWarning("Destroy message was sent but no dictionary key found for " + _actionText);
+                //Debug.LogWarning("Destroy message was sent but no dictionary key found for " + _actionText);
             }
 
             return;
@@ -338,18 +339,11 @@ public class canvasGameplay : MonoBehaviour
 
     public void OnStart()
     {
-        //hiringPanel.SetActive(isHiring);
         startScreen.SetActive(false);
-
-        //GameManager.gm.ToggleOrbitCamera(false);
-
-        //popupControls.SetActive(false);
 
         soUI.TriggerMessage("GAME START!", 3f);
 
         GameManager.gm.StartGameplay();
-
-        sPlayerCharacter.playerCharacterGlobal.CharacterControlsToggle(true);
     }
 
     public void ToggleHireScreen()
@@ -365,6 +359,7 @@ public class canvasGameplay : MonoBehaviour
         toolbelt.SetActive(!isHiring);
 
         GameManager.gm.ToggleOrbitCamera(isHiring);
+        GameManager.gm.ToggleGameplayCamera(!isHiring);
 
         if (!isHiring)
         {

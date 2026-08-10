@@ -70,7 +70,8 @@ public class sCharacterActionController : MonoBehaviour
 
                 //Debug.Log("Action Stopped on  " + actionable);
 
-                actionable.StopAction();      
+                if(actionable != null)
+                    actionable.StopAction();      
             }
             
         }

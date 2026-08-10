@@ -7,19 +7,7 @@ public class sAudioSetupSpot : MonoBehaviour
 {
     public eAudioType typeAudio;
 
-
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    public Vector3 setupOffset;
 
     private void OnTriggerEnter(Collider other)
     {       
@@ -36,7 +24,7 @@ public class sAudioSetupSpot : MonoBehaviour
                         case eAudioType.speaker:
                             {
 
-                            Debug.Log("Audio Speaker Collision with Setup Spot");
+                            Debug.Log("Audio setup Collision with Setup Spot");
 
 
                             break;
@@ -47,7 +35,7 @@ public class sAudioSetupSpot : MonoBehaviour
                         case eAudioType.sub:
                             {
 
-                            Debug.Log("Audio Speaker Collision with Sub Spot");
+                            Debug.Log("Audio setup Collision with Sub Spot");
 
                             break;
                             }
@@ -55,7 +43,7 @@ public class sAudioSetupSpot : MonoBehaviour
                         case eAudioType.mixer:
                             {
 
-                            Debug.Log("Audio Speaker Collision with Mixer Spot");
+                            Debug.Log("Audio setup Collision with Mixer Spot");
 
                             break;
                             }
@@ -63,12 +51,21 @@ public class sAudioSetupSpot : MonoBehaviour
                         case eAudioType.micStand:
                             {
 
-                            Debug.Log("Audio Speaker Collision with Mic Stand Spot");
+                            _audioGear.gameObject.transform.rotation = Quaternion.Euler(Vector3.zero);
+                            _audioGear.gameObject.transform.position = _audioGear.gameObject.transform.position + setupOffset;
+                            _audioGear.gameObject.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
+                            _audioGear.isSet = true;
+
+                            Debug.Log("Audio setup Collision with Mic Stand Spot");
+
+                            
 
                             break;
                             }
                     }
-                }
+
+                Destroy(this.gameObject);
+            }
 
                 else
                 {

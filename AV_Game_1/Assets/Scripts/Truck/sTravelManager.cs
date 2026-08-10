@@ -56,6 +56,8 @@ public void ArriveAtGig()
 
     Debug.Log("Arrived at gig! Activating scene.");
 
+    GameManager.gm.ArriveAtGig();
+    
     loadingOperation.allowSceneActivation = true;
 
     //GameManager.gm.StartGig();

@@ -371,7 +371,7 @@ RectTransform:
   m_GameObject: {fileID: 1034188768}
   m_LocalRotation: {x: -0.016999004, y: -0.70690304, z: -0.016998975, w: 0.70690197}
   m_LocalPosition: {x: 0, y: 0, z: -0.25929162}
-  m_LocalScale: {x: 0.7757852, y: 0.9356789, z: 0.23433462}
+  m_LocalScale: {x: 0.3451093, y: 0.41623828, z: 0.104244135}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1847707845}
@@ -380,7 +380,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0.014460921, y: 1.9829493}
+  m_AnchoredPosition: {x: 0.014460921, y: 0.57146704}
   m_SizeDelta: {x: 2.74, y: 0.4}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!223 &1034188773
@@ -705,7 +705,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1180355939}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -4.488683, y: 0.6, z: -1.6780729}
+  m_LocalPosition: {x: -3.2386832, y: 0.6, z: -1.6780708}
   m_LocalScale: {x: 1.2921792, y: 1.2841111, z: 1.9281}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1583,6 +1583,37 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!1 &145541673146264890
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2297905229304772318}
+  m_Layer: 0
+  m_Name: DriverTransform
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2297905229304772318
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 145541673146264890}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -3.4999962, y: 0.5, z: -2.500006}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3168655942611076112}
+  m_RootOrder: 19
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &175699071812446820
 GameObject:
   m_ObjectHideFlags: 0
@@ -5111,6 +5142,7 @@ Transform:
   - {fileID: 1174384208}
   - {fileID: 339486570}
   - {fileID: 2075426701}
+  - {fileID: 2297905229304772318}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -5168,6 +5200,7 @@ MonoBehaviour:
   textLoaded: {fileID: 5494993014461784492}
   textLoadedMessage: LOADED!
   textHatchClose: {fileID: 339486569}
+  truckDriverTransform: {fileID: 2297905229304772318}
 --- !u!1 &6334955125427170853
 GameObject:
   m_ObjectHideFlags: 0
@@ -5523,8 +5556,8 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6859056921090022890}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0.4}
-  m_LocalScale: {x: 0.25, y: 0.25, z: 0.25}
+  m_LocalPosition: {x: 0, y: 0, z: -2.003}
+  m_LocalScale: {x: 0.1505625, y: 0.1505625, z: 0.1505625}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4967568462070558085}
@@ -5533,7 +5566,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: -0, y: 1.5}
+  m_AnchoredPosition: {x: -2.897, y: 1.13}
   m_SizeDelta: {x: 33, y: 10}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!223 &6385972060059909941

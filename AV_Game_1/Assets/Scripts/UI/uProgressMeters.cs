@@ -48,7 +48,7 @@ public class uProgressMeters : MonoBehaviour
 
         int total = (int)_amount;
 
-        Debug.Log("Overall progress updated to " + total);
+        //Debug.Log("Overall progress updated to " + total);
 
         textOverall.text = total.ToString() + "% COMPLETE - OVERALL";
     }

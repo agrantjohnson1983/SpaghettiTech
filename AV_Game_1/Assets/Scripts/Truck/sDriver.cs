@@ -18,6 +18,9 @@ public class sDriver : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        if (GameManager.gm.GetGameMode() == eGameMode.gig)
+            return;
+
         if(other.CompareTag("Player") && sTruck.isLoaded)
         {
             player = other.gameObject;
@@ -40,7 +43,7 @@ public class sDriver : MonoBehaviour
 
     public void OnLetsGo()
     {
-        Debug.Log("Truck is driving");
+        //Debug.Log("Truck is driving");
 
         canvasUI.SetActive(false);
 
@@ -52,7 +55,7 @@ public class sDriver : MonoBehaviour
         //GameManager.gm.KillPlayers();
 
         // TO DO - Add text/feedback for fail
-        Debug.Log("Hatch needs to be closed to load!");
+        //Debug.Log("Hatch needs to be closed to load!");
     }
 
     public void OnHoldUp()

@@ -86,6 +86,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1572003561386411357}
   - component: {fileID: 1496568713697223603}
+  - component: {fileID: 1038213333145566896}
   m_Layer: 0
   m_Name: Speaker_Main
   m_TagString: Untagged
@@ -127,7 +128,42 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 43ba5f921c6e94c448acfad3fcccf0d2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  soUI: {fileID: 0}
+  soAudio: {fileID: 0}
+  _taskTime: 0
+  _toolTypeNeeded: 0
+  textMPAbove: {fileID: 0}
+  itemTextMP: []
+  textItem: 
+  ui_Select: {fileID: 0}
+  _transformGrab: {fileID: 0}
+  _UI_offset: {x: 0, y: 0, z: 0}
   typeAudio: 0
+  isSet: 0
+--- !u!114 &1038213333145566896
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1572003561386411356}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a88d3fc466c15264e9c273dd3d3f18a5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fadeSpeed: 10
+  pulseAmount: 0.15
+  pulseSpeed: 4
+  mode: 2
+  targetRenderer: {fileID: 0}
+  tintColor: {r: 1, g: 0.85, b: 0.2, a: 1}
+  tintEmissionIntensity: 1.5
+  emissionColorProperty: _EmissionColor
+  outlineColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+  outlineWidth: 0.02
+  outlineWidthProperty: _OutlineWidth
+  outlineColorProperty: _OutlineColor
 --- !u!1 &1572003561618075271
 GameObject:
   m_ObjectHideFlags: 0
@@ -763,6 +799,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a2c22c399ec84c4ba463994549d9efd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _syncSource: {fileID: 0}
 --- !u!1 &9135049568757681815
 GameObject:
   m_ObjectHideFlags: 0
@@ -926,6 +963,10 @@ PrefabInstance:
       value: XLR_Supply
       objectReference: {fileID: 0}
     - target: {fileID: 6627229779395795258, guid: 2d400ed8709252a4e9d55a8f50074736, type: 3}
+      propertyPath: plugInTransform
+      value: 
+      objectReference: {fileID: 794110043192633021}
+    - target: {fileID: 6627229779395795258, guid: 2d400ed8709252a4e9d55a8f50074736, type: 3}
       propertyPath: connectionObjects.Array.data[0]
       value: 
       objectReference: {fileID: 3953428128448496149}
@@ -934,5 +975,10 @@ PrefabInstance:
 --- !u!4 &794110042743158763 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6627229779395795252, guid: 2d400ed8709252a4e9d55a8f50074736, type: 3}
+  m_PrefabInstance: {fileID: 5835988639582023391}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &794110043192633021 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6627229779476170850, guid: 2d400ed8709252a4e9d55a8f50074736, type: 3}
   m_PrefabInstance: {fileID: 5835988639582023391}
   m_PrefabAsset: {fileID: 0}

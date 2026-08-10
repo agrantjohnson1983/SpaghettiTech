@@ -40,6 +40,8 @@ public class sTapeSegment : MonoBehaviour
         if (segmentRenderer == null)
             return;
 
+        //originalMaterial = segmentRenderer.material;
+
         if (active)
         {
             segmentRenderer.material = highlightedMaterial;

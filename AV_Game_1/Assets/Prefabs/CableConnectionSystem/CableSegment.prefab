@@ -228,6 +228,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   soUI: {fileID: 11400000, guid: 2b96b6b1405722c48a474d361c95f00a, type: 2}
+  soAudio: {fileID: 0}
   _taskTime: 0
   _toolTypeNeeded: 1
   textMPAbove: {fileID: 0}
@@ -273,4 +274,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   segmentRenderer: {fileID: 2657328428099782872}
-  highlightedMaterial: {fileID: 2100000, guid: 5de6f94e257c76b4fa11c206fb09441e, type: 2}
+  highlightedMaterial: {fileID: 2100000, guid: 12c741c5c13ad1d41be5dd5cbdc43a56, type: 2}

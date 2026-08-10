@@ -144,3 +144,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   line: {fileID: 524739208723810391}
   tapedSegments: []
+  previewColor: {r: 0.9728174, g: 1, b: 0, a: 1}
+  tapedColor: {r: 0, g: 0, b: 0, a: 1}

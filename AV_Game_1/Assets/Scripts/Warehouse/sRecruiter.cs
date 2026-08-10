@@ -5,9 +5,14 @@ using UnityEngine;
 public class sRecruiter : MonoBehaviour
 {
     public static bool isRecruiting = false;
-    public canvasGameplay canvasGameplay;
-    public CanvasWarehouse canvasWarehouse;
+    canvasGameplay canvasGameplay;
+    CanvasWarehouse canvasWarehouse;
 
+    private void Start()
+    {
+        canvasGameplay = GameManager.gm.canvasGameplay;
+        canvasWarehouse = GameManager.gm.canvasWarehouse;
+    }
 
     private void OnTriggerEnter(Collider other)
     {

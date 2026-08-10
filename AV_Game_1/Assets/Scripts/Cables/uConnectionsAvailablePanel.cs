@@ -56,13 +56,18 @@ public class uConnectionsAvailablePanel : MonoBehaviour
         lr.enabled = false;
     }
 
-    // Start is called before the first frame update
-    void Start()
+    private void Awake()
     {
         lr = GetComponent<LineRenderer>();
 
         // turns the line renderer off upon start
         lr.enabled = false;
+    }
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        
 
         // sets a reference to the main camera
         cam = Camera.main;

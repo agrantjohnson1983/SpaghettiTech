@@ -84,7 +84,7 @@ public class sBlueprintsManager : MonoBehaviour
 
         imageTruss.fillAmount = trussProgress;
 
-        Debug.Log("truss progress is at: " + trussProgress);
+        //Debug.Log("truss progress is at: " + trussProgress);
 
         // motor
         ObjectiveStatus motorStatus = sRiggingManager.riggingMangerGlobal.Status.objectives[1];
@@ -100,7 +100,7 @@ public class sBlueprintsManager : MonoBehaviour
 
         imageMotors.fillAmount = motorProgress;
 
-        Debug.Log("motor progress is at: " + motorProgress);
+        //Debug.Log("motor progress is at: " + motorProgress);
 
 
         // overall
@@ -135,15 +135,16 @@ public class sBlueprintsManager : MonoBehaviour
         blueprintsOpen = !blueprintsOpen;
 
         GameManager.gm.ToggleOverheadCamera(blueprintsOpen);
+        GameManager.gm.ToggleGameplayCamera(!blueprintsOpen);
 
-        if (!GameManager.gm.isDoingTut)
+        /*if (!GameManager.gm.isDoingTut)
         {
             blueprintsSetupSwitcher.SetActive(blueprintsOpen);
         }
         else
         {
             //blueprintsTut.SetActive(blueprintsOpen);
-        }
+        }*/
 
         //hiringButton.SetActive(!blueprintsOpen);
         //characterPanel.SetActive(!blueprintsOpen);

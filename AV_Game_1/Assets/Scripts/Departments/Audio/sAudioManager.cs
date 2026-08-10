@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum eAudioType { speaker, sub, mixer, micStand }
+public enum eAudioType { speaker, sub, mixer, micStand, microphone,  }
 public class sAudioManager : sDepartmentManager
 {
     public Transform[] speakerSetupLocations;
@@ -20,8 +20,10 @@ public class sAudioManager : sDepartmentManager
 
 
     // Start is called before the first frame update
-    void Start()
+    public override void Start()
     {
+        base.Start();
+
         for (int i = 0; i < speakerSetupLocations.Length; i++)
         {
             GameObject tempObj;

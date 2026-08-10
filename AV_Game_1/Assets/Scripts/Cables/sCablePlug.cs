@@ -193,7 +193,8 @@ public class sCablePlug : sInteractive, iPluggable, iClickable
                 cablePlugOtherEnd.supply.TogglePoweredObjects(true);
 
                 // drains power
-                source.DrainPower(cablePlugOtherEnd.supply.powerDrainAmount);
+                if(source != null)
+                    source.DrainPower(cablePlugOtherEnd.supply.powerDrainAmount);
 
                 // turns on connection UI
                 connectionUI.SetActive(true);

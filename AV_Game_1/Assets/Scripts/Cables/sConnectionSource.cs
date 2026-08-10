@@ -53,12 +53,10 @@ public class sConnectionSource : MonoBehaviour
 
         pluggableList = new List<GameObject>();
 
+        SpawnConnectionPlate();
         SpawnConnectionsAvailablePanel();
 
-        SpawnConnectionPlate();
-
- 
-
+       
         rb = GetComponent<Rigidbody>();
     }
 
@@ -78,6 +76,8 @@ public class sConnectionSource : MonoBehaviour
     // This spawns the connection plate which all of the input channels
     void SpawnConnectionPlate()
     {
+        //Debug.Log("Spawning Connection plate");
+
         // temp game object reference
         GameObject tempObj;
 
@@ -98,6 +98,8 @@ public class sConnectionSource : MonoBehaviour
     // This spawns the connection available panel which shows connections that are avaiable when the have collided with the connection source
     void SpawnConnectionsAvailablePanel()
     {
+        //Debug.Log("Spawning connections avail panel");
+
         GameObject tempObj;
 
         tempObj = Instantiate(pConnectionAvailablePanel, connectionsPlateTransforms);

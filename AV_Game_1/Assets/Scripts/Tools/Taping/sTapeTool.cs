@@ -25,7 +25,6 @@ public class sTapeTool : MonoBehaviour
 
     private HashSet<sTapeSegment> previewSegments = new();
 
-
     private void OnEnable()
     {
         if(playerCamera == null)
@@ -40,7 +39,7 @@ public class sTapeTool : MonoBehaviour
 
         if (isTaping)
         {
-            Debug.Log("[TAPE] Updating preview");
+            //Debug.Log("[TAPE] Updating preview");
             UpdatePreview();
         }
             
@@ -50,21 +49,21 @@ public class sTapeTool : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0))
         {
-            Debug.Log("[TAPE] Mouse DOWN");
+            //Debug.Log("[TAPE] Mouse DOWN");
             TryStartTape();
         }
 
 
         if (Input.GetMouseButtonUp(0))
         {
-            Debug.Log("[TAPE] Mouse UP");
+            //Debug.Log("[TAPE] Mouse UP");
             FinishTape();
         }
     }
 
     void TryStartTape()
     {
-        Debug.Log("[TAPE] Mouse down");
+        //Debug.Log("[TAPE] Mouse down");
 
         Ray ray = playerCamera.ScreenPointToRay(Input.mousePosition);
 
@@ -76,14 +75,14 @@ public class sTapeTool : MonoBehaviour
             return;
         }
 
-        Debug.Log("[TAPE] Started at " + hit.point);
+       // Debug.Log("[TAPE] Started at " + hit.point);
 
         startPoint = hit.point;
         currentPoint = hit.point;
 
         GameObject obj = Instantiate(tapeStripPrefab);
 
-        Debug.Log("[TAPE] Spawned strip");
+        //Debug.Log("[TAPE] Spawned strip");
 
         currentStrip = obj.GetComponent<sTapeStrip>();
 
@@ -102,7 +101,7 @@ public class sTapeTool : MonoBehaviour
             return;
         }
 
-        Debug.Log("[TAPE] Preview point: " + hit.point);
+        //Debug.Log("[TAPE] Preview point: " + hit.point);
 
         currentPoint = hit.point;
 
@@ -113,7 +112,7 @@ public class sTapeTool : MonoBehaviour
 
     void FinishTape()
     {
-        Debug.Log("[TAPE] FinishTape called");
+        //Debug.Log("[TAPE] FinishTape called");
 
         if (currentStrip == null)
         {
@@ -130,7 +129,7 @@ public class sTapeTool : MonoBehaviour
 
         currentStrip.Commit();
 
-        Debug.Log("[TAPE] Tape committed");
+        //Debug.Log("[TAPE] Tape committed");
 
         DetectCableSegments();
 
@@ -200,7 +199,7 @@ public class sTapeTool : MonoBehaviour
 
     void DetectCableSegments()
     {
-        Debug.Log("[TAPE] Starting cable detection");
+        //Debug.Log("[TAPE] Starting cable detection");
 
 
         Vector3 direction = currentPoint - startPoint;

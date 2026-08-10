@@ -79,8 +79,6 @@ public class sPlayerCharacter : MonoBehaviour
             return;
         }
 
-        cam = GameManager.gm.cameraGameplay.GetComponentInChildren<Camera>();
-
         vCam = GetComponentInChildren<CinemachineVirtualCamera>();
 
         actionController = GetComponent<sCharacterActionController>();
@@ -93,6 +91,8 @@ public class sPlayerCharacter : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        CharacterControlsToggle(false);
+
         // Safety net matching the Awake() guard - if this somehow isn't the
         // surviving global instance, don't run any of the registration logic
         if (playerCharacterGlobal != this)
@@ -101,6 +101,10 @@ public class sPlayerCharacter : MonoBehaviour
         }
 
         gm = GameManager.gm;
+
+        cam = gm.ReturnCameraGameplay().GetComponentInChildren<Camera>();
+
+        gm.SetPlayerGlobal(this);
 
         //// Sets first player spawned active
         //if (gm != null)
@@ -135,7 +139,7 @@ public class sPlayerCharacter : MonoBehaviour
 
         camStart = vCam.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset;
 
-        Debug.Log("Cam start is " + camStart);
+        //Debug.Log("Cam start is " + camStart);
 
         //Debug.Log("Hands list initialized with a count of " + handsList.Count);
     }
@@ -198,10 +202,10 @@ public class sPlayerCharacter : MonoBehaviour
         //mouseClickController.ToggleMouseClickController(_isOn);
 
         if (cam == null)
-            cam = Camera.main;
+            cam = GameManager.gm.ReturnCameraGameplay().GetComponent<Camera>();
 
         // turns camera on/off
-        cam.gameObject.SetActive(_isOn);
+        //cam.gameObject.SetActive(_isOn);
 
         // Changes the UI based on character data
         if (_isOn)
@@ -430,4 +434,8 @@ public class sPlayerCharacter : MonoBehaviour
         movementController.enabled = _isOn;
     }
 
+    public void ToggleModelVisibility(bool _isOn)
+    {
+        model.SetActive(_isOn);
+    }
 }

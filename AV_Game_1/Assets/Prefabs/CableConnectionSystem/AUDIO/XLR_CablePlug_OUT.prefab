@@ -190,9 +190,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3cdcf7e3154e9bc4aa70543b561b6542, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  uiEvents: {fileID: 11400000, guid: 2b96b6b1405722c48a474d361c95f00a, type: 2}
+  soUI: {fileID: 0}
+  soAudio: {fileID: 0}
   _taskTime: 0
-  _toolTypeNeeded: 1
+  _toolTypeNeeded: 0
   textMPAbove: {fileID: 0}
   itemTextMP: []
   textItem: 
@@ -218,6 +219,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a88d3fc466c15264e9c273dd3d3f18a5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  fadeSpeed: 10
+  pulseAmount: 0.15
+  pulseSpeed: 4
   mode: 2
   targetRenderer: {fileID: 4774520749273181791}
   tintColor: {r: 1, g: 0.85, b: 0.2, a: 1}

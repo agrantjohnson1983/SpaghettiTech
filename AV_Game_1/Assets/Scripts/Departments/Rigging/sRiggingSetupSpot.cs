@@ -13,7 +13,7 @@ public class sRiggingSetupSpot : MonoBehaviour, iActionable
 
     bool _canTriggerAction; // this is for controls to check if an action can be triggered
 
-    bool hasBeenSet = false;
+    //bool hasBeenSet = false;
 
     public eTypeRigSetup rigType;
 
@@ -160,6 +160,8 @@ public class sRiggingSetupSpot : MonoBehaviour, iActionable
 
             sRiggingManager.riggingMangerGlobal.RegisterOverheadGearSpot(this);
         }
+
+        sRiggingManager.riggingMangerGlobal.RegisterRiggingGear(rigType, this.transform.parent.gameObject);
     }
 
     void RecordOriginalLocalPositionIfNeeded()
@@ -311,7 +313,7 @@ public class sRiggingSetupSpot : MonoBehaviour, iActionable
 
     public void StopAction()
     {
-        Debug.Log("Stopping Action Tasking Cortoutine");
+        //Debug.Log("Stopping Action Tasking Cortoutine");
 
         StopCoroutine(ActionTasking());
 

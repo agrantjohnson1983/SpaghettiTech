@@ -8,7 +8,7 @@ public class sComputer : MonoBehaviour
 {
     public static sComputer computerGlobal;
 
-    public GameObject gigSelectScreen;
+    //public GameObject gigSelectScreen;
 
     bool isOnSelectScreen = false;
 
@@ -33,13 +33,16 @@ public class sComputer : MonoBehaviour
     {
         foreach(TMP_Text t in textCurrentGig)
         {
-            t.text = _text;
+            if(t != null)
+                t.text = _text;
         }
+
+        GameManager.gm.canvasWarehouse.SetGigText(_text);
     }
 
     void ToggleSelectScreen(bool _isOn)
     {
-        gigSelectScreen.SetActive(_isOn);
+        GameManager.gm.canvasWarehouse.ToggleGigSelectScreen(_isOn);
     }
 
     private void OnTriggerEnter(Collider other)

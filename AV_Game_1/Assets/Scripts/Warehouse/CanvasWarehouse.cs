@@ -17,6 +17,9 @@ public class CanvasWarehouse : MonoBehaviour
 
     public TextMeshProUGUI textMoney;
 
+    public GameObject gigSelectScreen;
+    public TMP_Text textGig;
+
     float money;
 
     private void Awake()
@@ -52,7 +55,17 @@ public class CanvasWarehouse : MonoBehaviour
     public void OnStartButton()
     {
         startScreen.SetActive(false);
-        GameManager.gm.ToggleOrbitCamera(false);
+        GameManager.gm.StartGameplay();
+    }
+
+    public void ToggleGigSelectScreen(bool _isOn)
+    {
+        gigSelectScreen.gameObject.SetActive(_isOn);
+    }
+
+    public void SetGigText(string _text)
+    {
+        textGig.text = _text;
     }
 
     public void ToggleHireScreen()

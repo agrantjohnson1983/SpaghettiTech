@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class sMotor : sRigGear
 {
-    Rigidbody rb;
+    //Rigidbody rb;
 
     LineRenderer lineChain;
 
@@ -35,7 +35,7 @@ public class sMotor : sRigGear
 
     Vector3 cachedChainTopPosition;
 
-    bool chainsUp = false;
+    //bool chainsUp = false;
 
     bool isMoving = false;
 
@@ -128,14 +128,16 @@ public class sMotor : sRigGear
     }
 
     // Start is called before the first frame update
-    void Start()
+    public override void Start()
     {
-        rb = GetComponent<Rigidbody>();
+        base.Start();
+
+        /*rb = GetComponent<Rigidbody>();
 
         if (rb == null)
         {
             Debug.LogWarning("[" + this.name + "] sMotor has no Rigidbody component - motor raise will not move it.", this);
-        }
+        }*/
 
         lineChain = GetComponent<LineRenderer>();
 

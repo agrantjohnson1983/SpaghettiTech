@@ -22,19 +22,21 @@ public class GameManager : MonoBehaviour
     public GameObject canvasWarehouseObject;
     public CanvasWarehouse canvasWarehouse;
 
-    sPlayerCharacter currentPlayer;
+    sPlayerCharacter playerGlobal;
 
     List<sPlayerCharacter> playerCharacters;
 
     //int activePlayerIndex = 0;
 
-    public GameObject cameraOrbit, cameraOverhead, cameraGameplay;
+    [SerializeField]private GameObject camOrbit, camOverhead, camGameplay;
 
     public eGameMode startingGameMode;
 
-    eGameMode currentGameMode;
+    eGameMode currentGameMode = eGameMode.none;
 
-    public bool isDoingTut = false;
+    public sCountdownSequence sequencer; 
+
+    //public bool isDoingTut = false;
     private void Awake()
     {
         if (gm == null)
@@ -113,18 +115,26 @@ public class GameManager : MonoBehaviour
 
     private void OnSceneLoad(Scene _scene, LoadSceneMode _loadMode)
     {
+        if (currentGameMode == eGameMode.none)
+            currentGameMode = startingGameMode;
+
+        ToggleGameplayCamera(false);
+
+        Debug.Log("On scene load called for mode: " + currentGameMode);
+
         switch (currentGameMode)
         {
             case eGameMode.gig:
-                
-                
-                ToggleOverheadCamera(true);
+
+                //TogglePlayerControls(false);
+                ToggleOverheadCamera(true);  
                 ToggleOrbitCamera(false);
 
                 break;
 
             case eGameMode.warehouse:
 
+                //TogglePlayerControls(false);
                 ToggleOrbitCamera(true);
                 ToggleOverheadCamera(false);
 
@@ -144,14 +154,6 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        //if(Input.GetKeyDown(KeyCode.Tab))
-        //{
-        //    SwitchActivePlayer(1);
-        //}
-    }
     public eGameMode GetGameMode()
     {
         return currentGameMode;
@@ -159,13 +161,18 @@ public class GameManager : MonoBehaviour
 
     public void SetGameMode(eGameMode _gameMode)
     {
+        Debug.Log("Setting game mode");
+
         currentGameMode = _gameMode;
 
-        cameraGameplay.SetActive(false);
+        camGameplay.SetActive(false);
 
         switch (currentGameMode)
         {
             case eGameMode.frontEnd:
+
+                canvasGameplayObject.SetActive(false);
+                canvasWarehouseObject.SetActive(false);
 
                 break;
 
@@ -187,10 +194,9 @@ public class GameManager : MonoBehaviour
 
                 canvasGameplayObject.SetActive(true);
                 canvasWarehouseObject.SetActive(false);
-
                 canvasGameplay.moneyUI.SetActive(true);
 
-
+                //ToggleOverheadCamera(true);
 
                 //cameraBlueprint.SetActive(true);
                 //canvasGameplay.characterPanel.SetActive(true);
@@ -214,149 +220,72 @@ public class GameManager : MonoBehaviour
     {
         SetGameMode(eGameMode.travel);
 
-        sPlayerCharacter.playerCharacterGlobal.ToggleMovement(false);
-
         SceneManager.LoadScene("Travel");
     }
 
-    public void StartGig()
+    public void ArriveAtGig()
     {
         SetGameMode(eGameMode.gig);
 
-        sPlayerCharacter.playerCharacterGlobal.ToggleMovement(true);
-
         ToggleOverheadCamera(true);
-
-        SceneManager.LoadScene(sGigManager.gigManagerGlobal.GetGigScene());
     }
 
     public void StartGameplay()
     {
+        TogglePlayerCharacter(true);
+
         ToggleOrbitCamera(false);
+
         ToggleOverheadCamera(false);
 
-        cameraGameplay.SetActive(true);
+        ToggleGameplayCamera(true);
+
+        if (sTruck.truckGlobal != null)
+            playerGlobal.transform.position = sTruck.truckGlobal.truckDriverTransform.position;
+        else
+            Debug.LogWarning("Truck global was null");
+
+        TogglePlayerControls(true);
+
+        if (sequencer != null && currentGameMode == eGameMode.gig)
+            sequencer.StartSequence();
+        //camGameplay.SetActive(true);
     }
-
-    // This is used to change the index manually outside of the TAB button or arrow buttons - mostly when a player gets clicked
-    //public void SwitchActivePlayerIndex(int _index)
-    //{
-    //    activePlayerIndex = _index;
-    //}
-
-    //public void SwitchActivePlayer(int _increase)
-    //{
-
-    //    Debug.Log("Switching Player");
-
-    //    //currentPlayer.ReturnGrabController().GrabReset();
-
-    //    // turns off the current players controls
-    //    playerCharacters[activePlayerIndex].CharacterControlsToggle(false);
-
-    //    // increments or decrements the player index based on the argument given
-    //    activePlayerIndex+=_increase;
-
-    //    // if the index is too high then it resets at 0
-    //    if(activePlayerIndex > playerCharacters.Count-1)
-    //    {
-    //        activePlayerIndex = 0;
-    //    }
-
-    //    // if the index is too low then it resets to the count minus 1 (matches array)
-    //    if(activePlayerIndex < 0)
-    //    {
-    //        activePlayerIndex = playerCharacters.Count - 1;
-    //    }
-
-    //    // turns back the character controls with the correct character
-    //    playerCharacters[activePlayerIndex].CharacterControlsToggle(true);
-
-    //    // sets the camera to the new character
-    //    canvasWorldSpace.worldCamera = Camera.main;
-
-    //    // turns off any popups currently over a character
-    //    soUI.ToggleControlsPopup(null);
-
-
-
-    //}
-
-    /*
-    public void ToggleActivePlayer(bool _isOn)
-    {
-        playerCharacters[activePlayerIndex].CharacterControlsToggle(_isOn);
-
-        ToggleHiringCamera(!_isOn);
-    }
-
-    */
-
 
     public void ToggleOrbitCamera(bool _isOn)
     {
-        cameraOrbit.SetActive(_isOn);
-
-        cameraGameplay.SetActive(!_isOn);
-
-        sPlayerCharacter.playerCharacterGlobal.CharacterControlsToggle(!_isOn);
-
-        //if(playerCharacters.Count > 0)
-        //{
-        //    //SetCurrentPlayer(playerCharacters[activePlayerIndex]);
-        //    playerCharacters[activePlayerIndex].SetToCurrentPlayer();
-        //    //playerCharacters[activePlayerIndex].CharacterControlsToggle(!_isOn);
-        //}
-
-        //else
-        //{
-        //    Debug.LogWarning("Player characters are null!");
-        //}
-
+        camOrbit.SetActive(_isOn);
     }
 
     public void ToggleOverheadCamera(bool _isOn)
     {
-        cameraOverhead.SetActive(_isOn);
-
-        cameraGameplay.SetActive(!_isOn);
-
-        sPlayerCharacter.playerCharacterGlobal.CharacterControlsToggle(!_isOn);
-
-        //playerCharacters[activePlayerIndex].CharacterControlsToggle(!_isOn);
+        //Debug.Log("Setting overhead cam to: " + _isOn);
+        camOverhead.SetActive(_isOn);
     }
 
-    //public void AddCharacterToList(sPlayerCharacter _player)
-    //{
-    //    Debug.Log("Adding player character to GM list");
-    //    playerCharacters.Add(_player);
-    //}
+    public void ToggleGameplayCamera(bool _isOn)
+    {
+        camGameplay.SetActive(_isOn);
+    }
 
-    //public List<sPlayerCharacter> ReturnPlayerList()
-    //{
-    //    return playerCharacters;
-    //}
+    void TogglePlayerControls(bool _isOn)
+    {
+        playerGlobal.CharacterControlsToggle(_isOn);
+    }
 
-    //public void SetCurrentPlayer(sPlayerCharacter _playerCharacter)
-    //{
-    //    currentPlayer = _playerCharacter;
-    //}
+    void TogglePlayerCharacter(bool _isOn)
+    {
+        playerGlobal.ToggleModelVisibility(_isOn);
+    }
 
-    //public sPlayerCharacter ReturnCurrentPlayer()
-    //{
-    //    return sPlayerCharacter.playerCharacterGlobal;
-    //}
+    public void SetPlayerGlobal(sPlayerCharacter _player)
+    {
+        //Debug.Log("Setting player global");
+        playerGlobal = _player;
+    }
 
-    //public Canvas ReturnCanvasWorldSpace()
-    //{
-    //    return canvasWorldSpace;
-    //}
-
-    //public void KillPlayers()
-    //{
-    //    for (int i = 0; i < playerCharacters.Count; i++)
-    //    {
-    //        Destroy(playerCharacters[i]);
-    //    }
-    //}
+    public GameObject ReturnCameraGameplay()
+    {
+        return camGameplay;
+    }
 }

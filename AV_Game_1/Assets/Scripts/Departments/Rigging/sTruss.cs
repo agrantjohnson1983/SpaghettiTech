@@ -4,8 +4,9 @@ using UnityEngine;
 
 public class sTruss : sRigGear
 {
-    private void Start()
+    public override void Start()
     {
+        base.Start();
         sRiggingManager.riggingMangerGlobal.trussList.Add(this);
     }
 }

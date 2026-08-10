@@ -6,6 +6,8 @@ using TMPro;
 
 public class sTruck : MonoBehaviour
 {
+    public static sTruck truckGlobal;
+
     public Vector3 camOffset;
 
     public Transform camMoveTransform;
@@ -32,6 +34,16 @@ public class sTruck : MonoBehaviour
     public GameObject textHatchClose;
     //List<SO_ItemData> itemNeededDataList, itemLoadedDataList;
 
+    public Transform truckDriverTransform;
+
+    private void Awake()
+    {
+        if(truckGlobal == null)
+        {
+            truckGlobal = this;
+        }
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -54,6 +66,10 @@ public class sTruck : MonoBehaviour
     {
         animator.SetTrigger("Drive");
 
+        textHatchClose.gameObject.SetActive(false);
+
+        sPlayerCharacter.playerCharacterGlobal.ToggleModelVisibility(false);
+
         sGigManager.gigManagerGlobal.TruckDrive();
     }
 
@@ -61,15 +77,14 @@ public class sTruck : MonoBehaviour
     public void SceneChange()
     {
         GameManager.gm.StartTravel();
-
-        
+        Destroy(this.gameObject);
     }
 
     void HandleTruckUI(bool _isOn)
     {
         //isUpdatingUI = true;
 
-        Debug.Log("Setting Truck UI to: " + _isOn);
+        //Debug.Log("Setting Truck UI to: " + _isOn);
 
         canvasLoaded.SetActive(_isOn);
 
@@ -115,6 +130,7 @@ public class sTruck : MonoBehaviour
             if(hasAll)
             {
                 Debug.Log("LET'S GO MOFO!");
+                isLoaded = true;
                 textLoaded.text = textLoadedMessage;
                 textLoaded.color = Color.green;
                 textHatchClose.SetActive(true);

@@ -97,7 +97,7 @@ public class sGigManager : MonoBehaviour
         }
 
         gigManagerGlobal = this;
-        DontDestroyOnLoad(this.gameObject); // only the real singleton persists
+        //DontDestroyOnLoad(this.gameObject); // only the real singleton persists
 
         if (gigEvent == null)
             gigEvent = new UnityEvent<SO_GigData>();
@@ -109,6 +109,9 @@ public class sGigManager : MonoBehaviour
 
         workersHiredList = new List<GameObject>();
 
+        if (currentGig != null)
+            SetCurrentGig(currentGig);
+
         //itemsLoadedDataList = new List<SO_ItemData>();
 
         //itemsNeededDataList = new List<SO_ItemData>();
@@ -119,7 +122,7 @@ public class sGigManager : MonoBehaviour
     public void RegisterDepartment(
     sDepartmentManager manager)
     {
-        Debug.Log("registering dept " + manager);
+        //Debug.Log("registering dept " + manager);
 
         if (!departmentManagersList.Contains(manager))
         {
@@ -133,10 +136,7 @@ public class sGigManager : MonoBehaviour
     {
         CurrentPhase = _phase;
 
-        switch(CurrentPhase)
-        {
-            
-        }
+        
     }
 
     void UpdateRigging(float _amount)
@@ -195,8 +195,6 @@ public class sGigManager : MonoBehaviour
         currentStatus.gigName = currentGig.gigName;
 
         UpdateGigUI();
-
-
     }
 
     void FinishGig()
@@ -351,7 +349,7 @@ public class sGigManager : MonoBehaviour
 
         if (GameManager.gm.GetGameMode() == eGameMode.gig)
         {
-            Debug.Log("Starting Gig");
+            //Debug.Log("Starting Gig");
             StartGig();
         }
     }

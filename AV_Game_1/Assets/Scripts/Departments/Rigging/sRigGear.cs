@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class sRigGear : sInteractive, iRiggable, iGrabbable, iLoadable
+public class sRigGear : sInteractive, iRiggable, iLoadable
 {
     public eTypeRigSetup _typeRig;
 
