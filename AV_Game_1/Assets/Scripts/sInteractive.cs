@@ -16,26 +16,26 @@ public class sInteractive : MonoBehaviour, iGrabbable
 
     bool _isGrabbed = false;
 
-    public float _taskTime;
+    //public float _taskTime;
     
-    public eToolType _toolTypeNeeded;
+    //public eToolType _toolTypeNeeded;
     //public eTypeRigSetup typeOfRig;
 
     bool hasCorrectTool;
 
     bool isActive;
 
-    public TextMeshPro textMPAbove;
+    //public TextMeshPro textMPAbove;
 
-    public TextMeshPro[] itemTextMP;
+    //public TextMeshPro[] itemTextMP;
 
-    public string textItem;
+    //public string textItem;
 
     public GameObject ui_Select;
 
     bool canBeSelected = true;
 
-    public float TaskTime
+    /*public float TaskTime
     {
         get
         {
@@ -46,9 +46,9 @@ public class sInteractive : MonoBehaviour, iGrabbable
         {
             _taskTime = value;
         }
-    }
+    }*/
 
-    public eToolType ToolTypeNeeded
+   /* public eToolType ToolTypeNeeded
     {
         get
         {
@@ -59,7 +59,7 @@ public class sInteractive : MonoBehaviour, iGrabbable
         {
             _toolTypeNeeded = value;
         }
-    }
+    }*/
 
     public bool CanBeGrabbed
     {
@@ -113,7 +113,7 @@ public class sInteractive : MonoBehaviour, iGrabbable
     public virtual void Start()
     {
         // Sets all the texts of item - for box labels, etc;
-        if(itemTextMP.Length > 0)
+        /*if(itemTextMP.Length > 0)
         {
             //Debug.Log("Setting text on " + gameObject.name);
 
@@ -121,7 +121,7 @@ public class sInteractive : MonoBehaviour, iGrabbable
             {
                 itemTextMP[i].SetText(textItem);
             }
-        }
+        }*/
 
         rb = GetComponent<Rigidbody>();
 

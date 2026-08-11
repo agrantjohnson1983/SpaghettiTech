@@ -27,6 +27,8 @@ public class sCamera : sInteractive, iActionable
         get;
         set;
     }
+    public float TaskTime { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
+    public eToolType ToolTypeNeeded { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
 
     // Start is called before the first frame update
     public override void Start()
@@ -36,12 +38,6 @@ public class sCamera : sInteractive, iActionable
         cam = GetComponentInChildren<Camera>();
 
         cameraFPS.SetActive(false);
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 
     public void TriggerAction(GameObject _actionObj, SO_ItemData _itemData)

@@ -8,18 +8,28 @@ using UnityEngine.Events;
 )]
 public class SO_AudioEventChannel : ScriptableObject
 {
-    public UnityEvent<string> OnAudioEventRaised;
+    public UnityEvent<string> audioEvent_SFX, audioEvent_MUSIC;
 
     private void OnEnable()
     {
-        if(OnAudioEventRaised== null)
+        if(audioEvent_SFX == null)
         {
-            OnAudioEventRaised = new UnityEvent<string>();
+            audioEvent_SFX = new UnityEvent<string>();
+        }
+
+        if (audioEvent_MUSIC == null)
+        {
+            audioEvent_MUSIC = new UnityEvent<string>();
         }
     }
 
-    public void Raise(string eventName)
+    public void TriggerSFX(string eventName)
     {
-        OnAudioEventRaised?.Invoke(eventName);
+        audioEvent_SFX?.Invoke(eventName);
+    }
+
+    public void TriggerMUSIC(string eventName)
+    {
+        audioEvent_MUSIC?.Invoke(eventName);
     }
 }

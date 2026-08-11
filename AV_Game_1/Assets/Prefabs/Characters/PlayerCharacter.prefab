@@ -270,6 +270,8 @@ MonoBehaviour:
   characterData: {fileID: 11400000, guid: b809d4cd6179c664785ae07a6a2666bf, type: 2}
   soUI: {fileID: 11400000, guid: 2b96b6b1405722c48a474d361c95f00a, type: 2}
   handsNumber: 2
+  camOffset: {x: 0, y: 0, z: 0}
+  camStart: {x: 0, y: 0, z: 0}
 --- !u!114 &2012776716820894630
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -339,7 +341,7 @@ MonoBehaviour:
   transformGrab: {fileID: 7892026315839176651}
   grabControlText: SPACE
   throwControlText: CLICK
-  vfxChannel: {fileID: 11400000, guid: 2e677f6310e0cd24e8679be3f3361b8f, type: 2}
+  soVFX: {fileID: 0}
   throwPower: 10
 --- !u!114 &8416505087930365736
 MonoBehaviour:
@@ -355,9 +357,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   transformToolbelt: {fileID: 3589997433737811900}
   soUI: {fileID: 11400000, guid: 2b96b6b1405722c48a474d361c95f00a, type: 2}
-  _numberOfHandsNeeded: 0
-  _handUseSprite: {fileID: 0}
-  tapeTool: {fileID: 0}
+  soAudio: {fileID: 11400000, guid: 85974a5eed2479c48b89b5a67f81403b, type: 2}
+  soVFX: {fileID: 11400000, guid: 2e677f6310e0cd24e8679be3f3361b8f, type: 2}
 --- !u!114 &8416505087930365737
 MonoBehaviour:
   m_ObjectHideFlags: 0

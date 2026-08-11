@@ -2,68 +2,108 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum eAudioType { speaker, sub, mixer, micStand, microphone,  }
+public enum eAudioType { speaker, sub, mixer, micStand, microphone }
 public class sAudioManager : sDepartmentManager
 {
-    public Transform[] speakerSetupLocations;
-    public Transform[] subSetupLocations;
-    public Transform[] mixerSetupLocations;
-    public Transform[] micStandLocations;
+    public static sAudioManager audioManagerGlobal;
+    //public Transform[] speakerSetupLocations;
+    //public Transform[] subSetupLocations;
+    //public Transform[] mixerSetupLocations;
+    //public Transform[] micStandLocations;
 
-    public GameObject pSpeakerSetup;
-    public GameObject pSubSetup;
-    public GameObject pMixerSetup;
-    public GameObject pMicStandSetup;
+    //public GameObject pSpeakerSetup;
+    //public GameObject pSubSetup;
+    //public GameObject pMixerSetup;
+    //public GameObject pMicStandSetup;
 
-    public List<sAudioMixer> audioMixerList;
-    public List<sAudioSpeakerMain> audioSpeakerMainList;
+    [HideInInspector] public List<sAudioMixer> audioMixerList;
+    [HideInInspector] public List<sAudioSpeakerMain> audioSpeakerMainList;
 
+    List<GameObject> speakerList, subList, mixerList, micStandList, microphoneList;
+
+    List<GameObject> setupSpeaker, setupSub, setupMixer, setupMicStand, setupMicrophone;
+
+    private void Awake()
+    {
+        if (audioManagerGlobal == null)
+            audioManagerGlobal = this;
+        else
+            Destroy(this.gameObject);
+
+        setupSpeaker = new List<GameObject>();
+        setupSub = new List<GameObject>();
+        setupMixer = new List<GameObject>();
+        setupMicStand = new List<GameObject>();
+        setupMicrophone = new List<GameObject>();
+    }
 
     // Start is called before the first frame update
     public override void Start()
     {
         base.Start();
+    }
 
-        for (int i = 0; i < speakerSetupLocations.Length; i++)
+    public void RegiseterAudioSetup(eAudioType _type, GameObject _object)
+    {
+        Debug.Log("Registering audio setup spot for " + _type);
+
+        switch (_type)
         {
-            GameObject tempObj;
+            case eAudioType.speaker:
 
-            tempObj = Instantiate(pSpeakerSetup, speakerSetupLocations[i]);
+                setupSpeaker.Add(_object);
 
-            //audioSpeakerMainList.Add(tempObj);
+                break;
 
-            // Turns off all objects during tutorial so you only do them one at a time vs all at once
-            //if (GameManager.gm.isDoingTut)
-            //    tempObj.SetActive(false);
+            case eAudioType.sub:
 
-        }
+                setupSub.Add(_object);
 
-        for (int i = 0; i < subSetupLocations.Length; i++)
-        {
-            GameObject tempObj;
+                break;
 
-            tempObj = Instantiate(pSubSetup, subSetupLocations[i]);
+            case eAudioType.mixer:
 
-            //audioSpeakerMainList.Add(tempObj);
+                setupMixer.Add(_object);
 
-            // Turns off all objects during tutorial so you only do them one at a time vs all at once
-            //if (GameManager.gm.isDoingTut)
-            //    tempObj.SetActive(false);
+                break;
 
-        }
+            case eAudioType.micStand:
 
-        for (int i = 0; i < mixerSetupLocations.Length; i++)
-        {
-            GameObject tempObj;
+                setupMicStand.Add(_object);
 
-            tempObj = Instantiate(pMixerSetup, mixerSetupLocations[i]);
+                break;
 
-            //audioSpeakerMainList.Add(tempObj);
+            case eAudioType.microphone:
 
-            // Turns off all objects during tutorial so you only do them one at a time vs all at once
-            //if (GameManager.gm.isDoingTut)
-            //    tempObj.SetActive(false);
+                setupMicrophone.Add(_object);
 
+                break;
         }
     }
+
+    /*public void RegisterAudioGear(eAudioType _type, GameObject _object)
+    {
+        switch(_type)
+        {
+            case eAudioType.speaker:
+
+                break;
+
+            case eAudioType.sub:
+
+                break;
+
+            case eAudioType.mixer:
+
+                break;
+
+            case eAudioType.micStand:
+
+                break;
+
+            case eAudioType.microphone:
+
+                break;
+        }
+    }    */
 }

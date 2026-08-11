@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4761baac45e190b46b25127123e335f2, type: 3}
-  m_Name: vfx_SmokePuff
+  m_Name: vfx_StarBurst
   m_EditorClassIdentifier: 
   type: 2
-  prefab: {fileID: 100000, guid: 83cd9cc9f9c88824ba18dc59b05ae328, type: 3}
+  prefab: {fileID: 100006, guid: 8fc06027b01064e4f885fd8dd2929310, type: 3}
   pool: 1
   lifetime: 2
   positionOffset: {x: 0, y: 0, z: 0}

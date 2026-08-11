@@ -2,14 +2,14 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 
-public enum eGigTask
+public enum eGigDept
 {
-    BuildRigging,
-    SetupAudio,
-    SetupLighting,
-    SetupVideo,
-    Power,
-    Cameras
+    NONE,
+    Rigging,
+    Audio,
+    Lighting,
+    Video,
+    Electricity,
 }
 
 public abstract class sDepartmentManager : MonoBehaviour
@@ -25,8 +25,9 @@ public abstract class sDepartmentManager : MonoBehaviour
     [SerializeField] protected float progress;
 
     [SerializeField]
-    protected eGigTask taskID;
+    protected eGigDept deptID;
 
+    List<GameObject> setupSpots;// = new List<GameObject>();
 
     public bool IsComplete => progress >= 1f;
 
@@ -36,6 +37,8 @@ public abstract class sDepartmentManager : MonoBehaviour
 
     public virtual void Start()
     {
+        setupSpots = new List<GameObject>();
+
         Status.departmentName = departmentName;
 
         sGigManager.gigManagerGlobal.RegisterDepartment(this);

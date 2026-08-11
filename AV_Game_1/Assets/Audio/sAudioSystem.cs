@@ -8,17 +8,18 @@ public class sAudioSystem : MonoBehaviour
 
     [Header("Audio Library")]
     [SerializeField]
-    private SO_AudioLibrary audioLibrary;
+    private SO_AudioLibrary audioLibrarySFX, audioLibraryMusic;
 
     [Header("Audio Source")]
     [SerializeField]
-    private AudioSource audioSource;
+    private AudioSource audioSource_SFX, audioSource_MUSIC;
 
     private void OnEnable()
     {
         if (audioEventChannel != null)
         {
-            audioEventChannel.OnAudioEventRaised.AddListener(HandleAudioEvent);
+            audioEventChannel.audioEvent_SFX.AddListener(HandleSFXAudio);
+            audioEventChannel.audioEvent_MUSIC.AddListener(HandleMusic);
         }
     }
 
@@ -26,19 +27,20 @@ public class sAudioSystem : MonoBehaviour
     {
         if (audioEventChannel != null)
         {
-            audioEventChannel.OnAudioEventRaised.RemoveListener(HandleAudioEvent);
+            audioEventChannel.audioEvent_SFX.RemoveListener(HandleSFXAudio);
+            audioEventChannel.audioEvent_MUSIC.RemoveListener(HandleMusic);
         }
     }
 
-    private void HandleAudioEvent(string eventName)
+    private void HandleSFXAudio(string eventName)
     {
-        if (audioLibrary == null)
+        if (audioLibrarySFX == null)
         {
-            Debug.LogWarning("sAudioSystem has no Audio Library assigned.");
+            Debug.LogWarning("sAudioSystem has no Audio Library assigned for SFX.");
             return;
         }
 
-        AudioEventEntry audioEvent = audioLibrary.GetEvent(eventName);
+        AudioEventEntry audioEvent = audioLibrarySFX.GetEvent(eventName);
 
         if (audioEvent == null)
         {
@@ -50,10 +52,33 @@ public class sAudioSystem : MonoBehaviour
         }
 
         //Debug.Log("Playing audio event in AudioSystem");
-        PlayAudioEvent(audioEvent);
+        PlaySFX(audioEvent);
     }
 
-    private void PlayAudioEvent(
+    private void HandleMusic(string eventName)
+    {
+        if (audioLibraryMusic == null)
+        {
+            Debug.LogWarning("sAudioSystem has no Audio Library assigned for music.");
+            return;
+        }
+
+        AudioEventEntry audioEvent = audioLibraryMusic.GetEvent(eventName);
+
+        if (audioEvent == null)
+        {
+            Debug.LogWarning(
+                $"No audio event found for: {eventName}"
+            );
+
+            return;
+        }
+
+        //Debug.Log("Playing audio event in AudioSystem");
+        PlayMusic(audioEvent);
+    }
+
+    private void PlaySFX(
         AudioEventEntry audioEvent)
     {
         //Debug.Log("Playing audio event");
@@ -115,6 +140,73 @@ public class sAudioSystem : MonoBehaviour
         //}
     }
 
+    private void PlayMusic(
+        AudioEventEntry audioEvent)
+    {
+        //Debug.Log("Playing music");
+
+        if (audioEvent.clips == null ||
+            audioEvent.clips.Count == 0)
+        {
+            Debug.LogWarning(
+                $"Audio event '{audioEvent.eventName}' has no clips."
+            );
+
+            return;
+        }
+
+        // Cooldown
+        if (Time.time < audioEvent.lastPlayedTime +
+            audioEvent.cooldown)
+        {
+            return;
+        }
+
+        audioEvent.lastPlayedTime = Time.time;
+
+        // Pick clip
+        AudioClip clip;
+
+        if (audioEvent.randomClip)
+        {
+            clip = audioEvent.clips[
+                Random.Range(0, audioEvent.clips.Count)
+            ];
+        }
+        else
+        {
+            clip = audioEvent.clips[0];
+        }
+
+        if (clip == null)
+            return;
+
+        audioSource_MUSIC.clip = clip;
+        audioSource_MUSIC.Play();
+
+        //Debug.Log("Music was played with " + clip.name);
+
+        //Play2D(clip, audioEvent.volume, audioEvent.minPitch, audioEvent.maxPitch);
+        // Position
+        //if (position.HasValue && audioEvent.use3D)
+        //{
+        //    AudioSource.PlayClipAtPoint(
+        //        clip,
+        //        position.Value,
+        //        audioEvent.volume
+        //    );
+        //}
+        //else
+        //{
+        //    Play2D(
+        //        clip,
+        //        audioEvent.volume,
+        //        audioEvent.minPitch,
+        //        audioEvent.maxPitch
+        //    );
+        //}
+    }
+
     private void Play2D(
         AudioClip clip,
         float volume,
@@ -123,7 +215,7 @@ public class sAudioSystem : MonoBehaviour
     {
         Debug.Log("Playing 2d audio");
 
-        if (audioSource == null)
+        if (audioSource_SFX == null)
         {
             Debug.LogWarning(
                 "sAudioSystem has no AudioSource assigned."
@@ -132,18 +224,18 @@ public class sAudioSystem : MonoBehaviour
             return;
         }
 
-        audioSource.pitch = Random.Range(
+        audioSource_SFX.pitch = Random.Range(
             minPitch,
             maxPitch
         );
 
-        audioSource.volume = volume;
+        audioSource_SFX.volume = volume;
 
-        audioSource.PlayOneShot(clip);
+        audioSource_SFX.PlayOneShot(clip);
 
         // Reset pitch so other systems don't
         // accidentally inherit the randomized value.
-        audioSource.pitch = 1f;
+        audioSource_SFX.pitch = 1f;
     }
 }
 

@@ -11,6 +11,8 @@ public class sToolHandler : MonoBehaviour
 
     public SO_AudioEventChannel soAudio;
 
+    public SO_VFXEventChannel soVFX;
+
     sPlayerCharacter playerCharacter;
 
     //SO_ItemData toolItemData;
@@ -178,7 +180,9 @@ public class sToolHandler : MonoBehaviour
             if (soAudio != null)
             {
                 Debug.Log("Sending audio trigger");
-                soAudio.Raise("pianoTrigger");
+                //soAudio.TriggerSFX("pianoTrigger");
+
+                soVFX.Raise(VFXType.Pickup, this.transform.position, Quaternion.identity);
             }
 
             else

@@ -59,13 +59,12 @@ public class sRiggingManager : sDepartmentManager
     List<GameObject> motorSetupList;
     List<GameObject> motorControllerSetupList;
 
-    public List<sTruss> trussList;
+    [HideInInspector] public List<sTruss> trussList;
+    [HideInInspector] public List<sMotor> motorList;
 
-    public List<sMotor> motorList;
+    //List<sMotorController> motorControllerList;
 
-    public List<sMotorController> motorControllerList;
-
-    public Transform trussTransform, motorTransform;
+    //public Transform trussTransform, motorTransform;
 
     // Tracks which truss setup slot (by index into trussSetupLocations)
     // has been rigged, and by which physical truss piece. Populated by
@@ -116,7 +115,7 @@ public class sRiggingManager : sDepartmentManager
 
         trussList = new List<sTruss>();
         motorList = new List<sMotor>();
-        motorControllerList = new List<sMotorController>();
+        //motorControllerList = new List<sMotorController>();
 
         overheadGearSpots = new List<sRiggingSetupSpot>();
 
@@ -171,7 +170,7 @@ public class sRiggingManager : sDepartmentManager
         });
     }
 
-    public void RegisterRiggingGear(eTypeRigSetup _type, GameObject tempObj)
+    public void RegisterRiggingSetup(eTypeRigSetup _type, GameObject tempObj)
     {
         if (tempObj == null)
             return;
@@ -1161,6 +1160,6 @@ public class sRiggingManager : sDepartmentManager
 
 
 
-        return 67; // total / objectives;
+        return 0.67f; // total / objectives;
     }
 }

@@ -151,6 +151,11 @@ public class sRiggingSetupSpot : MonoBehaviour, iActionable
 
     private void Start()
     {
+        if (sRiggingManager.riggingMangerGlobal)
+            sRiggingManager.riggingMangerGlobal.RegisterRiggingSetup(rigType, this.gameObject);
+        else
+            Debug.LogWarning("Rigging setup spot did not register with rigging manager for " + this.gameObject);
+
         if (textSetup != null)
             textSetup.gameObject.SetActive(false);
 
@@ -422,7 +427,7 @@ public class sRiggingSetupSpot : MonoBehaviour, iActionable
         if (isSetup)
             return;
 
-        Debug.Log("Rigging Setup On Trigger Enter");
+        //Debug.Log("Rigging Setup On Trigger Enter");
 
         if (HasAction)
         {

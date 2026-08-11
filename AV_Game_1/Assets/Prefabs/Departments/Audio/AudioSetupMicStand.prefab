@@ -61,7 +61,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 444ab64ad61724c4299878e7d27f14ae, type: 2}
+  - {fileID: 2100000, guid: a7376714181d7154381bdbe7b0f0a7da, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -145,6 +145,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   typeAudio: 0
+  setupOffset: {x: 0, y: 0, z: 0}
 --- !u!1 &5190185500421664092
 GameObject:
   m_ObjectHideFlags: 0
@@ -260,10 +261,17 @@ MonoBehaviour:
   hasAction: 0
   offset: {x: 2.16, y: 0.5, z: 0}
   rigType: 0
+  toolNeeded: 0
   _toolTypeNeeded: 1
   textSetup: {fileID: 0}
   _UI_offset: {x: 0, y: 0, z: 0}
+  setupIndex: -1
+  requireNeighborsSetup: 1
+  neighborTrussIndexA: -1
+  neighborTrussIndexB: -1
+  activeWorldYOffset: -1
   soUI: {fileID: 0}
+  actionObject: {fileID: 0}
 --- !u!1 &8468445531994352861
 GameObject:
   m_ObjectHideFlags: 0

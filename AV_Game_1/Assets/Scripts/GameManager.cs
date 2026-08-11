@@ -1,8 +1,6 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 
 public enum eGameMode { none, frontEnd, warehouse, gig, travel }
@@ -12,6 +10,8 @@ public class GameManager : MonoBehaviour
     public static GameManager gm;
 
     public SO_EventsUI soUI;
+
+    public SO_AudioEventChannel soAudio;
 
     public GameObject canvasGameplayObject;
     public canvasGameplay canvasGameplay;
@@ -34,9 +34,11 @@ public class GameManager : MonoBehaviour
 
     eGameMode currentGameMode = eGameMode.none;
 
-    public sCountdownSequence sequencer; 
+    public sCountdownSequence sequencer;
 
     //public bool isDoingTut = false;
+
+    public EventSystem eventSystem;
     private void Awake()
     {
         if (gm == null)
@@ -70,6 +72,8 @@ public class GameManager : MonoBehaviour
         SetGameMode(startingGameMode);
 
         playerCharacters = new List<sPlayerCharacter>();
+
+        eventSystem = GetComponentInChildren<EventSystem>();
     }
 
     // Re-caches the canvas component references from whatever GameObjects
@@ -130,6 +134,8 @@ public class GameManager : MonoBehaviour
                 ToggleOverheadCamera(true);  
                 ToggleOrbitCamera(false);
 
+                soAudio.TriggerMUSIC("GameplayLoop");
+
                 break;
 
             case eGameMode.warehouse:
@@ -138,13 +144,19 @@ public class GameManager : MonoBehaviour
                 ToggleOrbitCamera(true);
                 ToggleOverheadCamera(false);
 
+                soAudio.TriggerMUSIC("WarehouseLoop");
+
                 break;
 
             case eGameMode.frontEnd:
 
+                soAudio.TriggerMUSIC("FrontEndLoop");
+
                 break;
 
             case eGameMode.travel:
+
+                soAudio.TriggerMUSIC("TravelLoop");
 
                 //Destroy(this.gameObject);
 
@@ -161,7 +173,7 @@ public class GameManager : MonoBehaviour
 
     public void SetGameMode(eGameMode _gameMode)
     {
-        Debug.Log("Setting game mode");
+        Debug.Log("Setting game mode to " + _gameMode);
 
         currentGameMode = _gameMode;
 
@@ -287,5 +299,10 @@ public class GameManager : MonoBehaviour
     public GameObject ReturnCameraGameplay()
     {
         return camGameplay;
+    }
+
+    public void SetFirstSelected(GameObject _button)
+    {
+        eventSystem.firstSelectedGameObject = _button;
     }
 }

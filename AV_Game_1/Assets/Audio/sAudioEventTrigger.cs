@@ -32,8 +32,8 @@ public class sAudioEventTrigger : MonoBehaviour
             return;
         }
 
-        audioEventChannel.Raise(
-            eventName
-        );
+        //audioEventChannel.Raise(
+        //    eventName
+        //);
     }
 }

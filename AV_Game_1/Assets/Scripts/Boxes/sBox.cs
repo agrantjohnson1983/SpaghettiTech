@@ -200,7 +200,7 @@ public class sBox : sInteractive, iClickable, IPointerEnterHandler, IPointerExit
 
             //pModel.GetComponent<MeshRenderer>().material = materialBoxOpen;
 
-            textMPAbove.SetText("OPEN");
+            //atextMPAbove.SetText("OPEN");
 
             //ui_Ring.GetComponentInChildren<MeshRenderer>().material.color = Color.yellow;
 
@@ -245,7 +245,7 @@ public class sBox : sInteractive, iClickable, IPointerEnterHandler, IPointerExit
         //}
 
 
-        textMPAbove.SetText("CLOSED");
+        //textMPAbove.SetText("CLOSED");
 
         //ui_Ring.GetComponentInChildren<MeshRenderer>().material.color = Color.green;
 
@@ -281,7 +281,7 @@ public class sBox : sInteractive, iClickable, IPointerEnterHandler, IPointerExit
 
         pModel.GetComponent<MeshRenderer>().material = materialBoxEmpty;
 
-        textMPAbove.SetText("EMPTY");
+        //textMPAbove.SetText("EMPTY");
 
         //ui_Ring.SetActive(false);
         //ui_Ring.GetComponentInChildren<MeshRenderer>().material.color = Color.red;

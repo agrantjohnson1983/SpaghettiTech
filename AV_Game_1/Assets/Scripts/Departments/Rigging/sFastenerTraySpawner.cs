@@ -50,7 +50,17 @@ public class sFastenerTraySpawner : MonoBehaviour
         {
             if (boltPrefab != null && boltTrayContainer != null)
             {
-                Instantiate(boltPrefab, boltTrayContainer);
+                Vector3 offset;// = new Vector3();
+
+                Vector2 randomSpot = Random.insideUnitCircle;
+
+                offset = new Vector3(randomSpot.x, randomSpot.y, 0f);
+
+                GameObject tempObj;
+
+                tempObj = Instantiate(boltPrefab, boltTrayContainer);
+
+                tempObj.transform.position = boltTrayContainer.transform.position + offset;
             }
         }
 
@@ -58,7 +68,17 @@ public class sFastenerTraySpawner : MonoBehaviour
         {
             if (nutPrefab != null && nutTrayContainer != null)
             {
-                Instantiate(nutPrefab, nutTrayContainer);
+                Vector3 offset;// = new Vector3();
+
+                Vector2 randomSpot = Random.insideUnitCircle * 10f;
+
+                offset = new Vector3(randomSpot.x, randomSpot.y, 0f);
+
+                GameObject tempObj;
+
+                tempObj = Instantiate(nutPrefab, nutTrayContainer);
+
+                tempObj.transform.position = nutTrayContainer.transform.position + offset;
             }
         }
 

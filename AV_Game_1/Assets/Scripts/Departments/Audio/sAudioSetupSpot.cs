@@ -5,9 +5,21 @@ using UnityEngine;
 
 public class sAudioSetupSpot : MonoBehaviour
 {
+    public SO_VFXEventChannel soVFX;
+
+    public SO_AudioEventChannel soAudio;
+
     public eAudioType typeAudio;
 
     public Vector3 setupOffset;
+
+    private void Start()
+    {
+        if (sAudioManager.audioManagerGlobal)
+            sAudioManager.audioManagerGlobal.RegiseterAudioSetup(typeAudio, this.gameObject);
+        else
+            Debug.LogWarning("Audio setup spot did not register for " + this.gameObject);
+    }
 
     private void OnTriggerEnter(Collider other)
     {       
@@ -63,6 +75,8 @@ public class sAudioSetupSpot : MonoBehaviour
                             break;
                             }
                     }
+
+                soAudio.TriggerSFX("SetupComplete");
 
                 Destroy(this.gameObject);
             }

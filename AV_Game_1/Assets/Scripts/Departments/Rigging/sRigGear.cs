@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class sRigGear : sInteractive, iRiggable, iLoadable
+public class sRigGear : sInteractive, iRiggable
 {
     public eTypeRigSetup _typeRig;
 
@@ -74,41 +74,11 @@ public class sRigGear : sInteractive, iRiggable, iLoadable
     public override void Start()
     {
         base.Start();
+        //Init();
         CanBeGrabbed = true;
     }
 
-    // Update is called once per frame
 
-    void Init()
-    {
-        switch (TypeRig)
-        {
-            case eTypeRigSetup.truss:
-                {
-                    //sRiggingManager.riggingManger.trussList.Add(this.gameObject);
-
-                    break;
-                }
-
-            case eTypeRigSetup.bolts:
-                {
-                    break;
-                }
-
-            case eTypeRigSetup.motor:
-                {
-                    break;
-                }
-            //case eTypeRigSetup.speakerStand:
-            //    {
-            //        break;
-            //    }
-            //case eTypeRigSetup.videoScreenStand:
-            //    {
-            //        break;
-            //    }
-        }
-    }
 
     public virtual void TriggerGrabAction()
     {

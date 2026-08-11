@@ -1,0 +1,55 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c3ea558c88364b4e90b01c0fdc195b8, type: 3}
+  m_Name: audioMUSIC_Library
+  m_EditorClassIdentifier: 
+  events:
+  - eventName: WarehouseLoop
+    clips:
+    - {fileID: 8300000, guid: d267a37205a58194998c031a73f19d89, type: 3}
+    volume: 0.564
+    minPitch: 0
+    maxPitch: 0
+    cooldown: 0
+    use3D: 0
+    spatialBlend: 0
+    randomClip: 0
+  - eventName: GameplayLoop
+    clips:
+    - {fileID: 8300000, guid: b229d2d7303641747a98992894daad55, type: 3}
+    volume: 0.532
+    minPitch: 0
+    maxPitch: 0
+    cooldown: 0
+    use3D: 0
+    spatialBlend: 0
+    randomClip: 0
+  - eventName: FrontEndLoop
+    clips:
+    - {fileID: 8300000, guid: 66807a60e9391994cb286cb1c3e2e53d, type: 3}
+    volume: 0.532
+    minPitch: 0
+    maxPitch: 0
+    cooldown: 0
+    use3D: 0
+    spatialBlend: 0
+    randomClip: 0
+  - eventName: TravelLoop
+    clips:
+    - {fileID: 8300000, guid: 896d47471ce4fa24bb28be54897e57f0, type: 3}
+    volume: 0.532
+    minPitch: 0
+    maxPitch: 0
+    cooldown: 0
+    use3D: 0
+    spatialBlend: 0
+    randomClip: 0

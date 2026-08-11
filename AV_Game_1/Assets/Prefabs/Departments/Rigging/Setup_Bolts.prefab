@@ -989,7 +989,7 @@ MonoBehaviour:
   offset: {x: 0, y: 0, z: 0}
   rigType: 1
   toolNeeded: 1
-  _toolTypeNeeded: 0
+  _toolTypeNeeded: 1
   textSetup: {fileID: 6926732273762619244}
   _UI_offset: {x: 0, y: 0, z: 0}
   setupIndex: -1
