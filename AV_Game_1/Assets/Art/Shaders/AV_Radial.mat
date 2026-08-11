@@ -1,0 +1,99 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: AV_Radial
+  m_Shader: {fileID: 4800000, guid: 76b83fd619b5a204cbd6935bf72b351a, type: 3}
+  m_ValidKeywords: []
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _BaseMap:
+        m_Texture: {fileID: 2800000, guid: 70f29060f80742a4993b679cc8791d0d, type: 3}
+        m_Scale: {x: 5.84, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MainTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _NoiseTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _ScreenTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _BlendSharpness: 1
+    - _Brightness: 0.785
+    - _CurveAmount: 0.315
+    - _DashGap: 0.272
+    - _DashLength: 0.096
+    - _DissolveAmount: 0
+    - _EdgeGlow: 3.15
+    - _EdgeWidth: 0.001
+    - _FlashAmount: 0
+    - _FlickerSpeed: 8
+    - _FlickerStrength: 0.19
+    - _FlowSpeed: 1
+    - _FresnelPower: 2.5
+    - _FresnelStrength: 2.15
+    - _GlowStrength: 1.76
+    - _GridScale: 10
+    - _HazardLevel: 1
+    - _IsValid: 1
+    - _LineThickness: 0.0716
+    - _MajorLineEvery: 5
+    - _MajorLineThickness: 0.04
+    - _OverloadThreshold: 0
+    - _Progress: 0
+    - _PulseAmount: 0.414
+    - _PulseSpeed: 4
+    - _RimPower: 3.84
+    - _RimPulseAmount: 0.427
+    - _RimPulseSpeed: 0
+    - _RimStrength: 3.68
+    - _RingThickness: 0.5
+    - _ScanlineCount: 120
+    - _ScanlineStrength: 0.678
+    - _ScrollSpeed: 1
+    - _StartAngle: 0
+    - _StripeAngle: 49.5
+    - _StripeScale: 8
+    - _TexScale: 1
+    - _WarningThreshold: 0
+    m_Colors:
+    - _BackgroundColor: {r: 0.1, g: 0.1, b: 0.1, a: 0.6}
+    - _BaseColor: {r: 0.7, g: 0.7, b: 0.7, a: 1}
+    - _CableColor: {r: 0.05, g: 0.05, b: 0.05, a: 1}
+    - _CompleteColor: {r: 0.2, g: 1, b: 0.3, a: 1}
+    - _EdgeColor: {r: 1, g: 0.5, b: 0.1, a: 1}
+    - _FillColor: {r: 1, g: 0.7, b: 0.1, a: 1}
+    - _FlashColor: {r: 1, g: 1, b: 1, a: 1}
+    - _GridColor: {r: 0.3, g: 0.8, b: 1, a: 0.6}
+    - _InvalidColor: {r: 1, g: 0.2, b: 0.2, a: 0.35}
+    - _OverloadColor: {r: 1, g: 0.1, b: 0.1, a: 1}
+    - _RimColor: {r: 0.3, g: 0.8, b: 1, a: 1}
+    - _SafeColor: {r: 0.2, g: 0.9, b: 0.3, a: 1}
+    - _SignalColor: {r: 0.2, g: 0.6, b: 1, a: 1}
+    - _StripeColorA: {r: 1, g: 0.8, b: 0, a: 1}
+    - _StripeColorB: {r: 0.1, g: 0.1, b: 0.1, a: 1}
+    - _Tint: {r: 1, g: 1, b: 1, a: 1}
+    - _TintColor: {r: 0.6, g: 1, b: 0.7, a: 1}
+    - _ValidColor: {r: 0.2, g: 1, b: 0.3, a: 0.35}
+    - _WarningColor: {r: 1, g: 0.8, b: 0, a: 1}
+  m_BuildTextureStacks: []

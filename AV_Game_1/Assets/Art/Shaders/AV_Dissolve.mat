@@ -1,0 +1,60 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: AV_Dissolve
+  m_Shader: {fileID: 4800000, guid: 76b83fd619b5a204cbd6935bf72b351a, type: 3}
+  m_ValidKeywords: []
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _NoiseTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _DashGap: 0.371
+    - _DashLength: 0.269
+    - _DissolveAmount: 0
+    - _EdgeGlow: 3.15
+    - _EdgeWidth: 0.001
+    - _FlowSpeed: 1
+    - _FresnelPower: 2.5
+    - _FresnelStrength: 2.15
+    - _GlowStrength: 0.13
+    - _HazardLevel: 1
+    - _IsValid: 1
+    - _Progress: 0
+    - _PulseAmount: 0.414
+    - _PulseSpeed: 4
+    - _RingThickness: 0.5
+    - _ScrollSpeed: 1
+    - _StartAngle: 0
+    - _StripeAngle: 49.5
+    - _StripeScale: 8
+    m_Colors:
+    - _BackgroundColor: {r: 0.1, g: 0.1, b: 0.1, a: 0.6}
+    - _BaseColor: {r: 0.7, g: 0.7, b: 0.7, a: 1}
+    - _CableColor: {r: 0.05, g: 0.05, b: 0.05, a: 1}
+    - _CompleteColor: {r: 0.2, g: 1, b: 0.3, a: 1}
+    - _EdgeColor: {r: 1, g: 0.5, b: 0.1, a: 1}
+    - _FillColor: {r: 1, g: 0.7, b: 0.1, a: 1}
+    - _InvalidColor: {r: 1, g: 0.2, b: 0.2, a: 0.35}
+    - _SignalColor: {r: 0.2, g: 0.6, b: 1, a: 1}
+    - _StripeColorA: {r: 1, g: 0.8, b: 0, a: 1}
+    - _StripeColorB: {r: 0.1, g: 0.1, b: 0.1, a: 1}
+    - _ValidColor: {r: 0.2, g: 1, b: 0.3, a: 0.35}
+  m_BuildTextureStacks: []

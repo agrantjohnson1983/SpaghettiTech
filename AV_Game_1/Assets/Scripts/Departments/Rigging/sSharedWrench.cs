@@ -144,6 +144,7 @@ public class sSharedWrench : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
         isAttached = true;
 
         transform.SetParent(slot.SnapPoint, false);
+        transform.SetAsLastSibling();
         rectTransform.anchoredPosition = Vector2.zero;
         rectTransform.localRotation = Quaternion.Euler(0f, 0f, slot.CurrentWrenchAngle);
 

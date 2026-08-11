@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.UI;
 
 // One of these lives on each of the 4 bolt holes on the truss. Tracks
 // whether a bolt and nut are present, and - now that tightening is
@@ -28,6 +29,9 @@ public class sBoltHoleSlot : MonoBehaviour
     public int CurrentClicks { get; private set; }
     public float CurrentWrenchAngle { get; private set; }
 
+    private Material mat;
+    MaterialPropertyBlock block;
+
     // True only when this hole is actually ready for the shared
     // wrench to attach to - both parts present, not already done.
     public bool IsReadyForWrench
@@ -46,6 +50,12 @@ public class sBoltHoleSlot : MonoBehaviour
     void Awake()
     {
         CurrentWrenchAngle = initialWrenchAngleDegrees;
+
+        mat = new Material(GetComponent<Image>().material);
+
+        GetComponent<Image>().material = mat;
+
+        block = new MaterialPropertyBlock();
     }
 
     public bool CanAccept(eBoltPartType partType)
@@ -92,6 +102,12 @@ public class sBoltHoleSlot : MonoBehaviour
 
         CurrentClicks++;
 
+        //MaterialPropertyBlock propertyBlock -new MaterialPropertyBlock();
+
+        //GetComponent<Image>().material.Get
+
+        mat.SetFloat("_Progress", CurrentClicks / clicksToTighten);
+
         if (placedNut != null)
         {
             placedNut.transform.Rotate(0f, 0f, -nutRotationPerClick);
@@ -104,5 +120,7 @@ public class sBoltHoleSlot : MonoBehaviour
             IsTightened = true;
             OnSlotTightened?.Invoke(this);
         }
+
+        
     }
 }

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class uCanvasFrontEnd : MonoBehaviour
 {
@@ -30,8 +31,8 @@ public class uCanvasFrontEnd : MonoBehaviour
         {
             hasClicked = true;
             //Instantiate(levelSelectCanvas, this.transform);
-            clickToContinue.SetActive(false);
-            titleText.SetActive(false);
+            clickToContinue.GetComponent<Text>().text = "LOADING...";
+            //titleText.SetActive(false);
 
             SceneManager.LoadScene(sceneToLoad);
         }

@@ -43,8 +43,8 @@ GameObject:
   - component: {fileID: 2855093887310788807}
   - component: {fileID: 7131308150519788971}
   - component: {fileID: 1941078748956721423}
-  - component: {fileID: 901397488754581636}
   - component: {fileID: 2468936761807450687}
+  - component: {fileID: 3253035055603707549}
   m_Layer: 0
   m_Name: Text (TMP)
   m_TagString: Untagged
@@ -206,26 +206,6 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_renderer: {fileID: 7131308150519788971}
   m_maskType: 0
---- !u!95 &901397488754581636
-Animator:
-  serializedVersion: 4
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4713933340783718862}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 0286f9830f79a13418b9295013c8e2f1, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!114 &2468936761807450687
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -243,6 +223,50 @@ MonoBehaviour:
   lockY: 0
   lockZ: 0
   lookAtOffset: {x: 0, y: 0, z: 0}
+--- !u!114 &3253035055603707549
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4713933340783718862}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0953d848858f17c4ba2994e2d70dc07a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animationType: 0
+  playOnStart: 1
+  loop: 1
+  duration: 1
+  delay: 0
+  amount: 1.2
+  moveOffset: {x: 0, y: 50, z: 0}
+  rotationAxis: {x: 0, y: 0, z: 1}
+  ease:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &5190185500421664092
 GameObject:
   m_ObjectHideFlags: 0
@@ -307,7 +331,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 444ab64ad61724c4299878e7d27f14ae, type: 2}
+  - {fileID: 2100000, guid: a7376714181d7154381bdbe7b0f0a7da, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

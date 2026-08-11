@@ -17,7 +17,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &8828071288951943380
 RectTransform:
   m_ObjectHideFlags: 0
@@ -148,7 +148,7 @@ GameObject:
   - component: {fileID: 5901857150224392722}
   - component: {fileID: 6240212689400799890}
   - component: {fileID: 1477154835866851934}
-  - component: {fileID: 1678024060043591375}
+  - component: {fileID: 2265182756292332433}
   m_Layer: 5
   m_Name: uNut
   m_TagString: Untagged
@@ -241,7 +241,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   partType: 1
   snapDistance: 60
---- !u!114 &1678024060043591375
+--- !u!114 &2265182756292332433
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -250,12 +250,38 @@ MonoBehaviour:
   m_GameObject: {fileID: 5387795247408117778}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 99b89d62d5d848448a5cb61ede870f81, type: 3}
+  m_Script: {fileID: 11500000, guid: 0953d848858f17c4ba2994e2d70dc07a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wrenchIconPrefab: {fileID: 7642379710817207610, guid: 0c06c945f38dec54a9ef0285acc35cab, type: 3}
-  initialWrenchAngleDegrees: 0
-  wrenchAnglePerClick: 40
-  clicksToTighten: 6
-  swingThreshold: 40
-  rotationPerClick: 60
+  animationType: 6
+  playOnStart: 1
+  loop: 0
+  duration: 1
+  delay: 0
+  amount: 1.2
+  moveOffset: {x: 0, y: 50, z: 0}
+  rotationAxis: {x: 0, y: 0, z: 1}
+  ease:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4

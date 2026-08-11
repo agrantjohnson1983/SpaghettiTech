@@ -13,7 +13,7 @@ public class sRiggingSetupSpot : MonoBehaviour, iActionable
 
     bool _canTriggerAction; // this is for controls to check if an action can be triggered
 
-    //bool hasBeenSet = false;
+    bool hasBeenSet = false;
 
     public eTypeRigSetup rigType;
 
@@ -160,8 +160,6 @@ public class sRiggingSetupSpot : MonoBehaviour, iActionable
 
             sRiggingManager.riggingMangerGlobal.RegisterOverheadGearSpot(this);
         }
-
-        sRiggingManager.riggingMangerGlobal.RegisterRiggingGear(rigType, this.transform.parent.gameObject);
     }
 
     void RecordOriginalLocalPositionIfNeeded()
@@ -313,7 +311,7 @@ public class sRiggingSetupSpot : MonoBehaviour, iActionable
 
     public void StopAction()
     {
-        //Debug.Log("Stopping Action Tasking Cortoutine");
+        Debug.Log("Stopping Action Tasking Cortoutine");
 
         StopCoroutine(ActionTasking());
 
@@ -386,6 +384,26 @@ public class sRiggingSetupSpot : MonoBehaviour, iActionable
         Debug.Log("[" + this.name + "] FinishSetup step 3 complete - destroying setup spot");
 
         Destroy(this.gameObject);
+    }
+
+    // Wire this to an "Exit"/"Leave" button inside the minigame canvas.
+    // Unlike FinishSetup, this does NOT destroy the spot, call RigSet,
+    // or mark anything complete - it just closes the UI and gives
+    // movement back, so the player can go collect more bolts/nuts and
+    // come back later. Whatever progress exists on each sBoltHoleSlot
+    // (or on placedGearObject for a light) is untouched, since that
+    // state lives on those objects directly rather than being reset
+    // here.
+    public void ExitMinigame()
+    {
+        Debug.Log("[" + this.name + "] Exiting minigame without completing");
+
+        if (actionObject != null)
+        {
+            actionObject.SetActive(false);
+        }
+
+        sPlayerCharacter.playerCharacterGlobal.ToggleMovement(true);
     }
 
     public void WrongTool()
