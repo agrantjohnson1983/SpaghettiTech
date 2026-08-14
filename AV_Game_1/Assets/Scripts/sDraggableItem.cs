@@ -25,6 +25,8 @@ public class sDraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IE
     private Transform originalParent;
     private bool isPlaced;
 
+    public SO_AudioEventChannel soAudio;
+
     private void Awake()
     {
         rectTransform = GetComponent<RectTransform>();
@@ -47,6 +49,23 @@ public class sDraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IE
         // while being dragged.
         transform.SetParent(parentCanvas.transform, true);
         transform.SetAsLastSibling();
+
+        switch (partType)
+        {
+            case eBoltPartType.Bolt:
+
+                if (soAudio != null)
+                    soAudio.TriggerSFX("RigBoltSelect");
+
+                break;
+
+            case eBoltPartType.Nut:
+
+                if (soAudio != null)
+                    soAudio.TriggerSFX("RigNutSelect");
+
+                break;
+        }
     }
 
     public void OnDrag(PointerEventData eventData)
@@ -113,9 +132,27 @@ public class sDraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IE
         isPlaced = true;
 
         transform.SetParent(slot.SnapPoint, false);
-        rectTransform.anchoredPosition = Vector2.zero;
+        rectTransform.anchoredPosition = new Vector2(0.5f, 0.5f);
+        rectTransform.localPosition = Vector2.zero;
 
         slot.PlaceItem(partType, gameObject);
+
+        switch(partType)
+        {
+            case eBoltPartType.Bolt:
+
+                if (soAudio != null)
+                    soAudio.TriggerSFX("RigBoltPlaced");
+
+                break;
+
+            case eBoltPartType.Nut:
+
+                if (soAudio != null)
+                    soAudio.TriggerSFX("RigNutPlaced");
+
+                break;
+        }
     }
 
     private void ReturnToStart()

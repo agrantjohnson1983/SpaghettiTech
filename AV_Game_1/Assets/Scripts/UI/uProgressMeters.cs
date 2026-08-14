@@ -13,6 +13,8 @@ public class uProgressMeters : MonoBehaviour
 
     public TMP_Text textOverall, textRigging, textAudio, textVideo, textLighting;
 
+    public bool SetToZeroOnStart = true;
+
     private void OnEnable()
     {
         soUI.progOverall.AddListener(UpdateOverallProgress);
@@ -33,49 +35,143 @@ public class uProgressMeters : MonoBehaviour
 
     private void Start()
     {
-        UpdateOverallProgress(0f);
-        UpdateRiggingProgress(0f);
-        UpdateAudioProgress(0f);
-        UpdateVideoProgress(0f);
-        UpdateLightingProgress(0f);
+        if(SetToZeroOnStart)
+        {
+            UpdateOverallProgress(0f);
+            UpdateRiggingProgress(0f);
+            UpdateAudioProgress(0f);
+            UpdateVideoProgress(0f);
+            UpdateLightingProgress(0f);
+        }
+
+        else
+        {
+            UpdateAll();
+        }
+    }
+
+    void UpdateAll()
+    {
+        Debug.Log("Setting all progress for results");
+
+        if (sGigManager.gigManagerGlobal != null)
+        {
+            //sGigManager.gigManagerGlobal.
+
+            if (sRiggingManager.riggingMangerGlobal != null)
+            {
+                float completion = sRiggingManager.riggingMangerGlobal.CalculateProgress();
+
+                //sGigManager.gigManagerGlobal.
+
+                Debug.Log("Setting rigging progress to " + completion);
+
+                UpdateRiggingProgress(completion);
+            }
+
+            if (sAudioManager.audioManagerGlobal != null)
+            {
+                float completion = sAudioManager.audioManagerGlobal.Status.Completion;
+
+                UpdateAudioProgress(completion);
+            }
+
+            UpdateOverallProgress(sGigManager.gigManagerGlobal.GetOverallProgress());
+        }
     }
 
     void UpdateOverallProgress(float _amount)
     {
-        progBarOverall.fillAmount = _amount;
+        StartCoroutine(BarAnimation(progBarOverall, progBarOverall.fillAmount, _amount));
 
-        _amount *= 100f;
+        //progBarOverall.fillAmount = _amount;
 
-        int total = (int)_amount;
+        int total = (int)(_amount * 100f);
 
-        //Debug.Log("Overall progress updated to " + total);
-
-        textOverall.text = total.ToString() + "% COMPLETE - OVERALL";
+        textOverall.text = total.ToString() + "% \n[TOTAL]";
+         
+        SetColor(_amount, progBarOverall);
     }
 
     void UpdateAudioProgress(float _amount)
     {
-        progBarAudio.fillAmount = _amount;
-        textAudio.text = ((int)_amount * 100f).ToString() + "% COMPLETE - AUDIO";
+        StartCoroutine(BarAnimation(progBarAudio, progBarAudio.fillAmount, _amount));
+
+        //progBarAudio.fillAmount = _amount;
+
+        textAudio.text = ((int)(_amount * 100f)).ToString() + "% \n[AUDIO]";
+
+        SetColor(_amount, progBarAudio);
     }
 
     void UpdateRiggingProgress(float _amount)
     {
-        progBarRigging.fillAmount = _amount;
-        textRigging.text = ((int)_amount * 100f).ToString() + "% COMPLETE - RIGGING";
+        StartCoroutine(BarAnimation(progBarRigging, progBarRigging.fillAmount, _amount));
+
+        //progBarRigging.fillAmount = _amount;
+
+        textRigging.text = ((int)(_amount * 100f)).ToString() + "% \n[RIGGING]";
+
+        SetColor(_amount, progBarRigging);
 
     }
 
     void UpdateVideoProgress(float _amount)
     {
-        progBarVideo.fillAmount = _amount;
-        textVideo.text = ((int)_amount * 100f).ToString() + "% COMPLETE - VIDEO";
+        StartCoroutine(BarAnimation(progBarVideo, progBarVideo.fillAmount, _amount));
+
+        //progBarVideo.fillAmount = _amount;
+
+        textVideo.text = ((int)(_amount * 100f)).ToString() + "% \n[VIDEO]";
+
+        SetColor(_amount, progBarVideo);
     }
 
     void UpdateLightingProgress(float _amount)
     {
-        progBarLighting.fillAmount = _amount;
-        textLighting.text = ((int)_amount * 100f).ToString() + "% COMPLETE - LIGHTING";
+        StartCoroutine(BarAnimation(progBarLighting, progBarLighting.fillAmount, _amount));
+        
+        //progBarLighting.fillAmount = _amount;
+        
+        textLighting.text = ((int)(_amount * 100f)).ToString() + "% \n[LIGHTING]";
+
+        SetColor(_amount, progBarLighting);
     }
 
+    IEnumerator BarAnimation(Image _image, float _startingAmount, float _endAmount)
+    {
+        float counter = 0f;
+
+        while (counter < 0.5f)
+        {
+            _image.fillAmount = Mathf.Lerp(_startingAmount, _endAmount, (counter / 0.5f));
+
+            counter += Time.deltaTime;
+
+            yield return null;
+        }
+    }
+
+    void SetColor(float _amount, Image _image)
+    {
+        if(_amount > 0.5f)
+        {
+            _image.color = Color.yellow;
+        }
+
+        else
+        {
+            _image.color = Color.white;
+        }
+
+        if(_amount > 0.75f)
+        {
+            _image.color = Color.magenta;
+        }
+
+        if(_amount >= 1f)
+        {
+            _image.color = Color.green;
+        }
+    }
 }

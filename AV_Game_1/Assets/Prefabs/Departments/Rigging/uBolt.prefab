@@ -20,7 +20,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &482548635038666261
 RectTransform:
   m_ObjectHideFlags: 0
@@ -106,6 +106,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   partType: 0
   snapDistance: 60
+  soAudio: {fileID: 11400000, guid: 85974a5eed2479c48b89b5a67f81403b, type: 2}
 --- !u!114 &7771717539435473467
 MonoBehaviour:
   m_ObjectHideFlags: 0

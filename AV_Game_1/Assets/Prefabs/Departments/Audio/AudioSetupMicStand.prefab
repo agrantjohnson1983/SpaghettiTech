@@ -144,8 +144,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf27c0ca38e866a4381c53492fb8c5a9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  typeAudio: 0
-  setupOffset: {x: 0, y: 0, z: 0}
+  soVFX: {fileID: 11400000, guid: 2e677f6310e0cd24e8679be3f3361b8f, type: 2}
+  soAudio: {fileID: 11400000, guid: 85974a5eed2479c48b89b5a67f81403b, type: 2}
+  typeAudio: 3
+  setupOffset: {x: 0, y: 1.2312, z: 0}
 --- !u!1 &5190185500421664092
 GameObject:
   m_ObjectHideFlags: 0
@@ -271,6 +273,7 @@ MonoBehaviour:
   neighborTrussIndexB: -1
   activeWorldYOffset: -1
   soUI: {fileID: 0}
+  soAudio: {fileID: 0}
   actionObject: {fileID: 0}
 --- !u!1 &8468445531994352861
 GameObject:
@@ -374,7 +377,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Move Speaker Here
+  m_text: Move Mic Stand Here
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}

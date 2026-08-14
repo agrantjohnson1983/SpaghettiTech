@@ -13,9 +13,329 @@ MonoBehaviour:
   m_Name: audioSFX_Library
   m_EditorClassIdentifier: 
   events:
-  - eventName: pianoTrigger
+  - eventName: Grab
     clips:
-    - {fileID: 8300000, guid: 6e519a43128c37e4baae0e102462551f, type: 3}
+    - {fileID: 8300000, guid: 0d179a571e0eca9499b9a1978d92aac0, type: 3}
+    volume: 0.713
+    minPitch: 1
+    maxPitch: 1
+    cooldown: 0
+    use3D: 0
+    spatialBlend: 0
+    randomClip: 0
+  - eventName: Throw
+    clips:
+    - {fileID: 8300000, guid: 840d728a0c3935a48858b1c7fed6e116, type: 3}
+    volume: 0.713
+    minPitch: 1
+    maxPitch: 1
+    cooldown: 0
+    use3D: 0
+    spatialBlend: 0
+    randomClip: 0
+  - eventName: SetupComplete
+    clips:
+    - {fileID: 8300000, guid: 952984c893eb67747ad7d935bd211b1c, type: 3}
+    volume: 0.713
+    minPitch: 1
+    maxPitch: 1
+    cooldown: 0
+    use3D: 0
+    spatialBlend: 0
+    randomClip: 0
+  - eventName: DepartmentComplete
+    clips:
+    - {fileID: 8300000, guid: 82cc1f1933beeb543baa3d715804853e, type: 3}
+    volume: 0.713
+    minPitch: 1
+    maxPitch: 1
+    cooldown: 0
+    use3D: 0
+    spatialBlend: 0
+    randomClip: 0
+  - eventName: BoxOpen
+    clips:
+    - {fileID: 8300000, guid: f85e00736cc229d49b8315fa4aaa52e5, type: 3}
+    volume: 0.713
+    minPitch: 1
+    maxPitch: 1
+    cooldown: 0
+    use3D: 0
+    spatialBlend: 0
+    randomClip: 0
+  - eventName: BoxClose
+    clips:
+    - {fileID: 8300000, guid: f85e00736cc229d49b8315fa4aaa52e5, type: 3}
+    volume: 0.713
+    minPitch: 1
+    maxPitch: 1
+    cooldown: 0
+    use3D: 0
+    spatialBlend: 0
+    randomClip: 0
+  - eventName: BoxItemSelect
+    clips:
+    - {fileID: 8300000, guid: 905fa7a737c9c8e42af2d18849ed42cd, type: 3}
+    volume: 0.713
+    minPitch: 1
+    maxPitch: 1
+    cooldown: 0
+    use3D: 0
+    spatialBlend: 0
+    randomClip: 0
+  - eventName: BoxItemClick
+    clips:
+    - {fileID: 8300000, guid: dfccbbae16e3fe645ad175a69bc8effc, type: 3}
+    volume: 0.713
+    minPitch: 1
+    maxPitch: 1
+    cooldown: 0
+    use3D: 0
+    spatialBlend: 0
+    randomClip: 0
+  - eventName: CablePlugLatch
+    clips:
+    - {fileID: 8300000, guid: 80834a3b8f4146e40bd64f7ffd0cd57c, type: 3}
+    volume: 0.713
+    minPitch: 1
+    maxPitch: 1
+    cooldown: 0
+    use3D: 0
+    spatialBlend: 0
+    randomClip: 0
+  - eventName: CablePlugHalfConnected
+    clips:
+    - {fileID: 8300000, guid: af9b7c5e6ae5c6c42b2f16f072e3d01f, type: 3}
+    volume: 0.713
+    minPitch: 1
+    maxPitch: 1
+    cooldown: 0
+    use3D: 0
+    spatialBlend: 0
+    randomClip: 0
+  - eventName: CablePlugFullyConnected
+    clips:
+    - {fileID: 8300000, guid: 36c9e08e36db02d4fa4f2cf8d604ab10, type: 3}
+    volume: 0.713
+    minPitch: 1
+    maxPitch: 1
+    cooldown: 0
+    use3D: 0
+    spatialBlend: 0
+    randomClip: 0
+  - eventName: RigItemPlaced
+    clips:
+    - {fileID: 8300000, guid: 3703038e2239248449a084139d6db0a9, type: 3}
+    volume: 0.713
+    minPitch: 1
+    maxPitch: 1
+    cooldown: 0
+    use3D: 0
+    spatialBlend: 0
+    randomClip: 0
+  - eventName: RigMotorPlaced
+    clips:
+    - {fileID: 8300000, guid: 38240e216e2529a4588f0ff64864a446, type: 3}
+    volume: 0.713
+    minPitch: 1
+    maxPitch: 1
+    cooldown: 0
+    use3D: 0
+    spatialBlend: 0
+    randomClip: 0
+  - eventName: RigMotorControllerPressed
+    clips:
+    - {fileID: 8300000, guid: c5084fde866637e4f871b335bdbed5eb, type: 3}
+    volume: 0.713
+    minPitch: 1
+    maxPitch: 1
+    cooldown: 0
+    use3D: 0
+    spatialBlend: 0
+    randomClip: 0
+  - eventName: RigTrussRise
+    clips:
+    - {fileID: 8300000, guid: c5084fde866637e4f871b335bdbed5eb, type: 3}
+    volume: 0.713
+    minPitch: 1
+    maxPitch: 1
+    cooldown: 0
+    use3D: 0
+    spatialBlend: 0
+    randomClip: 0
+  - eventName: RigBoltSelect
+    clips:
+    - {fileID: 8300000, guid: ec9454f53b109444d87ea74b51c346f1, type: 3}
+    volume: 0.713
+    minPitch: 1
+    maxPitch: 1
+    cooldown: 0
+    use3D: 0
+    spatialBlend: 0
+    randomClip: 0
+  - eventName: RigBoltPlaced
+    clips:
+    - {fileID: 8300000, guid: fb7849e7f625d5f45bc099456e762c15, type: 3}
+    volume: 0.713
+    minPitch: 1
+    maxPitch: 1
+    cooldown: 0
+    use3D: 0
+    spatialBlend: 0
+    randomClip: 0
+  - eventName: RigNutSelect
+    clips:
+    - {fileID: 8300000, guid: c5084fde866637e4f871b335bdbed5eb, type: 3}
+    volume: 0.713
+    minPitch: 1
+    maxPitch: 1
+    cooldown: 0
+    use3D: 0
+    spatialBlend: 0
+    randomClip: 0
+  - eventName: RigNutPlaced
+    clips:
+    - {fileID: 8300000, guid: c5084fde866637e4f871b335bdbed5eb, type: 3}
+    volume: 0.713
+    minPitch: 1
+    maxPitch: 1
+    cooldown: 0
+    use3D: 0
+    spatialBlend: 0
+    randomClip: 0
+  - eventName: RigRatchetTurn
+    clips:
+    - {fileID: 8300000, guid: 6db80b38783976648b8cba55c2cad707, type: 3}
+    volume: 0.713
+    minPitch: 1
+    maxPitch: 1
+    cooldown: 0
+    use3D: 0
+    spatialBlend: 0
+    randomClip: 0
+  - eventName: RigRatchetComplete
+    clips:
+    - {fileID: 8300000, guid: 6a349f057530c71479ec10bde17b5db5, type: 3}
+    volume: 0.713
+    minPitch: 1
+    maxPitch: 1
+    cooldown: 0
+    use3D: 0
+    spatialBlend: 0
+    randomClip: 0
+  - eventName: AudioMixerStart
+    clips:
+    - {fileID: 8300000, guid: b0bfae1185603c641905904e5916b5dc, type: 3}
+    volume: 0.713
+    minPitch: 1
+    maxPitch: 1
+    cooldown: 0
+    use3D: 0
+    spatialBlend: 0
+    randomClip: 0
+  - eventName: CrewSelect
+    clips:
+    - {fileID: 8300000, guid: 39e0534ea9db64249b89a2b517eb3745, type: 3}
+    volume: 0.713
+    minPitch: 1
+    maxPitch: 1
+    cooldown: 0
+    use3D: 0
+    spatialBlend: 0
+    randomClip: 0
+  - eventName: CrewMoveOrder
+    clips:
+    - {fileID: 8300000, guid: 520d072432011e74e805dbc29911323b, type: 3}
+    volume: 0.713
+    minPitch: 1
+    maxPitch: 1
+    cooldown: 0
+    use3D: 0
+    spatialBlend: 0
+    randomClip: 0
+  - eventName: CrewHire
+    clips:
+    - {fileID: 8300000, guid: 0dff59396f70c544cb6dd3f4504ceff0, type: 3}
+    volume: 0.713
+    minPitch: 1
+    maxPitch: 1
+    cooldown: 0
+    use3D: 0
+    spatialBlend: 0
+    randomClip: 0
+  - eventName: HiringPanelOpen
+    clips:
+    - {fileID: 8300000, guid: c3d2befffb144664dac38151ce714a44, type: 3}
+    volume: 0.713
+    minPitch: 1
+    maxPitch: 1
+    cooldown: 0
+    use3D: 0
+    spatialBlend: 0
+    randomClip: 0
+  - eventName: HiringPanelClose
+    clips:
+    - {fileID: 8300000, guid: e0b6b0ebd69d1a247a5850fa0416a547, type: 3}
+    volume: 0.713
+    minPitch: 1
+    maxPitch: 1
+    cooldown: 0
+    use3D: 0
+    spatialBlend: 0
+    randomClip: 0
+  - eventName: TruckLoaded
+    clips:
+    - {fileID: 8300000, guid: 00e6afb7ef1b8e144b877ffb3a5f0c53, type: 3}
+    volume: 0.713
+    minPitch: 1
+    maxPitch: 1
+    cooldown: 0
+    use3D: 0
+    spatialBlend: 0
+    randomClip: 0
+  - eventName: TruckHatchClose
+    clips:
+    - {fileID: 8300000, guid: 7371c302e116d2540a78e8ae8b9fc6c5, type: 3}
+    volume: 0.713
+    minPitch: 1
+    maxPitch: 1
+    cooldown: 0
+    use3D: 0
+    spatialBlend: 0
+    randomClip: 0
+  - eventName: TruckDriveOff
+    clips:
+    - {fileID: 8300000, guid: b49cee3657e915442a7b5d099c8a5508, type: 3}
+    volume: 0.713
+    minPitch: 1
+    maxPitch: 1
+    cooldown: 0
+    use3D: 0
+    spatialBlend: 0
+    randomClip: 0
+  - eventName: ToolPickup
+    clips:
+    - {fileID: 8300000, guid: 878dc46cc3dae6744a929e73feb0cd9d, type: 3}
+    volume: 0.713
+    minPitch: 1
+    maxPitch: 1
+    cooldown: 0
+    use3D: 0
+    spatialBlend: 0
+    randomClip: 0
+  - eventName: BoltPickup
+    clips:
+    - {fileID: 8300000, guid: cd9f2ebad05242942a2570b1dc5dd9c5, type: 3}
+    volume: 0.713
+    minPitch: 1
+    maxPitch: 1
+    cooldown: 0
+    use3D: 0
+    spatialBlend: 0
+    randomClip: 0
+  - eventName: NutPickup
+    clips:
+    - {fileID: 8300000, guid: 5a6c9d56c94c04145be6cceb9e57045d, type: 3}
     volume: 0.713
     minPitch: 1
     maxPitch: 1

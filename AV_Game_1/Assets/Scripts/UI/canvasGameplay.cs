@@ -13,6 +13,9 @@ public class canvasGameplay : MonoBehaviour
     // EVENTS UI
     public SO_EventsUI soUI;
 
+    // AUDIO EVENTS
+    public SO_AudioEventChannel soAudio;
+
     //// CHARACTER STUFF
     //public GameObject characterPanel;
     //public Image characterImage;
@@ -53,13 +56,13 @@ public class canvasGameplay : MonoBehaviour
     public TextMeshProUGUI currentMoneyText;
 
     // TOOLBELT STUFF
-    public GameObject toolbelt, toolbeltGrid, toolbeltArrow;
+    public GameObject toolbelt, toolbeltGrid, toolbeltCloseArrow;
     bool isHoldingTool = false;
     public Image toolHeld;
     public Text tooldHeldText;
 
-    public Transform toolbeltPanel;
-    public GameObject toolbeltToolButton;
+    //public Transform toolbeltPanel;
+    public GameObject pToolbeltToolButton;
 
     public List<GameObject> toolButtonsList;
 
@@ -118,6 +121,40 @@ public class canvasGameplay : MonoBehaviour
         soUI.messageEvent.RemoveListener(MessageSend);
     }
 
+    // Start is called before the first frame update
+    void Start()
+    {
+        taskGauge.fillAmount = 0;
+
+        popupDictionary = new Dictionary<string, GameObject>();
+
+        currentMoney = startingMoney;
+        currentMoneyText.text = currentMoney.ToString();
+
+        toolbeltGrid.SetActive(false);
+        toolbeltCloseArrow.SetActive(false);
+        tooldHeldText.text = "";
+
+        toolHeld.gameObject.SetActive(false);
+
+        toolbelt.SetActive(false);
+
+        // turns off message at start
+        MessageSend("", 0f);
+    }
+
+    // GETS CALLED WHEN PLAYER PRESSES START
+    public void OnStart()
+    {
+        startScreen.SetActive(false);
+
+        soUI.TriggerMessage("GAME START!", 3f);
+
+        GameManager.gm.StartGameplay();
+    }
+
+    // MESSAGES
+
     private void MessageSend(string _message, float _time)
     {
         // turn alpha on
@@ -138,29 +175,13 @@ public class canvasGameplay : MonoBehaviour
 
         while (counter < _time)
         {
-            
+
             counter += Time.deltaTime;
             yield return null;
         }
     }
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        taskGauge.fillAmount = 0;
-
-        popupDictionary = new Dictionary<string, GameObject>();
-
-        currentMoney = startingMoney;
-        currentMoneyText.text = currentMoney.ToString();
-
-        toolbeltGrid.SetActive(false);
-        toolbeltArrow.SetActive(false);
-        tooldHeldText.text = "";
-
-        // turns off message at start
-        MessageSend("", 0f);
-    }
+    // POPUPS UI
 
     void TogglePopup(string _controlText, string _actionText)
     {
@@ -237,12 +258,12 @@ public class canvasGameplay : MonoBehaviour
         //    popupControlsText.gameObject.transform.position = Camera.main.WorldToScreenPoint(playerPos + popupControlsOffset);
         //}
     }
-
+/*
     // This gets called when a player clicks a item in the hands UI
     public void OnItemClick(int _index)
     {
         Debug.Log("Item image " + _index + " triggered");
-    }
+    }*/
 
     //void ChangeRiggingInstructions(string _instructions)
     //{
@@ -312,6 +333,8 @@ public class canvasGameplay : MonoBehaviour
         taskGauge.fillAmount = 0f;
     }
 
+    // MOTORS
+
     void ToggleMotorController(bool _isOn)
     {
         motorController.SetActive(_isOn);
@@ -320,31 +343,22 @@ public class canvasGameplay : MonoBehaviour
     public void MotorControllerUp()
     {
         soUI.TriggerMotorControls(true);
+
+        if (soAudio != null)
+            soAudio.TriggerSFX("RigMotorControlPressed");
     }
 
     public void MotorControllerDown()
     {
         soUI.TriggerMotorControls(false); ;
+
+        if (soAudio != null)
+            soAudio.TriggerSFX("RigMotorControlPressed");
     }
 
-    public void OnArrowLeft()
-    {
-        //GameManager.gm.SwitchActivePlayer(-1);
-    }
+    
 
-    public void OnArrowRight()
-    {
-        //GameManager.gm.SwitchActivePlayer(1);
-    }
-
-    public void OnStart()
-    {
-        startScreen.SetActive(false);
-
-        soUI.TriggerMessage("GAME START!", 3f);
-
-        GameManager.gm.StartGameplay();
-    }
+    // HIRING AND CREW
 
     public void ToggleHireScreen()
     {
@@ -365,11 +379,19 @@ public class canvasGameplay : MonoBehaviour
         {
             
         }
+
+        else
+        {
+
+        }
     }
 
     void HireCrew (SO_CrewProfile _crew)
     {
         ChangeMoney(_crew.hireCost);
+
+        if (soAudio != null)
+            soAudio.TriggerSFX("HireCrew");
     }
 
     // This takes in an amount and adds it to the money
@@ -378,7 +400,21 @@ public class canvasGameplay : MonoBehaviour
         currentMoney += _amount;
 
         currentMoneyText.text = currentMoney.ToString();
+
+        if(_amount < 0 )
+        {
+            if (soAudio != null)
+                soAudio.TriggerSFX("LoseMoney");
+        }
+
+        else if (_amount > 0)
+        {
+            if (soAudio != null)
+                soAudio.TriggerSFX("GainMoney");
+        }
     }
+
+    // TOOLBELT
 
     public void ToggleToolbelt(bool _isOpen)
     {
@@ -388,7 +424,7 @@ public class canvasGameplay : MonoBehaviour
         if(toolButtonsList.Count > 0)
         {
             toolbeltGrid.SetActive(_isOpen);
-            toolbeltArrow.SetActive(_isOpen);
+            toolbeltCloseArrow.SetActive(_isOpen);
         }      
     }
  
@@ -428,16 +464,18 @@ public class canvasGameplay : MonoBehaviour
 
     public void AddToolToBelt(SO_ToolData _toolData)
     {
+        toolbelt.SetActive(true);
+
         // if no tool is held then it changes the held tool;
         if(!isHoldingTool)
         {
-            
+            toolHeld.gameObject.SetActive(true);
         }
 
         SetToolHeld(_toolData);
 
         // Spawns toolbelt button and adds it to list
-        GameObject tempObject = Instantiate(toolbeltToolButton, toolbeltPanel);
+        GameObject tempObject = Instantiate(pToolbeltToolButton, toolbeltGrid.transform);
 
         uButtonTool buttonTool;
 

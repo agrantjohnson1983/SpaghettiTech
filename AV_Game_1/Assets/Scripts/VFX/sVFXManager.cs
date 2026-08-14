@@ -2,33 +2,50 @@ using UnityEngine;
 
 public class sVFXManager : MonoBehaviour
 {
-    [SerializeField]
-    SO_VFXDatabase database;
+    [Header("VFX")]
+    [SerializeField] private SO_VFXDatabase database;
 
-    [SerializeField]
-    SO_VFXEventChannel channel;
+    [Header("Events")]
+    [SerializeField] private SO_VFXEventChannel channel;
 
-    void OnEnable()
+
+    private void OnEnable()
     {
-        database.Initialize();
-        channel.OnEventRaised += Spawn;
+        if (database != null)
+            database.Initialize();
+
+        if (channel != null)
+            channel.OnEventRaised += Spawn;
     }
 
-    void OnDisable()
+    private void OnDisable()
     {
-        channel.OnEventRaised -= Spawn;
+        if (channel != null)
+            channel.OnEventRaised -= Spawn;
     }
 
-    void Spawn(
-    VFXType type,
-    Vector3 position,
-    Quaternion rotation)
+
+    private void Spawn(
+        string vfxID,
+        Vector3 position,
+        Quaternion rotation)
     {
-        var definition = database.Get(type);
+        if (database == null)
+        {
+            Debug.LogWarning("VFX Manager has no VFX Database assigned.");
+            return;
+        }
+
+        SO_VFXDefinition definition = database.Get(vfxID);
 
         if (definition == null)
+            return;
+
+        if (definition.prefab == null)
         {
-            Debug.LogWarning($"No VFX Definition for {type}");
+            Debug.LogWarning(
+                $"VFX '{vfxID}' has no prefab assigned.");
+
             return;
         }
 

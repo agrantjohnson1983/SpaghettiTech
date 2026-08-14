@@ -22,6 +22,8 @@ public class sCrewManager : MonoBehaviour
 
     List<sCrewMember> previewCrew = new List<sCrewMember>();
 
+    public SO_AudioEventChannel soAudio;
+
     void Update()
     {
         //if (Input.GetMouseButtonDown(0))

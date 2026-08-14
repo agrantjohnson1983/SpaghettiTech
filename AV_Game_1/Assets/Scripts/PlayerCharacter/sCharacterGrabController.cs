@@ -416,7 +416,7 @@ public class sCharacterGrabController : MonoBehaviour
 
     IEnumerator GrabMovement()
     {
-        soVFX?.Raise(VFXType.Pickup, transform.position, Quaternion.identity);
+        soVFX?.Raise("Grab", transform.position, Quaternion.identity);
 
         Vector3 startingPos = sPlayerCharacter.playerCharacterGlobal.model.transform.position;
         Vector3 endPos = interactiveObject.transform.position;
@@ -491,7 +491,7 @@ public class sCharacterGrabController : MonoBehaviour
 
             waitingForSpaceRelease = true;
 
-            soVFX?.Raise(VFXType.Pickup, transform.position, Quaternion.identity);
+            soVFX?.Raise("Throw", transform.position, Quaternion.identity);
 
             _grabbedRB.velocity = _tossDirection * throwPower;
             // If you want a little arc instead of a flat throw:

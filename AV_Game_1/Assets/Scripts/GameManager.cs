@@ -39,6 +39,8 @@ public class GameManager : MonoBehaviour
     //public bool isDoingTut = false;
 
     public EventSystem eventSystem;
+
+    public GameObject Results;
     private void Awake()
     {
         if (gm == null)
@@ -262,6 +264,33 @@ public class GameManager : MonoBehaviour
         if (sequencer != null && currentGameMode == eGameMode.gig)
             sequencer.StartSequence();
         //camGameplay.SetActive(true);
+    }
+
+    public void EndLevel()
+    {
+        TogglePlayerControls(false);
+
+        ToggleOrbitCamera(true);
+
+        soUI.TriggerMessage("Gig Over!", 2f);
+
+        Invoke("BackToWarehouse", 5f);
+    }
+
+    void BackToWarehouse()
+    {
+        SetGameMode(eGameMode.warehouse);
+
+        SceneManager.LoadScene("WarehouseHub");
+
+        SetResults();
+
+        //Invoke("SetResults", 4f);
+    }
+
+    void SetResults()
+    {
+        Results.SetActive(true);
     }
 
     public void ToggleOrbitCamera(bool _isOn)

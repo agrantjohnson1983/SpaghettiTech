@@ -33,14 +33,14 @@ public interface iRiggable
 
         Debug.Log("Setting rigging");
 
-        _riggingObject.GetComponent<Rigidbody>().velocity = Vector3.zero;
-        _riggingObject.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
-        _riggingObject.GetComponent<Rigidbody>().useGravity = false;
+        
 
-        _riggingObject.transform.position = _setupObject.transform.position + _offset;
-        _riggingObject.transform.rotation = _setupObject.transform.rotation;
+        //SmoothMovement(_riggingObject, _setupObject.transform.position, _setupObject.transform.rotation);
 
-        IsSet = true;
+        //_riggingObject.transform.position = _setupObject.transform.position + _offset;
+        //_riggingObject.transform.rotation = _setupObject.transform.rotation;
+
+        //IsSet = true;
     }
 
     public void RiggingObjectComplete(GameObject _riggedObject, eTypeRigSetup _type)

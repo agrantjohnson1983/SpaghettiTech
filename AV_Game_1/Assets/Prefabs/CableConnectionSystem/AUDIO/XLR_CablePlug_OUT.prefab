@@ -190,13 +190,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3cdcf7e3154e9bc4aa70543b561b6542, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  soUI: {fileID: 0}
-  soAudio: {fileID: 0}
-  _taskTime: 0
-  _toolTypeNeeded: 0
-  textMPAbove: {fileID: 0}
-  itemTextMP: []
-  textItem: 
+  soUI: {fileID: 11400000, guid: 2b96b6b1405722c48a474d361c95f00a, type: 2}
+  soAudio: {fileID: 11400000, guid: 85974a5eed2479c48b89b5a67f81403b, type: 2}
   ui_Select: {fileID: 3554864472482473007}
   _transformGrab: {fileID: 0}
   _UI_offset: {x: 0, y: 0, z: 0}

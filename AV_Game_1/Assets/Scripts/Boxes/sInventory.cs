@@ -9,6 +9,7 @@ public class sInventory : MonoBehaviour
 
 {
     //public int numberOfSlots;
+    public SO_AudioEventChannel soAudio;
 
     sBox box;
 
@@ -99,6 +100,9 @@ public class sInventory : MonoBehaviour
             Quaternion.identity);
 
         box.RemoveItemData(item);
+
+        if (soAudio != null)
+            soAudio.TriggerSFX("BoxItemClick");
 
         box.CloseBox();
     }

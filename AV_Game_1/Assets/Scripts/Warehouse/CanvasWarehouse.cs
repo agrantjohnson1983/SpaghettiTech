@@ -22,6 +22,8 @@ public class CanvasWarehouse : MonoBehaviour
 
     float money;
 
+    public SO_AudioEventChannel soAudio;
+
     private void Awake()
     {
         //if (GameManager.gm.canvasGameplay.gameObject != this.gameObject)
@@ -49,7 +51,8 @@ public class CanvasWarehouse : MonoBehaviour
     {
         Debug.Log("You hired " + _crew.crewName);
 
-        
+        if (soAudio != null)
+            soAudio.TriggerSFX("CrewHire");
     }
 
     public void OnStartButton()

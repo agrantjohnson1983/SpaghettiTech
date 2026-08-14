@@ -1264,8 +1264,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b38a7eb7e06324048b7fce455e733d13, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  canvasGameplay: {fileID: 0}
-  canvasWarehouse: {fileID: 0}
+  soAudio: {fileID: 11400000, guid: 85974a5eed2479c48b89b5a67f81403b, type: 2}
 --- !u!1 &954812553265364824
 GameObject:
   m_ObjectHideFlags: 0

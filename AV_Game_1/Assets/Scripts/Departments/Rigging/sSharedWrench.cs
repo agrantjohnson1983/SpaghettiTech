@@ -33,6 +33,8 @@ public class sSharedWrench : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     float accumulatedSwing;
     int swingDirection;
 
+    public SO_AudioEventChannel soAudio;
+
     void Awake()
     {
         rectTransform = GetComponent<RectTransform>();
@@ -58,6 +60,11 @@ public class sSharedWrench : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
         canvasGroup.blocksRaycasts = false;
         transform.SetParent(parentCanvas.transform, true);
         transform.SetAsLastSibling();
+
+        if(soAudio != null)
+        {
+            soAudio.TriggerSFX("RigRatchetSelect");
+        }
     }
 
     public void OnDrag(PointerEventData eventData)
@@ -197,6 +204,9 @@ public class sSharedWrench : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     void RegisterTurn()
     {
         attachedSlot.RegisterRatchetClick();
+
+        if (soAudio != null)
+            soAudio.TriggerSFX("RigRatchetTurn");
 
         rectTransform.localRotation = Quaternion.Euler(0f, 0f, attachedSlot.CurrentWrenchAngle);
 

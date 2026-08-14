@@ -105,6 +105,8 @@ public class sTruckHatch : MonoBehaviour
 
     public SO_EventsUI soUI;
 
+    public SO_AudioEventChannel soAudio;
+
     public void StopAction()
     {
         //throw new System.NotImplementedException();
@@ -164,6 +166,9 @@ public class sTruckHatch : MonoBehaviour
         textTruckCloseHatch.SetActive(false);
 
         truckHatchPhysical.SetActive(false);
+
+        if (soAudio != null)
+            soAudio.TriggerSFX("TruckHatchClose");
 
         Destroy(canvasUI.gameObject);
 

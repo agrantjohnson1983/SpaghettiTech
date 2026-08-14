@@ -36,6 +36,8 @@ public class sTruck : MonoBehaviour
 
     public Transform truckDriverTransform;
 
+    public SO_AudioEventChannel soAudio;
+
     private void Awake()
     {
         if(truckGlobal == null)
@@ -69,6 +71,9 @@ public class sTruck : MonoBehaviour
         textHatchClose.gameObject.SetActive(false);
 
         sPlayerCharacter.playerCharacterGlobal.ToggleModelVisibility(false);
+
+        if (soAudio != null)
+            soAudio.TriggerSFX("TruckDrive");
 
         sGigManager.gigManagerGlobal.TruckDrive();
     }
@@ -134,6 +139,9 @@ public class sTruck : MonoBehaviour
                 textLoaded.text = textLoadedMessage;
                 textLoaded.color = Color.green;
                 textHatchClose.SetActive(true);
+
+                if (soAudio != null)
+                    soAudio.TriggerSFX("TruckLoaded");
             }
 
             //itemLoadedDataList = new List<SO_ItemData>();

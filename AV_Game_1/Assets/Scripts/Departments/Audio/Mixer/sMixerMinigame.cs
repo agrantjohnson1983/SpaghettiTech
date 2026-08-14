@@ -22,6 +22,8 @@ public class sMixerMinigame : MonoBehaviour
 
     public TMP_Text statusText;
 
+    public SO_AudioEventChannel soAudio;
+
 
     void Start()
     {
@@ -33,6 +35,9 @@ public class sMixerMinigame : MonoBehaviour
         gainSlider.onValueChanged.AddListener(SetGain);
 
         sAudioMixer.isMixing = true;
+
+        if (soAudio != null)
+            soAudio.TriggerSFX("AudioMixerStart");
     }
 
     void GenerateTarget()
@@ -139,5 +144,8 @@ public class sMixerMinigame : MonoBehaviour
     {
         Debug.Log("MIX COMPLETE!");
         enabled = false;
+
+        if (soAudio != null)
+            soAudio.TriggerSFX("AudioMixerEQ_Complete");
     }
 }

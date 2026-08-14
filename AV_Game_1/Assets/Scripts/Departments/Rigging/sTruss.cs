@@ -7,6 +7,6 @@ public class sTruss : sRigGear
     public override void Start()
     {
         base.Start();
-        sRiggingManager.riggingMangerGlobal.trussList.Add(this);
+            sRiggingManager.riggingMangerGlobal.trussList.Add(this);
     }
 }

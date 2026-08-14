@@ -59,12 +59,13 @@ public class sRiggingManager : sDepartmentManager
     List<GameObject> motorSetupList;
     List<GameObject> motorControllerSetupList;
 
-    [HideInInspector] public List<sTruss> trussList;
-    [HideInInspector] public List<sMotor> motorList;
+    public List<sTruss> trussList;
 
-    //List<sMotorController> motorControllerList;
+    public List<sMotor> motorList;
 
-    //public Transform trussTransform, motorTransform;
+    public List<sMotorController> motorControllerList;
+
+    public Transform trussTransform, motorTransform;
 
     // Tracks which truss setup slot (by index into trussSetupLocations)
     // has been rigged, and by which physical truss piece. Populated by
@@ -94,7 +95,7 @@ public class sRiggingManager : sDepartmentManager
         SceneManager.sceneLoaded += OnSceneLoad;
     }
 
-    
+
 
     private void OnDisable()
     {
@@ -115,7 +116,7 @@ public class sRiggingManager : sDepartmentManager
 
         trussList = new List<sTruss>();
         motorList = new List<sMotor>();
-        //motorControllerList = new List<sMotorController>();
+        motorControllerList = new List<sMotorController>();
 
         overheadGearSpots = new List<sRiggingSetupSpot>();
 
@@ -126,11 +127,14 @@ public class sRiggingManager : sDepartmentManager
     public override void Start()
     {
         base.Start();
+
+        if (debugBypassBoltMinigame)
+            allBoltsComplete = true;
     }
 
     private void OnSceneLoad(Scene arg0, LoadSceneMode arg1)
     {
-        switch(GameManager.gm.GetGameMode())
+        switch (GameManager.gm.GetGameMode())
         {
             case eGameMode.frontEnd:
 
@@ -175,7 +179,7 @@ public class sRiggingManager : sDepartmentManager
         if (tempObj == null)
             return;
 
-        switch(_type)
+        switch (_type)
         {
             case eTypeRigSetup.truss:
 
@@ -238,7 +242,7 @@ public class sRiggingManager : sDepartmentManager
 
                 // Turns off all objects during tutorial so you only do them one at a time vs all at once
                 //if (GameManager.gm.isDoingTut)
-                 //   tempObj.SetActive(false);
+                //   tempObj.SetActive(false);
 
                 break;
 
@@ -698,7 +702,7 @@ public class sRiggingManager : sDepartmentManager
 
     public void RigSet(eTypeRigSetup _type)
     {
-        Debug.Log("Setting rig");
+        Debug.Log("Setting rig for " + _type);
 
         switch (_type)
         {
@@ -739,6 +743,9 @@ public class sRiggingManager : sDepartmentManager
                         }*//*
 
                     }*/
+
+                    if (soAudio != null)
+                        soAudio.TriggerSFX("RigItemPlaced");
 
                     break;
                 }
@@ -794,7 +801,7 @@ public class sRiggingManager : sDepartmentManager
                     {
                         //motorSetupList[activeIndexMotorSetup].SetActive(true);
                     }
-                        
+
 
                     else
                     {
@@ -806,6 +813,9 @@ public class sRiggingManager : sDepartmentManager
 
                         //StartMotorControllerSetup();
                     }
+
+                    if (soAudio != null)
+                        soAudio.TriggerSFX("RigMotorPlaced");
 
                     break;
                 }
@@ -826,9 +836,11 @@ public class sRiggingManager : sDepartmentManager
 
         //Debug.Log("Refreshing Progress");
 
+        
+
         RefreshProgress();
 
-        soUI.TriggerProgRigging(Status.Completion);
+        UpdateDepartmentUI();
     }
 
     /*
@@ -965,7 +977,7 @@ public class sRiggingManager : sDepartmentManager
             overheadGearSpots.Add(_spot);
         }
 
-        _spot.gameObject.SetActive(AreAllMotorsAtOrAboveWorkingHeight());
+        //_spot.SetOverheadGearActive(AreAllMotorsAtOrAboveWorkingHeight());
     }
 
     // Called by sMotor whenever its raise/lower stage changes. Shows or
@@ -981,7 +993,8 @@ public class sRiggingManager : sDepartmentManager
         {
             if (_spot != null)
             {
-                _spot.gameObject.SetActive(ready);
+                _spot.SetOverheadGearActive(ready);
+                _spot.transform.position = _spot.transform.position + Vector3.down * 1.5f;
             }
         }
     }
@@ -1043,6 +1056,9 @@ public class sRiggingManager : sDepartmentManager
         }
 
         ValidateMotorSync();
+
+        if (soAudio != null)
+            soAudio.TriggerSFX("RigTrussRise");
 
         for (int i = 0; i < motorList.Count; i++)
         {
@@ -1123,6 +1139,8 @@ public class sRiggingManager : sDepartmentManager
 
     public override float CalculateProgress()
     {
+        base.CalculateProgress();
+
         Debug.Log("Calculating Rigging Progress");
 
         //float total = 0;
@@ -1160,6 +1178,6 @@ public class sRiggingManager : sDepartmentManager
 
 
 
-        return 0.67f; // total / objectives;
+        return progress; // total / objectives;
     }
 }

@@ -70,7 +70,7 @@ public class sAudioSetupSpot : MonoBehaviour
 
                             Debug.Log("Audio setup Collision with Mic Stand Spot");
 
-                            
+                            sAudioManager.audioManagerGlobal.AudioSet(typeAudio);
 
                             break;
                             }

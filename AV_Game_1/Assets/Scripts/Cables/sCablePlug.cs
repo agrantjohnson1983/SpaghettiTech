@@ -161,6 +161,8 @@ public class sCablePlug : sInteractive, iPluggable, iClickable
         // Sets plug to be plugged in
         IsPluggedIn = true;
 
+
+
         // Checks if the other end of the cable is plugged in
         if(cablePlugOtherEnd.ReturnIsPluggedIn() == true)
         {
@@ -170,6 +172,9 @@ public class sCablePlug : sInteractive, iPluggable, iClickable
             cableSegmentHandler.ConnectionComplete();
 
             textPopup.SpawnTextPopup(this.gameObject.transform, "FULLY CONNECTED", 20);
+
+            if (soAudio != null)
+                soAudio.TriggerSFX("CablePlugFullyConnected");
 
             // Checks if there is a supply
             if (supply)
@@ -209,6 +214,9 @@ public class sCablePlug : sInteractive, iPluggable, iClickable
             cableSegmentHandler.HalfConnect();
 
             textPopup.SpawnTextPopup(this.gameObject.transform, "HALF PLUGGED IN", 12);
+
+            if (soAudio != null)
+                soAudio.TriggerSFX("CablePlugHalfConnected");
         }
 
         // Destroys any grab joints from playerw
@@ -231,6 +239,9 @@ public class sCablePlug : sInteractive, iPluggable, iClickable
 
         // Turns off connection UI
         connectionUI.SetActive(false);
+
+        if (soAudio != null)
+            soAudio.TriggerSFX("CablePlugDisconnect");
 
         // Checks if the other end is plugged in to know if cable is half or fully disconnected
         if (cablePlugOtherEnd.ReturnIsPluggedIn() == true)

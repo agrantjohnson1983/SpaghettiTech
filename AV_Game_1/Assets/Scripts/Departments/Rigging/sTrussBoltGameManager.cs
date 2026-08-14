@@ -13,9 +13,13 @@ public class sTrussBoltGameManager : MonoBehaviour
     private int tightenedCount;
     private bool hasCompleted;
 
+    public SO_AudioEventChannel soAudio;
+
     private void Start()
     {
         sPlayerCharacter.playerCharacterGlobal.ToggleMovement(false);
+
+        GameManager.gm.canvasGameplayObject.SetActive(false);
 
         foreach (sBoltHoleSlot slot in boltSlots)
         {
@@ -38,8 +42,13 @@ public class sTrussBoltGameManager : MonoBehaviour
     {
         tightenedCount++;
 
+        if (soAudio != null)
+            soAudio.TriggerSFX("RigRatchetComplete");
+
         if (tightenedCount >= boltSlots.Count && !hasCompleted)
         {
+            GameManager.gm.canvasGameplayObject.SetActive(true);
+            sPlayerCharacter.playerCharacterGlobal.ToggleMovement(true);
             hasCompleted = true;
             OnAllBoltsSecured?.Invoke();
         }

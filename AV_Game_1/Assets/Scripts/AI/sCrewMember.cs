@@ -34,6 +34,8 @@ public class sCrewMember : MonoBehaviour
 
     public sCrewSelectionIndicator selectionIndicator;
 
+    public SO_AudioEventChannel soAudio;
+
     void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
@@ -130,6 +132,9 @@ public class sCrewMember : MonoBehaviour
         {
             Debug.LogWarning(name + " has no selection indicator assigned!");
         }
+
+        if (soAudio != null)
+            soAudio.TriggerSFX("CrewSelect");
     }
 
     public void Deselect()
@@ -147,6 +152,9 @@ public class sCrewMember : MonoBehaviour
     {
         agent.SetDestination(destination);
         state = CrewState.Moving;
+
+        if (soAudio != null)
+            soAudio.TriggerSFX("CrewMoveOrder");
     }
 
     CrewJobType ConvertCommandToJob(CrewCommand command)

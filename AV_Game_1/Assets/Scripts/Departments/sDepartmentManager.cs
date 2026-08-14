@@ -16,6 +16,8 @@ public abstract class sDepartmentManager : MonoBehaviour
 {
     public SO_EventsUI soUI;
 
+    public SO_AudioEventChannel soAudio;
+
     [Header("Gig Task")]
     //[SerializeField] protected string taskID;
 
@@ -82,6 +84,33 @@ public abstract class sDepartmentManager : MonoBehaviour
     {
         Debug.Log("Refresh Progress called");
         SetProgress(Status.Completion);
+    }
+
+    protected virtual void UpdateDepartmentUI()
+    {
+        if (soUI == null)
+            return;
+
+        Debug.Log("Updating " + deptID + " department progress to: " + progress);
+
+        switch (deptID)
+        {
+            case eGigDept.Rigging:
+                soUI.TriggerProgRigging(progress);
+                break;
+
+            case eGigDept.Audio:
+                soUI.TriggerProgAudio(progress);
+                break;
+
+            case eGigDept.Lighting:
+                soUI.TriggerProgLighting(progress);
+                break;
+
+            case eGigDept.Video:
+                soUI.TriggerProgVideo(progress);
+                break;
+        }
     }
 }
 

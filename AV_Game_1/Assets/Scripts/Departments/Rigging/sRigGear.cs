@@ -74,8 +74,10 @@ public class sRigGear : sInteractive, iRiggable
     public override void Start()
     {
         base.Start();
-        //Init();
+
         CanBeGrabbed = true;
+
+
     }
 
 

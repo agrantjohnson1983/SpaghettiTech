@@ -119,7 +119,7 @@ public class sToolHandler : MonoBehaviour
             _tempTool = null;
         }
 
-        Debug.Log("End of tool check - returning at end");
+        //Debug.Log("End of tool check - returning at end");
 
         return _tempTool;
     }
@@ -177,18 +177,6 @@ public class sToolHandler : MonoBehaviour
     {
         if(other.gameObject.TryGetComponent<sTool>(out sTool _tool))
         {
-            if (soAudio != null)
-            {
-                Debug.Log("Sending audio trigger");
-                //soAudio.TriggerSFX("pianoTrigger");
-
-                soVFX.Raise(VFXType.Pickup, this.transform.position, Quaternion.identity);
-            }
-
-            else
-            {
-                Debug.Log("so Audio is null");
-            }
             //Debug.Log("Collided with a tool: " + _tool);
 
             // this is for Non toolbelt tools - like nuts and bolts
@@ -201,6 +189,10 @@ public class sToolHandler : MonoBehaviour
                 case eToolType.nut:
 
                     soUI.TriggerNutPickup();
+
+                    if (soAudio != null)
+                        soAudio.TriggerSFX("NutPickup");
+
                     Destroy(other.gameObject);
 
                     return;
@@ -209,10 +201,22 @@ public class sToolHandler : MonoBehaviour
                 case eToolType.bolt:
 
                     soUI.TriggerBoltPickup();
+
+                    if (soAudio != null)
+                        soAudio.TriggerSFX("BoltPickup");
+
                     Destroy(other.gameObject);
 
                     return;
 
+                case eToolType.ratchet:
+                case eToolType.tape:
+                case eToolType.crescent:
+
+                    if (soAudio != null)
+                        soAudio.TriggerSFX("ToolPickup");
+
+                    break;
                     //break;
             }
 

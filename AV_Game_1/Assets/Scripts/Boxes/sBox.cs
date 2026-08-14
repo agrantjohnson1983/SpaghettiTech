@@ -210,6 +210,9 @@ public class sBox : sInteractive, iClickable, IPointerEnterHandler, IPointerExit
 
             ui_Select.SetActive(false);
 
+            if (soAudio != null)
+                soAudio.TriggerSFX("OpenBox");
+
             //GameManager.gm.ReturnCurrentPlayer().ReturnGrabController().grabPopupText.
         }
 
@@ -235,6 +238,9 @@ public class sBox : sInteractive, iClickable, IPointerEnterHandler, IPointerExit
         inventoryPanel.SetActive(false);
 
         sPlayerCharacter.playerCharacterGlobal.ToggleMovement(true);
+
+        if (soAudio != null)
+            soAudio.TriggerSFX("CloseBox");
 
         //if (inventory != null)
         //{

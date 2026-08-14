@@ -18,6 +18,8 @@ public class sVolumeMixerMinigame : MonoBehaviour
 
     public sVolumeChannelUI[] channelUI;
 
+    public SO_AudioEventChannel soAudio;
+
 
     void Start()
     {
@@ -125,6 +127,9 @@ public class sVolumeMixerMinigame : MonoBehaviour
     void Complete()
     {
         Debug.Log("VOLUME MIX COMPLETE!");
+
+        if (soAudio != null)
+            soAudio.TriggerSFX("AudioMixerVolumeComplete");
 
         enabled = false;
     }

@@ -8,6 +8,8 @@ public class sRecruiter : MonoBehaviour
     canvasGameplay canvasGameplay;
     CanvasWarehouse canvasWarehouse;
 
+    public SO_AudioEventChannel soAudio;
+
     private void Start()
     {
         canvasGameplay = GameManager.gm.canvasGameplay;
@@ -23,6 +25,9 @@ public class sRecruiter : MonoBehaviour
             isRecruiting = true;
             //canvasGameplay.ToggleHireScreen();
             canvasWarehouse.ToggleHireScreen();
+
+            if (soAudio != null)
+                soAudio.TriggerSFX("HiringPanelOpen");
         }
     }
 
@@ -34,6 +39,9 @@ public class sRecruiter : MonoBehaviour
 
             isRecruiting = false;
             canvasWarehouse.ToggleHireScreen();
+
+            if (soAudio != null)
+                soAudio.TriggerSFX("HiringPanelClose");
         }
     }
 }
