@@ -121,7 +121,7 @@ public class sAudioSystem : MonoBehaviour
 
         Play2D(clip, audioEvent.volume, audioEvent.minPitch, audioEvent.maxPitch);
         // Position
-        //if (position.HasValue && audioEvent.use3D)
+        //if (position.HasValue && audwioEvent.use3D)
         //{
         //    AudioSource.PlayClipAtPoint(
         //        clip,
@@ -213,7 +213,7 @@ public class sAudioSystem : MonoBehaviour
         float minPitch,
         float maxPitch)
     {
-        Debug.Log("Playing 2d audio");
+        //Debug.Log("Playing 2d audio");
 
         if (audioSource_SFX == null)
         {

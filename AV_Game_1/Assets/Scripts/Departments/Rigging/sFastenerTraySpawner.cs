@@ -50,17 +50,22 @@ public class sFastenerTraySpawner : MonoBehaviour
         {
             if (boltPrefab != null && boltTrayContainer != null)
             {
-                Vector3 offset;// = new Vector3();
+               /* Vector3 offset;// = new Vector3();
 
                 Vector2 randomSpot = Random.insideUnitCircle;
 
-                offset = new Vector3(randomSpot.x, randomSpot.y, 0f);
+                offset = new Vector3(randomSpot.x, randomSpot.y, 0f);*/
 
                 GameObject tempObj;
 
                 tempObj = Instantiate(boltPrefab, boltTrayContainer);
 
-                tempObj.transform.position = boltTrayContainer.transform.position + offset;
+                //tempObj.transform.localPosition = Vector3.zero;
+
+                //tempObj.transform.position = boltTrayContainer.transform.position;// + offset;
+
+                //tempObj.SetParent(originalParent, true);
+                //rectTransform.anchoredPosition = originalAnchoredPosition;
             }
         }
 
@@ -68,17 +73,19 @@ public class sFastenerTraySpawner : MonoBehaviour
         {
             if (nutPrefab != null && nutTrayContainer != null)
             {
-                Vector3 offset;// = new Vector3();
+                //Vector3 offset;// = new Vector3();
 
-                Vector2 randomSpot = Random.insideUnitCircle * 10f;
+                //Vector2 randomSpot = Random.insideUnitCircle * 10f;
 
-                offset = new Vector3(randomSpot.x, randomSpot.y, 0f);
+                //offset = new Vector3(randomSpot.x, randomSpot.y, 0f);
 
                 GameObject tempObj;
 
                 tempObj = Instantiate(nutPrefab, nutTrayContainer);
 
-                tempObj.transform.position = nutTrayContainer.transform.position + offset;
+                //tempObj.transform.localPosition = Vector3.zero;
+
+                //tempObj.transform.position = nutTrayContainer.transform.position;// + offset;
             }
         }
 

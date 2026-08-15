@@ -16,20 +16,6 @@ public class canvasGameplay : MonoBehaviour
     // AUDIO EVENTS
     public SO_AudioEventChannel soAudio;
 
-    //// CHARACTER STUFF
-    //public GameObject characterPanel;
-    //public Image characterImage;
-    //public Image characterSymbolImage;
-    //public Text characterName;
-
-    //HAND HELD STUFF
-    //public Sprite[] handImagesEmpty;
-    //public Image[] handBGImages;
-    //public Image[] handImages;
-    //public GameObject handRight, handLeft;
-    //public Sprite spriteHandRight, spriteHandLeft;
-    //public Transform connectionPlatesTransform;
-
     // INSTRUCTIONS STUFF
     //public Text textInstructionsRigging, textInstructionsAudio, textInstructionsVideo, textInstructionsLighting;
     //public string startingInstructionsRigging, startingInstructionsAudio, startingInstructionsVideo, startingInstructionsLighting;
@@ -49,22 +35,16 @@ public class canvasGameplay : MonoBehaviour
     // TIME
     public GameObject timeUI;
 
-    // MONEY STUFF
-    public GameObject moneyUI;
-    public float startingMoney = 1000;
-    float currentMoney;
-    public TextMeshProUGUI currentMoneyText;
-
     // TOOLBELT STUFF
-    public GameObject toolbelt, toolbeltGrid, toolbeltCloseArrow;
-    bool isHoldingTool = false;
-    public Image toolHeld;
+    public GameObject toolbelt;//, toolbeltGrid, toolbeltCloseArrow;
+
+    public Image toolHeldImage;
     public Text tooldHeldText;
 
     //public Transform toolbeltPanel;
-    public GameObject pToolbeltToolButton;
+    //public GameObject pToolbeltToolButton;
 
-    public List<GameObject> toolButtonsList;
+    //public List<GameObject> toolButtonsList;
 
     // WAREHOUSE
     public GameObject startScreen;
@@ -94,9 +74,7 @@ public class canvasGameplay : MonoBehaviour
 
         soUI.controlsPopup.AddListener(TogglePopup);
 
-        soUI.crewHire.AddListener(HireCrew);
-
-        soUI.toolHeldImage.AddListener(AddToolToBelt);
+        soUI.toolHeldImage.AddListener(SetToolHeld);
 
         soUI.messageEvent.AddListener(MessageSend);
     }
@@ -114,9 +92,7 @@ public class canvasGameplay : MonoBehaviour
 
         soUI.controlsPopup.RemoveListener(TogglePopup);
 
-        soUI.crewHire.RemoveListener(HireCrew);
-
-        soUI.toolHeldImage.RemoveListener(AddToolToBelt);
+        soUI.toolHeldImage.RemoveListener(SetToolHeld);
 
         soUI.messageEvent.RemoveListener(MessageSend);
     }
@@ -128,16 +104,13 @@ public class canvasGameplay : MonoBehaviour
 
         popupDictionary = new Dictionary<string, GameObject>();
 
-        currentMoney = startingMoney;
-        currentMoneyText.text = currentMoney.ToString();
-
-        toolbeltGrid.SetActive(false);
-        toolbeltCloseArrow.SetActive(false);
+        //toolbeltGrid.SetActive(false);
+        //toolbeltCloseArrow.SetActive(false);
         tooldHeldText.text = "";
 
-        toolHeld.gameObject.SetActive(false);
+        //toolHeldImage.gameObject.SetActive(false);
 
-        toolbelt.SetActive(false);
+        //toolbelt.SetActive(false);
 
         // turns off message at start
         MessageSend("", 0f);
@@ -157,6 +130,9 @@ public class canvasGameplay : MonoBehaviour
 
     private void MessageSend(string _message, float _time)
     {
+        // turns object on
+        textMessageMain.gameObject.SetActive(true);
+
         // turn alpha on
         textMessageMain.CrossFadeAlpha(1, 0f, false);
 
@@ -167,18 +143,14 @@ public class canvasGameplay : MonoBehaviour
         textMessageMain.CrossFadeAlpha(0, _time, false);
 
         //textMessageMain.CrossFadeColor()
+
+        // turns off message in time
+        Invoke("TurnOffMessage", _time + 0.5f);
     }
 
-    IEnumerator MessageFade(float _time)
+    void TurnOffMessage()
     {
-        float counter = 0f;
-
-        while (counter < _time)
-        {
-
-            counter += Time.deltaTime;
-            yield return null;
-        }
+        textMessageMain.gameObject.SetActive(false);
     }
 
     // POPUPS UI
@@ -386,107 +358,14 @@ public class canvasGameplay : MonoBehaviour
         }
     }
 
-    void HireCrew (SO_CrewProfile _crew)
-    {
-        ChangeMoney(_crew.hireCost);
-
-        if (soAudio != null)
-            soAudio.TriggerSFX("HireCrew");
-    }
-
-    // This takes in an amount and adds it to the money
-    void ChangeMoney(float _amount)
-    {
-        currentMoney += _amount;
-
-        currentMoneyText.text = currentMoney.ToString();
-
-        if(_amount < 0 )
-        {
-            if (soAudio != null)
-                soAudio.TriggerSFX("LoseMoney");
-        }
-
-        else if (_amount > 0)
-        {
-            if (soAudio != null)
-                soAudio.TriggerSFX("GainMoney");
-        }
-    }
-
     // TOOLBELT
-
-    public void ToggleToolbelt(bool _isOpen)
-    {
-        Debug.Log("Toggling the toolbelt");
-
-        // Checks if there are any tools
-        if(toolButtonsList.Count > 0)
-        {
-            toolbeltGrid.SetActive(_isOpen);
-            toolbeltCloseArrow.SetActive(_isOpen);
-        }      
-    }
- 
-    public void ChangeToolImage(Sprite _sprite)
-    {
-        toolHeld.sprite = _sprite;
-    }
-
-    public void OnToolClick(SO_ToolData _toolData)
-    {
-        Debug.Log("Tool Item Clicked");
-
-        sPlayerCharacter.playerCharacterGlobal.ReturnToolHandler().GoTool(_toolData);
-    }
 
     void SetToolHeld(SO_ToolData _itemData)
     {
-        isHoldingTool = true;
-        toolHeld.sprite = _itemData.itemSprite;
+        //toolHeldImage.gameObject.SetActive(true);
+
+        toolHeldImage.sprite = _itemData.itemSprite;
+
         tooldHeldText.text = _itemData.itemName;
-    }
-
-    bool CheckIfInToolBelt(uButtonTool _tool)
-    {
-        bool isInBelt = false;
-
-        for (int i = 0; i < toolButtonsList.Count; i++)
-        {
-            if(_tool == toolButtonsList[i])
-            {
-                isInBelt = true;
-            }
-        }
-
-        return isInBelt;
-    }
-
-    public void AddToolToBelt(SO_ToolData _toolData)
-    {
-        toolbelt.SetActive(true);
-
-        // if no tool is held then it changes the held tool;
-        if(!isHoldingTool)
-        {
-            toolHeld.gameObject.SetActive(true);
-        }
-
-        SetToolHeld(_toolData);
-
-        // Spawns toolbelt button and adds it to list
-        GameObject tempObject = Instantiate(pToolbeltToolButton, toolbeltGrid.transform);
-
-        uButtonTool buttonTool;
-
-        buttonTool = tempObject.GetComponent<uButtonTool>();
-
-        buttonTool.SetButton(_toolData);
-
-        toolButtonsList.Add(tempObject);
-
-        //buttonTool.SetIndex(toolButtonsList.Count);
-
-        Debug.Log("Setting Tool to index " + toolButtonsList.Count);
     }
 }

@@ -83,7 +83,7 @@ public class sPlayerCharacter : MonoBehaviour
 
         actionController = GetComponent<sCharacterActionController>();
         movementController = GetComponent<sCharacterMovementController>();
-        grabController = GetComponent<sCharacterGrabController>();
+        grabController = GetComponentInChildren<sCharacterGrabController>();
         toolHandler = GetComponent<sToolHandler>();
         mouseClickController = GetComponent<sMouseClickController>();
     }

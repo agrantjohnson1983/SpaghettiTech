@@ -184,36 +184,18 @@ public class sBox : sInteractive, iClickable, IPointerEnterHandler, IPointerExit
 
             Vector3 panelOffset = GetInventoryPanelOffset();
 
-            //inventory = Instantiate(pBoxInventoryPanel, this.transform.position + panelOffset, Quaternion.identity).GetComponent<sInventory>();
-
             sPlayerCharacter.playerCharacterGlobal.ToggleMovement(false);
 
             inventoryPanel.gameObject.SetActive(true);
 
             rb.constraints = RigidbodyConstraints.FreezeAll;
 
-            //inventory.gameObject.transform.parent = this.transform;
-
-            //inventory.SetBox(this);
-
-            //inventory.SetInventory(boxedItemDataList.ToArray());
-
-            //pModel.GetComponent<MeshRenderer>().material = materialBoxOpen;
-
-            //atextMPAbove.SetText("OPEN");
-
-            //ui_Ring.GetComponentInChildren<MeshRenderer>().material.color = Color.yellow;
-
-            //ui_Text.SetActive(false);
-
             ui_Img.SetActive(false);
 
             ui_Select.SetActive(false);
 
             if (soAudio != null)
-                soAudio.TriggerSFX("OpenBox");
-
-            //GameManager.gm.ReturnCurrentPlayer().ReturnGrabController().grabPopupText.
+                soAudio.TriggerSFX("BoxOpen");
         }
 
         else
@@ -228,10 +210,6 @@ public class sBox : sInteractive, iClickable, IPointerEnterHandler, IPointerExit
         //Debug.Log("Closing Box");
 
         isOpen = false;
-        //base.StopAction(_actionObj);
-        // switches back to closed color unless empty
-        //if(!isEmpty)
-        //pModel.GetComponent<MeshRenderer>().material = materialBoxClosed;
 
         rb.constraints = startingConstraints;
 
@@ -240,40 +218,15 @@ public class sBox : sInteractive, iClickable, IPointerEnterHandler, IPointerExit
         sPlayerCharacter.playerCharacterGlobal.ToggleMovement(true);
 
         if (soAudio != null)
-            soAudio.TriggerSFX("CloseBox");
-
-        //if (inventory != null)
-        //{
-        //    inventory.ResetInventory();
-
-        //    Destroy(inventory.gameObject);
-        //    //inventory = null;
-        //}
-
-
-        //textMPAbove.SetText("CLOSED");
-
-        //ui_Ring.GetComponentInChildren<MeshRenderer>().material.color = Color.green;
-
-        //ui_Text.SetActive(true);
+            soAudio.TriggerSFX("BoxClose");
 
         ui_Img.SetActive(true);
     }
-
-    /*public void InventoryItemPick(int _index)
-    {
-        numberOfSlots--;
-
-        //RemoveItemData(_index);
-    }*/
 
     public void RemoveItemData(SO_ItemData _ItemData)
     {
         //Debug.Log("Removing Item at index: " + _index);
         boxedItemDataList.Remove(_ItemData);
-
-
-        //itemData.Sort();
     }
 
     public int ReturnNumberOfInventorySlots()
@@ -287,15 +240,7 @@ public class sBox : sInteractive, iClickable, IPointerEnterHandler, IPointerExit
 
         pModel.GetComponent<MeshRenderer>().material = materialBoxEmpty;
 
-        //textMPAbove.SetText("EMPTY");
-
-        //ui_Ring.SetActive(false);
-        //ui_Ring.GetComponentInChildren<MeshRenderer>().material.color = Color.red;
-        //ui_Text.SetActive(false);
-
         ui_Img.SetActive(false);
-
-
     }
 
     // This gets called when a player clicks the box
@@ -323,19 +268,9 @@ public class sBox : sInteractive, iClickable, IPointerEnterHandler, IPointerExit
             else
             {
                 inventory.OnClickX();
-                //Destroy(inventory.gameObject);
-                //inventory = null;
                 isOpen = true;
                 TriggerOpenBox();
             }
-
-            //}
-
-            //else
-            //{
-            //    isOpen = false;
-            //    CloseBox();
-            // }
         }
     }
 
@@ -346,11 +281,6 @@ public class sBox : sInteractive, iClickable, IPointerEnterHandler, IPointerExit
         if (Vector3.Distance(this.transform.position, sPlayerCharacter.playerCharacterGlobal.transform.position) < UI_ToggleDistance)
         {
             isWithinOpenRange = true;
-
-            //ui_Img.SetActive(true);
-            //if (!isOpen)
-                //ui_Text.SetActive(true);
-            //ui_Ring.SetActive(!iGrabbable.IsGrabbed);
         }
 
         else
@@ -358,11 +288,6 @@ public class sBox : sInteractive, iClickable, IPointerEnterHandler, IPointerExit
             //Debug.Log("Outside of range of " + this.gameObject.name);
 
             isWithinOpenRange = false;
-
-            //ui_Img.SetActive(false);
-            //ui_Text.SetActive(false);
-
-            //ui_Ring.SetActive(false);
 
             if (isOpen)
                 CloseBox();
@@ -373,7 +298,7 @@ public class sBox : sInteractive, iClickable, IPointerEnterHandler, IPointerExit
     {
         //Debug.Log("Box On Grab Triggered");
         iGrabbable.IsGrabbed = true;
-        //ui_Ring.SetActive(false);
+
         ui_Select.SetActive(false);
 
         ui_Img.SetActive(false);
@@ -384,7 +309,6 @@ public class sBox : sInteractive, iClickable, IPointerEnterHandler, IPointerExit
     {
         //Debug.Log("Box Off Grab Triggered");
         Invoke("GrabReset", 0.5f);
-        //ui_Select.SetActive(true);
     }
 
     void GrabReset()
@@ -398,21 +322,18 @@ public class sBox : sInteractive, iClickable, IPointerEnterHandler, IPointerExit
         return;
 
         //Debug.Log("On Select on Box");
+
         if(!isOpen)
             ui_Select.SetActive(true);
 
         soUI.TriggerControlsPopup("F", "Open");
-
-        //base.OnSelect();
-
-        
     }
 
     public override void OffSelect()
     {
         //Debug.Log("Off Select on Box");
+
         ui_Select.SetActive(false);
-        //base.OnSelect();
 
         soUI.TriggerControlsPopup("", "Open");
     }
@@ -423,7 +344,6 @@ public class sBox : sInteractive, iClickable, IPointerEnterHandler, IPointerExit
 
         if (isWithinOpenRange && !sCharacterGrabController.isGrabbing)
             ui_Img.SetActive(true);
-        //Cursor.SetCursor(boxSelectMouseImage, new Vector2(10, 10), CursorMode.Auto);
     }
 
     public void OnPointerExit(PointerEventData eventData)
@@ -432,41 +352,5 @@ public class sBox : sInteractive, iClickable, IPointerEnterHandler, IPointerExit
 
         if (eventData.fullyExited)
             ui_Img.SetActive(false);
-        //Cursor.SetCursor()
     }
-
-
-    /*
-    private void OnTriggerEnter(Collider other)
-    {
-        if(other.gameObject.CompareTag("Player")  && !isOpen)
-        {
-            isOpen = true;
-            TriggerOpenBox();
-            //Debug.Log("Open Trigger From Box Enter");
-        }
-    }
-
-    
-    private void OnTriggerStay(Collider other)
-    {
-        if (other.gameObject.CompareTag("Player") && !isOpen)
-        {
-            isOpen = true;
-            TriggerOpenBox();
-            //Debug.Log("Open Trigger From Box Stay");
-        }
-    }
-
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.gameObject.CompareTag("Player") && isOpen)
-        {
-            
-            isOpen = false;
-            CloseBox();
-            //Debug.Log("Closed Trigger From Box");
-        }
-    }
-    */
 }

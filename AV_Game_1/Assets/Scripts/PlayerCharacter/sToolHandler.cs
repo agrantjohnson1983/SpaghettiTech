@@ -19,7 +19,9 @@ public class sToolHandler : MonoBehaviour
 
     //GameObject toolObj;
 
-    List<SO_ToolData> toolHeldItemDataList;
+    //List<SO_ToolData> toolHeldItemDataList;
+
+    SO_ToolData currentToolData = null;
 
     //SO_ToolData currentToolItem = null;
 
@@ -77,7 +79,7 @@ public class sToolHandler : MonoBehaviour
         //toolItemData = null;
 
         //toolObj = null;
-        toolHeldItemDataList = new List<SO_ToolData>();
+        //toolHeldItemDataList = new List<SO_ToolData>();
 
         tapeTool = GetComponent<sTapeTool>();
 
@@ -87,58 +89,72 @@ public class sToolHandler : MonoBehaviour
 
     public SO_ToolData CheckIfHasTool(eToolType _toolType)
     {
-        if (toolHeldItemDataList.Count == 0)
+        if (currentToolData == null)
             return null;
 
-        SO_ToolData _tempTool = toolHeldItemDataList[0];
-
-        //bool hasCorrectTool = false;
-
-        if (toolHeldItemDataList != null)
+        if(currentToolData.typeOfTool == _toolType)
         {
-            for (int i = 0; i < toolHeldItemDataList.Count; i++)
-            {
-                if (toolHeldItemDataList[i].typeOfTool == _toolType)
-                {
-                    _tempTool = toolHeldItemDataList[i];
-
-                    //Debug.Log("Tool check - has correct type of tool!  Returning tool");// + toolHeldList[i].name);
-                    //hasCorrectTool = true;
-
-                    return _tempTool;
-                }
-            }
-
+            return currentToolData;
         }
 
         else
 
         {
-            Debug.Log("Tool held list is null");
+            //Debug.Log("Tool held is incorrect");
 
-            _tempTool = null;
+            return null;
         }
 
         //Debug.Log("End of tool check - returning at end");
 
-        return _tempTool;
+        //return _tempTool;
     }
 
-    public List<SO_ToolData> ReturnToolHeldList()
+    /*public List<SO_ToolData> ReturnToolHeldList()
     {
         return toolHeldItemDataList;
-    }
+    }*/
 
-    public void DropTool(int _index)
+    public void DropTool()
     {
+        if (currentToolData == null)
+            return;
+
         // Spawns tool model
-        Instantiate(toolHeldItemDataList[_index].prefabItem);
+        //Instantiate(toolHeldItemDataList[_index].prefabItem);
+
+        GameObject tempObj;
+
+        tempObj = Instantiate(currentToolData.prefabItem);
+
+        Vector3 randomCircle = Random.onUnitSphere;
+
+        Vector3 offset = new Vector3(randomCircle.x, 1f, randomCircle.z) * 2f;
+
+        tempObj.transform.position = sPlayerCharacter.playerCharacterGlobal.transform.position + Vector3.up * 2f;
+
+        Rigidbody rb = tempObj.GetComponent<Rigidbody>();
+
+        rb.WakeUp();
+
+        rb.constraints = RigidbodyConstraints.None;
+
+        rb.AddForce(offset, ForceMode.Impulse);
+
+        rb.AddTorque(Random.onUnitSphere * 100f, ForceMode.Impulse);
 
         // Triggers UI change
-        soUI.TriggerToolChange(toolHeldItemDataList[_index]);
+        //soUI.TriggerToolChange();
 
         // Removes tool from list
-        toolHeldItemDataList.RemoveAt(_index);
+        //toolHeldItemDataList.RemoveAt(_index);
+
+        //Invoke("ResetToolRB", 0.5f);
+    }
+
+    void ResetToolRB()
+    {
+
     }
 
     public void GoTool(SO_ToolData _toolData)
@@ -147,7 +163,7 @@ public class sToolHandler : MonoBehaviour
         soUI.TriggerToolChange(_toolData);
 
         // turns off all current tools, then turns back on one tool
-        ToolsOff();
+        //ToolsOff();
 
         // turns tool on, etc.
         switch(_toolData.typeOfTool)
@@ -195,8 +211,8 @@ public class sToolHandler : MonoBehaviour
 
                     Destroy(other.gameObject);
 
-                    return;
-                    //break;
+                    //return;
+                    break;
 
                 case eToolType.bolt:
 
@@ -207,20 +223,32 @@ public class sToolHandler : MonoBehaviour
 
                     Destroy(other.gameObject);
 
-                    return;
+                        //return;
+
+                        break;
+
+                case eToolType.tape:
 
                 case eToolType.ratchet:
-                case eToolType.tape:
+                
                 case eToolType.crescent:
 
                     if (soAudio != null)
                         soAudio.TriggerSFX("ToolPickup");
 
-                    break;
-                    //break;
+                    DropTool();
+
+                    currentToolData = _tool.toolData;
+
+                    soUI.TriggerToolChange(_tool.toolData);
+
+                    Destroy(other.gameObject);
+
+                break;
+                //break;
             }
 
-            // has no tool and grabs a tool - and has hand free
+            /*// has no tool and grabs a tool - and has hand free
             if (toolHeldItemDataList != null)//  && handFree)
             {
                 //Debug.Log("Tool Acquired to belt");
@@ -243,7 +271,7 @@ public class sToolHandler : MonoBehaviour
             {
                 Debug.Log("Tool item data list is null!");
                 // spawn a canvas asking if you want to drop current tool
-            }
+            }*/
             
         }
     }

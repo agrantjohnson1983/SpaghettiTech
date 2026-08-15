@@ -27,21 +27,8 @@ public interface iRiggable
         set;
     }
 
-    public void SetRigging(GameObject _riggingObject, GameObject _setupObject, Vector3 _offset)
-    {
-        //hasBeenRigged = true;
-
-        Debug.Log("Setting rigging");
-
+    public void SetRigging(GameObject _riggingObject, GameObject _setupObject, Vector3 _offset);
         
-
-        //SmoothMovement(_riggingObject, _setupObject.transform.position, _setupObject.transform.rotation);
-
-        //_riggingObject.transform.position = _setupObject.transform.position + _offset;
-        //_riggingObject.transform.rotation = _setupObject.transform.rotation;
-
-        //IsSet = true;
-    }
 
     public void RiggingObjectComplete(GameObject _riggedObject, eTypeRigSetup _type)
     {

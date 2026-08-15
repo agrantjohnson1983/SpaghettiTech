@@ -31,9 +31,9 @@ public class uButtonTool : MonoBehaviour
 
     public void OnClick()
     {
-        CanvasGameplay.OnToolClick(toolData);
+        //CanvasGameplay.OnToolClick(toolData);
         
-        CanvasGameplay.ToggleToolbelt(false);
+        //CanvasGameplay.ToggleToolbelt(false);
 
         // Sets 
 

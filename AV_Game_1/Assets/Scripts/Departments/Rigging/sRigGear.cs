@@ -76,8 +76,6 @@ public class sRigGear : sInteractive, iRiggable
         base.Start();
 
         CanBeGrabbed = true;
-
-
     }
 
 
@@ -91,4 +89,10 @@ public class sRigGear : sInteractive, iRiggable
 
     }
 
+    public void SetRigging(GameObject _riggingObject, GameObject _setupObject, Vector3 _offset)
+    {
+        Debug.Log("Rigging set for " + this.gameObject);
+
+        CanBeGrabbed = false;
+    }
 }

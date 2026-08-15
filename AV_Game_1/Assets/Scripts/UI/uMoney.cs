@@ -7,6 +7,8 @@ public class uMoney : MonoBehaviour
 {
     public static uMoney moneyGlobal;
 
+    public GameObject moneyUI;
+
     public float moneyStarting = 100000;
     float moneyCurrent;
 
@@ -46,8 +48,21 @@ public class uMoney : MonoBehaviour
 
     void MoneyChange(float _amount)
     {
-        moneyCurrent += _amount;
-        textMoney.text = "$" + moneyCurrent;
+        if(moneyUI.activeInHierarchy)
+        {
+            moneyCurrent += _amount;
+            textMoney.text = "$" + moneyCurrent;
+        }
+
+        else
+        {
+            Debug.LogWarning("Money change was triggered but money UI is not active");
+        }
+    }
+
+    public void ToggleUI(bool _isOn)
+    {
+        moneyUI.SetActive(_isOn);
     }
 
 }

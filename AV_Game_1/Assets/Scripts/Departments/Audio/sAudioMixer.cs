@@ -23,7 +23,7 @@ public class sAudioMixer : sAudioGear
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.CompareTag("Player") && !isPlayingMinigame)
+        if(other.CompareTag("Player") && !isPlayingMinigame && isSet)
         {
             isPlayingMinigame = true;
             //mixerMiniGame.SetActive(true);

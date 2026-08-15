@@ -331,7 +331,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2012776716820894629}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: acca6fb6d53664e419da2fc3c65f6dc4, type: 3}
   m_Name: 
@@ -341,7 +341,7 @@ MonoBehaviour:
   transformGrab: {fileID: 7892026315839176651}
   grabControlText: SPACE
   throwControlText: CLICK
-  soVFX: {fileID: 0}
+  soVFX: {fileID: 11400000, guid: 2e677f6310e0cd24e8679be3f3361b8f, type: 2}
   throwPower: 10
 --- !u!114 &8416505087930365736
 MonoBehaviour:
@@ -1009,6 +1009,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7892026315839176651}
+  - component: {fileID: 142620657}
+  - component: {fileID: 142620656}
   m_Layer: 7
   m_Name: transformGrab
   m_TagString: Untagged
@@ -1024,13 +1026,45 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4460913622819355572}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.25, z: 1.5}
+  m_LocalPosition: {x: 0, y: 0.25, z: 1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2012776716820894628}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!135 &142620657
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4460913622819355572}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &142620656
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4460913622819355572}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: acca6fb6d53664e419da2fc3c65f6dc4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  model: {fileID: 2012776718528749849}
+  soUI: {fileID: 11400000, guid: 2b96b6b1405722c48a474d361c95f00a, type: 2}
+  transformGrab: {fileID: 7892026315839176651}
+  grabControlText: SPACE
+  throwControlText: CLICK
+  soVFX: {fileID: 11400000, guid: 2e677f6310e0cd24e8679be3f3361b8f, type: 2}
+  throwPower: 10
 --- !u!1 &5718862906781706156
 GameObject:
   m_ObjectHideFlags: 0

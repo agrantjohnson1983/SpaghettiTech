@@ -19,4 +19,4 @@ MonoBehaviour:
   prefabItem: {fileID: 5428049608754613346, guid: 9c712260188bfeb4595db57e1db2ec59, type: 3}
   weight: 0
   description: Ratchety ratcherson
-  typeOfTool: 0
+  typeOfTool: 1

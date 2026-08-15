@@ -23,6 +23,10 @@ public class sInventoryItem : MonoBehaviour, IPointerEnterHandler,
     public GameObject toolTip;
     public TMP_Text toolText;
 
+    public SO_AudioEventChannel soAudio;
+
+    public GameObject parent;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -43,11 +47,11 @@ public class sInventoryItem : MonoBehaviour, IPointerEnterHandler,
     {
         //Debug.Log("Inventory Item " + textItemName.ToString() + " button was clicked") ;
 
-        inventory?.ItemPicked(itemData);
+        inventory.ItemPicked(itemData);
 
         //Instantiate(pItem, inventory.ReturnBox().transform.position, Quaternion.identity);
 
-        Destroy(this.gameObject);
+        Destroy(parent);
     }
 
     public void OnPointerEnter(PointerEventData eventData)
@@ -55,7 +59,10 @@ public class sInventoryItem : MonoBehaviour, IPointerEnterHandler,
         //Debug.Log("Inventory Item pointer enter");
 
         //bg.color = hoverColor;
-        toolTip?.SetActive(true);
+        toolTip.SetActive(true);
+
+        if (soAudio != null)
+            soAudio.TriggerSFX("BoxItemSelect");
     }
 
     public void OnPointerExit(PointerEventData eventData)
@@ -63,6 +70,6 @@ public class sInventoryItem : MonoBehaviour, IPointerEnterHandler,
         //Debug.Log("Inventory Item pointer exit");
 
         //bg.color = normalColor;
-        toolTip?.SetActive(false);
+        toolTip.SetActive(false);
     }
 }

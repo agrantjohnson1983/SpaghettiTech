@@ -111,8 +111,12 @@ public class sCharacterActionController : MonoBehaviour
                 // Sets the item data to the tools item data
                 itemData = tempToolData;
             }
-            
 
+            else
+            {
+                Debug.Log("Did not have correct tool to trigger action");
+                
+            }
 
             if(_actionable.HasAction)
             {

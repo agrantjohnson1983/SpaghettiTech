@@ -16,7 +16,7 @@ MonoBehaviour:
   numberOfHandsNeeded: 0
   itemName: Tape
   itemSprite: {fileID: 21300000, guid: 4a203596f7d9eaf4283ba1de54bcf595, type: 3}
-  prefabItem: {fileID: 4550732650419208238, guid: 3546630cc25e16b4b919d790607c1b2f, type: 3}
+  prefabItem: {fileID: 4373965452669374060, guid: 3546630cc25e16b4b919d790607c1b2f, type: 3}
   weight: 0
   description: gafferino!
   typeOfTool: 2

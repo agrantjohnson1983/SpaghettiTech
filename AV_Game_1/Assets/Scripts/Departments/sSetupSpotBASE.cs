@@ -15,8 +15,6 @@ public class sSetupSpotBASE : MonoBehaviour, iActionable
 
     bool hasBeenSet = false;
 
-    public eTypeRigSetup rigType;
-
     public bool toolNeeded = false;
 
     public eToolType _toolTypeNeeded;
@@ -129,7 +127,11 @@ public class sSetupSpotBASE : MonoBehaviour, iActionable
             yield return null;
         }
 
+        //Debug.Log("Smooth movement finished for)
+
         _object.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
+
+        Destroy(this.gameObject, 0.5f);
 
     }
 

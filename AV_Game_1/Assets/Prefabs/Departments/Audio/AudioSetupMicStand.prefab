@@ -26,7 +26,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 63192978360294292}
   m_LocalRotation: {x: -0, y: -0.70710576, z: -0, w: 0.7071079}
-  m_LocalPosition: {x: 0, y: 0.26, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1.0474571, y: 1.6303505, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -131,7 +131,7 @@ BoxCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 0.97, y: 1.64, z: 1.08}
-  m_Center: {x: 0, y: 0.26, z: 0}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &1898210753952151173
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -144,8 +144,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf27c0ca38e866a4381c53492fb8c5a9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  soVFX: {fileID: 11400000, guid: 2e677f6310e0cd24e8679be3f3361b8f, type: 2}
+  _taskTime: 0
+  hasAction: 0
+  offset: {x: 0, y: 0, z: 0}
+  rigType: 0
+  toolNeeded: 0
+  _toolTypeNeeded: 0
+  textSetup: {fileID: 0}
+  _UI_offset: {x: 0, y: 0, z: 0}
+  soUI: {fileID: 0}
   soAudio: {fileID: 11400000, guid: 85974a5eed2479c48b89b5a67f81403b, type: 2}
+  actionObject: {fileID: 0}
+  soVFX: {fileID: 11400000, guid: 2e677f6310e0cd24e8679be3f3361b8f, type: 2}
   typeAudio: 3
   setupOffset: {x: 0, y: 1.2312, z: 0}
 --- !u!1 &5190185500421664092
@@ -267,14 +277,14 @@ MonoBehaviour:
   _toolTypeNeeded: 1
   textSetup: {fileID: 0}
   _UI_offset: {x: 0, y: 0, z: 0}
+  soUI: {fileID: 0}
+  soAudio: {fileID: 0}
+  actionObject: {fileID: 0}
   setupIndex: -1
   requireNeighborsSetup: 1
   neighborTrussIndexA: -1
   neighborTrussIndexB: -1
   activeWorldYOffset: -1
-  soUI: {fileID: 0}
-  soAudio: {fileID: 0}
-  actionObject: {fileID: 0}
 --- !u!1 &8468445531994352861
 GameObject:
   m_ObjectHideFlags: 0
@@ -312,7 +322,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 1.3299999}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0.41, y: 1.96}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!23 &4949155113279766678

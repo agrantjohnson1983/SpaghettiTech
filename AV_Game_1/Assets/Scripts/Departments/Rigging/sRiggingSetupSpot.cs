@@ -54,7 +54,7 @@ public class sRiggingSetupSpot : sSetupSpotBASE
     Vector3 originalLocalPosition;
     bool hasRecordedOriginalLocalPosition;
 
-    
+    public eTypeRigSetup rigType;
 
     public void Start()
     {
@@ -318,23 +318,81 @@ public class sRiggingSetupSpot : sSetupSpotBASE
         sPlayerCharacter.playerCharacterGlobal.ToggleMovement(true);
     }
 
+    // TO DO - Check to see how close the rigging piece rotation is compared to the setup spot rotation
+
+
+    bool ToolCheck(GameObject _toolCheckObj)
+    {
+        // Checks for tool handler - located on Player
+        if (_toolCheckObj.TryGetComponent<sToolHandler>(out sToolHandler _toolHandler))
+        {
+            //Debug.Log("Collision with player and " + this.name + " - checking tool");
+
+            if (_toolHandler.CheckIfHasTool(ToolTypeNeeded))
+            {
+
+
+                CorrectTool();
+
+                return true;
+            }
+
+            else
+            {
+                // If the player character doesn't have the correct tool
+                WrongTool();
+
+                return false;
+            }
+
+        }
+
+        else
+        {
+            return false;
+        }
+
+    }
+
+    void CorrectTool()
+    {
+        Debug.Log("Correct Tool!");
+
+        // Toggles bool
+        CanTriggerAction = true;
+
+        // Displays text above spot
+        textSetup.SetText("CORRECT TOOL");
+
+        // triggers message?
+        soUI.TriggerMessage("Correct Tool!", 1f);
+
+        // Sets the color of the text to green showing the tool is good
+        textSetup.color = Color.green;
+    }
+
     public void WrongTool()
     {
         Debug.Log("Wrong Tool");
 
         textSetup.gameObject.SetActive(true);
 
-        //textSetup.color = Color.red;
+        textSetup.color = Color.red;
+
+        textSetup.text = "WRONG TOOL!\n Need " + ToolTypeNeeded;
 
         CanTriggerAction = false;
     }
 
     void SetupGear(iRiggable _riggable, GameObject other)
     {
+        _riggable.IsSet = true;
         isSetup = true;
 
         if (soAudio != null)
             soAudio.TriggerSFX("SetupComplete");
+
+        sPlayerCharacter.playerCharacterGlobal.ReturnGrabController().GrabReset();
 
         StartCoroutine(SmoothMovement(other, this.gameObject.transform.position + offset, this.transform.rotation));
 
@@ -477,7 +535,7 @@ public class sRiggingSetupSpot : sSetupSpotBASE
         if (other.TryGetComponent(out iRiggable _riggable))
         {
             // Checks that collided rig type is same as setup type
-            if (_riggable.TypeRig == rigType)
+            if (_riggable.TypeRig == rigType && _riggable.IsSet == false)
             {
                 SetupGear(_riggable, other.gameObject);
             }
@@ -486,78 +544,15 @@ public class sRiggingSetupSpot : sSetupSpotBASE
             {
                 Debug.Log("[" + this.name + "] Wrong setup spot type - spot expects " + rigType
                     + " but " + other.gameObject.name + " is " + _riggable.TypeRig);
+                return;
             }
+
+            
 
         }
     }
 
-    // TO DO - Check to see how close the rigging piece rotation is compared to the setup spot rotation
-
-
-    bool ToolCheck(GameObject _toolCheckObj)
-    {
-        // Checks for tool handler - located on Player
-        if (_toolCheckObj.TryGetComponent<sToolHandler>(out sToolHandler _toolHandler))
-        {
-            //Debug.Log("Collision with player and " + this.name + " - checking tool");
-
-            // Checks to see if there are any tools held
-            if (_toolHandler.ReturnToolHeldList() != null)
-            {
-                //Debug.Log("Tool list isn't null");
-
-                SO_ItemData tempToolData;
-
-                tempToolData = _toolHandler.CheckIfHasTool(ToolTypeNeeded);
-
-                // Debug.Log(tempTool + " temp tool");
-
-                // Returns null if tool is not correct
-                if (tempToolData != null)
-                {
-                    //Debug.Log("Temp Tool Not Null and Setting UI");
-
-                    // Toggles bool
-                    CanTriggerAction = true;
-
-                    // Displays text above spot
-                    textSetup.SetText("CORRECT TOOL");
-
-                    // Sets the color of the text to green showing the tool is good
-                    textSetup.color = Color.green;
-
-                    return true;
-                }
-
-                else
-                {
-                    Debug.Log("Temp Tool Data is null");
-
-                    // If the player character doesn't have the correct tool
-                    WrongTool();
-
-                    return false;
-                }
-            }
-
-            else
-            {
-                Debug.Log("Tool Handler List is null");
-
-                // If the player character doesn't have the correct tool
-                WrongTool();
-
-                return false;
-            }
-
-        }
-
-        else
-        {
-            return false;
-        }
-
-    }
+    
 
     private void OnTriggerExit(Collider other)
     {

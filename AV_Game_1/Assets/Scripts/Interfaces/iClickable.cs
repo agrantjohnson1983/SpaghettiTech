@@ -5,5 +5,4 @@ using UnityEngine;
 public interface iClickable
 {
     public void OnClick();
-
 }

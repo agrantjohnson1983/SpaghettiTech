@@ -41,6 +41,9 @@ public class GameManager : MonoBehaviour
     public EventSystem eventSystem;
 
     public GameObject Results;
+
+    uMoney money;
+
     private void Awake()
     {
         if (gm == null)
@@ -71,11 +74,13 @@ public class GameManager : MonoBehaviour
             return;
         }
 
-        SetGameMode(startingGameMode);
-
         playerCharacters = new List<sPlayerCharacter>();
 
         eventSystem = GetComponentInChildren<EventSystem>();
+
+        money = GetComponentInChildren<uMoney>();
+
+        SetGameMode(startingGameMode);
     }
 
     // Re-caches the canvas component references from whatever GameObjects
@@ -208,7 +213,7 @@ public class GameManager : MonoBehaviour
 
                 canvasGameplayObject.SetActive(true);
                 canvasWarehouseObject.SetActive(false);
-                canvasGameplay.moneyUI.SetActive(true);
+                //uMoney.moneyGlobal.ToggleUI(false);
 
                 //ToggleOverheadCamera(true);
 
@@ -300,7 +305,7 @@ public class GameManager : MonoBehaviour
 
     public void ToggleOverheadCamera(bool _isOn)
     {
-        //Debug.Log("Setting overhead cam to: " + _isOn);
+        Debug.Log("Setting overhead cam to: " + _isOn);
         camOverhead.SetActive(_isOn);
     }
 

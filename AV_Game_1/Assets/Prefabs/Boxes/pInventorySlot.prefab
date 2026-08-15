@@ -660,3 +660,5 @@ MonoBehaviour:
   textItemName: {fileID: 2248481275697594715}
   toolTip: {fileID: 3219310382286600201}
   toolText: {fileID: 8489554279931555532}
+  soAudio: {fileID: 11400000, guid: 85974a5eed2479c48b89b5a67f81403b, type: 2}
+  parent: {fileID: 5734894799169402483}

@@ -22,7 +22,7 @@ public class sBoltHoleSlot : MonoBehaviour
 
     [Header("Tightening Progress")]
     public int clicksToTighten = 3;
-    public float wrenchAnglePerClick = 40f;
+    public float wrenchAnglePerClick = -40f;
     public float initialWrenchAngleDegrees = 0f;
     public float nutRotationPerClick = 60f;
 

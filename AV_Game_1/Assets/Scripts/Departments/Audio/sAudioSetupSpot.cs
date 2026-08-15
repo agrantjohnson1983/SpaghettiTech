@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public class sAudioSetupSpot : MonoBehaviour
+public class sAudioSetupSpot : sSetupSpotBASE
 {
     public SO_VFXEventChannel soVFX;
 
-    public SO_AudioEventChannel soAudio;
+    //public SO_AudioEventChannel soAudio;
 
     public eAudioType typeAudio;
 
@@ -31,12 +31,29 @@ public class sAudioSetupSpot : MonoBehaviour
                 // Checks that collided rig type is same as setup type
                 if (_audioGear.typeAudio == typeAudio && _audioGear.enabled)
                 {
+                    // Resets the grab in case player is still holding the gear
+                    sPlayerCharacter.playerCharacterGlobal.ReturnGrabController().GrabReset();
+
+                    // this keeps the grab UI from turning on and prevents player from grabbing
+                     _audioGear.CanBeGrabbed = false;
+
                     switch (typeAudio)
                     {
                         case eAudioType.speaker:
                             {
 
                             Debug.Log("Audio setup Collision with Setup Spot");
+
+                            StartCoroutine(SmoothMovement(other.gameObject, this.transform.position + offset, this.transform.rotation));
+
+                            //_audioGear.gameObject.transform.rotation = Quaternion.Euler(Vector3.zero);
+                            //_audioGear.gameObject.transform.position = _audioGear.gameObject.transform.position + setupOffset;
+                            //_audioGear.gameObject.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
+                            _audioGear.isSet = true;
+
+                            Debug.Log("Audio setup Collision with Mic Stand Spot");
+
+                            sAudioManager.audioManagerGlobal.AudioSet(typeAudio);
 
 
                             break;
@@ -49,6 +66,15 @@ public class sAudioSetupSpot : MonoBehaviour
 
                             Debug.Log("Audio setup Collision with Sub Spot");
 
+                            StartCoroutine(SmoothMovement(other.gameObject, this.transform.position + offset, this.transform.rotation));
+
+                            //_audioGear.gameObject.transform.rotation = Quaternion.Euler(Vector3.zero);
+                            //_audioGear.gameObject.transform.position = _audioGear.gameObject.transform.position + setupOffset;
+                            //_audioGear.gameObject.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
+                            _audioGear.isSet = true;                            
+
+                            sAudioManager.audioManagerGlobal.AudioSet(typeAudio);
+
                             break;
                             }
 
@@ -57,18 +83,30 @@ public class sAudioSetupSpot : MonoBehaviour
 
                             Debug.Log("Audio setup Collision with Mixer Spot");
 
+                            StartCoroutine(SmoothMovement(other.gameObject, this.transform.position + offset, this.transform.rotation));
+
+                            //_audioGear.gameObject.transform.rotation = Quaternion.Euler(Vector3.zero);
+                            //_audioGear.gameObject.transform.position = _audioGear.gameObject.transform.position + setupOffset;
+                            //_audioGear.gameObject.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
+                            _audioGear.isSet = true;
+
+                            sAudioManager.audioManagerGlobal.AudioSet(typeAudio);
+
                             break;
                             }
 
                         case eAudioType.micStand:
                             {
 
-                            _audioGear.gameObject.transform.rotation = Quaternion.Euler(Vector3.zero);
-                            _audioGear.gameObject.transform.position = _audioGear.gameObject.transform.position + setupOffset;
-                            _audioGear.gameObject.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
-                            _audioGear.isSet = true;
 
                             Debug.Log("Audio setup Collision with Mic Stand Spot");
+
+                            StartCoroutine(SmoothMovement(other.gameObject, this.transform.position + offset, this.transform.rotation));
+
+                            //_audioGear.gameObject.transform.rotation = Quaternion.Euler(Vector3.zero);
+                            //_audioGear.gameObject.transform.position = _audioGear.gameObject.transform.position + setupOffset;
+                            //_audioGear.gameObject.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
+                            _audioGear.isSet = true;
 
                             sAudioManager.audioManagerGlobal.AudioSet(typeAudio);
 
@@ -78,7 +116,7 @@ public class sAudioSetupSpot : MonoBehaviour
 
                 soAudio.TriggerSFX("SetupComplete");
 
-                Destroy(this.gameObject);
+                //Destroy(this.gameObject);
             }
 
                 else
