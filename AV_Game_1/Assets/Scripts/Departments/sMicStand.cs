@@ -15,15 +15,26 @@ public class sMicStand : sAudioGear
 
         if(other.TryGetComponent<sAudioGear>(out sAudioGear _gear) && isSet)
         {
-            Debug.Log("Mic stand collision with audio gear");
+            //Debug.Log("Mic stand collision with audio gear");
 
             if(_gear.typeAudio == eAudioType.microphone)
             {
-                other.gameObject.transform.parent = micConnectTransform;
-                other.gameObject.transform.localPosition = Vector3.zero + offset;
-                other.gameObject.transform.rotation = Quaternion.Euler(micRot);
-                other.gameObject.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
-                _gear.isSet = true;
+                sPlayerCharacter.playerCharacterGlobal.ReturnGrabController().GrabReset();
+
+                GameObject micObject = other.gameObject;
+
+                // turns off collision
+                //other.enabled = false;
+                micObject.GetComponent<Rigidbody>().detectCollisions = false;
+
+                // moves object
+                micObject.transform.parent = micConnectTransform;
+                micObject.transform.localPosition = Vector3.zero + offset;
+                micObject.transform.rotation = Quaternion.Euler(micRot);
+                micObject.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
+                micObject.GetComponent<Rigidbody>().detectCollisions = false;
+
+                _gear.SetGear(eAudioType.microphone);
             }
         }
     }

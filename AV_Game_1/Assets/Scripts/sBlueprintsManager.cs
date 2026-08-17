@@ -35,8 +35,9 @@ public class sBlueprintsManager : MonoBehaviour
     //public GameObject blueprintVideoInstructions, blueprintVideoInstructinsMinimized;
     //public GameObject blueprintLightingInstructions, blueprintLightingInstructinsMinimized;
 
+    public GameObject pDeptStatus;
 
-
+    List<GameObject> deptStatusList;
 
     private void Awake()
     {
@@ -58,16 +59,18 @@ public class sBlueprintsManager : MonoBehaviour
     {
         //blueprintSetupText.text = blueprintTextName[activeBlueprintIndex];
 
-        for (int i = 0; i < blueprintSetups.Length; i++)
+        /*for (int i = 0; i < blueprintSetups.Length; i++)
         {
             blueprintSetups[i].SetActive(false);
         }
+*/
+        //blueprintSetups[activeBlueprintIndex].SetActive(true);
 
-        blueprintSetups[activeBlueprintIndex].SetActive(true);
+        deptStatusList = new List<GameObject>();
 
-        Invoke("SetBluePrints", 1f);
+        //Invoke("SetBluePrints", 1f);
     }
-
+/*
     void UpdateRigging()
     {
         //truss
@@ -80,7 +83,7 @@ public class sBlueprintsManager : MonoBehaviour
             trussProgress = (float)trussStatus.completedItems / trussStatus.totalItems;
         }
 
-        statusTruss.text = (int)(trussProgress*100) + "%";
+        statusTruss.text = trussStatus.completedItems + "/" + trussStatus.totalItems;
 
         imageTruss.fillAmount = trussProgress;
 
@@ -96,7 +99,7 @@ public class sBlueprintsManager : MonoBehaviour
             motorProgress = (float)motorStatus.completedItems / motorStatus.totalItems;
         }
 
-        statusMotors.text = (int)(motorProgress*100) + "%";
+        statusMotors.text = motorStatus.completedItems + "/" + motorStatus.totalItems;
 
         imageMotors.fillAmount = motorProgress;
 
@@ -109,7 +112,7 @@ public class sBlueprintsManager : MonoBehaviour
         statusTotal.text = (int)(overallProgress*100f) + "%";
 
         imageTotal.fillAmount = overallProgress;
-    }
+    }*/
 
     void UpdateAudio()
     {
@@ -150,11 +153,21 @@ public class sBlueprintsManager : MonoBehaviour
         //characterPanel.SetActive(!blueprintsOpen);
         //toolbelt.SetActive(!blueprintsOpen);
 
-        gigStatus.SetActive(blueprintsOpen);
+        //gigStatus.SetActive(blueprintsOpen);
 
         if (blueprintsOpen)
         {
             SetBluePrints();
+        }
+
+        else
+        {
+            foreach(GameObject go in deptStatusList)
+            {
+                Destroy(go);
+            }
+
+            deptStatusList.Clear();
         }
     }
 
@@ -163,10 +176,23 @@ public class sBlueprintsManager : MonoBehaviour
     {
         //riggingTotal = sGigManager.gigManagerGlobal.
 
-        UpdateRigging();
+        //UpdateRigging();
+
+        deptStatusList = new List<GameObject>();
+
+        foreach(sDepartmentManager dm in sGigManager.gigManagerGlobal.departmentManagersList)
+        {
+
+            uDeptStatus dStatus = Instantiate(pDeptStatus, gigStatus.transform).GetComponent<uDeptStatus>();
+
+            dStatus.SetObjectives(dm);
+
+            deptStatusList.Add(dStatus.gameObject);
+        }
+
     }
 
-    public void SwitchBlueprint(bool _isLeftButton)
+    /*public void SwitchBlueprint(bool _isLeftButton)
     {
         blueprintSetups[activeBlueprintIndex].SetActive(false);
 
@@ -205,7 +231,7 @@ public class sBlueprintsManager : MonoBehaviour
 
         Debug.Log("Setting active with index of " + activeBlueprintIndex);
         blueprintSetups[activeBlueprintIndex].SetActive(true);
-    }
+    }*/
 
     //public void ToggleBlueprintRiggingInstructions()
     //{

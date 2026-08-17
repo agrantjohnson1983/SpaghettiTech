@@ -414,9 +414,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   soUI: {fileID: 11400000, guid: 2b96b6b1405722c48a474d361c95f00a, type: 2}
-  _typeRig: 2
-  _grabTriggersAction: 0
+  soAudio: {fileID: 11400000, guid: 85974a5eed2479c48b89b5a67f81403b, type: 2}
+  ui_Select: {fileID: 0}
+  _transformGrab: {fileID: 0}
   _UI_offset: {x: 0, y: 0, z: 0}
+  _typeRig: 2
   _itemData: {fileID: 11400000, guid: b5f3f2061c0fbdb498b7d8f83aaeeec8, type: 2}
   heightToRaise: 50
   workingHeight: 5
@@ -510,7 +512,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: d78d20cbb7eb7744aa4ee4bb69d3c74e, type: 2}
+  - {fileID: 2100000, guid: a5ddb3e34cbdfd24f9625f4c3d5f7553, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

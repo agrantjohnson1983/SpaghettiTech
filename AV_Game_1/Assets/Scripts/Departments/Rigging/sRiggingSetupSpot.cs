@@ -6,6 +6,7 @@ using System;
 
 public class sRiggingSetupSpot : sSetupSpotBASE
 {
+    public eTypeRigSetup rigType;
 
     // Index into sRiggingManager.trussSetupLocations that this spot
     // represents, when rigType == truss. Assigned dynamically by
@@ -54,7 +55,7 @@ public class sRiggingSetupSpot : sSetupSpotBASE
     Vector3 originalLocalPosition;
     bool hasRecordedOriginalLocalPosition;
 
-    public eTypeRigSetup rigType;
+
 
     public void Start()
     {
@@ -157,10 +158,24 @@ public class sRiggingSetupSpot : sSetupSpotBASE
     // Gates gear that mounts onto the truss itself (lights, and later
     // speakers/screens) behind the truss being raised to working height
     // or above. A spot for any other rig type is unaffected.
+    //
+    // NOTE: the call site for this in SetupGear is currently commented
+    // out (see below) - flagging in case that was left off from testing
+    // rather than intentionally, since it means lights can currently be
+    // mounted at any truss height, not just working height or above.
     bool TrussReadyForOverheadGear()
     {
         if (rigType != eTypeRigSetup.light)
 
+        {
+            return true;
+        }
+
+        // UCOMMENT THIS
+
+        Debug.LogWarning("NEED TO UN-COMMENT CODE in Rigging setup spot");
+
+        if (sRiggingManager.riggingMangerGlobal.debugBypassLightHeightGate)
         {
             return true;
         }
@@ -188,7 +203,7 @@ public class sRiggingSetupSpot : sSetupSpotBASE
             return;
         }
 
-        if (toolNeeded && ToolCheck(_playerObj) == false)
+        if (ToolTypeNeeded != eToolType.NONE && ToolCheck(_playerObj) == false)
         {
             Debug.Log("[" + this.name + "] Blocked - player missing required tool (" + ToolTypeNeeded + ")");
             return;
@@ -255,7 +270,10 @@ public class sRiggingSetupSpot : sSetupSpotBASE
     {
         Debug.Log("[" + this.name + "] FinishSetup called - Action Task Complete");
 
-        //actionObject.SetActive(false);
+        if (actionObject != null)
+        {
+            actionObject.SetActive(false);
+        }
 
         if (rigType == eTypeRigSetup.bolts)
         {
@@ -305,94 +323,13 @@ public class sRiggingSetupSpot : sSetupSpotBASE
     // (or on placedGearObject for a light) is untouched, since that
     // state lives on those objects directly rather than being reset
     // here.
-    public void ExitMinigame()
-    {
-        Debug.Log("[" + this.name + "] Exiting minigame without completing");
-
-        if (actionObject != null)
-        {
-            actionObject.SetActive(false);
-        }
-
-        GameManager.gm.canvasGameplayObject.SetActive(true);
-        sPlayerCharacter.playerCharacterGlobal.ToggleMovement(true);
-    }
-
-    // TO DO - Check to see how close the rigging piece rotation is compared to the setup spot rotation
-
-
-    bool ToolCheck(GameObject _toolCheckObj)
-    {
-        // Checks for tool handler - located on Player
-        if (_toolCheckObj.TryGetComponent<sToolHandler>(out sToolHandler _toolHandler))
-        {
-            //Debug.Log("Collision with player and " + this.name + " - checking tool");
-
-            if (_toolHandler.CheckIfHasTool(ToolTypeNeeded))
-            {
-
-
-                CorrectTool();
-
-                return true;
-            }
-
-            else
-            {
-                // If the player character doesn't have the correct tool
-                WrongTool();
-
-                return false;
-            }
-
-        }
-
-        else
-        {
-            return false;
-        }
-
-    }
-
-    void CorrectTool()
-    {
-        Debug.Log("Correct Tool!");
-
-        // Toggles bool
-        CanTriggerAction = true;
-
-        // Displays text above spot
-        textSetup.SetText("CORRECT TOOL");
-
-        // triggers message?
-        soUI.TriggerMessage("Correct Tool!", 1f);
-
-        // Sets the color of the text to green showing the tool is good
-        textSetup.color = Color.green;
-    }
-
-    public void WrongTool()
-    {
-        Debug.Log("Wrong Tool");
-
-        textSetup.gameObject.SetActive(true);
-
-        textSetup.color = Color.red;
-
-        textSetup.text = "WRONG TOOL!\n Need " + ToolTypeNeeded;
-
-        CanTriggerAction = false;
-    }
 
     void SetupGear(iRiggable _riggable, GameObject other)
     {
-        _riggable.IsSet = true;
-        isSetup = true;
+        //_riggable.IsSet = true;
 
         if (soAudio != null)
             soAudio.TriggerSFX("SetupComplete");
-
-        sPlayerCharacter.playerCharacterGlobal.ReturnGrabController().GrabReset();
 
         StartCoroutine(SmoothMovement(other, this.gameObject.transform.position + offset, this.transform.rotation));
 
@@ -420,7 +357,7 @@ public class sRiggingSetupSpot : sSetupSpotBASE
 
                         sRiggingManager.riggingMangerGlobal.RegisterTrussPiece(setupIndex, other.gameObject);
 
-                        Destroy(this.gameObject, 0.5f);
+                        Destroy(this.gameObject, 0.55f);
                     }
                     else
                     {
@@ -444,7 +381,7 @@ public class sRiggingSetupSpot : sSetupSpotBASE
 
                         //other.gameObject.GetComponent<sRigGear>().enabled = false;
 
-                        Destroy(this.gameObject, 0.5f);
+                        Destroy(this.gameObject, 0.55f);
                     }
                     else
                     {
@@ -468,7 +405,7 @@ public class sRiggingSetupSpot : sSetupSpotBASE
 
                         //other.gameObject.GetComponent<sRigGear>().enabled = false;
 
-                        Destroy(this.gameObject, 0.5f);
+                        Destroy(this.gameObject, 0.55f);
                     }
                     else
                     {
@@ -488,11 +425,11 @@ public class sRiggingSetupSpot : sSetupSpotBASE
                         break;
                     }
 
-                    /*if (!TrussReadyForOverheadGear())
+                    if (!TrussReadyForOverheadGear())
                     {
                         Debug.Log("[" + this.name + "] Truss is not at working height yet - cannot mount light here.");
                         break;
-                    }*/
+                    }
 
                     Debug.Log("[" + this.name + "] Light snapped into place - starting crescent wrench tightening");
 
@@ -519,7 +456,7 @@ public class sRiggingSetupSpot : sSetupSpotBASE
 
     private void OnTriggerEnter(Collider other)
     {
-        if (isSetup)
+        if (hasBeenSet)
             return;
 
         //Debug.Log("Rigging Setup On Trigger Enter");
@@ -535,7 +472,7 @@ public class sRiggingSetupSpot : sSetupSpotBASE
         if (other.TryGetComponent(out iRiggable _riggable))
         {
             // Checks that collided rig type is same as setup type
-            if (_riggable.TypeRig == rigType && _riggable.IsSet == false)
+            if (_riggable.TypeRig == rigType)
             {
                 SetupGear(_riggable, other.gameObject);
             }
@@ -544,13 +481,13 @@ public class sRiggingSetupSpot : sSetupSpotBASE
             {
                 Debug.Log("[" + this.name + "] Wrong setup spot type - spot expects " + rigType
                     + " but " + other.gameObject.name + " is " + _riggable.TypeRig);
-                return;
             }
-
-            
 
         }
     }
+
+    // TO DO - Check to see how close the rigging piece rotation is compared to the setup spot rotation
+
 
     
 

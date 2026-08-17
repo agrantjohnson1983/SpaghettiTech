@@ -105,15 +105,8 @@ public class sToolHandler : MonoBehaviour
             return null;
         }
 
-        //Debug.Log("End of tool check - returning at end");
-
-        //return _tempTool;
     }
 
-    /*public List<SO_ToolData> ReturnToolHeldList()
-    {
-        return toolHeldItemDataList;
-    }*/
 
     public void DropTool()
     {

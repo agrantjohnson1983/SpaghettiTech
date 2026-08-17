@@ -28,7 +28,7 @@ public class SO_EventsUI : ScriptableObject
 
     public UnityEvent<string, float> messageEvent;
 
-    public UnityEvent<float> progOverall, progRigging, progAudio, progVideo, progLighting;
+    public UnityEvent<float> progOverall, progRigging, progAudio, progVideo, progLighting, progPower;
 
     public UnityEvent nutPickup, boltPickup;
 
@@ -127,6 +127,11 @@ public class SO_EventsUI : ScriptableObject
         if (progLighting == null)
         {
             progLighting = new UnityEvent<float>();
+        }
+
+        if (progPower == null)
+        {
+            progPower = new UnityEvent<float>();
         }
 
         if (nutPickup == null)
@@ -235,6 +240,11 @@ public class SO_EventsUI : ScriptableObject
     public void TriggerProgLighting(float _amount)
     {
         progLighting?.Invoke(_amount);
+    }
+
+    public void TriggerProgPower(float _amount)
+    {
+        progPower?.Invoke(_amount);
     }
 
     public void TriggerBoltPickup()

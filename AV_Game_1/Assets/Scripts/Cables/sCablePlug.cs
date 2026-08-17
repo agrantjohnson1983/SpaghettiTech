@@ -117,6 +117,10 @@ public class sCablePlug : sInteractive, iPluggable, iClickable
 
     public GameObject connectionUI;
 
+    //public string objectiveName;
+
+    public eGigDept department;
+
     // Start is called before the first frame update
     public override void Start()
     {
@@ -132,6 +136,69 @@ public class sCablePlug : sInteractive, iPluggable, iClickable
 
         connectionUI.SetActive(false);
         //joint = GetComponent<ConfigurableJoint>();
+    }
+
+    void CompleteObjective(string _objectiveName)
+    {
+        Debug.Log("Completing objective " + _objectiveName);
+
+        switch(department)
+        {
+
+            case eGigDept.Rigging:
+
+                if(sRiggingManager.riggingMangerGlobal.Status.objectives.TryGetValue(_objectiveName, out  ObjectiveStatus _statusRigging))
+                {
+                    _statusRigging.completedItems++;
+                }
+
+                else
+                {
+                    Debug.LogWarning("No objective with name: " +  _objectiveName);
+                }
+
+                break;
+
+            case eGigDept.Lighting:
+
+
+
+                break;
+
+            case eGigDept.Audio:
+
+                if (sAudioManager.audioManagerGlobal.Status.objectives.TryGetValue(_objectiveName, out ObjectiveStatus _statusAudio))
+                {
+                    _statusAudio.completedItems++;
+                }
+
+                else
+                {
+                    Debug.LogWarning("No objective with name: " + _objectiveName);
+                }
+
+                break;
+
+            case eGigDept.Video:
+
+
+
+                break;
+
+            case eGigDept.Power:
+
+                if (sPowerManager.powerManagerGlobal.Status.objectives.TryGetValue(_objectiveName, out ObjectiveStatus _statusPower))
+                {
+                    _statusPower.completedItems++;
+                }
+
+                else
+                {
+                    Debug.LogWarning("No objective with name: " + _objectiveName);
+                }
+
+                break;
+        }
     }
 
     // Checks if the plug type in argument is same as this cable plug - return true if so
@@ -156,11 +223,10 @@ public class sCablePlug : sInteractive, iPluggable, iClickable
     // This gets called when a plug gets connected
     public void PlugConnect()
     {
-        //Debug.Log(this.gameObject.name + " is plugged in and connected");
+        Debug.Log(this.gameObject.name + " is plugged in and connected");
 
         // Sets plug to be plugged in
         IsPluggedIn = true;
-
 
 
         // Checks if the other end of the cable is plugged in
@@ -173,13 +239,16 @@ public class sCablePlug : sInteractive, iPluggable, iClickable
 
             textPopup.SpawnTextPopup(this.gameObject.transform, "FULLY CONNECTED", 20);
 
+            // sets the progress status
+            //CompleteObjective();
+
             if (soAudio != null)
                 soAudio.TriggerSFX("CablePlugFullyConnected");
 
             // Checks if there is a supply
             if (supply)
             {
-                //Debug.Log("Toggling supply objects on!");
+                Debug.Log("Toggling supply objects on!");
 
                 // Toggles on supply objects
                 supply.TogglePoweredObjects(true);
@@ -189,6 +258,8 @@ public class sCablePlug : sInteractive, iPluggable, iClickable
 
                 // turns on connection UI
                 connectionUI.SetActive(true);
+
+                CompleteObjective(supply.objectiveName);
             }
 
             // Checks if the other end has a supply connection
@@ -203,6 +274,8 @@ public class sCablePlug : sInteractive, iPluggable, iClickable
 
                 // turns on connection UI
                 connectionUI.SetActive(true);
+
+                CompleteObjective(cablePlugOtherEnd.supply.objectiveName);
             }
         }
 
@@ -370,10 +443,12 @@ public class sCablePlug : sInteractive, iPluggable, iClickable
     // This gets used to set the connection source/supply for the plug that gets connected
     public void SetConnection(GameObject _connectionToSet, float _powerDrainAmount)
     {
+        Debug.Log("Setting connection from " + this.gameObject + " to " + _connectionToSet);
+
 
         if(_connectionToSet.TryGetComponent<sConnectionSource>(out sConnectionSource _source))
         {
-            //Debug.Log("Setting connection source");
+            Debug.Log("Setting connection source");
             source = _source;
 
             source.DrainPower(_powerDrainAmount);
@@ -381,10 +456,8 @@ public class sCablePlug : sInteractive, iPluggable, iClickable
 
         else if(_connectionToSet.TryGetComponent<sConnectionSupply>(out sConnectionSupply _supply))
         {
-            //Debug.Log("Setting connection supply");
+            Debug.Log("Setting connection supply");
             supply = _supply;
-
-
 
             PlugConnect();
         }

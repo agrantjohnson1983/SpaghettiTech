@@ -453,6 +453,7 @@ MonoBehaviour:
   disconnectForce: 50
   _typePlug: 0
   connectionUI: {fileID: 4000031328773378187}
+  department: 5
 --- !u!114 &1014900614724991103
 MonoBehaviour:
   m_ObjectHideFlags: 0

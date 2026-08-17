@@ -9,7 +9,7 @@ public enum eGigDept
     Audio,
     Lighting,
     Video,
-    Electricity,
+    Power,
 }
 
 public abstract class sDepartmentManager : MonoBehaviour
@@ -37,13 +37,54 @@ public abstract class sDepartmentManager : MonoBehaviour
 
     public DepartmentStatus Status => status;
 
+    [Header("Department Data")]
+    [SerializeField] protected SO_DeptData deptData;
+    
     public virtual void Start()
     {
         setupSpots = new List<GameObject>();
 
-        Status.departmentName = departmentName;
+        //Status.departmentName = departmentName;
 
         sGigManager.gigManagerGlobal.RegisterDepartment(this);
+
+        InitializeDepartment();
+    }
+
+    public virtual void InitializeDepartment()
+    {
+        if (deptData == null)
+        {
+            Debug.LogError(
+                $"{name}: No Department Data assigned.");
+
+            return;
+        }
+
+        departmentName = deptData.departmentName;
+        deptID = deptData.departmentID;
+
+        status = new DepartmentStatus
+        {
+            departmentName = deptData.departmentName,
+            objectives = new Dictionary<string, ObjectiveStatus>()
+        };
+
+        foreach (SO_ObjectiveData objectiveData in deptData.objectives)
+        {
+            ObjectiveStatus runtimeObjective = new ObjectiveStatus
+            {
+                objectiveID = objectiveData.objectiveID,
+                name = objectiveData.objectiveName,
+                totalItems = objectiveData.totalItems,
+                completedItems = 0,
+                weight = objectiveData.weight
+            };
+
+            status.objectives.Add(runtimeObjective.objectiveID ,runtimeObjective);
+        }
+
+        RefreshProgress();
     }
 
     public virtual void SetProgress(float value)
@@ -80,6 +121,7 @@ public abstract class sDepartmentManager : MonoBehaviour
         return progress;
     }
 
+
     public void RefreshProgress()
     {
         Debug.Log("Refresh Progress called");
@@ -112,6 +154,62 @@ public abstract class sDepartmentManager : MonoBehaviour
                 break;
         }
     }
+
+    protected void ObjectiveItemComplete(string _key)
+    {
+        if (Status.objectives.TryGetValue(_key, out ObjectiveStatus _status))
+        {
+            Debug.Log("Incrementing objective status for " + _status);
+            _status.completedItems++;
+        }
+
+        else
+        {
+            Debug.LogWarning(_key + " is not a key value for " + departmentName);
+        }
+
+    }
+
+    public virtual void AddObjectiveProgress(
+    string objectiveID,
+    int amount = 1)
+    {
+        ObjectiveStatus objective =
+            GetObjective(objectiveID);
+
+        if (objective == null)
+        {
+            Debug.LogWarning(
+                $"{departmentName}: Could not find objective " +
+                $"'{objectiveID}'.");
+
+            return;
+        }
+
+        objective.completedItems = Mathf.Clamp(
+            objective.completedItems + amount,
+            0,
+            objective.totalItems);
+
+        RefreshProgress();
+    }
+
+    public ObjectiveStatus GetObjective(string objectiveID)
+    {
+        /*foreach (ObjectiveStatus objective in status.objectives)
+        {
+            if (objective.objectiveID == objectiveID)
+                return objective;
+        }*/
+
+        foreach(KeyValuePair<string, ObjectiveStatus> kvp in status.objectives)
+        {
+            if (kvp.Value.objectiveID == objectiveID)
+                return kvp.Value;
+        }
+
+        return null;
+    }
 }
 
 [System.Serializable]
@@ -119,7 +217,7 @@ public class DepartmentStatus
 {
     public string departmentName;
 
-    public List<ObjectiveStatus> objectives = new();
+    public Dictionary<string, ObjectiveStatus> objectives = new();
 
     public float Completion
     {
@@ -130,19 +228,25 @@ public class DepartmentStatus
 
             float total = 0f;
 
-            foreach (ObjectiveStatus objective in objectives)
+            /*foreach (ObjectiveStatus objective in objectives)
             {
                 total += objective.Completion;
+            }*/
+
+            foreach(KeyValuePair<string, ObjectiveStatus> kvp in objectives)
+            {
+                total += kvp.Value.Completion;
             }
 
             return total / objectives.Count;
         }
     }
 }
-
 [System.Serializable]
 public class ObjectiveStatus
 {
+    public string objectiveID;
+
     public string name;
 
     public int completedItems;
@@ -157,7 +261,7 @@ public class ObjectiveStatus
     {
         get
         {
-            if (totalItems == 0)
+            if (totalItems <= 0)
                 return 0f;
 
             return (float)completedItems / totalItems;

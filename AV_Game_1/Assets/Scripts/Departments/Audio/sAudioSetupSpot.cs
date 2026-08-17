@@ -37,6 +37,8 @@ public class sAudioSetupSpot : sSetupSpotBASE
                     // this keeps the grab UI from turning on and prevents player from grabbing
                      _audioGear.CanBeGrabbed = false;
 
+                    _audioGear.SetGear(typeAudio);
+
                     switch (typeAudio)
                     {
                         case eAudioType.speaker:
@@ -46,15 +48,9 @@ public class sAudioSetupSpot : sSetupSpotBASE
 
                             StartCoroutine(SmoothMovement(other.gameObject, this.transform.position + offset, this.transform.rotation));
 
-                            //_audioGear.gameObject.transform.rotation = Quaternion.Euler(Vector3.zero);
-                            //_audioGear.gameObject.transform.position = _audioGear.gameObject.transform.position + setupOffset;
-                            //_audioGear.gameObject.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
-                            _audioGear.isSet = true;
-
                             Debug.Log("Audio setup Collision with Mic Stand Spot");
 
                             sAudioManager.audioManagerGlobal.AudioSet(typeAudio);
-
 
                             break;
                             }
@@ -66,12 +62,7 @@ public class sAudioSetupSpot : sSetupSpotBASE
 
                             Debug.Log("Audio setup Collision with Sub Spot");
 
-                            StartCoroutine(SmoothMovement(other.gameObject, this.transform.position + offset, this.transform.rotation));
-
-                            //_audioGear.gameObject.transform.rotation = Quaternion.Euler(Vector3.zero);
-                            //_audioGear.gameObject.transform.position = _audioGear.gameObject.transform.position + setupOffset;
-                            //_audioGear.gameObject.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
-                            _audioGear.isSet = true;                            
+                            StartCoroutine(SmoothMovement(other.gameObject, this.transform.position + offset, this.transform.rotation));                         
 
                             sAudioManager.audioManagerGlobal.AudioSet(typeAudio);
 
@@ -81,14 +72,9 @@ public class sAudioSetupSpot : sSetupSpotBASE
                         case eAudioType.mixer:
                             {
 
-                            Debug.Log("Audio setup Collision with Mixer Spot");
+                            //Debug.Log("Audio setup Collision with Mixer Spot");
 
                             StartCoroutine(SmoothMovement(other.gameObject, this.transform.position + offset, this.transform.rotation));
-
-                            //_audioGear.gameObject.transform.rotation = Quaternion.Euler(Vector3.zero);
-                            //_audioGear.gameObject.transform.position = _audioGear.gameObject.transform.position + setupOffset;
-                            //_audioGear.gameObject.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
-                            _audioGear.isSet = true;
 
                             sAudioManager.audioManagerGlobal.AudioSet(typeAudio);
 
@@ -99,14 +85,9 @@ public class sAudioSetupSpot : sSetupSpotBASE
                             {
 
 
-                            Debug.Log("Audio setup Collision with Mic Stand Spot");
+                            //Debug.Log("Audio setup Collision with Mic Stand Spot");
 
                             StartCoroutine(SmoothMovement(other.gameObject, this.transform.position + offset, this.transform.rotation));
-
-                            //_audioGear.gameObject.transform.rotation = Quaternion.Euler(Vector3.zero);
-                            //_audioGear.gameObject.transform.position = _audioGear.gameObject.transform.position + setupOffset;
-                            //_audioGear.gameObject.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
-                            _audioGear.isSet = true;
 
                             sAudioManager.audioManagerGlobal.AudioSet(typeAudio);
 
@@ -116,7 +97,7 @@ public class sAudioSetupSpot : sSetupSpotBASE
 
                 soAudio.TriggerSFX("SetupComplete");
 
-                //Destroy(this.gameObject);
+                Destroy(this.gameObject, 0.55f);
             }
 
                 else

@@ -20,6 +20,8 @@ public class sConnectionSupply : MonoBehaviour
 
     public Vector3 connectionOffset = new Vector3(1, 0, 0);
 
+    public string objectiveName;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -72,6 +74,11 @@ public class sConnectionSupply : MonoBehaviour
         for (int i = 0; i < connectionObjects.Length; i++)
         {
             connectionObjects[i].SetActive(_hasPower);
+        }
+
+        switch(connectionType)
+        {
+
         }
     }
 

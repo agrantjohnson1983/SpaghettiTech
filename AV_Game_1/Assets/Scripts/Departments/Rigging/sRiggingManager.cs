@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.ProBuilder.Shapes;
 using UnityEngine.SceneManagement;
 
 public enum RiggingObjective
@@ -36,6 +37,11 @@ public class sRiggingManager : sDepartmentManager
     // that isn't fully bolted shouldn't be liftable.
     bool allBoltsComplete = false;
 
+    // Separate, minimal counter used only to derive allBoltsComplete -
+    // deliberately does not touch Status.objectives/RigSet's objective
+    // tracking, which is left exactly as-is.
+    int completedBoltsCount = 0;
+
     int activeIndexMotorSetup = 0;
     int activeIndexMotorControllerSetup = 0;
 
@@ -67,13 +73,16 @@ public class sRiggingManager : sDepartmentManager
 
     public Transform trussTransform, motorTransform;
 
-    // Tracks which truss setup slot (by index into trussSetupLocations)
-    // has been rigged, and by which physical truss piece. Populated by
-    // sRiggingSetupSpot.RegisterTrussPiece once a truss piece finishes
-    // being set. Bolt setup spots query this by index (since they are
-    // spawned dynamically and cannot hold a direct inspector reference
-    // to a truss piece that does not exist yet).
-    GameObject[] rigidTrussPieces;
+    // Tracks which truss setup slot (by index, assigned in registration
+    // order - see RegisterRiggingSetup) has been rigged, and by which
+    // physical truss piece. Populated by sRiggingSetupSpot.RegisterTrussPiece
+    // once a truss piece finishes being set. Bolt setup spots query this
+    // by index. A List rather than a fixed array, since the total truss
+    // count is not known upfront anymore (each spot registers itself
+    // individually via its own Start(), rather than a batch spawn loop
+    // that knew the total count in advance) - grows on demand as pieces
+    // register.
+    List<GameObject> rigidTrussPieces;
 
     //private int totalMotors;
     //private int completedMotors;
@@ -120,7 +129,7 @@ public class sRiggingManager : sDepartmentManager
 
         overheadGearSpots = new List<sRiggingSetupSpot>();
 
-        rigidTrussPieces = new GameObject[trussList.Count];
+        rigidTrussPieces = new List<GameObject>();
     }
 
     // Start is called before the first frame update
@@ -146,14 +155,14 @@ public class sRiggingManager : sDepartmentManager
 
             case eGameMode.gig:
 
-                AddObjectives();
+                //AddObjectives();
                 //SpawnSetupObjects();
 
                 break;
         }
     }
 
-    void AddObjectives()
+    /*void AddObjectives()
     {
         Status.objectives.Add(new ObjectiveStatus()
         {
@@ -172,7 +181,7 @@ public class sRiggingManager : sDepartmentManager
             //id = "Raise",
             name = "Raise Truss"
         });
-    }
+    }*/
 
     public void RegisterRiggingSetup(eTypeRigSetup _type, GameObject tempObj)
     {
@@ -184,20 +193,32 @@ public class sRiggingManager : sDepartmentManager
             case eTypeRigSetup.truss:
 
                 trussSetupsList.Add(tempObj);
-                status.objectives[0].totalItems++;
-                //sRiggingSetupSpot trussSpotScript = tempObj.GetComponentInChildren<sRiggingSetupSpot>(true);
 
-                /*if (trussSpotScript != null)
+                //status.objectives[0].totalItems++;
+
+                //if(status.objectives.TryGetValue("Build Truss", out ObjectiveStatus _status))
+                //{
+                //    _status.totalItems++;
+                //}
+
+                // Assigns this spot's position in registration order as
+                // its setupIndex, restoring what the old spawn-loop used
+                // to assign upfront (trussSpotScript.setupIndex = i).
+                // Needed so RegisterTrussPiece/neighbor gating below has
+                // a stable index to key off of.
+                sRiggingSetupSpot trussSpotScript = tempObj.GetComponentInChildren<sRiggingSetupSpot>(true);
+
+                if (trussSpotScript != null)
                 {
-                    //trussSpotScript.setupIndex = i;
+                    trussSpotScript.setupIndex = trussSetupsList.Count - 1;
 
-                    Debug.Log("[RiggingManager] Assigned setupIndex " + i + " to " + trussSpotScript.name
+                    Debug.Log("[RiggingManager] Assigned setupIndex " + trussSpotScript.setupIndex + " to " + trussSpotScript.name
                         + " (instance id " + trussSpotScript.GetInstanceID() + ")");
                 }
                 else
                 {
-                    Debug.LogWarning("pTrussSetup prefab has no sRiggingSetupSpot component anywhere in its hierarchy: " + tempObj.name);
-                }*/
+                    Debug.LogWarning("Truss setup object has no sRiggingSetupSpot component anywhere in its hierarchy: " + tempObj.name);
+                }
 
                 // Turns off all objects during tutorial so you only do them one at a time vs all at once
                 //if (GameManager.gm.isDoingTut)
@@ -210,23 +231,28 @@ public class sRiggingManager : sDepartmentManager
 
                 boltingSetupsList.Add(tempObj);
 
-                status.objectives[0].totalItems++;
+                //status.objectives[0].totalItems++;
 
-                // Assumes a linear rig layout where bolt spot i joins truss
-                // slots i and i + 1. If the rig layout is not a straight
-                // line matching this array order, this mapping needs to
+                // Assumes a linear rig layout where bolt spot i joins
+                // truss slots i and i + 1, restoring the same assumption
+                // the old spawn-loop used - just computed here from
+                // registration order instead of a known-upfront loop
+                // index. If the rig layout is not a straight line
+                // matching registration order, this mapping needs to
                 // change to whatever actually determines adjacency.
                 sRiggingSetupSpot boltSpotScript = tempObj.GetComponentInChildren<sRiggingSetupSpot>();
 
-                /*if (boltSpotScript != null)
+                if (boltSpotScript != null)
                 {
+                    int i = boltingSetupsList.Count - 1;
+
                     boltSpotScript.neighborTrussIndexA = i;
                     boltSpotScript.neighborTrussIndexB = i + 1;
                 }
                 else
                 {
-                    Debug.LogWarning("pBoltSetup prefab has no sRiggingSetupSpot component anywhere in its hierarchy: " + tempObj.name);
-                }*/
+                    Debug.LogWarning("Bolt setup object has no sRiggingSetupSpot component anywhere in its hierarchy: " + tempObj.name);
+                }
 
                 // Turns off all objects during tutorial so you only do them one at a time vs all at once
                 //if (GameManager.gm.isDoingTut)
@@ -238,7 +264,7 @@ public class sRiggingManager : sDepartmentManager
 
                 motorSetupList.Add(tempObj);
 
-                status.objectives[1].totalItems++;
+                //status.objectives[1].totalItems++;
 
                 // Turns off all objects during tutorial so you only do them one at a time vs all at once
                 //if (GameManager.gm.isDoingTut)
@@ -250,7 +276,7 @@ public class sRiggingManager : sDepartmentManager
 
                 motorControllerSetupList.Add(tempObj);
 
-                status.objectives[1].totalItems++;
+                //status.objectives[1].totalItems++;
 
                 // Turns off all objects during tutorial so you only do them one at a time vs all at once
                 //if (GameManager.gm.isDoingTut)
@@ -266,126 +292,19 @@ public class sRiggingManager : sDepartmentManager
         //trussSetupsList[activeIndexTrussSetup].SetActive(true);
     }
 
-    // This will spawn all the setup objects for each game
-    /*void SpawnSetupObjects()
-    {
-        for (int i = 0; i < trussSetupLocations.Length; i++)
-        {
-            GameObject tempObj;
-
-            tempObj = Instantiate(pTrussSetup, trussSetupLocations[i]);
-
-            trussSetupsList.Add(tempObj);
-
-            status.objectives[0].totalItems++;
-
-            // Tell this spot which truss slot index it represents, so it
-            // can register itself with the manager once rigged. Uses
-            // GetComponentInChildren rather than TryGetComponent/
-            // GetComponent since sRiggingSetupSpot may live on a child
-            // of the prefab root rather than the root itself.
-            sRiggingSetupSpot trussSpotScript = tempObj.GetComponentInChildren<sRiggingSetupSpot>(true);
-
-            if (trussSpotScript != null)
-            {
-                trussSpotScript.setupIndex = i;
-
-                Debug.Log("[RiggingManager] Assigned setupIndex " + i + " to " + trussSpotScript.name
-                    + " (instance id " + trussSpotScript.GetInstanceID() + ")");
-            }
-            else
-            {
-                Debug.LogWarning("pTrussSetup prefab has no sRiggingSetupSpot component anywhere in its hierarchy: " + tempObj.name);
-            }
-
-            // Turns off all objects during tutorial so you only do them one at a time vs all at once
-            if (GameManager.gm.isDoingTut)
-                tempObj.SetActive(false);
-
-        }
-
-        for (int i = 0; i < boltingLocations.Length; i++)
-        {
-            GameObject tempObj;
-            tempObj = Instantiate(pBoltSetup, boltingLocations[i]);
-
-            boltingSetupsList.Add(tempObj);
-
-            status.objectives[0].totalItems++;
-
-            // Assumes a linear rig layout where bolt spot i joins truss
-            // slots i and i + 1. If the rig layout is not a straight
-            // line matching this array order, this mapping needs to
-            // change to whatever actually determines adjacency.
-            sRiggingSetupSpot boltSpotScript = tempObj.GetComponentInChildren<sRiggingSetupSpot>();
-
-            if (boltSpotScript != null)
-            {
-                boltSpotScript.neighborTrussIndexA = i;
-                boltSpotScript.neighborTrussIndexB = i + 1;
-            }
-            else
-            {
-                Debug.LogWarning("pBoltSetup prefab has no sRiggingSetupSpot component anywhere in its hierarchy: " + tempObj.name);
-            }
-
-            // Turns off all objects during tutorial so you only do them one at a time vs all at once
-            if (GameManager.gm.isDoingTut)
-                tempObj.SetActive(false);
-        }
-
-        for (int i = 0; i < motorSetupLocations.Length; i++)
-        {
-            GameObject tempObj;
-            tempObj = Instantiate(pMotorSetup, motorSetupLocations[i]);
-
-            motorSetupList.Add(tempObj);
-
-            status.objectives[1].totalItems++;
-
-            // Turns off all objects during tutorial so you only do them one at a time vs all at once
-            if (GameManager.gm.isDoingTut)
-                tempObj.SetActive(false);
-        }
-
-        for (int i = 0; i < motorControllerSetupLocation.Length; i++)
-        {
-            GameObject tempObj;
-            tempObj = Instantiate(pMotorControllerSetup, motorControllerSetupLocation[i]);
-
-            motorControllerSetupList.Add(tempObj);
-
-            status.objectives[1].totalItems++;
-
-            // Turns off all objects during tutorial so you only do them one at a time vs all at once
-            if (GameManager.gm.isDoingTut)
-                tempObj.SetActive(false);
-        }
-
-        //totalRigSets = trussSetupsList.Count + boltingSetupsList.Count + motorSetupList.Count + motorControllerSetupList.Count;
-
-        //totalRigSets = 4;
-
-        //totalMotors = motorSetupList.Count;
-
-        //totalTruss = trussSetupsList.Count;
-
-        //totalMotorControllers = motorControllerSetupList.Count;
-
-        //totalBoltSets = boltingSetupsList.Count;
-
-        trussSetupsList[activeIndexTrussSetup].SetActive(true);
-
-    }*/
-
     // Called by a truss sRiggingSetupSpot once its truss piece finishes
     // being rigged, so bolt spots gating on this slot can query it.
     public void RegisterTrussPiece(int _index, GameObject _trussPiece)
     {
-        if (_index < 0 || _index >= rigidTrussPieces.Length)
+        if (_index < 0)
         {
             Debug.LogWarning("sRiggingManager.RegisterTrussPiece index out of range: " + _index);
             return;
+        }
+
+        while (rigidTrussPieces.Count <= _index)
+        {
+            rigidTrussPieces.Add(null);
         }
 
         rigidTrussPieces[_index] = _trussPiece;
@@ -411,12 +330,14 @@ public class sRiggingManager : sDepartmentManager
         }
     }
 
-    // True if a truss slot index is either out of range (meaning there
-    // is no truss expected at that position, e.g. the end of the rig)
-    // or has already been rigged.
+    // True if a truss slot index is either out of range (meaning no
+    // truss has registered that far yet - either the edge of the rig,
+    // or one that simply has not loaded/registered yet) or has already
+    // been rigged. Fails open (true) on out-of-range, same as before,
+    // to avoid permanently blocking a bolt spot at the edge of the rig.
     public bool IsTrussIndexRigged(int _index)
     {
-        if (_index < 0 || _index >= rigidTrussPieces.Length)
+        if (_index < 0 || _index >= rigidTrussPieces.Count)
         {
             return true;
         }
@@ -442,6 +363,13 @@ public class sRiggingManager : sDepartmentManager
     // play.
     public bool debugBypassBoltMinigame = false;
 
+    // When true, light setup spots skip the "truss must be at working
+    // height or above" requirement entirely, so you can test light
+    // mounting and the crescent wrench minigame without doing a full
+    // truss raise sequence first. Toggleable live in Play mode. Leave
+    // off for normal play.
+    public bool debugBypassLightHeightGate = false;
+
     [Header("Truss Weld Joints")]
     // Left at infinity for now - once the weight-limit system is in,
     // these should be driven by the truss's rated capacity so an
@@ -457,8 +385,8 @@ public class sRiggingManager : sDepartmentManager
     // spot could not have activated otherwise).
     public void WeldTrussNeighbors(int _indexA, int _indexB, Vector3 _weldWorldPosition)
     {
-        if (_indexA < 0 || _indexA >= rigidTrussPieces.Length
-            || _indexB < 0 || _indexB >= rigidTrussPieces.Length)
+        if (_indexA < 0 || _indexA >= rigidTrussPieces.Count
+            || _indexB < 0 || _indexB >= rigidTrussPieces.Count)
         {
             // One side is out of range - the edge of the rig, nothing
             // to weld against.
@@ -712,9 +640,9 @@ public class sRiggingManager : sDepartmentManager
                     //activeIndexTrussSetup++;
                     //completedTruss++;
 
-                    ObjectiveStatus truss = Status.objectives[0];
+                    ObjectiveItemComplete("Build Truss");
 
-                    truss.completedItems++;
+                    
 
                     //truss.Refresh();
 
@@ -754,13 +682,26 @@ public class sRiggingManager : sDepartmentManager
                 {
                     //activeIndexBoltSetup++;
 
-                    ObjectiveStatus truss = Status.objectives[0];
+                    //ObjectiveStatus truss = Status.objectives[0];
 
-                    truss.completedItems++;
+                    //truss.completedItems++;
+
+                    ObjectiveItemComplete("Bolt Truss");
 
                     //truss.Refresh();
 
                     //Debug.Log("One piece bolted!");
+
+                    // Minimal, separate tracking to derive allBoltsComplete -
+                    // does not touch the objectives lines above/below.
+                    completedBoltsCount++;
+
+                    if (completedBoltsCount >= boltingSetupsList.Count)
+                    {
+                        allBoltsComplete = true;
+
+                        Debug.Log("[RiggingManager] All bolts complete - truss can now be raised.");
+                    }
 
                     /*if (activeIndexBoltSetup < boltingSetupsList.Count)
                     {
@@ -789,13 +730,15 @@ public class sRiggingManager : sDepartmentManager
                 {
                     activeIndexMotorSetup++;
 
-                    ObjectiveStatus motor = Status.objectives[1];
+                    //ObjectiveStatus motor = Status.objectives[1];
 
-                    motor.completedItems++;
+                    //motor.completedItems++;
 
                     //motor.Refresh();
 
                     Debug.Log("Motor rigged!");
+
+                    ObjectiveItemComplete("Set Motors");
 
                     if (activeIndexMotorSetup < motorSetupList.Count)
                     {
@@ -822,9 +765,11 @@ public class sRiggingManager : sDepartmentManager
 
             case eTypeRigSetup.motorController:
                 {
-                    ObjectiveStatus motor = Status.objectives[1];
+                    //ObjectiveStatus motor = Status.objectives[1];
 
-                    motor.completedItems++;
+                    ObjectiveItemComplete("Set Motor Controller");
+
+                    //motor.completedItems++;
 
                     //motor.Refresh();
 
@@ -836,7 +781,7 @@ public class sRiggingManager : sDepartmentManager
 
         //Debug.Log("Refreshing Progress");
 
-        
+
 
         RefreshProgress();
 
@@ -977,7 +922,8 @@ public class sRiggingManager : sDepartmentManager
             overheadGearSpots.Add(_spot);
         }
 
-        //_spot.SetOverheadGearActive(AreAllMotorsAtOrAboveWorkingHeight());
+        if(!debugBypassLightHeightGate)
+            _spot.SetOverheadGearActive(AreAllMotorsAtOrAboveWorkingHeight());
     }
 
     // Called by sMotor whenever its raise/lower stage changes. Shows or
@@ -994,7 +940,6 @@ public class sRiggingManager : sDepartmentManager
             if (_spot != null)
             {
                 _spot.SetOverheadGearActive(ready);
-                _spot.transform.position = _spot.transform.position + Vector3.down * 1.5f;
             }
         }
     }

@@ -24,16 +24,16 @@ public class sAudioManager : sDepartmentManager
 
     List<GameObject> setupSpeaker, setupSub, setupMixer, setupMicStand, setupMicrophone;
 
-    private void OnEnable()
+    /*private void OnEnable()
     {
-        SceneManager.sceneLoaded += OnSceneLoad;
+        //SceneManager.sceneLoaded += OnSceneLoad;
     }
 
     private void OnDisable()
     {
-        SceneManager.sceneLoaded -= OnSceneLoad;
+        //SceneManager.sceneLoaded -= OnSceneLoad;
     }
-
+*/
     private void Awake()
     {
         if (audioManagerGlobal == null)
@@ -54,7 +54,7 @@ public class sAudioManager : sDepartmentManager
         base.Start();
     }
 
-    private void OnSceneLoad(Scene arg0, LoadSceneMode arg1)
+    /*private void OnSceneLoad(Scene arg0, LoadSceneMode arg1)
     {
         switch (GameManager.gm.GetGameMode())
         {
@@ -68,14 +68,14 @@ public class sAudioManager : sDepartmentManager
 
             case eGameMode.gig:
 
-                AddObjectives();
+                //AddObjectives();
                 //SpawnSetupObjects();
 
                 break;
         }
-    }
+    }*/
 
-    void AddObjectives()
+    /*void AddObjectives()
     {
         Status.objectives.Add(new ObjectiveStatus()
         {
@@ -94,7 +94,7 @@ public class sAudioManager : sDepartmentManager
             //id = "Raise",
             name = "Setup Mixer"
         });
-    }
+    }*/
 
     public void RegiseterAudioSetup(eAudioType _type, GameObject _object)
     {
@@ -106,7 +106,7 @@ public class sAudioManager : sDepartmentManager
 
                 setupSpeaker.Add(_object);
 
-                status.objectives[0].totalItems++;
+                //status.objectives[0].totalItems++;
 
                 break;
 
@@ -114,7 +114,7 @@ public class sAudioManager : sDepartmentManager
 
                 setupSub.Add(_object);
 
-                status.objectives[0].totalItems++;
+                //status.objectives[0].totalItems++;
 
                 break;
 
@@ -122,7 +122,7 @@ public class sAudioManager : sDepartmentManager
 
                 setupMixer.Add(_object);
 
-                status.objectives[2].totalItems++;
+                //status.objectives[2].totalItems++;
 
                 break;
 
@@ -130,7 +130,7 @@ public class sAudioManager : sDepartmentManager
 
                 setupMicStand.Add(_object);
 
-                status.objectives[1].totalItems++;
+                //status.objectives[1].totalItems++;
 
                 break;
 
@@ -149,14 +149,17 @@ public class sAudioManager : sDepartmentManager
     {
         Debug.Log("Setting audio for type " + _type);
 
+
         switch(_type)
         {
             case eAudioType.speaker:
             case eAudioType.sub:
 
-                ObjectiveStatus speakers = Status.objectives[0];
+                ObjectiveItemComplete("Set Speakers");
 
-                speakers.completedItems++;
+                //ObjectiveStatus speakers = Status.objectives[0];
+
+                //speakers.completedItems++;
 
                 //Debug.Log("Adding to objective status: " + speakers);
 
@@ -164,22 +167,28 @@ public class sAudioManager : sDepartmentManager
 
             case eAudioType.mixer:
 
-                ObjectiveStatus mixer = Status.objectives[2];
-                mixer.completedItems++;
+                //ObjectiveStatus mixer = Status.objectives[2];
+                //mixer.completedItems++;
+
+                ObjectiveItemComplete("Set Mixer");
 
                 break;
 
             case eAudioType.micStand:
 
-                ObjectiveStatus micStand = Status.objectives[1];
-                micStand.completedItems++;
+                //ObjectiveStatus micStand = Status.objectives[1];
+                //micStand.completedItems++;
+
+                ObjectiveItemComplete("Set Mic Stands");
 
                 break;
 
             case eAudioType.microphone:
 
-                ObjectiveStatus microphone = Status.objectives[1];
-                microphone.completedItems++;
+                ObjectiveItemComplete("Set Microphone");
+
+                //ObjectiveStatus microphone = Status.objectives[1];
+                //microphone.completedItems++;
 
                 //Debug.Log("Adding to objective status: " + microphone);
 

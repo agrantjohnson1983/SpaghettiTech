@@ -4,15 +4,22 @@ using UnityEngine;
 
 public class sAudioSpeakerMain : sAudioGear
 {
+    public GameObject plugPower, plugAudio; 
+
     // Start is called before the first frame update
-    void Start()
+    public override void Start()
     {
-        
+        base.Start();
+
+        plugPower.SetActive(false);
+        plugAudio.SetActive(false);
     }
 
-    // Update is called once per frame
-    void Update()
+    public override void SetGear(eAudioType _typeAudio)
     {
-        
+        base.SetGear(_typeAudio);
+
+        plugAudio.SetActive(true);
+        plugPower.SetActive(true);
     }
 }

@@ -9,9 +9,9 @@ public class uProgressMeters : MonoBehaviour
 {
     public SO_EventsUI soUI;
 
-    public Image progBarOverall, progBarRigging, progBarAudio, progBarVideo, progBarLighting;
+    public Image progBarOverall, progBarRigging, progBarAudio, progBarVideo, progBarLighting, progBarPower;
 
-    public TMP_Text textOverall, textRigging, textAudio, textVideo, textLighting;
+    public TMP_Text textOverall, textRigging, textAudio, textVideo, textLighting, textPower;
 
     public bool SetToZeroOnStart = true;
 
@@ -22,6 +22,7 @@ public class uProgressMeters : MonoBehaviour
         soUI.progAudio.AddListener(UpdateAudioProgress);
         soUI.progVideo.AddListener(UpdateVideoProgress);
         soUI.progLighting.AddListener(UpdateLightingProgress);
+        soUI.progPower.AddListener(UpdatePowerProgress);
     }
 
     private void OnDisable()
@@ -31,6 +32,7 @@ public class uProgressMeters : MonoBehaviour
         soUI.progAudio.RemoveListener(UpdateAudioProgress);
         soUI.progVideo.RemoveListener(UpdateVideoProgress);
         soUI.progLighting.RemoveListener(UpdateLightingProgress);
+        soUI.progPower.RemoveListener(UpdatePowerProgress);
     }
 
     private void Start()
@@ -42,6 +44,7 @@ public class uProgressMeters : MonoBehaviour
             UpdateAudioProgress(0f);
             UpdateVideoProgress(0f);
             UpdateLightingProgress(0f);
+            UpdatePowerProgress(0f);
         }
 
         else
@@ -69,6 +72,11 @@ public class uProgressMeters : MonoBehaviour
                 UpdateRiggingProgress(completion);
             }
 
+            else
+            {
+                Debug.LogWarning("Rigging Mgr was null!");
+            }
+
             if (sAudioManager.audioManagerGlobal != null)
             {
                 float completion = sAudioManager.audioManagerGlobal.Status.Completion;
@@ -76,7 +84,33 @@ public class uProgressMeters : MonoBehaviour
                 UpdateAudioProgress(completion);
             }
 
+            else
+            {
+                Debug.LogWarning("Audio Mgr was null!");
+            }
+
+            if(sPowerManager.powerManagerGlobal != null)
+            {
+                float completion = sPowerManager.powerManagerGlobal.Status.Completion;
+
+                UpdatePowerProgress(completion);
+            }
+
+            else
+            {
+                Debug.LogWarning("Power Mgr was null!");
+            }
+
+            UpdateVideoProgress(0f);
+
+            UpdateLightingProgress(0f);
+
             UpdateOverallProgress(sGigManager.gigManagerGlobal.GetOverallProgress());
+        }
+
+        else
+        {
+            Debug.LogWarning("Gig Mgr was null!");
         }
     }
 
@@ -138,6 +172,15 @@ public class uProgressMeters : MonoBehaviour
         SetColor(_amount, progBarLighting);
     }
 
+    void UpdatePowerProgress(float _amount)
+    {
+        StartCoroutine(BarAnimation(progBarPower, progBarPower.fillAmount, _amount));
+
+        textPower.text = ((int)(_amount * 100f)).ToString() + "% \n[POWER]";
+
+        SetColor(_amount, progBarPower);
+    }
+
     IEnumerator BarAnimation(Image _image, float _startingAmount, float _endAmount)
     {
         float counter = 0f;
@@ -154,19 +197,9 @@ public class uProgressMeters : MonoBehaviour
 
     void SetColor(float _amount, Image _image)
     {
-        if(_amount > 0.5f)
+        if(_amount < 0.75f)
         {
             _image.color = Color.yellow;
-        }
-
-        else
-        {
-            _image.color = Color.white;
-        }
-
-        if(_amount > 0.75f)
-        {
-            _image.color = Color.magenta;
         }
 
         if(_amount >= 1f)

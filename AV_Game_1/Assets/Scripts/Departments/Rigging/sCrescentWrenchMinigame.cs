@@ -36,6 +36,10 @@ public class sCrescentWrenchMinigame : MonoBehaviour
         {
             turnHandle.OnFullyTightened += HandleFullyTightened;
         }
+
+        sPlayerCharacter.playerCharacterGlobal.ToggleMovement(false);
+
+        //sPlayerCharacter.playerCharacterGlobal.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
     }
 
     void OnDisable()
@@ -67,5 +71,7 @@ public class sCrescentWrenchMinigame : MonoBehaviour
     void HandleFullyTightened()
     {
         OnWrenchTightened?.Invoke();
+
+        sPlayerCharacter.playerCharacterGlobal.ToggleMovement(true);
     }
 }

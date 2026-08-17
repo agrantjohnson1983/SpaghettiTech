@@ -26,8 +26,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 63192978360294292}
   m_LocalRotation: {x: -0, y: -0.70710576, z: -0, w: 0.7071079}
-  m_LocalPosition: {x: 0, y: 0.26, z: 0}
-  m_LocalScale: {x: 1.0474571, y: 1.6303505, z: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 3.5046434, y: 5.07, z: 3.3458586}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4235169804406096509}
@@ -61,7 +61,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 444ab64ad61724c4299878e7d27f14ae, type: 2}
+  - {fileID: 2100000, guid: a7376714181d7154381bdbe7b0f0a7da, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -144,7 +144,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf27c0ca38e866a4381c53492fb8c5a9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _taskTime: 0
+  hasAction: 0
+  offset: {x: 0, y: 0, z: 0}
+  _toolTypeNeeded: 0
+  textSetup: {fileID: 0}
+  _UI_offset: {x: 0, y: 0, z: 0}
+  soUI: {fileID: 11400000, guid: 2b96b6b1405722c48a474d361c95f00a, type: 2}
+  soAudio: {fileID: 11400000, guid: 85974a5eed2479c48b89b5a67f81403b, type: 2}
+  actionObject: {fileID: 0}
+  soVFX: {fileID: 11400000, guid: 2e677f6310e0cd24e8679be3f3361b8f, type: 2}
   typeAudio: 0
+  setupOffset: {x: 0, y: 0, z: 0}
 --- !u!1 &5190185500421664092
 GameObject:
   m_ObjectHideFlags: 0
@@ -259,11 +270,18 @@ MonoBehaviour:
   _taskTime: 0
   hasAction: 0
   offset: {x: 2.16, y: 0.5, z: 0}
-  rigType: 0
   _toolTypeNeeded: 1
   textSetup: {fileID: 0}
   _UI_offset: {x: 0, y: 0, z: 0}
   soUI: {fileID: 0}
+  soAudio: {fileID: 0}
+  actionObject: {fileID: 0}
+  rigType: 0
+  setupIndex: -1
+  requireNeighborsSetup: 1
+  neighborTrussIndexA: -1
+  neighborTrussIndexB: -1
+  activeWorldYOffset: -1
 --- !u!1 &8468445531994352861
 GameObject:
   m_ObjectHideFlags: 0

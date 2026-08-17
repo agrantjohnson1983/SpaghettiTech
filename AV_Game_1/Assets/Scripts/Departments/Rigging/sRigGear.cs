@@ -93,6 +93,8 @@ public class sRigGear : sInteractive, iRiggable
     {
         Debug.Log("Rigging set for " + this.gameObject);
 
+        IsSet = true;
+
         CanBeGrabbed = false;
     }
 }
