@@ -114,7 +114,7 @@ public class sCharacterActionController : MonoBehaviour
 
             else
             {
-                Debug.Log("Did not have correct tool to trigger action");
+                //Debug.Log("Did not have correct tool to trigger action");
                 
             }
 

@@ -444,6 +444,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   soUI: {fileID: 11400000, guid: 2b96b6b1405722c48a474d361c95f00a, type: 2}
   soAudio: {fileID: 11400000, guid: 85974a5eed2479c48b89b5a67f81403b, type: 2}
+  soVFX: {fileID: 11400000, guid: 2e677f6310e0cd24e8679be3f3361b8f, type: 2}
   ui_Select: {fileID: 4898627217900053345}
   _transformGrab: {fileID: 0}
   _UI_offset: {x: 0, y: 0, z: 0}
@@ -454,6 +455,7 @@ MonoBehaviour:
   disconnectForce: 50
   _typePlug: 1
   connectionUI: {fileID: 4000031328773378187}
+  department: 2
 --- !u!114 &1014900614724991103
 MonoBehaviour:
   m_ObjectHideFlags: 0

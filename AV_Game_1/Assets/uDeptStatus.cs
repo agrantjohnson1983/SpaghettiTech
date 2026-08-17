@@ -15,27 +15,14 @@ public class uDeptStatus : MonoBehaviour
 
     public void SetObjectives(sDepartmentManager dm)
     {
-        Debug.Log("Setting objectives for " + dm);
+        //Debug.Log("Setting objectives for " + dm);
 
         overallStatusFill.fillAmount = dm.Status.Completion;
 
         textDeptName.text = dm.Status.departmentName;
 
-        textOverallProgress.text = dm.Status.Completion * 100f + "%";
-/*
-        foreach(ObjectiveStatus status in dm.Status.objectives)
-        {
-            Debug.Log("Spawning objective status");
+        textOverallProgress.text = ((int)dm.Status.Completion) * 100f + "%";
 
-            uObjectiveStatus oStatus;
-
-            // spawns objective status panel
-            oStatus = Instantiate(pObjectiveStatus, panelObjectives).GetComponent<uObjectiveStatus>();
-
-            // sets objective status
-            oStatus.SetObjective(status);
-        }
-*/
         foreach(KeyValuePair<string, ObjectiveStatus> kvp in dm.Status.objectives)
         {
             uObjectiveStatus oStatus;

@@ -49,6 +49,8 @@ public class sVFXManager : MonoBehaviour
             return;
         }
 
+        Debug.Log("Spwaning vfx: " + vfxID);
+
         GameObject effect = Instantiate(
             definition.prefab,
             position + definition.positionOffset,

@@ -14,6 +14,8 @@ public class sInteractive : MonoBehaviour, iGrabbable
 
     public SO_AudioEventChannel soAudio;
 
+    public SO_VFXEventChannel soVFX;
+
     bool _isGrabbed = false;
 
     //public float _taskTime;
@@ -33,7 +35,7 @@ public class sInteractive : MonoBehaviour, iGrabbable
 
     public GameObject ui_Select;
 
-    bool canBeSelected = true;
+    protected bool canBeSelected = true;
 
     /*public float TaskTime
     {
@@ -66,6 +68,8 @@ public class sInteractive : MonoBehaviour, iGrabbable
         get;
         set;
     }
+
+    //protected bool _canBeGrabbed;
 
     public bool IsGrabbed
     {

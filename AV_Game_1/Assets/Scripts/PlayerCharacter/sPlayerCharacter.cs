@@ -227,7 +227,7 @@ public class sPlayerCharacter : MonoBehaviour
 
     Coroutine truckCamRoutine;
 
-    public void ToggleTruckCamera(bool _isOn, float _moveTime)
+    public void ToggleForwardCamera(bool _isOn, float _moveTime)
     {
         // Ignore duplicate calls - already in the requested state
         if (_isOn == isInTruckMode)
@@ -248,7 +248,7 @@ public class sPlayerCharacter : MonoBehaviour
 
             cam.transform.SetParent(null);
 
-            truckCamRoutine = StartCoroutine(TruckCamMovementWorld(0.5f, true));
+            truckCamRoutine = StartCoroutine(CamMovementWorld(0.5f, true));
         }
 
         else
@@ -256,12 +256,12 @@ public class sPlayerCharacter : MonoBehaviour
             cam.transform.SetParent(this.gameObject.transform);
             cam.transform.localRotation = camRot;
 
-            truckCamRoutine = StartCoroutine(TruckCamMovementLocal(_moveTime, false));
+            truckCamRoutine = StartCoroutine(CamMovementLocal(_moveTime, false));
         }
     }
 
     // Used only while unparented (entry) — world space lerp is correct here
-    IEnumerator TruckCamMovementWorld(float _time, bool _isOn)
+    IEnumerator CamMovementWorld(float _time, bool _isOn)
     {
         Debug.Log("Starting truck movement");
 
@@ -298,7 +298,7 @@ public class sPlayerCharacter : MonoBehaviour
     }
 
     // Used only while parented (exit) — local space lerp tracks the moving player
-    IEnumerator TruckCamMovementLocal(float _time, bool _isOn)
+    IEnumerator CamMovementLocal(float _time, bool _isOn)
     {
         float _counter = 0f;
 

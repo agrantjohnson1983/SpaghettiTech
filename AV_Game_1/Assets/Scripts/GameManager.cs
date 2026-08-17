@@ -52,6 +52,7 @@ public class GameManager : MonoBehaviour
 
             DontDestroyOnLoad(this.gameObject);
         }
+
         else
         {
             // This is a duplicate GameManager placed in a newly loaded scene
@@ -64,11 +65,11 @@ public class GameManager : MonoBehaviour
             // destroyed, so gm always ends up pointing at the CURRENT
             // scene's live canvas rather than a stale reference to
             // whatever scene it first spawned in.
-            gm.canvasGameplayObject = this.canvasGameplayObject;
+            //gm.canvasGameplayObject = this.canvasGameplayObject;
             //gm.canvasWorldSpaceObject = this.canvasWorldSpaceObject;
-            gm.canvasWarehouseObject = this.canvasWarehouseObject;
+            //gm.canvasWarehouseObject = this.canvasWarehouseObject;
 
-            gm.RefreshCanvasReferences();
+            //gm.RefreshCanvasReferences();
 
             Destroy(this.gameObject);
             return;
@@ -131,7 +132,7 @@ public class GameManager : MonoBehaviour
 
         ToggleGameplayCamera(false);
 
-        Debug.Log("On scene load called for mode: " + currentGameMode);
+        //Debug.Log("On scene load called for mode: " + currentGameMode);
 
         switch (currentGameMode)
         {
@@ -180,7 +181,7 @@ public class GameManager : MonoBehaviour
 
     public void SetGameMode(eGameMode _gameMode)
     {
-        Debug.Log("Setting game mode to " + _gameMode);
+        //Debug.Log("Setting game mode to " + _gameMode);
 
         currentGameMode = _gameMode;
 
@@ -305,7 +306,7 @@ public class GameManager : MonoBehaviour
 
     public void ToggleOverheadCamera(bool _isOn)
     {
-        Debug.Log("Setting overhead cam to: " + _isOn);
+        //Debug.Log("Setting overhead cam to: " + _isOn);
         camOverhead.SetActive(_isOn);
     }
 
@@ -338,5 +339,10 @@ public class GameManager : MonoBehaviour
     public void SetFirstSelected(GameObject _button)
     {
         eventSystem.firstSelectedGameObject = _button;
+    }
+
+    private void OnDestroy()
+    {
+        //Debug.Log($"{name} WAS DESTROYED");
     }
 }

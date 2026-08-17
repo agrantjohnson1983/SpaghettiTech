@@ -16,7 +16,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &3241287176044810167
 Transform:
@@ -99,7 +99,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &4235169804406096509
 Transform:
@@ -134,19 +134,19 @@ MonoBehaviour:
   _taskTime: 0
   hasAction: 0
   offset: {x: 0, y: 1, z: 0}
-  rigType: 3
-  toolNeeded: 0
   _toolTypeNeeded: 0
   textSetup: {fileID: 8844641472681299470}
   _UI_offset: {x: 0, y: 0, z: 0}
+  soUI: {fileID: 11400000, guid: 2b96b6b1405722c48a474d361c95f00a, type: 2}
+  soAudio: {fileID: 11400000, guid: 85974a5eed2479c48b89b5a67f81403b, type: 2}
+  soVFX: {fileID: 11400000, guid: 2e677f6310e0cd24e8679be3f3361b8f, type: 2}
+  actionObject: {fileID: 0}
+  rigType: 3
   setupIndex: -1
   requireNeighborsSetup: 0
   neighborTrussIndexA: -1
   neighborTrussIndexB: -1
   activeWorldYOffset: -1
-  soUI: {fileID: 11400000, guid: 2b96b6b1405722c48a474d361c95f00a, type: 2}
-  soAudio: {fileID: 11400000, guid: 85974a5eed2479c48b89b5a67f81403b, type: 2}
-  actionObject: {fileID: 0}
 --- !u!65 &8475362855462495187
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -178,7 +178,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 0
 --- !u!4 &5190185500421664088
 Transform:
@@ -274,19 +274,19 @@ MonoBehaviour:
   _taskTime: 0
   hasAction: 0
   offset: {x: 2.16, y: 0.5, z: 0}
-  rigType: 0
-  toolNeeded: 0
   _toolTypeNeeded: 1
   textSetup: {fileID: 0}
   _UI_offset: {x: 0, y: 0, z: 0}
+  soUI: {fileID: 0}
+  soAudio: {fileID: 0}
+  soVFX: {fileID: 0}
+  actionObject: {fileID: 0}
+  rigType: 0
   setupIndex: -1
   requireNeighborsSetup: 1
   neighborTrussIndexA: -1
   neighborTrussIndexB: -1
   activeWorldYOffset: -1
-  soUI: {fileID: 0}
-  soAudio: {fileID: 0}
-  actionObject: {fileID: 0}
 --- !u!1 &8468445531994352861
 GameObject:
   m_ObjectHideFlags: 0
@@ -305,7 +305,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!224 &3127781376590582939
 RectTransform:

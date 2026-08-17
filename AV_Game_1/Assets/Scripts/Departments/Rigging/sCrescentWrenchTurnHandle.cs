@@ -1,19 +1,23 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 // Handles the turning phase of the crescent wrench minigame. Unlike a
 // ratchet, a crescent wrench cannot swing back and forth to accumulate
 // turns - each turn requires a full grab, swing, and release/reset
 // cycle. A single press-drag-release that sweeps far enough - in
-// EITHER direction, since there is no fixed "correct" swing direction
-// here - counts as one turn; releasing too early registers nothing and
-// the player has to press down again to retry. This is NOT a single
-// continuous rotation - do a short swing, fully release, then press
-// again for each subsequent turn (turnsToTighten times total).
+// EITHER direction - counts as one turn. The handle's color changes
+// live, mid-drag, the instant the swing has gone far enough, so the
+// player gets real-time feedback that it is safe to release rather
+// than only finding out after letting go.
 public class sCrescentWrenchTurnHandle : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointerUpHandler
 {
     public int turnsToTighten = 4;
     public float degreesPerTurn = 45f;
+
+    public Image feedbackImage;
+    public Color readyColor = Color.green;
+    public Color notReadyColor = Color.white;
 
     RectTransform rectTransform;
     Vector2 pivotScreenPos;
@@ -22,14 +26,22 @@ public class sCrescentWrenchTurnHandle : MonoBehaviour, IPointerDownHandler, IDr
     int currentTurns;
     bool isComplete;
 
-    // Tracks the largest swing reached during the current grab
-    // (magnitude, either direction), not just whatever angle happens
-    // to be showing at the exact moment of release - so a good swing
-    // still counts even if the hand relaxes back toward center right
-    // before letting go.
     float peakAbsoluteSweptAngle;
 
-    public event System.Action OnTurnRegistered;
+    public int CurrentTurns
+    {
+        get
+        {
+            return currentTurns;
+        }
+    }
+
+    // (currentTurns, turnsToTighten) - fired after a successful turn.
+    public event System.Action<int, int> OnTurnRegistered;
+
+    // Fired on release when the swing did not reach the threshold.
+    public event System.Action OnTurnFailed;
+
     public event System.Action OnFullyTightened;
 
     void Awake()
@@ -50,6 +62,11 @@ public class sCrescentWrenchTurnHandle : MonoBehaviour, IPointerDownHandler, IDr
         pivotScreenPos = RectTransformUtility.WorldToScreenPoint(eventData.pressEventCamera, rectTransform.position);
         dragStartAngle = AngleFromPivot(eventData.position);
 
+        if (feedbackImage != null)
+        {
+            feedbackImage.color = notReadyColor;
+        }
+
         Debug.Log("[" + this.name + "] Grab started - turn " + (currentTurns + 1) + " of " + turnsToTighten
             + ", need to swing at least " + degreesPerTurn + " degrees (either direction) before releasing.");
     }
@@ -66,9 +83,14 @@ public class sCrescentWrenchTurnHandle : MonoBehaviour, IPointerDownHandler, IDr
 
         peakAbsoluteSweptAngle = Mathf.Max(peakAbsoluteSweptAngle, Mathf.Abs(sweptAngle));
 
-        // Visually rotate the handle to follow the drag while held, so
-        // the player can see how far through the swing they are.
         rectTransform.localRotation = Quaternion.Euler(0f, 0f, sweptAngle);
+
+        // Live feedback: turns green the instant the swing is far
+        // enough to count, so releasing now would register.
+        if (feedbackImage != null)
+        {
+            feedbackImage.color = peakAbsoluteSweptAngle >= degreesPerTurn ? readyColor : notReadyColor;
+        }
     }
 
     public void OnPointerUp(PointerEventData eventData)
@@ -80,10 +102,12 @@ public class sCrescentWrenchTurnHandle : MonoBehaviour, IPointerDownHandler, IDr
 
         isDragging = false;
 
-        // Reset the visual regardless of success - simulates lifting
-        // the wrench off and resetting for the next grab, same as a
-        // real crescent wrench with no ratchet mechanism.
         rectTransform.localRotation = Quaternion.identity;
+
+        if (feedbackImage != null)
+        {
+            feedbackImage.color = notReadyColor;
+        }
 
         if (peakAbsoluteSweptAngle >= degreesPerTurn)
         {
@@ -96,6 +120,8 @@ public class sCrescentWrenchTurnHandle : MonoBehaviour, IPointerDownHandler, IDr
         {
             Debug.Log("[" + this.name + "] Released - peak swept angle " + peakAbsoluteSweptAngle
                 + " (needed " + degreesPerTurn + ") - not enough, no turn registered. Press down again to retry.");
+
+            OnTurnFailed?.Invoke();
         }
     }
 
@@ -111,7 +137,7 @@ public class sCrescentWrenchTurnHandle : MonoBehaviour, IPointerDownHandler, IDr
 
         Debug.Log("[" + this.name + "] Turn " + currentTurns + " of " + turnsToTighten + " complete.");
 
-        OnTurnRegistered?.Invoke();
+        OnTurnRegistered?.Invoke(currentTurns, turnsToTighten);
 
         if (currentTurns >= turnsToTighten)
         {

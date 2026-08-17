@@ -122,7 +122,7 @@ public class uProgressMeters : MonoBehaviour
 
         int total = (int)(_amount * 100f);
 
-        textOverall.text = total.ToString() + "% \n[TOTAL]";
+        textOverall.text = ((int)total).ToString() + "% \n[TOTAL]";
          
         SetColor(_amount, progBarOverall);
     }

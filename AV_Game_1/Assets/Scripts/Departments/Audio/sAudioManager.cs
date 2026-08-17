@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public enum eAudioType { speaker, sub, mixer, micStand, microphone }
+public enum eAudioType { speaker, sub, mixer, micStand, microphone, wireless,  }
 public class sAudioManager : sDepartmentManager
 {
     public static sAudioManager audioManagerGlobal;
@@ -98,7 +98,7 @@ public class sAudioManager : sDepartmentManager
 
     public void RegiseterAudioSetup(eAudioType _type, GameObject _object)
     {
-        Debug.Log("Registering audio setup spot for " + _type);
+        //Debug.Log("Registering audio setup spot for " + _type);
 
         switch (_type)
         {
@@ -147,7 +147,7 @@ public class sAudioManager : sDepartmentManager
 
     public void AudioSet(eAudioType _type)
     {
-        Debug.Log("Setting audio for type " + _type);
+        //Debug.Log("Setting audio for type " + _type);
 
 
         switch(_type)
@@ -191,6 +191,12 @@ public class sAudioManager : sDepartmentManager
                 //microphone.completedItems++;
 
                 //Debug.Log("Adding to objective status: " + microphone);
+
+                break;
+
+            case eAudioType.wireless:
+
+                ObjectiveItemComplete("Set Wireless");
 
                 break;
         }

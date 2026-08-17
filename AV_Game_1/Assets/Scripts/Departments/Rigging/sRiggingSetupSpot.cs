@@ -312,7 +312,13 @@ public class sRiggingSetupSpot : sSetupSpotBASE
 
         Debug.Log("[" + this.name + "] FinishSetup step 3 complete - destroying setup spot");
 
-        Destroy(this.gameObject);
+        if (soAudio != null)
+            soAudio.TriggerSFX("SetupComplete");
+
+        if (soVFX != null)
+            soVFX.Raise("StarburstSmall", this.transform.position + Vector3.up, Quaternion.identity);
+
+        Destroy(this.gameObject, 0.25f);
     }
 
     // Wire this to an "Exit"/"Leave" button inside the minigame canvas.
@@ -328,76 +334,17 @@ public class sRiggingSetupSpot : sSetupSpotBASE
     {
         //_riggable.IsSet = true;
 
-        if (soAudio != null)
-            soAudio.TriggerSFX("SetupComplete");
-
-        StartCoroutine(SmoothMovement(other, this.gameObject.transform.position + offset, this.transform.rotation));
-
         switch (_riggable.TypeRig)
         {
             case eTypeRigSetup.truss:
-                {
-                    if (_riggable.Enabled)
-                    {
-                        Debug.Log("Truss Collision with Setup Spot");
-
-                        _riggable.SetRigging(other.gameObject, this.gameObject, offset);
-
-                        //_riggable.Enabled = false;
-
-                        _riggable.RiggingObjectComplete(other.gameObject, _riggable.TypeRig);
-
-                        other.gameObject.GetComponent<sRigGear>().enabled = false;
-
-                        // Let the manager know this truss slot is
-                        // filled, so any bolt spots gating on
-                        // setupIndex can now proceed.
-                        Debug.Log("[" + this.name + "] (instance id " + this.GetInstanceID()
-                            + ") colliding with setupIndex = " + setupIndex);
-
-                        sRiggingManager.riggingMangerGlobal.RegisterTrussPiece(setupIndex, other.gameObject);
-
-                        Destroy(this.gameObject, 0.55f);
-                    }
-                    else
-                    {
-                        Debug.Log("[" + this.name + "] Truss " + other.gameObject.name
-                            + " collided but iRiggable.Enabled is false - setup spot will not complete");
-                    }
-
-                    break;
-
-                }
 
             case eTypeRigSetup.motor:
-                {
-                    if (_riggable.Enabled)
-                    {
-                        Debug.Log("Motor Collision with Setup Spot");
-
-                        _riggable.SetRigging(other.gameObject, this.gameObject, offset);
-
-                        _riggable.RiggingObjectComplete(other.gameObject, _riggable.TypeRig);
-
-                        //other.gameObject.GetComponent<sRigGear>().enabled = false;
-
-                        Destroy(this.gameObject, 0.55f);
-                    }
-                    else
-                    {
-                        Debug.Log("[" + this.name + "] Motor " + other.gameObject.name
-                            + " collided but iRiggable.Enabled is false - setup spot will not complete");
-                    }
-
-                    break;
-                }
 
             case eTypeRigSetup.motorController:
                 {
-
                     if (_riggable.Enabled)
                     {
-                        Debug.Log("Motor Collision with Setup Spot");
+                        //Debug.Log("Motor Collision with Setup Spot");
 
                         _riggable.SetRigging(other.gameObject, this.gameObject, offset);
 
@@ -405,7 +352,9 @@ public class sRiggingSetupSpot : sSetupSpotBASE
 
                         //other.gameObject.GetComponent<sRigGear>().enabled = false;
 
-                        Destroy(this.gameObject, 0.55f);
+                        //Destroy(this.gameObject, 1f);
+
+                        StartCoroutine(SmoothMovement(other, this.gameObject.transform.position + offset, this.transform.rotation));
                     }
                     else
                     {
@@ -438,6 +387,8 @@ public class sRiggingSetupSpot : sSetupSpotBASE
                     // yet - that is deferred to FinishSetup,
                     // called once the crescent wrench minigame
                     // (actionObject) reports completion.
+                    StartCoroutine(SmoothMovement(other, this.gameObject.transform.position + offset, this.transform.rotation, false));
+
                     _riggable.SetRigging(other.gameObject, this.gameObject, offset);
 
                     other.gameObject.GetComponent<sRigGear>().enabled = false;
@@ -472,8 +423,10 @@ public class sRiggingSetupSpot : sSetupSpotBASE
         if (other.TryGetComponent(out iRiggable _riggable))
         {
             // Checks that collided rig type is same as setup type
-            if (_riggable.TypeRig == rigType)
+            if (_riggable.TypeRig == rigType && !_riggable.IsSet && !hasBeenSet)
             {
+                hasBeenSet = true;
+                _riggable.IsSet = true;
                 SetupGear(_riggable, other.gameObject);
             }
 

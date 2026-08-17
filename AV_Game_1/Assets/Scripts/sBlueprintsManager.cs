@@ -12,10 +12,6 @@ public class sBlueprintsManager : MonoBehaviour
 
     public GameObject[] blueprintSetups;
 
-    int activeBlueprintIndex = 0;
-
-    float riggingTotal, audioTotal, videoTotal, lightingTotal;
-
     public GameObject gigStatus;
 
     public TMP_Text statusTotal, statusTruss, statusMotors;
@@ -57,103 +53,16 @@ public class sBlueprintsManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        //blueprintSetupText.text = blueprintTextName[activeBlueprintIndex];
-
-        /*for (int i = 0; i < blueprintSetups.Length; i++)
-        {
-            blueprintSetups[i].SetActive(false);
-        }
-*/
-        //blueprintSetups[activeBlueprintIndex].SetActive(true);
-
         deptStatusList = new List<GameObject>();
-
-        //Invoke("SetBluePrints", 1f);
-    }
-/*
-    void UpdateRigging()
-    {
-        //truss
-        ObjectiveStatus trussStatus = sRiggingManager.riggingMangerGlobal.Status.objectives[0];
-
-        float trussProgress = 0f;
-
-        if (trussStatus.totalItems > 0)
-        {
-            trussProgress = (float)trussStatus.completedItems / trussStatus.totalItems;
-        }
-
-        statusTruss.text = trussStatus.completedItems + "/" + trussStatus.totalItems;
-
-        imageTruss.fillAmount = trussProgress;
-
-        //Debug.Log("truss progress is at: " + trussProgress);
-
-        // motor
-        ObjectiveStatus motorStatus = sRiggingManager.riggingMangerGlobal.Status.objectives[1];
-
-        float motorProgress = 0f;
-
-        if (motorStatus.totalItems > 0)
-        {
-            motorProgress = (float)motorStatus.completedItems / motorStatus.totalItems;
-        }
-
-        statusMotors.text = motorStatus.completedItems + "/" + motorStatus.totalItems;
-
-        imageMotors.fillAmount = motorProgress;
-
-        //Debug.Log("motor progress is at: " + motorProgress);
-
-
-        // overall
-        float overallProgress = sRiggingManager.riggingMangerGlobal.Status.Completion;
-
-        statusTotal.text = (int)(overallProgress*100f) + "%";
-
-        imageTotal.fillAmount = overallProgress;
-    }*/
-
-    void UpdateAudio()
-    {
-
     }
 
-    void UpdateVideo()
-    {
 
-    }
-
-    void UpdateLighting()
-    {
-
-    }
-
-    void UpdateTotal()
-    {
-
-    }
     public void ToggleBlueprintOpen()
     {
         blueprintsOpen = !blueprintsOpen;
 
         GameManager.gm.ToggleOverheadCamera(blueprintsOpen);
         GameManager.gm.ToggleGameplayCamera(!blueprintsOpen);
-
-        /*if (!GameManager.gm.isDoingTut)
-        {
-            blueprintsSetupSwitcher.SetActive(blueprintsOpen);
-        }
-        else
-        {
-            //blueprintsTut.SetActive(blueprintsOpen);
-        }*/
-
-        //hiringButton.SetActive(!blueprintsOpen);
-        //characterPanel.SetActive(!blueprintsOpen);
-        //toolbelt.SetActive(!blueprintsOpen);
-
-        //gigStatus.SetActive(blueprintsOpen);
 
         if (blueprintsOpen)
         {
@@ -174,15 +83,10 @@ public class sBlueprintsManager : MonoBehaviour
 
     public void SetBluePrints()
     {
-        //riggingTotal = sGigManager.gigManagerGlobal.
-
-        //UpdateRigging();
-
         deptStatusList = new List<GameObject>();
 
         foreach(sDepartmentManager dm in sGigManager.gigManagerGlobal.departmentManagersList)
         {
-
             uDeptStatus dStatus = Instantiate(pDeptStatus, gigStatus.transform).GetComponent<uDeptStatus>();
 
             dStatus.SetObjectives(dm);

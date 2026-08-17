@@ -13,6 +13,14 @@ public class sVolumeChannelUI : MonoBehaviour
 
     public sVUMeter vuMeter;
 
+    public AudioSource _audioSource;
+
+    private void OnEnable()
+    {
+
+
+    }
+
     public void Setup(sVolumeChannel channel)
     {
         Debug.Log(
@@ -37,6 +45,11 @@ public class sVolumeChannelUI : MonoBehaviour
         if (vuMeter != null)
         {
             vuMeter.SetLevel(value);
+        }
+
+        if(_audioSource != null)
+        {
+            _audioSource.volume = value;
         }
     }
 }

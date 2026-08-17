@@ -368,4 +368,9 @@ public class canvasGameplay : MonoBehaviour
 
         tooldHeldText.text = _itemData.itemName;
     }
+
+    private void OnDestroy()
+    {
+        //Debug.Log($"{name} WAS DESTROYED");
+    }
 }

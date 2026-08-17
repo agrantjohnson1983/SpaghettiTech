@@ -198,7 +198,7 @@ public class sTruck : MonoBehaviour
             //Debug.Log("Triggering player entering truck");
             isInTruck = true;
 
-            _player.ToggleTruckCamera(true, 0.5f);
+            //_player.ToggleForwardCamera(true, 0.5f);
 
             if (sGigManager.gigManagerGlobal.CheckIfHasAGig())
                 HandleTruckUI(true);
@@ -228,7 +228,7 @@ public class sTruck : MonoBehaviour
         {
             //Debug.Log("Triggering player exiting truck");
             isInTruck = false;
-            _player.ToggleTruckCamera(false, 0.5f);
+            //_player.ToggleForwardCamera(false, 0.5f);
             HandleTruckUI(false);
         }
     }

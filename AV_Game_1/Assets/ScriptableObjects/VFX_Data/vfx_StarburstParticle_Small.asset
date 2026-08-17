@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4761baac45e190b46b25127123e335f2, type: 3}
-  m_Name: vfx_StarBurst
+  m_Name: vfx_StarburstParticle_Small
   m_EditorClassIdentifier: 
-  vfxID: Pickup
-  prefab: {fileID: 100006, guid: 8fc06027b01064e4f885fd8dd2929310, type: 3}
+  vfxID: StarburstSmall
+  prefab: {fileID: 8825990591915180119, guid: f87eba9856ff7ab44a11a8af898efa49, type: 3}
   lifetime: 2
   positionOffset: {x: 0, y: 0, z: 0}
   rotationOffset: {x: 0, y: 0, z: 0}

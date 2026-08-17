@@ -228,6 +228,8 @@ public class sCablePlug : sInteractive, iPluggable, iClickable
         // Sets plug to be plugged in
         IsPluggedIn = true;
 
+        if (soVFX != null)
+            soVFX.Raise("Electric", this.transform.position + Vector3.forward*5f + Vector3.up*2f, Quaternion.identity);
 
         // Checks if the other end of the cable is plugged in
         if(cablePlugOtherEnd.ReturnIsPluggedIn() == true)

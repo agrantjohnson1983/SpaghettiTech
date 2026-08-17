@@ -35,3 +35,8 @@ MonoBehaviour:
     description: 
     totalItems: 1
     weight: 0
+  - objectiveID: Set Wireless
+    objectiveName: Set Wireless
+    description: 
+    totalItems: 1
+    weight: 0

@@ -5,8 +5,6 @@ using UnityEngine;
 
 public class sAudioSetupSpot : sSetupSpotBASE
 {
-    public SO_VFXEventChannel soVFX;
-
     //public SO_AudioEventChannel soAudio;
 
     public eAudioType typeAudio;
@@ -44,11 +42,9 @@ public class sAudioSetupSpot : sSetupSpotBASE
                         case eAudioType.speaker:
                             {
 
-                            Debug.Log("Audio setup Collision with Setup Spot");
+                            //Debug.Log("Audio setup Collision with speaker Spot");
 
                             StartCoroutine(SmoothMovement(other.gameObject, this.transform.position + offset, this.transform.rotation));
-
-                            Debug.Log("Audio setup Collision with Mic Stand Spot");
 
                             sAudioManager.audioManagerGlobal.AudioSet(typeAudio);
 
@@ -60,7 +56,7 @@ public class sAudioSetupSpot : sSetupSpotBASE
                         case eAudioType.sub:
                             {
 
-                            Debug.Log("Audio setup Collision with Sub Spot");
+                            //Debug.Log("Audio setup Collision with Sub Spot");
 
                             StartCoroutine(SmoothMovement(other.gameObject, this.transform.position + offset, this.transform.rotation));                         
 
@@ -97,7 +93,7 @@ public class sAudioSetupSpot : sSetupSpotBASE
 
                 soAudio.TriggerSFX("SetupComplete");
 
-                Destroy(this.gameObject, 0.55f);
+                Destroy(this.gameObject, 0.75f);
             }
 
                 else

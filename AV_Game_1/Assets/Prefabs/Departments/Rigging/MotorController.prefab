@@ -287,6 +287,7 @@ GameObject:
   - component: {fileID: 2891879731063605178}
   - component: {fileID: 6877154127784233237}
   - component: {fileID: 9136541360935291169}
+  - component: {fileID: 747345225}
   m_Layer: 0
   m_Name: MotorController
   m_TagString: Untagged
@@ -324,9 +325,9 @@ Rigidbody:
   m_AngularDrag: 0.05
   m_UseGravity: 1
   m_IsKinematic: 0
-  m_Interpolate: 0
+  m_Interpolate: 1
   m_Constraints: 64
-  m_CollisionDetection: 0
+  m_CollisionDetection: 2
 --- !u!65 &2891879731063605178
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -353,9 +354,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   soUI: {fileID: 11400000, guid: 2b96b6b1405722c48a474d361c95f00a, type: 2}
-  _typeRig: 3
-  _grabTriggersAction: 0
+  soAudio: {fileID: 11400000, guid: 85974a5eed2479c48b89b5a67f81403b, type: 2}
+  soVFX: {fileID: 11400000, guid: 2e677f6310e0cd24e8679be3f3361b8f, type: 2}
+  ui_Select: {fileID: 0}
+  _transformGrab: {fileID: 0}
   _UI_offset: {x: 0, y: 0, z: 0}
+  _typeRig: 3
   _itemData: {fileID: 11400000, guid: 1e7728ed59f9d0f44abf6f3179b3c59b, type: 2}
 --- !u!114 &9136541360935291169
 MonoBehaviour:
@@ -381,6 +385,19 @@ MonoBehaviour:
   outlineWidth: 0.02
   outlineWidthProperty: _OutlineWidth
   outlineColorProperty: _OutlineColor
+--- !u!65 &747345225
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7353685729362514316}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1.33, y: 1, z: 2.33}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &7353685730963997909
 GameObject:
   m_ObjectHideFlags: 0

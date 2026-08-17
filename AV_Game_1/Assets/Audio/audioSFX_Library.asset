@@ -125,8 +125,8 @@ MonoBehaviour:
     randomClip: 0
   - eventName: RigItemPlaced
     clips:
-    - {fileID: 8300000, guid: 3703038e2239248449a084139d6db0a9, type: 3}
-    volume: 0.939
+    - {fileID: 8300000, guid: ec9454f53b109444d87ea74b51c346f1, type: 3}
+    volume: 0.838
     minPitch: 1
     maxPitch: 1
     cooldown: 0

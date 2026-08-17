@@ -89,16 +89,16 @@ public abstract class sDepartmentManager : MonoBehaviour
 
     public virtual void SetProgress(float value)
     {
-        Debug.Log("Set progress called");
+        //Debug.Log("Set progress called");
 
         progress = Mathf.Clamp01(value);
 
-        UpdateGigManager();
+        //UpdateGigManager();
     }
 
     protected virtual void UpdateGigManager()
     {
-        Debug.Log("Updating Gig manager");
+        //Debug.Log("Updating Gig manager");
 
         if (sGigManager.gigManagerGlobal == null)
             return;
@@ -124,7 +124,7 @@ public abstract class sDepartmentManager : MonoBehaviour
 
     public void RefreshProgress()
     {
-        Debug.Log("Refresh Progress called");
+        //Debug.Log("Refresh Progress called");
         SetProgress(Status.Completion);
     }
 
@@ -133,7 +133,7 @@ public abstract class sDepartmentManager : MonoBehaviour
         if (soUI == null)
             return;
 
-        Debug.Log("Updating " + deptID + " department progress to: " + progress);
+        //Debug.Log("Updating " + deptID + " department progress to: " + progress);
 
         switch (deptID)
         {
@@ -159,7 +159,7 @@ public abstract class sDepartmentManager : MonoBehaviour
     {
         if (Status.objectives.TryGetValue(_key, out ObjectiveStatus _status))
         {
-            Debug.Log("Incrementing objective status for " + _status);
+            //Debug.Log("Incrementing objective status for " + _status);
             _status.completedItems++;
         }
 

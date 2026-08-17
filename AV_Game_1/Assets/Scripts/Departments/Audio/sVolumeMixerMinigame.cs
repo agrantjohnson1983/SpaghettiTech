@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.Audio;
 
 public class sVolumeMixerMinigame : MonoBehaviour
 {
@@ -20,6 +21,10 @@ public class sVolumeMixerMinigame : MonoBehaviour
 
     public SO_AudioEventChannel soAudio;
 
+    public AudioMixerGroup audioMixerMinigame;
+
+    public Slider masterVolume;
+
 
     void Start()
     {
@@ -38,7 +43,15 @@ public class sVolumeMixerMinigame : MonoBehaviour
 
 
             channelUI[i].Setup(channels[i]);
+
+            sliders[i].value = 0f;
         }
+
+        
+        masterVolume.onValueChanged.AddListener(value => {
+            float clampedValue = Mathf.Max(masterVolume.value, 0.0001f); 
+            float volume = Mathf.Log10(clampedValue) * 20f; 
+            audioMixerMinigame.audioMixer.SetFloat("MinigameVolume", volume); });
     }
 
 

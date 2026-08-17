@@ -93,8 +93,18 @@ public class sRigGear : sInteractive, iRiggable
     {
         Debug.Log("Rigging set for " + this.gameObject);
 
-        IsSet = true;
-
         CanBeGrabbed = false;
+        canBeSelected = false;
+
+        if (IsGrabbed)
+        {
+            Debug.Log("Riggin setup being set while grabbing");
+
+            IsGrabbed = false;
+
+            sPlayerCharacter.playerCharacterGlobal.ReturnGrabController().GrabReset();
+        }
+
+        IsSet = true;
     }
 }

@@ -212,8 +212,8 @@ public class sRiggingManager : sDepartmentManager
                 {
                     trussSpotScript.setupIndex = trussSetupsList.Count - 1;
 
-                    Debug.Log("[RiggingManager] Assigned setupIndex " + trussSpotScript.setupIndex + " to " + trussSpotScript.name
-                        + " (instance id " + trussSpotScript.GetInstanceID() + ")");
+                    //Debug.Log("[RiggingManager] Assigned setupIndex " + trussSpotScript.setupIndex + " to " + trussSpotScript.name
+                    //    + " (instance id " + trussSpotScript.GetInstanceID() + ")");
                 }
                 else
                 {

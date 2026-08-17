@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using UnityEditor.Tilemaps;
 using UnityEngine;
 
 public class sSetupSpotBASE : MonoBehaviour, iActionable
@@ -98,42 +99,92 @@ public class sSetupSpotBASE : MonoBehaviour, iActionable
 
     public SO_AudioEventChannel soAudio;
 
+    public SO_VFXEventChannel soVFX;
+
     public GameObject actionObject;
 
 
-    public IEnumerator SmoothMovement(GameObject _object, Vector3 _endPos, Quaternion _endRot)
+    public IEnumerator SmoothMovement(GameObject _object, Vector3 _endPos, Quaternion _endRot, bool _destroyAtEnd = true)
     {
-        hasBeenSet = true;
+        //Debug.Log("Starting smooth movement for " + _object + " from start pos of: " + _object.transform.position + " to end pos: " + _endPos);
 
-        Debug.Log("Starting smooth movement for " + _object + " from start pos of: " + _object.transform.position + " to end pos: " + _endPos);
+        if(_object == null)
+        {
+            Debug.LogWarning("Smooth movement object is null");
+            yield return null;
+        }
 
         float counter = 0f;
 
-        _object.GetComponent<Rigidbody>().velocity = Vector3.zero;
-        
-        //_object.GetComponent<Rigidbody>().useGravity = false;
+        Collider _collider;
+
+        if(_object.TryGetComponent<Collider>(out _collider))
+        {
+            _collider.enabled = false;
+        }
+
+        Rigidbody _rb;
+
+        if(_object.TryGetComponent<Rigidbody>(out _rb))
+        {
+            _rb.velocity = Vector3.zero;
+            _rb.angularVelocity = Vector3.zero;
+            _rb.isKinematic = true;
+        }
+
+        if(_object.TryGetComponent<FixedJoint>(out FixedJoint _joint))
+        {
+            Debug.Log("Fixed joint was found on " + _object);
+
+            if(_object.TryGetComponent<sInteractive>(out sInteractive _interactive))
+            {
+                Debug.Log("Setting interactive object for setup");
+                _interactive.OffGrab();
+                
+            }
+
+            Destroy(_joint);
+
+            sPlayerCharacter.playerCharacterGlobal.ReturnGrabController().GrabReset();
+        }
 
         Vector3 _startingPos = _object.transform.position;
         Quaternion _startingRot = _object.transform.rotation;
 
-        while (counter < 0.5f)
+        while (counter < 1f)
         {
-            _object.transform.position = Vector3.Lerp(_startingPos, _endPos, (counter / 0.5f));
+            float _time = counter / 1f;
 
-            _object.transform.rotation = Quaternion.Slerp(_startingRot, _endRot, (counter / 0.5f));
+            _object.transform.position = Vector3.Lerp(_startingPos, _endPos, _time);
+
+            _object.transform.rotation = Quaternion.Slerp(_startingRot, _endRot, _time);
 
             counter += Time.deltaTime;
 
             yield return null;
         }
 
-        
-
-        _object.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
-
         Debug.Log("Smooth movement finished for " + _object);
 
-        //Destroy(this.gameObject, 0.5f);
+
+        if(_rb)
+        {
+            _rb.constraints = RigidbodyConstraints.FreezeAll;
+        }
+
+        if(_collider)
+            _collider.enabled = true;
+
+        if (soAudio != null)
+            soAudio.TriggerSFX("SetupComplete");
+
+        if (soVFX != null)
+            soVFX.Raise("StarburstSmall", this.transform.position + Vector3.up, Quaternion.identity);
+
+        Debug.Log("Smooth movement coroutine finished for " + _object);
+
+        if (_destroyAtEnd)
+            Destroy(this.gameObject, 0.5f);
 
     }
 
@@ -175,6 +226,13 @@ public class sSetupSpotBASE : MonoBehaviour, iActionable
 
     protected bool ToolCheck(GameObject _toolCheckObj)
     {
+        if (!_toolCheckObj.CompareTag("Player"))
+        {
+            Debug.Log("Collision is not a player object");
+            return false;
+        }
+            
+
         // Checks for tool handler - located on Player
         if (_toolCheckObj.TryGetComponent<sToolHandler>(out sToolHandler _toolHandler))
         {
@@ -214,5 +272,10 @@ public class sSetupSpotBASE : MonoBehaviour, iActionable
             return false;
         }
 
+    }
+
+    public virtual void FinishSetup()
+    {
+        
     }
 }
