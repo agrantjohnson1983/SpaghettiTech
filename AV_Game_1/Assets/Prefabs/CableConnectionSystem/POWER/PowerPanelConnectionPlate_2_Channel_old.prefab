@@ -318,7 +318,7 @@ GameObject:
   - component: {fileID: 5021267142730780109}
   - component: {fileID: 928287497577340382}
   m_Layer: 5
-  m_Name: PowerPanelConnectionPlate_2_Channel
+  m_Name: PowerPanelConnectionPlate_2_Channel_old
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

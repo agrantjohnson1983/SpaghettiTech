@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using TMPro;
 
 public class sInputChannel : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
@@ -14,7 +15,7 @@ public class sInputChannel : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
     public Image channelImage;
 
-    public Text channelText;
+    public TMP_Text channelText;
 
     Sprite connectedImage, disconnectedImage;
 

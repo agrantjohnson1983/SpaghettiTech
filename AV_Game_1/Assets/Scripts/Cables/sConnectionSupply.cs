@@ -22,6 +22,8 @@ public class sConnectionSupply : MonoBehaviour
 
     public string objectiveName;
 
+    public Vector3 rotOffset;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -112,7 +114,7 @@ public class sConnectionSupply : MonoBehaviour
 
                 collision.gameObject.transform.position = plugInTransform.position + connectionOffset;
 
-                collision.gameObject.transform.rotation = Quaternion.Euler(new Vector3(0, 90, 0));
+                collision.gameObject.transform.rotation = Quaternion.Euler(rotOffset);
 
                 //collision.gameObject.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
 

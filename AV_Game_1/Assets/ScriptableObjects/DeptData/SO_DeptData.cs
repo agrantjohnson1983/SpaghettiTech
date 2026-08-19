@@ -11,6 +11,8 @@ public class SO_DeptData : ScriptableObject
     public string departmentName;
 
     public List<SO_ObjectiveData> objectives = new();
+
+    public Material deptMat;
 }
 
 [Serializable]

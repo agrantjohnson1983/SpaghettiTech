@@ -92,7 +92,7 @@ GameObject:
   - component: {fileID: 392098381972168981}
   - component: {fileID: 8948307518628653837}
   m_Layer: 5
-  m_Name: Power_Button_InputChannel
+  m_Name: Power_Button_InputChannel_old
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

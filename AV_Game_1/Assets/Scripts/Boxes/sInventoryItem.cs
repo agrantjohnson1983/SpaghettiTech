@@ -21,16 +21,20 @@ public class sInventoryItem : MonoBehaviour, IPointerEnterHandler,
     SO_ItemData itemData;
 
     public GameObject toolTip;
-    public TMP_Text toolText;
+    public TMP_Text toolDescription;
 
     public SO_AudioEventChannel soAudio;
 
     public GameObject parent;
 
+    Vector3 tooltipStartingPos;
+
     // Start is called before the first frame update
     void Start()
     {
         inventory = GetComponentInParent<sInventory>();
+
+        tooltipStartingPos = toolTip.transform.position;
     }
 
     public void SetItem(SO_ItemData _itemData)
@@ -39,7 +43,9 @@ public class sInventoryItem : MonoBehaviour, IPointerEnterHandler,
         textItemName.text = _itemData.itemName;
         itemImage.sprite = _itemData.itemSprite;
         pItem = _itemData.prefabItem;
-        toolText.text = _itemData.description;
+        toolDescription.text = _itemData.description;
+
+        toolTip.SetActive(false);
     }
 
 
@@ -60,6 +66,8 @@ public class sInventoryItem : MonoBehaviour, IPointerEnterHandler,
 
         //bg.color = hoverColor;
         toolTip.SetActive(true);
+
+        toolTip.transform.position = this.transform.parent.transform.parent.transform.position + new Vector3(6f, 0f, 2f);
 
         if (soAudio != null)
             soAudio.TriggerSFX("BoxItemSelect");

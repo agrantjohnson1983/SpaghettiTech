@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f1c4bf882ee3cce4a8a2480c9bc1051a, type: 3}
-  m_Name: vfx_Database
+  m_Name: _VFX_Database
   m_EditorClassIdentifier: 
   effects:
   - {fileID: 11400000, guid: 9e42763e6ef637344a409cd928511de1, type: 2}

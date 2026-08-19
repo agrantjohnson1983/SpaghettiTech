@@ -38,7 +38,7 @@ public abstract class sDepartmentManager : MonoBehaviour
     public DepartmentStatus Status => status;
 
     [Header("Department Data")]
-    [SerializeField] protected SO_DeptData deptData;
+    [SerializeField] public SO_DeptData deptData;
     
     public virtual void Start()
     {

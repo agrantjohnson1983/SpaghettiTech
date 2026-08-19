@@ -28,7 +28,7 @@ public class sConnectionSource : MonoBehaviour
     uConnectionsAvailablePanel connectionsAvailablePlate;
 
     // the list of pluggables that collide with source
-    public List<GameObject> pluggableList;
+    [HideInInspector] public List<GameObject> pluggableList;
 
     Rigidbody rb;
 
@@ -53,10 +53,10 @@ public class sConnectionSource : MonoBehaviour
 
         pluggableList = new List<GameObject>();
 
-        SpawnConnectionPlate();
         SpawnConnectionsAvailablePanel();
 
-       
+        SpawnConnectionPlate();
+
         rb = GetComponent<Rigidbody>();
     }
 
@@ -92,6 +92,15 @@ public class sConnectionSource : MonoBehaviour
 
         // Turns off the connection plate
         connectionPlate.gameObject.transform.parent.gameObject.SetActive(false);
+
+        if (connectionsAvailablePlate)
+        {
+            connectionsAvailablePlate.SetConnectionPlate(connectionPlate);
+            connectionPlate.SetConnectionsAvailablePanel(connectionsAvailablePlate);
+        }
+            
+        else
+            Debug.LogWarning("No connections available plate");
     }
 
 
@@ -109,13 +118,16 @@ public class sConnectionSource : MonoBehaviour
         // Gives the connection available plate a reference to this connection source
         connectionsAvailablePlate.SetConnectionSource(this);
 
+        if(connectionPlate)
+        {
+
+        }
+
         connectionsAvailablePlate.gameObject.SetActive(false);
 
-        // Gives the connection plate a reference to the connection available panel
-        connectionPlate.SetConnectionsAvailablePanel(connectionsAvailablePlate);
+        
 
-        // Gives the connection available plate a reference to the connection plate
-        connectionsAvailablePlate.SetConnectionPlate(connectionPlate);
+        
     }
 
 

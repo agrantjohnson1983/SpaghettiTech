@@ -38,6 +38,7 @@ public class sInventory : MonoBehaviour
 
     public void SetInventory(SO_ItemData[] _itemData)
     {
+
         for (int i = 0; i < _itemData.Length; i++)
         {
             sInventoryItem tempItem;

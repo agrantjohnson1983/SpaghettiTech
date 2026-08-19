@@ -13,6 +13,8 @@ public class uDeptStatus : MonoBehaviour
 
     public Transform panelObjectives;
 
+    public Image[] deptImages;
+
     public void SetObjectives(sDepartmentManager dm)
     {
         //Debug.Log("Setting objectives for " + dm);
@@ -33,6 +35,10 @@ public class uDeptStatus : MonoBehaviour
             // sets objective status
             oStatus.SetObjective(kvp.Value);
         }
-        
+
+        for (int i = 0; i < deptImages.Length; i++)
+        {
+            deptImages[i].color = dm.deptData.deptMat.color;
+        }
     }
 }

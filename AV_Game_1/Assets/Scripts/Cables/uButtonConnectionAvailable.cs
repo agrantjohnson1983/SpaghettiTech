@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using TMPro;
 
 public class uButtonConnectionAvailable : MonoBehaviour, IPointerDownHandler
 {
     public Image connectionImage;
-    public Text connectionNumberText;
+    public TMP_Text connectionNumberText;
 
     //public GameObject backGround;
 

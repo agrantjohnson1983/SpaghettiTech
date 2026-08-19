@@ -14,7 +14,7 @@ public class sBox : sInteractive, iClickable, IPointerEnterHandler, IPointerExit
 
     static sInventory inventory = null;
 
-    public int numberOfSlots;
+    private int numberOfSlots;
 
     public List<SO_ItemData> boxedItemDataList;
 
@@ -71,12 +71,13 @@ public class sBox : sInteractive, iClickable, IPointerEnterHandler, IPointerExit
         inventory.SetBox(this);
 
         inventory.SetInventory(boxedItemDataList.ToArray());
+
+        numberOfSlots = boxedItemDataList.Count;
         //ui_Text.GetComponent<TextMeshProUGUI>().fontSize = boxTextFontSize;
 
         //ui_Text.SetActive(false);
 
-
-
+        
     }
 
     // Called by sBoxSpawner right after Instantiate. Applies all data-driven
@@ -147,6 +148,13 @@ public class sBox : sInteractive, iClickable, IPointerEnterHandler, IPointerExit
         ui_Img.gameObject.transform.position = this.gameObject.transform.position + ui_Img_Offset;
         //ui_Text.gameObject.transform.position = this.gameObject.transform.position + ui_Text_Offset;
         //}
+
+        if(Input.GetKey(KeyCode.F) && !isOpen && isWithinOpenRange)
+        {
+            Debug.Log("Open box input triggered");
+
+            TriggerOpenBox();
+        }
     }
 
     // Recalculates the panel offset's z-sign each time the box opens, based on
@@ -180,28 +188,41 @@ public class sBox : sInteractive, iClickable, IPointerEnterHandler, IPointerExit
 
         if (numberOfSlots > 0)
         {
-            //Debug.Log("Opening Box");
+            isOpen = true;
 
+            Debug.Log("Opening Box");
+
+            // gets panel offset
             Vector3 panelOffset = GetInventoryPanelOffset();
 
+            //turns off player movemement
             sPlayerCharacter.playerCharacterGlobal.ToggleMovement(false);
 
+            // turns on inventory panel
             inventoryPanel.gameObject.SetActive(true);
 
+            // freezes box movement
             rb.constraints = RigidbodyConstraints.FreezeAll;
 
+            // turns of ui image
             ui_Img.SetActive(false);
 
+            // turns off UI
             ui_Select.SetActive(false);
 
+            // triggers sfx
             if (soAudio != null)
                 soAudio.TriggerSFX("BoxOpen");
+
+            // add Vfx?
+            if (soVFX != null)
+                soVFX.Raise("", this.transform.position + Vector3.up * 2f, Quaternion.identity);
         }
 
         else
         {
             //EmptyBox();
-
+            Debug.Log("Slots number is less than or equal to 0");
         }
     }
 
@@ -318,7 +339,7 @@ public class sBox : sInteractive, iClickable, IPointerEnterHandler, IPointerExit
 
     public override void OnSelect()
     {
-        if(sCharacterGrabController.isGrabbing)
+        if(sCharacterGrabController.isGrabbing || !canBeSelected)
         return;
 
         //Debug.Log("On Select on Box");
@@ -326,7 +347,14 @@ public class sBox : sInteractive, iClickable, IPointerEnterHandler, IPointerExit
         if(!isOpen)
             ui_Select.SetActive(true);
 
-        soUI.TriggerControlsPopup("F", "Open");
+        
+
+        if (soUI != null)
+        {
+            soUI.TriggerControlsPopup("SPACE", "Grab");
+            soUI.TriggerControlsPopup("F", "Open");
+        }
+            
     }
 
     public override void OffSelect()

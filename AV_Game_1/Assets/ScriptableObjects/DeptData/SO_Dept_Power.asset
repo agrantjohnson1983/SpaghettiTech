@@ -25,3 +25,4 @@ MonoBehaviour:
     description: 
     totalItems: 1
     weight: 0
+  deptMat: {fileID: 2100000, guid: 4c006d7843ab2d4499730147793bfcbe, type: 2}
