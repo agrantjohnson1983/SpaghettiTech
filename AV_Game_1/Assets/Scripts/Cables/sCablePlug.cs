@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class sCablePlug : sInteractive, iPluggable, iClickable
 {
-    public uTextPopupSpawn textPopup;
-
     //public GameObject canvasUI;
 
     //Collider collider;
@@ -214,7 +212,8 @@ public class sCablePlug : sInteractive, iPluggable, iClickable
         else
         {
             // Spawns a text popup displaying that the connection type is wrong
-            textPopup.SpawnTextPopup(this.transform, "WRONG CONNECTION TYPE", 12);
+            if(soText != null)
+                soText.SpawnTextPopup(this.transform, "WRONG CONNECTION TYPE", 12);
 
             return false;
         }
@@ -228,7 +227,7 @@ public class sCablePlug : sInteractive, iPluggable, iClickable
         // Sets plug to be plugged in
         IsPluggedIn = true;
 
-        
+        sPlayerCharacter.playerCharacterGlobal.ToggleMovement(true);
 
         // Checks if the other end of the cable is plugged in
         if(cablePlugOtherEnd.ReturnIsPluggedIn() == true)
@@ -238,7 +237,8 @@ public class sCablePlug : sInteractive, iPluggable, iClickable
             // Sets the cables to complete - turns them green
             cableSegmentHandler.ConnectionComplete();
 
-            textPopup.SpawnTextPopup(this.gameObject.transform, "FULLY CONNECTED", 20);
+            if(soText != null)
+                soText.SpawnTextPopup(this.gameObject.transform, "FULLY CONNECTED", 20);
 
             // sets the progress status
             //CompleteObjective();
@@ -287,7 +287,8 @@ public class sCablePlug : sInteractive, iPluggable, iClickable
             // Sets cable to half plugged in - turns yellow
             cableSegmentHandler.HalfConnect();
 
-            textPopup.SpawnTextPopup(this.gameObject.transform, "HALF PLUGGED IN", 12);
+            if (soText != null)
+                soText.SpawnTextPopup(this.gameObject.transform, "HALF PLUGGED IN", 12);
 
             if (soAudio != null)
                 soAudio.TriggerSFX("CablePlugHalfConnected");
@@ -328,7 +329,8 @@ public class sCablePlug : sInteractive, iPluggable, iClickable
             // Half connects the cable from being fully connected
             cableSegmentHandler.HalfConnect();
 
-            textPopup.SpawnTextPopup(this.gameObject.transform, "HALF PLUGGED IN", 12);
+            if(soText != null)
+                soText.SpawnTextPopup(this.gameObject.transform, "HALF PLUGGED IN", 12);
         }
 
         else
@@ -338,7 +340,8 @@ public class sCablePlug : sInteractive, iPluggable, iClickable
             // Fully disconnects the cable
             cableSegmentHandler.Disconnect();
 
-            textPopup.SpawnTextPopup(this.gameObject.transform, "DISCONNECTING CABLE", 12);
+            if(soText != null)
+                soText.SpawnTextPopup(this.gameObject.transform, "DISCONNECTING CABLE", 12);
         }
 
         // Destroys the joint connecting the plug
@@ -424,7 +427,8 @@ public class sCablePlug : sInteractive, iPluggable, iClickable
 
             CanBeGrabbed = false;
 
-            textPopup.SpawnTextPopup(this.gameObject.transform, "READY TO PLUG IN", 12);
+            if(soText != null)
+                soText.SpawnTextPopup(this.gameObject.transform, "READY TO PLUG IN", 12);
         }
 
         // unplugs cable and shoots it out

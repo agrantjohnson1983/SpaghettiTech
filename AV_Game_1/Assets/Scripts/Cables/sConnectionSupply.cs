@@ -78,10 +78,10 @@ public class sConnectionSupply : MonoBehaviour
             connectionObjects[i].SetActive(_hasPower);
         }
 
-        switch(connectionType)
+        /*switch(connectionType)
         {
 
-        }
+        }*/
     }
 
     // This handles adding a joint to the plug object when it collides with the connection source

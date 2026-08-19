@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 5042380129448042514}
   m_Layer: 0
   m_Name: ArmR
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -320,7 +320,7 @@ GameObject:
   - component: {fileID: 1506946594104878499}
   m_Layer: 0
   m_Name: CM vcam1
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -339,7 +339,7 @@ Transform:
   m_Children:
   - {fileID: 1506946593236517151}
   m_Father: {fileID: 2012776716820894628}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1506946594104878499
 MonoBehaviour:
@@ -395,7 +395,6 @@ GameObject:
   - component: {fileID: 2012776716820894630}
   - component: {fileID: 2012776716820894648}
   - component: {fileID: 2129175803242849458}
-  - component: {fileID: 2450426245701803805}
   - component: {fileID: 8416505087930365736}
   - component: {fileID: 8416505087930365737}
   m_Layer: 7
@@ -418,7 +417,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2012776718528749848}
-  - {fileID: 7892026315839176651}
   - {fileID: 3589997433737811900}
   - {fileID: 1506946594104878498}
   m_Father: {fileID: 0}
@@ -465,7 +463,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 112
+  m_Constraints: 32
   m_CollisionDetection: 2
 --- !u!114 &2450426245767801009
 MonoBehaviour:
@@ -537,25 +535,6 @@ MonoBehaviour:
   mask_Clickable:
     serializedVersion: 2
     m_Bits: 128
---- !u!114 &2450426245701803805
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2012776716820894629}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: acca6fb6d53664e419da2fc3c65f6dc4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  model: {fileID: 2012776718528749849}
-  soUI: {fileID: 11400000, guid: 2b96b6b1405722c48a474d361c95f00a, type: 2}
-  transformGrab: {fileID: 7892026315839176651}
-  grabControlText: SPACE
-  throwControlText: CLICK
-  soVFX: {fileID: 11400000, guid: 2e677f6310e0cd24e8679be3f3361b8f, type: 2}
-  throwPower: 10
 --- !u!114 &8416505087930365736
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -572,6 +551,7 @@ MonoBehaviour:
   soUI: {fileID: 11400000, guid: 2b96b6b1405722c48a474d361c95f00a, type: 2}
   soAudio: {fileID: 11400000, guid: 85974a5eed2479c48b89b5a67f81403b, type: 2}
   soVFX: {fileID: 11400000, guid: 2e677f6310e0cd24e8679be3f3361b8f, type: 2}
+  soText: {fileID: 11400000, guid: 5ecd37f9e7581824fbdb05b506ea589c, type: 2}
 --- !u!114 &8416505087930365737
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -607,7 +587,7 @@ GameObject:
   - component: {fileID: 2012776716926582538}
   m_Layer: 7
   m_Name: Cube
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -690,7 +670,7 @@ GameObject:
   - component: {fileID: 2012776717130760465}
   m_Layer: 7
   m_Name: Head (2)
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -773,7 +753,7 @@ GameObject:
   - component: {fileID: 2012776717481548639}
   m_Layer: 7
   m_Name: Head
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -856,7 +836,7 @@ GameObject:
   - component: {fileID: 2012776717800696086}
   m_Layer: 7
   m_Name: Head (1)
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -939,7 +919,7 @@ GameObject:
   - component: {fileID: 2012776717933692629}
   m_Layer: 7
   m_Name: Cube (1)
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1022,7 +1002,7 @@ GameObject:
   - component: {fileID: 2012776718439228699}
   m_Layer: 7
   m_Name: Capsule
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1038,7 +1018,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 1.25, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 7892026315839176651}
   m_Father: {fileID: 2012776718528749848}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1103,7 +1084,7 @@ GameObject:
   - component: {fileID: 2012776718528749848}
   m_Layer: 7
   m_Name: model
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1145,7 +1126,7 @@ GameObject:
   - component: {fileID: 2012776718560531874}
   m_Layer: 7
   m_Name: Head (3)
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1231,7 +1212,7 @@ GameObject:
   - component: {fileID: 369143879135263591}
   m_Layer: 0
   m_Name: HandR
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1345,12 +1326,12 @@ ConfigurableJoint:
   m_ConnectedAnchor: {x: 0, y: 1.2183601, z: 0}
   serializedVersion: 2
   m_SecondaryAxis: {x: 0, y: 1, z: 0}
-  m_XMotion: 0
-  m_YMotion: 0
-  m_ZMotion: 0
-  m_AngularXMotion: 1
-  m_AngularYMotion: 1
-  m_AngularZMotion: 1
+  m_XMotion: 1
+  m_YMotion: 1
+  m_ZMotion: 1
+  m_AngularXMotion: 2
+  m_AngularYMotion: 2
+  m_AngularZMotion: 2
   m_LinearLimitSpring:
     spring: 0
     damper: 0
@@ -1439,7 +1420,7 @@ GameObject:
   - component: {fileID: 142620656}
   m_Layer: 7
   m_Name: transformGrab
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1456,8 +1437,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 2012776716820894628}
-  m_RootOrder: 1
+  m_Father: {fileID: 2012776718439228697}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!135 &142620657
 SphereCollider:
@@ -1467,10 +1448,10 @@ SphereCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4460913622819355572}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.5
+  m_Radius: 1
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &142620656
 MonoBehaviour:
@@ -1490,7 +1471,7 @@ MonoBehaviour:
   grabControlText: SPACE
   throwControlText: CLICK
   soVFX: {fileID: 11400000, guid: 2e677f6310e0cd24e8679be3f3361b8f, type: 2}
-  throwPower: 10
+  throwPower: 20
 --- !u!1 &5718862906781706156
 GameObject:
   m_ObjectHideFlags: 0
@@ -1502,7 +1483,7 @@ GameObject:
   - component: {fileID: 3589997433737811900}
   m_Layer: 7
   m_Name: transformToolbelt
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1520,7 +1501,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2012776716820894628}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6514888490392294554
 GameObject:
@@ -1538,7 +1519,7 @@ GameObject:
   - component: {fileID: 7110121692541860841}
   m_Layer: 0
   m_Name: HandL
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1652,12 +1633,12 @@ ConfigurableJoint:
   m_ConnectedAnchor: {x: 0, y: 1.2183601, z: -1.4602495e-12}
   serializedVersion: 2
   m_SecondaryAxis: {x: 0, y: 1, z: 0}
-  m_XMotion: 0
-  m_YMotion: 0
-  m_ZMotion: 0
-  m_AngularXMotion: 1
-  m_AngularYMotion: 1
-  m_AngularZMotion: 1
+  m_XMotion: 1
+  m_YMotion: 1
+  m_ZMotion: 1
+  m_AngularXMotion: 2
+  m_AngularYMotion: 2
+  m_AngularZMotion: 2
   m_LinearLimitSpring:
     spring: 0
     damper: 0
@@ -1749,7 +1730,7 @@ GameObject:
   - component: {fileID: 256878441791900445}
   m_Layer: 0
   m_Name: ArmL
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1957,9 +1938,10 @@ GameObject:
   - component: {fileID: 4345738086852669234}
   - component: {fileID: 385667110694006347}
   - component: {fileID: 2828586570553297465}
+  - component: {fileID: 1457638639}
   m_Layer: 0
   m_Name: ShoulderL
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2003,20 +1985,20 @@ ConfigurableJoint:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6635771773974172318}
-  m_ConnectedBody: {fileID: 2012776716820894649}
+  m_ConnectedBody: {fileID: 0}
   m_ConnectedArticulationBody: {fileID: 0}
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: 1, y: 0, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: -0.5, y: 0.75, z: 0}
+  m_ConnectedAnchor: {x: -0.5, y: 2, z: 0}
   serializedVersion: 2
   m_SecondaryAxis: {x: 0, y: 1, z: 0}
-  m_XMotion: 0
-  m_YMotion: 0
-  m_ZMotion: 0
-  m_AngularXMotion: 1
-  m_AngularYMotion: 0
-  m_AngularZMotion: 1
+  m_XMotion: 1
+  m_YMotion: 1
+  m_ZMotion: 1
+  m_AngularXMotion: 2
+  m_AngularYMotion: 2
+  m_AngularZMotion: 2
   m_LinearLimitSpring:
     spring: 0
     damper: 0
@@ -2092,6 +2074,23 @@ ConfigurableJoint:
   m_EnablePreprocessing: 1
   m_MassScale: 1
   m_ConnectedMassScale: 1
+--- !u!114 &1457638639
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6635771773974172318}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cfc376057cfdc6744b5c9d1cfe761dd5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  type: 0
+  lockX: 0
+  lockY: 0
+  lockZ: 0
+  lookAtOffset: {x: 0, y: 0, z: 0}
 --- !u!1 &7474095777921935750
 GameObject:
   m_ObjectHideFlags: 0
@@ -2103,9 +2102,10 @@ GameObject:
   - component: {fileID: 4320158986685418459}
   - component: {fileID: 727793410993857901}
   - component: {fileID: 6293773609372818992}
+  - component: {fileID: 815508402}
   m_Layer: 0
   m_Name: ShoulderR
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2140,7 +2140,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 126
+  m_Constraints: 14
   m_CollisionDetection: 0
 --- !u!153 &6293773609372818992
 ConfigurableJoint:
@@ -2149,20 +2149,20 @@ ConfigurableJoint:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7474095777921935750}
-  m_ConnectedBody: {fileID: 2012776716820894649}
+  m_ConnectedBody: {fileID: 0}
   m_ConnectedArticulationBody: {fileID: 0}
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: 1, y: 0, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: 0.5, y: 0.75, z: 0}
+  m_ConnectedAnchor: {x: 0.5, y: 2, z: 0}
   serializedVersion: 2
   m_SecondaryAxis: {x: 0, y: 1, z: 0}
-  m_XMotion: 0
-  m_YMotion: 0
-  m_ZMotion: 0
-  m_AngularXMotion: 1
-  m_AngularYMotion: 1
-  m_AngularZMotion: 1
+  m_XMotion: 1
+  m_YMotion: 1
+  m_ZMotion: 1
+  m_AngularXMotion: 2
+  m_AngularYMotion: 2
+  m_AngularZMotion: 2
   m_LinearLimitSpring:
     spring: 0
     damper: 0
@@ -2238,3 +2238,20 @@ ConfigurableJoint:
   m_EnablePreprocessing: 1
   m_MassScale: 1
   m_ConnectedMassScale: 1
+--- !u!114 &815508402
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7474095777921935750}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cfc376057cfdc6744b5c9d1cfe761dd5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  type: 0
+  lockX: 0
+  lockY: 0
+  lockZ: 0
+  lookAtOffset: {x: 0, y: 0, z: 0}

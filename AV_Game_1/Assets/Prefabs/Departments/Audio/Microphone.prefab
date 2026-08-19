@@ -63,7 +63,7 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.55
+  m_Radius: 7
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!54 &3036872418323584772
 Rigidbody:
@@ -79,7 +79,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 112
+  m_Constraints: 126
   m_CollisionDetection: 2
 --- !u!153 &7098299934311583855
 ConfigurableJoint:
@@ -88,12 +88,12 @@ ConfigurableJoint:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4001821383988600423}
-  m_ConnectedBody: {fileID: 0}
+  m_ConnectedBody: {fileID: 1695444339}
   m_ConnectedArticulationBody: {fileID: 0}
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: 1, y: 0, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: 0, y: 0, z: 0}
+  m_ConnectedAnchor: {x: 0.5279999, y: -0.015999973, z: -0.5}
   serializedVersion: 2
   m_SecondaryAxis: {x: 0, y: 1, z: 0}
   m_XMotion: 2
@@ -2254,7 +2254,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 1198
+  m_VersionIndex: 1240
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -2405,11 +2405,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   soUI: {fileID: 11400000, guid: 2b96b6b1405722c48a474d361c95f00a, type: 2}
   soAudio: {fileID: 11400000, guid: 85974a5eed2479c48b89b5a67f81403b, type: 2}
+  soVFX: {fileID: 11400000, guid: 2e677f6310e0cd24e8679be3f3361b8f, type: 2}
+  soText: {fileID: 11400000, guid: 5ecd37f9e7581824fbdb05b506ea589c, type: 2}
   ui_Select: {fileID: 0}
   _transformGrab: {fileID: 0}
   _UI_offset: {x: 0, y: 0, z: 0}
-  typeAudio: 0
+  typeAudio: 4
   isSet: 0
+  isWireless: 0
+  isConnected: 0
 --- !u!114 &672415474980854410
 MonoBehaviour:
   m_ObjectHideFlags: 0

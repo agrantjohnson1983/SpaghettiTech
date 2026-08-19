@@ -355,7 +355,7 @@ public class sCharacterGrabController : MonoBehaviour
                 Rigidbody _playerRB;
 
                 // Sets RB to this, which is on the player gameObject
-                _playerRB = this.gameObject.GetComponent<Rigidbody>();
+                _playerRB = this.gameObject.GetComponentInParent<Rigidbody>();
 
 
                 if (interactiveObject.TryGetComponent<Rigidbody>(out Rigidbody _rb))
@@ -416,7 +416,7 @@ public class sCharacterGrabController : MonoBehaviour
 
     IEnumerator GrabMovement()
     {
-        soVFX?.Raise("Grab", transform.position, Quaternion.identity);
+        soVFX?.Raise("Grab", interactiveObject.transform.position, Quaternion.identity);
 
         Vector3 startingPos = sPlayerCharacter.playerCharacterGlobal.model.transform.position;
         Vector3 endPos = interactiveObject.transform.position;
@@ -428,10 +428,12 @@ public class sCharacterGrabController : MonoBehaviour
 
         float counter = 0f;
 
+        Transform _targetTransform = interactiveObject.transform;
+
         while (counter < 0.25f)
         {
             sPlayerCharacter.playerCharacterGlobal.model.transform.position = Vector3.Lerp(startingPos, endPos, (counter / 0.25f));
-            sPlayerCharacter.playerCharacterGlobal.model.transform.LookAt(interactiveObject.transform);
+            sPlayerCharacter.playerCharacterGlobal.model.transform.LookAt(_targetTransform);
 
             counter += Time.deltaTime;
 
@@ -493,7 +495,12 @@ public class sCharacterGrabController : MonoBehaviour
 
             soVFX?.Raise("Throw", transform.position, Quaternion.identity);
 
-            _grabbedRB.velocity = _tossDirection * throwPower;
+            //_grabbedRB.velocity = _tossDirection * throwPower;
+
+            _grabbedRB.AddForce(_tossDirection * throwPower, ForceMode.Impulse);
+
+            _grabbedRB.AddTorque((model.transform.right + model.transform.up) * throwPower, ForceMode.Impulse);
+
             // If you want a little arc instead of a flat throw:
             // _grabbedRB.velocity += Vector3.up * (throwPower * 0.2f);
 

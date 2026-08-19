@@ -205,7 +205,7 @@ MonoBehaviour:
   pConnectionAvailablePanel: {fileID: 8240157060571585621, guid: dff9f0a6a9f8e83478bbefb71edf334f, type: 3}
   pluggableList: []
   connectionsPlateTransforms: {fileID: 743581262225445482}
-  uTextPopup: {fileID: 0}
+  soText: {fileID: 11400000, guid: 5ecd37f9e7581824fbdb05b506ea589c, type: 2}
   meterTotal: 100
   meterUI: {fileID: 23321939910570695}
 --- !u!1 &208617711253032286

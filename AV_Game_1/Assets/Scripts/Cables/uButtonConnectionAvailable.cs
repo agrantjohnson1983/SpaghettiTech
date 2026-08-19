@@ -77,14 +77,14 @@ public class uButtonConnectionAvailable : MonoBehaviour, IPointerDownHandler
         }
     }
 
-    // Use this for connecting a connection - DO NOT TOGGLE isConnected
+    // Use this for connecting a connection with line renderer - DO NOT TOGGLE isConnected
     public void OnPointerDown(PointerEventData _eventData)
     {
         if(!isConnected)
         {
             //Debug.Log(name + " clicked");
             
-            connectionsAvailablePanel.OnConnectionClick(index);
+            connectionsAvailablePanel.OnConnectionClick(index, this.transform.position);
         }      
     }
 

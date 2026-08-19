@@ -34,7 +34,7 @@ public class sConnectionSource : MonoBehaviour
 
     public Transform connectionsPlateTransforms;
 
-    public uTextPopupSpawn uTextPopup;
+    public SO_Text soText;
 
 
     // METER - this can be used for a variety of devices
@@ -124,10 +124,6 @@ public class sConnectionSource : MonoBehaviour
         }
 
         connectionsAvailablePlate.gameObject.SetActive(false);
-
-        
-
-        
     }
 
 
@@ -272,13 +268,15 @@ public class sConnectionSource : MonoBehaviour
                 if(_pluggable.CheckIfCorrectConnection(typeOfConnection) == false)
                 {
                     // Spawns a text message saying wrong type of connection
-                    uTextPopup.SpawnTextPopup(this.transform, "WRONG TYPE OF CONNECTION", 12);
+                    if (soText != null)
+                        soText.SpawnTextPopup(this.transform, "WRONG TYPE OF CONNECTION", 12);
                 }
 
                 else if(_pluggable.IsInput && _pluggable.CheckIfCorrectConnection(typeOfConnection) == true)
                 {
                     // Spawns a text message saying wrong end of cable
-                    uTextPopup.SpawnTextPopup(this.transform, "WRONG END OF CABLE", 12);
+                    if(soText != null)
+                        soText.SpawnTextPopup(this.transform, "WRONG END OF CABLE", 12);
                 }
 
                 else
@@ -347,14 +345,14 @@ public class sConnectionSource : MonoBehaviour
         {
             if (pluggableList.Count <= 0)
             {
-                Debug.Log("No pluggables in list");
+                //Debug.Log("No pluggables in list");
                 return;
             }
 
             // Checks the connection canvas is not open
             if (!connectionCanvasOpen && pluggableList.Count > 0)
             {
-                //Debug.Log("Opening Connection Plate Canvas");
+                Debug.Log("Opening Connection Plate Canvas");
 
                 // Sets bool to true to open
                 connectionCanvasOpen = true;
@@ -373,6 +371,8 @@ public class sConnectionSource : MonoBehaviour
 
                 // Sets the connection avaiable plate to open
                 connectionsAvailablePlate.gameObject.SetActive(true);
+
+                //sPlayerCharacter.playerCharacterGlobal.ToggleMovement(false);
 
                 // Checks that there's something in the pluggable list
                 //if (pluggableList.Count > 0)

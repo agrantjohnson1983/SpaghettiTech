@@ -67,8 +67,6 @@ public class uConnectionsAvailablePanel : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
-
         // sets a reference to the main camera
         cam = Camera.main;
 
@@ -80,7 +78,7 @@ public class uConnectionsAvailablePanel : MonoBehaviour
     {
         // The line renderer only turns on if "isClickingConnection" is toggled on
         if(isClickingConnectionAvailable)
-        LineHandler();
+            LineHandler();
     }
 
     // Sets the reference to connection source
@@ -170,9 +168,11 @@ public class uConnectionsAvailablePanel : MonoBehaviour
     }
     
     // This gets called by a Connection Available Channel - This sets the isClickingConnection to true which turns on the line renderer.  This also sets the tempClickIndex, which lets an input channel get an index.
-    public void OnConnectionClick(int _index)
+    public void OnConnectionClick(int _index, Vector3 _pos)
     {
         Debug.Log("Button Click at index of: " + _index + ".  Connections available list has count of: " + connectionsAvailableList.Count);
+
+        startPos = _pos;
 
         // toggles the bool
         isClickingConnectionAvailable = true;
@@ -254,7 +254,7 @@ public class uConnectionsAvailablePanel : MonoBehaviour
             lr.positionCount = 2;
             
             // Sets first position to mouse position converted from screen to world
-            startPos = cam.ScreenToWorldPoint(Input.mousePosition+camOffset);
+            //startPos = cam.ScreenToWorldPoint(Input.mousePosition + camOffset);
 
             // Sets the line to the startPos
             lr.SetPosition(0, startPos);
@@ -295,7 +295,7 @@ public class uConnectionsAvailablePanel : MonoBehaviour
     // Use this for setting a connection line to continually appear once it's been connected
     public void SetConnectionLine(int _index)
     {
-        //Debug.Log("Setting Connection Line at index of " + _index);
+        Debug.Log("Setting Connection Line at index of " + _index);
 
         // temp ref for line renderer connection
         sConnectionLineRenderer lineRendererConnection;

@@ -6,9 +6,17 @@ public class sCameraTrigger : MonoBehaviour
 {
     bool isTriggered = false;
 
+    public bool canTrigger = true;
+
+    private void Start()
+    {
+        //if (disableOnStart)
+        //    this.enabled = false;
+    }
+
     private void OnTriggerEnter(Collider other)
     {
-        if (other.TryGetComponent<sPlayerCharacter>(out sPlayerCharacter _player) && !isTriggered)
+        if (other.TryGetComponent<sPlayerCharacter>(out sPlayerCharacter _player) && !isTriggered && canTrigger)
         {
             isTriggered = true;
 

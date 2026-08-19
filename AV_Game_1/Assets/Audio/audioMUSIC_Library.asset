@@ -15,7 +15,7 @@ MonoBehaviour:
   events:
   - eventName: WarehouseLoop
     clips:
-    - {fileID: 8300000, guid: d267a37205a58194998c031a73f19d89, type: 3}
+    - {fileID: 8300000, guid: 7689eb9cd678f38488d18034d39e4800, type: 3}
     volume: 0.564
     minPitch: 0
     maxPitch: 0
@@ -25,7 +25,7 @@ MonoBehaviour:
     randomClip: 0
   - eventName: GameplayLoop
     clips:
-    - {fileID: 8300000, guid: b229d2d7303641747a98992894daad55, type: 3}
+    - {fileID: 8300000, guid: 96402f3f6f4861049937e93fcc993ca3, type: 3}
     volume: 0.532
     minPitch: 0
     maxPitch: 0
@@ -35,7 +35,7 @@ MonoBehaviour:
     randomClip: 0
   - eventName: FrontEndLoop
     clips:
-    - {fileID: 8300000, guid: 66807a60e9391994cb286cb1c3e2e53d, type: 3}
+    - {fileID: 8300000, guid: c76c3c6bf20a74a41b89c44f4068da41, type: 3}
     volume: 0.532
     minPitch: 0
     maxPitch: 0

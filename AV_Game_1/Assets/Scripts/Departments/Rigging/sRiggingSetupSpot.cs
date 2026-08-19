@@ -241,7 +241,7 @@ public class sRiggingSetupSpot : sSetupSpotBASE
 
         //StopCoroutine(ActionTasking());
 
-        StopAllCoroutines();
+        //StopAllCoroutines();
 
         sPlayerCharacter.playerCharacterGlobal.ToggleMovement(true);
 
@@ -266,7 +266,7 @@ public class sRiggingSetupSpot : sSetupSpotBASE
         //FinishSetup();
     }
 
-    public void FinishSetup()
+    public override void FinishSetup()
     {
         Debug.Log("[" + this.name + "] FinishSetup called - Action Task Complete");
 
@@ -344,17 +344,13 @@ public class sRiggingSetupSpot : sSetupSpotBASE
                 {
                     if (_riggable.Enabled)
                     {
-                        //Debug.Log("Motor Collision with Setup Spot");
+                        Debug.Log(_riggable + " collision with Setup Spot");
 
                         _riggable.SetRigging(other.gameObject, this.gameObject, offset);
 
                         _riggable.RiggingObjectComplete(other.gameObject, _riggable.TypeRig);
 
-                        //other.gameObject.GetComponent<sRigGear>().enabled = false;
-
-                        //Destroy(this.gameObject, 1f);
-
-                        StartCoroutine(SmoothMovement(other, this.gameObject.transform.position + offset, this.transform.rotation));
+                        StartCoroutine(ReleaseThenMove(other, this.gameObject.transform.position + offset, this.transform.rotation));
                     }
                     else
                     {
@@ -387,7 +383,7 @@ public class sRiggingSetupSpot : sSetupSpotBASE
                     // yet - that is deferred to FinishSetup,
                     // called once the crescent wrench minigame
                     // (actionObject) reports completion.
-                    StartCoroutine(SmoothMovement(other, this.gameObject.transform.position + offset, this.transform.rotation, false));
+                    StartCoroutine(ReleaseThenMove(other, this.gameObject.transform.position + offset, this.transform.rotation, false));
 
                     _riggable.SetRigging(other.gameObject, this.gameObject, offset);
 
@@ -449,6 +445,7 @@ public class sRiggingSetupSpot : sSetupSpotBASE
         if (other.gameObject.CompareTag("Player") && HasAction)
         {
             isPlayerInsideTrigger = false;
+
             cachedPlayerObject = null;
 
             CanTriggerAction = false;

@@ -16,6 +16,8 @@ public class sInteractive : MonoBehaviour, iGrabbable
 
     public SO_VFXEventChannel soVFX;
 
+    public SO_Text soText;
+
     bool _isGrabbed = false;
 
     //public float _taskTime;

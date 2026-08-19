@@ -78,8 +78,6 @@ public class sRigGear : sInteractive, iRiggable
         CanBeGrabbed = true;
     }
 
-
-
     public virtual void TriggerGrabAction()
     {
 
@@ -101,8 +99,6 @@ public class sRigGear : sInteractive, iRiggable
             Debug.Log("Riggin setup being set while grabbing");
 
             IsGrabbed = false;
-
-            sPlayerCharacter.playerCharacterGlobal.ReturnGrabController().GrabReset();
         }
 
         IsSet = true;

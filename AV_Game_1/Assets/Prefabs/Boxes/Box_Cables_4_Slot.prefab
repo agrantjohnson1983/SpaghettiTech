@@ -220,7 +220,7 @@ BoxCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3163874987475164060}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 16943b5919b099b428b0afe9ff82f1d8, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
@@ -269,7 +269,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   soUI: {fileID: 11400000, guid: 2b96b6b1405722c48a474d361c95f00a, type: 2}
   soAudio: {fileID: 11400000, guid: 85974a5eed2479c48b89b5a67f81403b, type: 2}
-  soVFX: {fileID: 0}
+  soVFX: {fileID: 11400000, guid: 2e677f6310e0cd24e8679be3f3361b8f, type: 2}
+  soText: {fileID: 11400000, guid: 5ecd37f9e7581824fbdb05b506ea589c, type: 2}
   ui_Select: {fileID: 7207851875643422336}
   _transformGrab: {fileID: 0}
   _UI_offset: {x: 0, y: 0, z: 0}

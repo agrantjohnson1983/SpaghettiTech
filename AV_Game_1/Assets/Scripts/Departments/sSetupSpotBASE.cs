@@ -101,10 +101,20 @@ public class sSetupSpotBASE : MonoBehaviour, iActionable
 
     public SO_VFXEventChannel soVFX;
 
+    public SO_Text soText;
+
     public GameObject actionObject;
 
+    public IEnumerator ReleaseThenMove(GameObject _object, Vector3 _endPos, Quaternion _endRot, bool _destroyAtEnd = true)
+    {
+        sPlayerCharacter.playerCharacterGlobal.ReturnGrabController().GrabReset();
 
-    public IEnumerator SmoothMovement(GameObject _object, Vector3 _endPos, Quaternion _endRot, bool _destroyAtEnd = true)
+        yield return new WaitForEndOfFrame();
+
+        yield return StartCoroutine(SmoothMovement(_object, _endPos, _endRot, _destroyAtEnd));
+    }
+
+    IEnumerator SmoothMovement(GameObject _object, Vector3 _endPos, Quaternion _endRot, bool _destroyAtEnd)
     {
         //Debug.Log("Starting smooth movement for " + _object + " from start pos of: " + _object.transform.position + " to end pos: " + _endPos);
 
@@ -113,6 +123,8 @@ public class sSetupSpotBASE : MonoBehaviour, iActionable
             Debug.LogWarning("Smooth movement object is null");
             yield return null;
         }
+
+        
 
         float counter = 0f;
 
@@ -123,6 +135,13 @@ public class sSetupSpotBASE : MonoBehaviour, iActionable
             _collider.enabled = false;
         }
 
+        /*Collider[] _colliders = _object.GetComponentsInChildren<Collider>();
+
+        foreach (Collider c in _colliders)
+        {
+            c.enabled = false;
+        }
+*/
         Rigidbody _rb;
 
         if(_object.TryGetComponent<Rigidbody>(out _rb))
@@ -175,11 +194,21 @@ public class sSetupSpotBASE : MonoBehaviour, iActionable
         if(_collider)
             _collider.enabled = true;
 
+        /*_colliders = _object.GetComponentsInChildren<Collider>();
+
+        foreach (Collider c in _colliders)
+        {
+            c.enabled = true;
+        }*/
+
         if (soAudio != null)
             soAudio.TriggerSFX("SetupComplete");
 
         if (soVFX != null)
             soVFX.Raise("StarburstSmall", this.transform.position + Vector3.up, Quaternion.identity);
+
+        if (soText != null)
+            soText.SpawnTextPopup(this.transform, "SET!", 10);
 
         Debug.Log("Smooth movement coroutine finished for " + _object);
 
@@ -219,7 +248,7 @@ public class sSetupSpotBASE : MonoBehaviour, iActionable
 
         textSetup.color = Color.red;
 
-        textSetup.SetText("WRONG TOOL - NEED: " + ToolTypeNeeded);
+        textSetup.SetText("NEED: " + ToolTypeNeeded);
 
         CanTriggerAction = false;
     }

@@ -13,6 +13,12 @@ public class sMicrophone : sAudioGear
         base.SetGear(_typeAudio);
 
         sAudioManager.audioManagerGlobal.AudioSet(eAudioType.microphone);
+
+        soText.SpawnTextPopup(this.transform, "SET", 12);
+
+        soVFX.Raise("SetupComplete", this.transform.position, Quaternion.identity);
+
+        soAudio.TriggerSFX("SetupComplete");
     }
 
     public void SetWireless(bool _isConnected, sAudioWirelessReceiver receiver)

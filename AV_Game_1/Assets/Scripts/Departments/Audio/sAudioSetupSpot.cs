@@ -20,88 +20,94 @@ public class sAudioSetupSpot : sSetupSpotBASE
     }
 
     private void OnTriggerEnter(Collider other)
-    {       
-            //if (HasAction)
-            //    ToolCheck(other.gameObject);
+    {
+        //if (HasAction)
+        //    ToolCheck(other.gameObject);
+        if (hasBeenSet)
+            return;
 
-            if (other.TryGetComponent(out sAudioGear _audioGear))
+        if (other.TryGetComponent(out sAudioGear _audioGear))
+        {
+            // Checks that collided rig type is same as setup type
+            if (_audioGear.typeAudio == typeAudio && _audioGear.enabled && !_audioGear.isSet)
             {
-                // Checks that collided rig type is same as setup type
-                if (_audioGear.typeAudio == typeAudio && _audioGear.enabled)
+                hasBeenSet = true;
+
+                // Resets the grab in case player is still holding the gear
+                sPlayerCharacter.playerCharacterGlobal.ReturnGrabController().GrabReset();
+
+                // this keeps the grab UI from turning on and prevents player from grabbing
+                    _audioGear.CanBeGrabbed = false;
+
+                _audioGear.SetGear(typeAudio);
+
+                switch (typeAudio)
                 {
-                    // Resets the grab in case player is still holding the gear
-                    sPlayerCharacter.playerCharacterGlobal.ReturnGrabController().GrabReset();
+                    case eAudioType.speaker:
+                        {
 
-                    // this keeps the grab UI from turning on and prevents player from grabbing
-                     _audioGear.CanBeGrabbed = false;
+                        //Debug.Log("Audio setup Collision with speaker Spot");
 
-                    _audioGear.SetGear(typeAudio);
+                        StartCoroutine(ReleaseThenMove(other.gameObject, this.transform.position + offset, this.transform.rotation));
 
-                    switch (typeAudio)
-                    {
-                        case eAudioType.speaker:
-                            {
+                        sAudioManager.audioManagerGlobal.AudioSet(typeAudio);
 
-                            //Debug.Log("Audio setup Collision with speaker Spot");
-
-                            StartCoroutine(SmoothMovement(other.gameObject, this.transform.position + offset, this.transform.rotation));
-
-                            sAudioManager.audioManagerGlobal.AudioSet(typeAudio);
-
-                            break;
-                            }
+                        break;
+                        }
 
                             
 
-                        case eAudioType.sub:
-                            {
+                    case eAudioType.sub:
+                        {
 
-                            //Debug.Log("Audio setup Collision with Sub Spot");
+                        //Debug.Log("Audio setup Collision with Sub Spot");
 
-                            StartCoroutine(SmoothMovement(other.gameObject, this.transform.position + offset, this.transform.rotation));                         
+                        StartCoroutine(ReleaseThenMove(other.gameObject, this.transform.position + offset, this.transform.rotation));                         
 
-                            sAudioManager.audioManagerGlobal.AudioSet(typeAudio);
+                        sAudioManager.audioManagerGlobal.AudioSet(typeAudio);
 
-                            break;
-                            }
+                        break;
+                        }
 
-                        case eAudioType.mixer:
-                            {
+                    case eAudioType.mixer:
+                        {
 
-                            //Debug.Log("Audio setup Collision with Mixer Spot");
+                        //Debug.Log("Audio setup Collision with Mixer Spot");
 
-                            StartCoroutine(SmoothMovement(other.gameObject, this.transform.position + offset, this.transform.rotation));
+                        StartCoroutine(ReleaseThenMove(other.gameObject, this.transform.position + offset, this.transform.rotation));
 
-                            sAudioManager.audioManagerGlobal.AudioSet(typeAudio);
+                        sAudioManager.audioManagerGlobal.AudioSet(typeAudio);
 
-                            break;
-                            }
+                        break;
+                        }
 
-                        case eAudioType.micStand:
-                            {
+                    case eAudioType.micStand:
+                        {
 
 
-                            //Debug.Log("Audio setup Collision with Mic Stand Spot");
+                        //Debug.Log("Audio setup Collision with Mic Stand Spot");
 
-                            StartCoroutine(SmoothMovement(other.gameObject, this.transform.position + offset, this.transform.rotation));
+                        StartCoroutine(ReleaseThenMove(other.gameObject, this.transform.position + offset, this.transform.rotation));
 
-                            sAudioManager.audioManagerGlobal.AudioSet(typeAudio);
+                        sAudioManager.audioManagerGlobal.AudioSet(typeAudio);
 
-                            break;
-                            }
-                    }
-
-                soAudio.TriggerSFX("SetupComplete");
-
-                Destroy(this.gameObject, 0.75f);
-            }
-
-                else
-                {
-                    Debug.Log("Wrong setup spot type");
+                        break;
+                        }
                 }
 
+            soAudio.TriggerSFX("AudioGearSet");
+
+            //soText.SpawnTextPopup(this.transform, "SETUP!", 12);
+
+            //Destroy(this.gameObject, 0.75f);
+        }
+
+            else
+            {
+                Debug.Log("Wrong setup spot type");
             }
+
+        }
         
     }
 }

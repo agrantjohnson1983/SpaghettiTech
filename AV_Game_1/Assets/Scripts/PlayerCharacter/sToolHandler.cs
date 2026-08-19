@@ -13,6 +13,8 @@ public class sToolHandler : MonoBehaviour
 
     public SO_VFXEventChannel soVFX;
 
+    public SO_Text soText;
+
     sPlayerCharacter playerCharacter;
 
     //SO_ItemData toolItemData;
@@ -188,8 +190,6 @@ public class sToolHandler : MonoBehaviour
         {
             //Debug.Log("Collided with a tool: " + _tool);
 
-            
-
             // this is for Non toolbelt tools - like nuts and bolts
             switch (_tool.toolData.typeOfTool)
             {
@@ -209,6 +209,9 @@ public class sToolHandler : MonoBehaviour
                         soVFX.Raise("Boltburst", this.transform.position, Quaternion.identity);
                     }
 
+                    if (soText != null)
+                        soText.SpawnTextPopup(this.transform, "+1 Nut", 7);
+
                     Destroy(other.gameObject);
 
                     //return;
@@ -225,6 +228,9 @@ public class sToolHandler : MonoBehaviour
                     {
                         soVFX.Raise("Boltburst", this.transform.position, Quaternion.identity);
                     }
+
+                    if (soText != null)
+                        soText.SpawnTextPopup(this.transform, "+1 Bolt", 7);
 
                     Destroy(other.gameObject);
 
@@ -251,6 +257,9 @@ public class sToolHandler : MonoBehaviour
                     {
                         soVFX.Raise("Pickup", this.transform.position, Quaternion.identity);
                     }
+
+                    if (soText != null)
+                        soText.SpawnTextPopup(this.transform,currentToolData.itemName, 7);
 
                     Destroy(other.gameObject);
 
