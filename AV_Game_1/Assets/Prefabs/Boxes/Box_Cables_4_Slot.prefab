@@ -220,7 +220,7 @@ BoxCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3163874987475164060}
-  m_Material: {fileID: 13400000, guid: 16943b5919b099b428b0afe9ff82f1d8, type: 2}
+  m_Material: {fileID: 13400000, guid: 5335e7c9da2ae5d4191b71f222cf22e6, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
@@ -292,6 +292,7 @@ MonoBehaviour:
   boxSelectMouseImage: {fileID: 2800000, guid: 8bf01251be4cbcc4283405886810eaf9, type: 3}
   boxData: {fileID: 0}
   boxTextFontSize: 0.05
+  openBoxAction: {fileID: -1876474617413016653, guid: fc62af52181a74f4583fbd411a2c9312, type: 3}
 --- !u!114 &2690858896691665127
 MonoBehaviour:
   m_ObjectHideFlags: 0

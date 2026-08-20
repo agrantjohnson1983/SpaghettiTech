@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting.Antlr3.Runtime;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class sCharacterActionController : MonoBehaviour
 {
@@ -20,6 +22,9 @@ public class sCharacterActionController : MonoBehaviour
 
     public string popupControlText = "Left Click For Action";
 
+    [Header("Input")]
+    [SerializeField] private InputActionReference ActionTrigger;
+
 
     // Start is called before the first frame update
     void Start()
@@ -27,11 +32,76 @@ public class sCharacterActionController : MonoBehaviour
         toolHandler = GetComponent<sToolHandler>();
     }
 
+    private void OnEnable()
+    {
+        ActionTrigger.action.Enable();
+        ActionTrigger.action.started += OnActionPress;
+        ActionTrigger.action.canceled += OnActionRelease;
+    }
+
+    private void OnDisable()
+    {
+        ActionTrigger.action.Disable();
+        ActionTrigger.action.started -= OnActionPress;
+        ActionTrigger.action.canceled += OnActionRelease;
+    }
+
     // Update is called once per frame
     void Update()
     {
-        HandleAction();
+        //HandleAction();
     }
+
+    private void OnActionPress(InputAction.CallbackContext context)
+    {
+        // Uncomment when you implement dash
+        // rb.AddForce(direction * dashPower, ForceMode.Impulse);
+
+        if (isTouchingActionable && !isDoingAction && actionable != null && interactiveObject != null)
+        {
+            isDoingAction = true;
+
+            //Debug.Log("Action triggered on " + actionable.ToString());
+
+            actionable.TriggerAction(interactiveObject, itemData);
+        }
+    }
+
+    private void OnActionRelease(InputAction.CallbackContext context)
+    {
+        // Uncomment when you implement dash
+        // rb.AddForce(direction * dashPower, ForceMode.Impulse);
+
+        if (isTouchingActionable && !isDoingAction)
+        {
+
+            // This stops an action
+            if (actionable != null)
+            {
+                isDoingAction = false;
+
+                //Debug.Log("Action Stopped on  " + actionable);
+
+                if (actionable != null)
+                    actionable.StopAction();
+            }
+
+        }
+
+        else
+        {
+            // This stops an active action.  Does a check for an actionable
+            if (actionable != null)
+            {
+                isDoingAction = false;
+
+                //Debug.Log("Action Stopped with " + actionable.ToString());
+
+                actionable.StopAction();
+            }
+        }
+    }
+
 
     void HandleAction()
     {

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
 
 public class sBox : sInteractive, iClickable, IPointerEnterHandler, IPointerExitHandler, iLoadable
 {
@@ -55,7 +56,7 @@ public class sBox : sInteractive, iClickable, IPointerEnterHandler, IPointerExit
 
     //bool isBeingThrown = false;
 
-    
+    [SerializeField] private InputActionReference openBoxAction;
 
     // Start is called before the first frame update
     private void Awake()
@@ -78,6 +79,20 @@ public class sBox : sInteractive, iClickable, IPointerEnterHandler, IPointerExit
         //ui_Text.SetActive(false);
 
         
+    }
+
+    private void OnEnable()
+    {
+        openBoxAction.action.Enable();
+
+        openBoxAction.action.performed += OnOpenPress;
+    }
+
+    private void OnDisable()
+    {
+        openBoxAction.action.Disable();
+
+        openBoxAction.action.performed -= OnOpenPress;
     }
 
     // Called by sBoxSpawner right after Instantiate. Applies all data-driven
@@ -149,7 +164,20 @@ public class sBox : sInteractive, iClickable, IPointerEnterHandler, IPointerExit
         //ui_Text.gameObject.transform.position = this.gameObject.transform.position + ui_Text_Offset;
         //}
 
-        if(Input.GetKey(KeyCode.F) && !isOpen && isWithinOpenRange)
+        /*if(Input.GetKey(KeyCode.F) && !isOpen && isWithinOpenRange)
+        {
+            Debug.Log("Open box input triggered");
+
+            TriggerOpenBox();
+        }*/
+    }
+
+    private void OnOpenPress(InputAction.CallbackContext context)
+    {
+        // Uncomment when you implement dash
+        // rb.AddForce(direction * dashPower, ForceMode.Impulse);
+
+        if (!isOpen && isWithinOpenRange)
         {
             Debug.Log("Open box input triggered");
 

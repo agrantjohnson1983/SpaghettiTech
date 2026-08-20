@@ -184,114 +184,120 @@ public class sToolHandler : MonoBehaviour
         tapeTool.enabled = false;
     }
 
+    void HandleToolCollision(sTool _tool)
+    {
+        //Debug.Log("Collided with a tool: " + _tool);
+
+        // this is for Non toolbelt tools - like nuts and bolts
+        switch (_tool.toolData.typeOfTool)
+        {
+            case eToolType.NONE:
+
+                break;
+
+            case eToolType.nut:
+
+                soUI.TriggerNutPickup();
+
+                if (soAudio != null)
+                    soAudio.TriggerSFX("NutPickup");
+
+                if (soVFX != null)
+                {
+                    soVFX.Raise("Boltburst", this.transform.position, Quaternion.identity);
+                }
+
+                if (soText != null)
+                    soText.SpawnTextPopup(this.transform, "+1 Nut", 7);
+
+                Destroy(_tool.gameObject);
+
+                //return;
+                break;
+
+            case eToolType.bolt:
+
+                soUI.TriggerBoltPickup();
+
+                if (soAudio != null)
+                    soAudio.TriggerSFX("BoltPickup");
+
+                if (soVFX != null)
+                {
+                    soVFX.Raise("Boltburst", this.transform.position, Quaternion.identity);
+                }
+
+                if (soText != null)
+                    soText.SpawnTextPopup(this.transform, "+1 Bolt", 7);
+
+                Destroy(_tool.gameObject);
+
+                //return;
+
+                break;
+
+            case eToolType.tape:
+
+            case eToolType.ratchet:
+
+            case eToolType.crescent:
+
+                if (soAudio != null)
+                    soAudio.TriggerSFX("ToolPickup");
+
+                DropTool();
+
+                currentToolData = _tool.toolData;
+
+                if(currentToolData != null)
+                    GoTool(currentToolData);
+
+                if (soVFX != null)
+                {
+                    soVFX.Raise("Pickup", this.transform.position, Quaternion.identity);
+                }
+
+                if (soText != null)
+                    soText.SpawnTextPopup(this.transform, currentToolData.itemName, 7);
+
+                Destroy(_tool.gameObject);
+
+                break;
+                //break;
+        }
+
+        /*// has no tool and grabs a tool - and has hand free
+        if (toolHeldItemDataList != null)//  && handFree)
+        {
+            //Debug.Log("Tool Acquired to belt");
+
+            // adds to list
+            toolHeldItemDataList.Add(_tool.toolData);
+
+            if (_tool.toolData != null)
+                GoTool(_tool.toolData);
+            else
+                Debug.LogWarning("No tool data for: " + _tool);
+
+            Destroy(other.gameObject);
+        }
+
+
+        // when you already have a tool and touch another tool
+        else
+
+        {
+            Debug.Log("Tool item data list is null!");
+            // spawn a canvas asking if you want to drop current tool
+        }*/
+
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if(other.gameObject.TryGetComponent<sTool>(out sTool _tool))
         {
-            //Debug.Log("Collided with a tool: " + _tool);
-
-            // this is for Non toolbelt tools - like nuts and bolts
-            switch (_tool.toolData.typeOfTool)
-            {
-                case eToolType.NONE:
-
-                    break;
-
-                case eToolType.nut:
-
-                    soUI.TriggerNutPickup();
-
-                    if (soAudio != null)
-                        soAudio.TriggerSFX("NutPickup");
-
-                    if (soVFX != null)
-                    {
-                        soVFX.Raise("Boltburst", this.transform.position, Quaternion.identity);
-                    }
-
-                    if (soText != null)
-                        soText.SpawnTextPopup(this.transform, "+1 Nut", 7);
-
-                    Destroy(other.gameObject);
-
-                    //return;
-                    break;
-
-                case eToolType.bolt:
-
-                    soUI.TriggerBoltPickup();
-
-                    if (soAudio != null)
-                        soAudio.TriggerSFX("BoltPickup");
-
-                    if (soVFX != null)
-                    {
-                        soVFX.Raise("Boltburst", this.transform.position, Quaternion.identity);
-                    }
-
-                    if (soText != null)
-                        soText.SpawnTextPopup(this.transform, "+1 Bolt", 7);
-
-                    Destroy(other.gameObject);
-
-                        //return;
-
-                        break;
-
-                case eToolType.tape:
-
-                case eToolType.ratchet:
-                
-                case eToolType.crescent:
-
-                    if (soAudio != null)
-                        soAudio.TriggerSFX("ToolPickup");
-
-                    DropTool();
-
-                    currentToolData = _tool.toolData;
-
-                    soUI.TriggerToolChange(_tool.toolData);
-
-                    if (soVFX != null)
-                    {
-                        soVFX.Raise("Pickup", this.transform.position, Quaternion.identity);
-                    }
-
-                    if (soText != null)
-                        soText.SpawnTextPopup(this.transform,currentToolData.itemName, 7);
-
-                    Destroy(other.gameObject);
-
-                break;
-                //break;
-            }
-
-            /*// has no tool and grabs a tool - and has hand free
-            if (toolHeldItemDataList != null)//  && handFree)
-            {
-                //Debug.Log("Tool Acquired to belt");
-
-                // adds to list
-                toolHeldItemDataList.Add(_tool.toolData);
-
-                if (_tool.toolData != null)
-                    GoTool(_tool.toolData);
-                else
-                    Debug.LogWarning("No tool data for: " + _tool);
-
-                Destroy(other.gameObject);
-            }
-
-
-            // when you already have a tool and touch another tool
-            else
-
-            {
-                Debug.Log("Tool item data list is null!");
-                // spawn a canvas asking if you want to drop current tool
-            }*/
-            
+            HandleToolCollision(_tool);
         }
     }
 }

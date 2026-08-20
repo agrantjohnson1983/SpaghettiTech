@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class sTapeTool : MonoBehaviour
 {
@@ -25,17 +26,32 @@ public class sTapeTool : MonoBehaviour
 
     private HashSet<sTapeSegment> previewSegments = new();
 
+    [Header("Input")]
+    [SerializeField] private InputActionReference clickAction;
+
+
     private void OnEnable()
     {
         if(playerCamera == null)
         {
             playerCamera = Camera.main;
         }
+
+        clickAction.action.Enable();
+        clickAction.action.started += OnTapeInputTrigger;
+        clickAction.action.canceled += OnTapeInputRelease;
+    }
+
+    private void OnDisable()
+    {
+        clickAction.action.Disable();
+        clickAction.action.started -= OnTapeInputTrigger;
+        clickAction.action.canceled -= OnTapeInputRelease;
     }
 
     void Update()
     {
-        HandleInput();
+        //HandleInput();
 
         if (isTaping)
         {
@@ -43,6 +59,16 @@ public class sTapeTool : MonoBehaviour
             UpdatePreview();
         }
             
+    }
+
+    private void OnTapeInputTrigger(InputAction.CallbackContext context)
+    {
+        TryStartTape();
+    }
+
+    private void OnTapeInputRelease(InputAction.CallbackContext context)
+    {
+        FinishTape();
     }
 
     void HandleInput()
@@ -65,7 +91,7 @@ public class sTapeTool : MonoBehaviour
     {
         //Debug.Log("[TAPE] Mouse down");
 
-        Ray ray = playerCamera.ScreenPointToRay(Input.mousePosition);
+        Ray ray = playerCamera.ScreenPointToRay(Mouse.current.position.ReadValue());
 
         Debug.DrawRay(ray.origin, ray.direction * 50f, Color.green, 1f);
 
@@ -93,7 +119,7 @@ public class sTapeTool : MonoBehaviour
 
     void UpdatePreview()
     {
-        Ray ray = playerCamera.ScreenPointToRay(Input.mousePosition);
+        Ray ray = playerCamera.ScreenPointToRay(Mouse.current.position.ReadValue());
 
         if (!Physics.Raycast(ray, out RaycastHit hit, 50f, floorLayer))
         {

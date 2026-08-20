@@ -1,8 +1,14 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(Rigidbody))]
 public class sCharacterMovementController : MonoBehaviour
 {
+    [Header("Input")]
+    [SerializeField] private InputActionReference moveAction;
+    [SerializeField] private InputActionReference sprintAction;
+    [SerializeField] private InputActionReference dashAction;
+
     [Header("Movement")]
     public float characterSpeed = 5f;
 
@@ -32,7 +38,8 @@ public class sCharacterMovementController : MonoBehaviour
     private bool isGrounded;
     private RaycastHit groundHit;
 
-    void Start()
+
+    private void Start()
     {
         rb = GetComponent<Rigidbody>();
 
@@ -42,15 +49,36 @@ public class sCharacterMovementController : MonoBehaviour
         direction = Vector3.forward;
     }
 
-    void Update()
+
+    private void OnEnable()
+    {
+        moveAction.action.Enable();
+        sprintAction.action.Enable();
+        dashAction.action.Enable();
+
+        dashAction.action.performed += OnDash;
+    }
+
+
+    private void OnDisable()
+    {
+        dashAction.action.performed -= OnDash;
+
+        moveAction.action.Disable();
+        sprintAction.action.Disable();
+        dashAction.action.Disable();
+    }
+
+
+    private void Update()
     {
         GetInput();
         CheckGround();
         RotateCharacter();
-        CheckDash();
     }
 
-    void FixedUpdate()
+
+    private void FixedUpdate()
     {
         MoveCharacter();
 
@@ -70,18 +98,19 @@ public class sCharacterMovementController : MonoBehaviour
         }
     }
 
-    void GetInput()
+
+    private void GetInput()
     {
-        inputVelocity = new Vector2(
-            Input.GetAxisRaw("Horizontal"),
-            Input.GetAxisRaw("Vertical"));
+        inputVelocity = moveAction.action.ReadValue<Vector2>();
 
-        inputVelocity.Normalize();
+        // Prevent diagonal movement from being faster
+        inputVelocity = Vector2.ClampMagnitude(inputVelocity, 1f);
 
-        isSprinting = Input.GetKey(KeyCode.LeftShift);
+        isSprinting = sprintAction.action.IsPressed();
     }
 
-    void CheckGround()
+
+    private void CheckGround()
     {
         isGrounded = Physics.Raycast(
             transform.position + Vector3.up * 0.1f,
@@ -91,7 +120,8 @@ public class sCharacterMovementController : MonoBehaviour
             groundMask);
     }
 
-    void RotateCharacter()
+
+    private void RotateCharacter()
     {
         if (inputVelocity.sqrMagnitude < 0.01f)
             return;
@@ -109,7 +139,8 @@ public class sCharacterMovementController : MonoBehaviour
             Quaternion.Euler(0, targetAngle, 0);
     }
 
-    void MoveCharacter()
+
+    private void MoveCharacter()
     {
         if (inputVelocity.sqrMagnitude < 0.001f)
         {
@@ -153,12 +184,10 @@ public class sCharacterMovementController : MonoBehaviour
             moveDirection.z * speed);
     }
 
-    void CheckDash()
+
+    private void OnDash(InputAction.CallbackContext context)
     {
-        if (Input.GetMouseButtonDown(0))
-        {
-            // Uncomment if you want dash later
-            // rb.AddForce(direction * dashPower, ForceMode.Impulse);
-        }
+        // Uncomment when you implement dash
+        // rb.AddForce(direction * dashPower, ForceMode.Impulse);
     }
 }

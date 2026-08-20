@@ -1,7 +1,6 @@
 using System.Collections;
-using System.Collections.Generic;
-using System.Dynamic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 
 public class sCharacterGrabController : MonoBehaviour
@@ -20,6 +19,8 @@ public class sCharacterGrabController : MonoBehaviour
 
     public static bool isGrabbing = false;
 
+    bool isPressingGrab = false;
+
     bool canLetGo = false;
 
     float letGoDelayTime = 0f;
@@ -28,9 +29,13 @@ public class sCharacterGrabController : MonoBehaviour
 
     public Transform transformGrab;
 
-    public string grabControlText, throwControlText;
+    private string grabControlText, throwControlText;
 
     public SO_VFXEventChannel soVFX;
+
+    [Header("Input")]
+    [SerializeField] private InputActionReference grabAction;
+    [SerializeField] private InputActionReference throwAction;
 
     //public int _numberOfHandsNeeded;
     //public int NumberOfHandsNeeded
@@ -79,7 +84,7 @@ public class sCharacterGrabController : MonoBehaviour
     // THROWING
     public float throwPower = 10f;
 
-    bool waitingForSpaceRelease = false;
+    bool waitingForGrabRelease = false;
 
     // Tracks the specific FixedJoint this script creates for a grab, so
     // cleanup only ever touches a joint this script owns. Never search the
@@ -95,16 +100,33 @@ public class sCharacterGrabController : MonoBehaviour
         //joint = GetComponent<ConfigurableJoint>();
 
         //HandIndexList = new List<int>();
+
+        grabControlText = grabAction.action.GetBindingDisplayString();
+        throwControlText = throwAction.action.GetBindingDisplayString();
     }
 
     private void OnEnable()
     {
         SceneManager.sceneLoaded += OnSceneLoaded;
+
+        grabAction.action.Enable();
+        grabAction.action.performed += OnGrabInput;
+        grabAction.action.canceled += OnGrabRelease;
+
+        throwAction.action.Enable();
+        throwAction.action.performed += OnThrowInput;
     }
 
     private void OnDisable()
     {
         SceneManager.sceneLoaded -= OnSceneLoaded;
+
+        grabAction.action.Disable();
+        grabAction.action.performed -= OnGrabInput;
+        grabAction.action.canceled -= OnGrabRelease;
+
+        throwAction.action.Disable();
+        throwAction.action.performed -= OnThrowInput;
     }
 
     // isGrabbing is static, so it survives a scene load (only a full domain
@@ -117,7 +139,7 @@ public class sCharacterGrabController : MonoBehaviour
     private void OnSceneLoaded(Scene _scene, LoadSceneMode _mode)
     {
         isGrabbing = false;
-        waitingForSpaceRelease = false;
+        waitingForGrabRelease = false;
         canLetGo = false;
         grabbable = null;
         interactiveObject = null;
@@ -127,26 +149,54 @@ public class sCharacterGrabController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (waitingForSpaceRelease && Input.GetKeyUp(KeyCode.Space))
+        /*if (waitingForGrabRelease && isPressingGrab)
         {
-            waitingForSpaceRelease = false;
-        }
+            waitingForGrabRelease = false;
+        }*/
 
-        if (canLetGo)
-            HandleGrabLetGo();
+        //if (canLetGo)
+        //    HandleGrabLetGo();
+        //HandleGrabToss();
+    }
+
+    private void OnGrabInput(InputAction.CallbackContext context)
+    {
+        // Don't allow a new grab until the previous grab input
+        // has actually been released.
+        if (waitingForGrabRelease)
+            return;
+
+        isPressingGrab = true;
+    }
+
+    private void OnGrabRelease(InputAction.CallbackContext context)
+    {
+        isPressingGrab = false;
+
+        // The player has now physically released the grab button.
+        // A new grab is allowed.
+        waitingForGrabRelease = false;
+
+        HandleGrabLetGo();
+    }
+
+    private void OnThrowInput(InputAction.CallbackContext context)
+    {
         HandleGrabToss();
     }
 
     void HandleGrabLetGo()
     {
+        isPressingGrab = false;
+
         // This handles the "let go" part of the grabbing
-        if (Input.GetKeyUp(KeyCode.Space) && isGrabbing)
+        if (canLetGo && isGrabbing)
         {
             //Debug.Log("Off Grab Control Triggered");
             GrabReset();
 
             canLetGo = false;
-            waitingForSpaceRelease = true;
+            waitingForGrabRelease = true;
         }
     }
 
@@ -248,11 +298,6 @@ public class sCharacterGrabController : MonoBehaviour
                     grabbable.OnSelect();
                     SetObjectHighlight(interactiveObject, true);
                 }
-
-                else
-                {
-                    //Debug.Log("Current grabbable object is closer");
-                }
             }
 
             // This gets called if grabbable or interactive object is null
@@ -268,8 +313,6 @@ public class sCharacterGrabController : MonoBehaviour
                 SetObjectHighlight(interactiveObject, true);
             }
 
-
-            //bool bothHandsFree = true;
             int[] _tempIndexArray = new int[1] { -1 };
 
             //Debug.Log("Testttt");
@@ -277,49 +320,12 @@ public class sCharacterGrabController : MonoBehaviour
             // Checks if the character is grabbing and if both hands are free and also if the grabbable can be grabbed
             if (!isGrabbing && _grabbable.CanBeGrabbed)
             {
-                //_tempIndexArray = GameManager.gm.ReturnCurrentPlayer().CheckHands(NumberOfHandsNeeded);
-
-                //// iterates through the hands array.  If it returns less than 0 then....
-                //for (int i = 0; i < _tempIndexArray.Length; i++)
-                //{
-                //    if (_tempIndexArray[i] < 0)
-                //    {
-                //        Debug.Log("Temp Index is too small at position " + i.ToString() + " with value of " + _tempIndexArray[i].ToString());
-                //        bothHandsFree = false;
-                //    }
-
-                //    else
-                //    {
-                //        //Debug.Log("Temp index pos is greater than -1 at value of: " + _tempIndexArray[i]);
-                //        //HandIndexList.Add(_tempIndexArray[i]);
-                //    }
-                //}
-
-                //if (!bothHandsFree)
-                //{
-                //    //Debug.Log("Both hands not free");
-                //}
-
-                //else
-                //{
-                //    //Debug.Log("Both hands are free");
-                //}
-
-                //Debug.Log("Triggering Grab Popup Text");
-
                 // Sets grab UI text
                 soUI.TriggerControlsPopup(grabControlText, "Grab");
             }
 
-            //else
-            //{
-            //    Debug.Log("Is already grabbing, both hands aren't free, or the grabbable can't be grabbed");
-            //}
-
-            //Debug.Log("Testttt");
-
             // Checks for input to start Grab, if the player is grabbing already, if both hands are free and if the grabbable object is grabbed
-            if (!iGrabbable.IsGrabbed && !isGrabbing && !waitingForSpaceRelease && Input.GetKey(KeyCode.Space))
+            if (!iGrabbable.IsGrabbed && !isGrabbing && !waitingForGrabRelease && isPressingGrab)
             {
                 //Debug.Log("Grab Key Detected and can grab");
 
@@ -470,7 +476,7 @@ public class sCharacterGrabController : MonoBehaviour
 
     void HandleGrabToss()
     {
-        if (Input.GetMouseButtonDown(0) && isGrabbing)
+        if (isGrabbing)
         {
             TossGrabbedObject();
         }
@@ -478,44 +484,41 @@ public class sCharacterGrabController : MonoBehaviour
 
     void TossGrabbedObject()
     {
-        // Grab a reference to the rigidbody before GrabReset() clears interactiveObject
-        if (interactiveObject != null && interactiveObject.TryGetComponent<Rigidbody>(out Rigidbody _grabbedRB))
+        if (interactiveObject != null &&
+            interactiveObject.TryGetComponent<Rigidbody>(out Rigidbody _grabbedRB))
         {
-            // Cache the facing direction before GrabReset() runs
-            Vector3 _tossDirection = model.transform.forward + model.transform.up * 0.5f;
+            Vector3 _tossDirection =
+                model.transform.forward +
+                model.transform.up * 0.5f;
 
-            // Destroy only the joint this script created, not any joint search result
             if (_grabJoint != null)
             {
                 Destroy(_grabJoint);
                 _grabJoint = null;
             }
 
-            waitingForSpaceRelease = true;
+            // The current grab input must be released before another
+            // object can be grabbed.
+            waitingForGrabRelease = true;
+
+            GrabReset();
 
             soVFX?.Raise("Throw", transform.position, Quaternion.identity);
 
-            //_grabbedRB.velocity = _tossDirection * throwPower;
+            _grabbedRB.AddForce(
+                _tossDirection * throwPower,
+                ForceMode.Impulse);
 
-            _grabbedRB.AddForce(_tossDirection * throwPower, ForceMode.Impulse);
-
-            _grabbedRB.AddTorque((model.transform.right + model.transform.up) * throwPower, ForceMode.Impulse);
-
-            // If you want a little arc instead of a flat throw:
-            // _grabbedRB.velocity += Vector3.up * (throwPower * 0.2f);
-
-            // Reuses your existing cleanup: calls OffSelect/OffGrab, resets hands,
-            // clears state. Runs immediately now instead of via a delayed Invoke,
-            // so isGrabbing / iGrabbable.IsGrabbed can never get stranded true
-            // (which happened if this GameObject was disabled - e.g. switching
-            // characters - before the old 0.5s Invoke had a chance to fire).
-            GrabReset();
-
-            
+            _grabbedRB.AddTorque(
+                (model.transform.right + model.transform.up) * throwPower,
+                ForceMode.Impulse);
         }
         else
         {
             GrabReset();
+
+            // Still require the player to release the grab button.
+            waitingForGrabRelease = true;
         }
     }
 

@@ -25,7 +25,7 @@ public class sTapeStrip : MonoBehaviour
 
     public void UpdatePreview(Vector3 start, Vector3 end)
     {
-        Debug.Log("Updating preview");
+        //Debug.Log("Updating preview");
 
         StartPoint = start;
         EndPoint = end;
