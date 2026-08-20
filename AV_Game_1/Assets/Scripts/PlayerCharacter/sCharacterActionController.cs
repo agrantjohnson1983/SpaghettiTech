@@ -20,7 +20,7 @@ public class sCharacterActionController : MonoBehaviour
 
     SO_ItemData itemData = null;
 
-    public string popupControlText = "Left Click For Action";
+    private string popupControlText = "Left Click For Action";
 
     [Header("Input")]
     [SerializeField] private InputActionReference ActionTrigger;
@@ -30,6 +30,8 @@ public class sCharacterActionController : MonoBehaviour
     void Start()
     {
         toolHandler = GetComponent<sToolHandler>();
+
+        popupControlText = ActionTrigger.action.GetBindingDisplayString();
     }
 
     private void OnEnable()
@@ -51,6 +53,7 @@ public class sCharacterActionController : MonoBehaviour
     {
         //HandleAction();
     }
+
 
     private void OnActionPress(InputAction.CallbackContext context)
     {

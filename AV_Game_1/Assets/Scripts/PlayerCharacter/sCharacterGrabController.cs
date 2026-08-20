@@ -37,6 +37,11 @@ public class sCharacterGrabController : MonoBehaviour
     [SerializeField] private InputActionReference grabAction;
     [SerializeField] private InputActionReference throwAction;
 
+    private InputAction grabInput;
+    private InputAction throwInput;
+
+    PlayerInput playerInput;
+
     //public int _numberOfHandsNeeded;
     //public int NumberOfHandsNeeded
     //{
@@ -93,40 +98,66 @@ public class sCharacterGrabController : MonoBehaviour
     // and that search has no way to tell the two apart.
     FixedJoint _grabJoint;
 
+    void Awake()
+    {
+        player = GetComponentInParent<sPlayerCharacter>();
+
+        playerInput = GetComponentInParent<PlayerInput>();
+
+        if (playerInput == null)
+        {
+            Debug.LogError(
+                $"No PlayerInput found on {gameObject.name}",
+                this);
+
+            return;
+        }
+
+        grabInput = playerInput.actions.FindAction(grabAction.action.id);
+        throwInput = playerInput.actions.FindAction(throwAction.action.id);
+    }
+
     // Start is called before the first frame update
     void Start()
     {
-        player = GetComponent<sPlayerCharacter>();
-        //joint = GetComponent<ConfigurableJoint>();
-
-        //HandIndexList = new List<int>();
-
-        grabControlText = grabAction.action.GetBindingDisplayString();
-        throwControlText = throwAction.action.GetBindingDisplayString();
+        grabControlText = grabInput.GetBindingDisplayString();
+        throwControlText = grabInput.GetBindingDisplayString();
     }
 
     private void OnEnable()
     {
         SceneManager.sceneLoaded += OnSceneLoaded;
 
-        grabAction.action.Enable();
-        grabAction.action.performed += OnGrabInput;
-        grabAction.action.canceled += OnGrabRelease;
+        if (grabInput != null)
+        {
+            grabInput.Enable();
+            grabInput.performed += OnGrabInput;
+            grabInput.canceled += OnGrabRelease;
+        }
 
-        throwAction.action.Enable();
-        throwAction.action.performed += OnThrowInput;
+        if (throwInput != null)
+        {
+            throwInput.Enable();
+            throwInput.performed += OnThrowInput;
+        }
     }
 
     private void OnDisable()
     {
         SceneManager.sceneLoaded -= OnSceneLoaded;
 
-        grabAction.action.Disable();
-        grabAction.action.performed -= OnGrabInput;
-        grabAction.action.canceled -= OnGrabRelease;
+        if (grabInput != null)
+        {
+            grabInput.performed -= OnGrabInput;
+            grabInput.canceled -= OnGrabRelease;
+            grabInput.Disable();
+        }
 
-        throwAction.action.Disable();
-        throwAction.action.performed -= OnThrowInput;
+        if (throwInput != null)
+        {
+            throwInput.performed -= OnThrowInput;
+            throwInput.Disable();
+        }
     }
 
     // isGrabbing is static, so it survives a scene load (only a full domain
@@ -144,19 +175,6 @@ public class sCharacterGrabController : MonoBehaviour
         grabbable = null;
         interactiveObject = null;
         _grabJoint = null;
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        /*if (waitingForGrabRelease && isPressingGrab)
-        {
-            waitingForGrabRelease = false;
-        }*/
-
-        //if (canLetGo)
-        //    HandleGrabLetGo();
-        //HandleGrabToss();
     }
 
     private void OnGrabInput(InputAction.CallbackContext context)
@@ -189,10 +207,8 @@ public class sCharacterGrabController : MonoBehaviour
     {
         isPressingGrab = false;
 
-        // This handles the "let go" part of the grabbing
         if (canLetGo && isGrabbing)
         {
-            //Debug.Log("Off Grab Control Triggered");
             GrabReset();
 
             canLetGo = false;
@@ -424,12 +440,12 @@ public class sCharacterGrabController : MonoBehaviour
     {
         soVFX?.Raise("Grab", interactiveObject.transform.position, Quaternion.identity);
 
-        Vector3 startingPos = sPlayerCharacter.playerCharacterGlobal.model.transform.position;
+        Vector3 startingPos = player.model.transform.position;
         Vector3 endPos = interactiveObject.transform.position;
 
-        Vector3 localPos = sPlayerCharacter.playerCharacterGlobal.model.transform.localPosition;
+        Vector3 localPos = player.model.transform.localPosition;
 
-        Quaternion startingRot = sPlayerCharacter.playerCharacterGlobal.transform.rotation;
+        Quaternion startingRot = player.transform.rotation;
         Quaternion endRot = transformGrab.rotation;
 
         float counter = 0f;
@@ -438,15 +454,15 @@ public class sCharacterGrabController : MonoBehaviour
 
         while (counter < 0.25f)
         {
-            sPlayerCharacter.playerCharacterGlobal.model.transform.position = Vector3.Lerp(startingPos, endPos, (counter / 0.25f));
-            sPlayerCharacter.playerCharacterGlobal.model.transform.LookAt(_targetTransform);
+            player.model.transform.position = Vector3.Lerp(startingPos, endPos, (counter / 0.25f));
+            player.model.transform.LookAt(_targetTransform);
 
             counter += Time.deltaTime;
 
             yield return null;
         }
 
-        sPlayerCharacter.playerCharacterGlobal.model.transform.localPosition = localPos;
+        player.model.transform.localPosition = localPos;
     }
     public bool ReturnIsGrabbing()
     {

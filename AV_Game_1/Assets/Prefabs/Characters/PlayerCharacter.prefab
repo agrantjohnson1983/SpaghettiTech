@@ -397,13 +397,14 @@ GameObject:
   - component: {fileID: 2129175803242849458}
   - component: {fileID: 8416505087930365736}
   - component: {fileID: 8416505087930365737}
+  - component: {fileID: 3272763752138916873}
   m_Layer: 7
   m_Name: PlayerCharacter
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &2012776716820894628
 Transform:
   m_ObjectHideFlags: 0
@@ -495,11 +496,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a341d6cc5d14ca8479fbec615e30f21d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveAction: {fileID: 5694971950960424688, guid: fc62af52181a74f4583fbd411a2c9312, type: 3}
+  sprintAction: {fileID: -4417439400283225016, guid: fc62af52181a74f4583fbd411a2c9312, type: 3}
+  dashAction: {fileID: 6616391728025047144, guid: fc62af52181a74f4583fbd411a2c9312, type: 3}
   characterSpeed: 10
   sprintMultiplier: 2
   groundMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 512
   groundCheckDistance: 0.6
   maxSlopeAngle: 45
   gravityMultiplier: 3
@@ -519,7 +523,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   soUI: {fileID: 11400000, guid: 2b96b6b1405722c48a474d361c95f00a, type: 2}
-  popupControlText: CLICK
+  ActionTrigger: {fileID: 1248588675309013619, guid: fc62af52181a74f4583fbd411a2c9312, type: 3}
 --- !u!114 &2129175803242849458
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -532,6 +536,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff34d8a7a50eaf3409701e20d9608cc2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  clickAction: {fileID: 1248588675309013619, guid: fc62af52181a74f4583fbd411a2c9312, type: 3}
   mask_Clickable:
     serializedVersion: 2
     m_Bits: 128
@@ -559,7 +564,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2012776716820894629}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 81e8d0ad72fc3344c9108c7ac368594c, type: 3}
   m_Name: 
@@ -574,6 +579,37 @@ MonoBehaviour:
   cableLayer:
     serializedVersion: 2
     m_Bits: 128
+  clickAction: {fileID: 1248588675309013619, guid: fc62af52181a74f4583fbd411a2c9312, type: 3}
+--- !u!114 &3272763752138916873
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2012776716820894629}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Actions: {fileID: -944628639613478452, guid: fc62af52181a74f4583fbd411a2c9312, type: 3}
+  m_NotificationBehavior: 0
+  m_UIInputModule: {fileID: 0}
+  m_DeviceLostEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_DeviceRegainedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ControlsChangedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ActionEvents: []
+  m_NeverAutoSwitchControlSchemes: 0
+  m_DefaultControlScheme: 
+  m_DefaultActionMap: CharacterController
+  m_SplitScreenIndex: -1
+  m_Camera: {fileID: 0}
 --- !u!1 &2012776716926582537
 GameObject:
   m_ObjectHideFlags: 0
@@ -1468,10 +1504,10 @@ MonoBehaviour:
   model: {fileID: 2012776718528749849}
   soUI: {fileID: 11400000, guid: 2b96b6b1405722c48a474d361c95f00a, type: 2}
   transformGrab: {fileID: 7892026315839176651}
-  grabControlText: SPACE
-  throwControlText: CLICK
   soVFX: {fileID: 11400000, guid: 2e677f6310e0cd24e8679be3f3361b8f, type: 2}
-  throwPower: 20
+  grabAction: {fileID: 5380840456326010044, guid: fc62af52181a74f4583fbd411a2c9312, type: 3}
+  throwAction: {fileID: 1248588675309013619, guid: fc62af52181a74f4583fbd411a2c9312, type: 3}
+  throwPower: 15
 --- !u!1 &5718862906781706156
 GameObject:
   m_ObjectHideFlags: 0

@@ -64,7 +64,7 @@ public class sPlayerCharacter : MonoBehaviour
             DontDestroyOnLoad(this.gameObject);
         }
 
-        else if (playerCharacterGlobal != this)
+        /*else if (playerCharacterGlobal != this)
         {
             // This is a duplicate (e.g. a test player already placed in a
             // newly loaded scene while the persisted one survives from
@@ -77,7 +77,7 @@ public class sPlayerCharacter : MonoBehaviour
             Destroy(this.gameObject);
             gameObject.SetActive(false);
             return;
-        }
+        }*/
 
         vCam = GetComponentInChildren<CinemachineVirtualCamera>();
 
