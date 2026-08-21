@@ -16,11 +16,11 @@ public class sCameraTrigger : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.TryGetComponent<sPlayerCharacter>(out sPlayerCharacter _player) && !isTriggered && canTrigger)
+        if (other.TryGetComponent<sCameraController>(out sCameraController _cameraController) && !isTriggered && canTrigger)
         {
             isTriggered = true;
 
-            _player.ToggleForwardCamera(true, 0.5f);
+            _cameraController.ToggleForwardCamera(true, 0.5f);
 
             return;
         }
@@ -28,13 +28,13 @@ public class sCameraTrigger : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.TryGetComponent<sPlayerCharacter>(out sPlayerCharacter _player) && isTriggered)
+        if (other.TryGetComponent<sCameraController>(out sCameraController _cameraController) && isTriggered)
         {
             //Debug.Log("Triggering player exiting truck");
 
             isTriggered = false;
 
-            _player.ToggleForwardCamera(false, 0.5f);
+            _cameraController.ToggleForwardCamera(false, 0.5f);
         }
     }
 }

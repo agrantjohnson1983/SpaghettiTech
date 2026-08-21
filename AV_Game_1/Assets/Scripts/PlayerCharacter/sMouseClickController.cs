@@ -48,7 +48,7 @@ public class sMouseClickController : MonoBehaviour, iClickable
     private void HandleMouseClicking()
     {
         // Don't allow clicking while the character is grabbing
-        if (sCharacterGrabController.isGrabbing)
+        if (player.ReturnGrabController().isGrabbing)
             return;
 
         cam = Camera.main;

@@ -28,6 +28,8 @@ public class sCableSegmentHandler : MonoBehaviour
 
     //float powerDrainTotal = 0f;
 
+    //sPlayerCharacter playerRef = null;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -79,7 +81,6 @@ public class sCableSegmentHandler : MonoBehaviour
             //tempObj.transform.rotation = cableList[i].transform.rotation;
 
             cableList.Add(tempObj);
-
         }
 
         // adds last cable to end of list and last transform in list
@@ -156,7 +157,7 @@ public class sCableSegmentHandler : MonoBehaviour
     {
         //Debug.Log("Cable connection complete - cable is now connected at location " + _tranform.position.ToString());
 
-        sPlayerCharacter.playerCharacterGlobal.ReturnGrabController().GrabReset();
+        //sPlayerCharacter.playerCharacterGlobal.ReturnGrabController().GrabReset();
 
         //this.gameObject.transform.position = _tranform.position;
         //this.gameObject.transform.rotation = _tranform.rotation;
@@ -164,6 +165,8 @@ public class sCableSegmentHandler : MonoBehaviour
         for (int i = 1; i < cableList.Count-1; i++)
         {
             cableList[i].GetComponent<MeshRenderer>().material = connectionCompleteMaterial;
+
+            
         }
     }
 
@@ -235,11 +238,5 @@ public class sCableSegmentHandler : MonoBehaviour
         MovingUI.SetActive(true);
 
         StartCoroutine(MoveConnectionUI());
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
     }
 }

@@ -17,7 +17,7 @@ public class sTrussBoltGameManager : MonoBehaviour
 
     private void Start()
     {
-        sPlayerCharacter.playerCharacterGlobal.ToggleMovement(false);
+        //sPlayerCharacter.playerCharacterGlobal.ToggleMovement(false);
 
         GameManager.gm.canvasGameplayObject.SetActive(false);
 
@@ -48,7 +48,7 @@ public class sTrussBoltGameManager : MonoBehaviour
         if (tightenedCount >= boltSlots.Count && !hasCompleted)
         {
             GameManager.gm.canvasGameplayObject.SetActive(true);
-            sPlayerCharacter.playerCharacterGlobal.ToggleMovement(true);
+            //sPlayerCharacter.playerCharacterGlobal.ToggleMovement(true);
             hasCompleted = true;
             OnAllBoltsSecured?.Invoke();
         }

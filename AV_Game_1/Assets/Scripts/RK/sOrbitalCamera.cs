@@ -27,7 +27,9 @@ public class sOrbitalCamera : MonoBehaviour
     {
         //inputs = new PlayerInputs();
 
-        target = sPlayerCharacter.playerCharacterGlobal.transform;
+        //target = sPlayerCharacter.playerCharacterGlobal.transform;
+
+        target = GameManager.gm.transform;
     }
 
     private void OnEnable()

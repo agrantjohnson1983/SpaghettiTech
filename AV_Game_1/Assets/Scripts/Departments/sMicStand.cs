@@ -19,7 +19,7 @@ public class sMicStand : sAudioGear
 
             if(_gear.typeAudio == eAudioType.microphone)
             {
-                sPlayerCharacter.playerCharacterGlobal.ReturnGrabController().GrabReset();
+                //sPlayerCharacter.playerCharacterGlobal.ReturnGrabController().GrabReset();
 
                 GameObject micObject = other.gameObject;
 

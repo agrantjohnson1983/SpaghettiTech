@@ -16,7 +16,12 @@ public interface iGrabbable
         set;
     }
 
-    static bool IsGrabbed
+    // Per-instance - each grabbable tracks whether IT is currently held.
+    // This must not be static: a static property here is one single flag
+    // shared by every object in the game, which means it can never actually
+    // answer "is this specific object grabbed" and any check against it is
+    // either always true or always false for everyone.
+    bool IsGrabbed
     {
         get;
         set;
@@ -30,11 +35,11 @@ public interface iGrabbable
         set;
     }
 
-    void OnGrab();
+    void OnGrab(sPlayerCharacter _player);
 
     void OffGrab();
 
-    void OnSelect();
+    void OnSelect(sPlayerCharacter _player);
 
     void OffSelect();
 

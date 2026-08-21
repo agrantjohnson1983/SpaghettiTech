@@ -40,8 +40,9 @@ public class sVelocityClamp : MonoBehaviour
         // joint itself controls motion - clamping is harmless here since
         // the object moves with the player rather than under free physics,
         // but skipping it avoids any unnecessary velocity changes while held.
-        if (iGrabbable.IsGrabbed && GetComponent<iGrabbable>() != null)
+        if (TryGetComponent<iGrabbable>(out iGrabbable _grabbable))
         {
+            _grabbable.IsGrabbed = true;
             return;
         }
 

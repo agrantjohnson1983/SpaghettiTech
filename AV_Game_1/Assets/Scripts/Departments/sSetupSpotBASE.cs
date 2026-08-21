@@ -105,9 +105,11 @@ public class sSetupSpotBASE : MonoBehaviour, iActionable
 
     public GameObject actionObject;
 
+    //sPlayerCharacter playerRef = null;
+
     public IEnumerator ReleaseThenMove(GameObject _object, Vector3 _endPos, Quaternion _endRot, bool _destroyAtEnd = true)
     {
-        sPlayerCharacter.playerCharacterGlobal.ReturnGrabController().GrabReset();
+        //sPlayerCharacter.playerCharacterGlobal.ReturnGrabController().GrabReset();
 
         yield return new WaitForEndOfFrame();
 
@@ -164,7 +166,7 @@ public class sSetupSpotBASE : MonoBehaviour, iActionable
 
             Destroy(_joint);
 
-            sPlayerCharacter.playerCharacterGlobal.ReturnGrabController().GrabReset();
+            //sPlayerCharacter.playerCharacterGlobal.ReturnGrabController().GrabReset();
         }
 
         Vector3 _startingPos = _object.transform.position;
@@ -237,7 +239,7 @@ public class sSetupSpotBASE : MonoBehaviour, iActionable
         }
 
         GameManager.gm.canvasGameplayObject.SetActive(true);
-        sPlayerCharacter.playerCharacterGlobal.ToggleMovement(true);
+        //sPlayerCharacter.playerCharacterGlobal.ToggleMovement(true);
     }
 
     public void WrongTool()

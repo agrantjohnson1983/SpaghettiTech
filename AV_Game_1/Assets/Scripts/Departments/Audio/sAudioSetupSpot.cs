@@ -34,7 +34,7 @@ public class sAudioSetupSpot : sSetupSpotBASE
                 hasBeenSet = true;
 
                 // Resets the grab in case player is still holding the gear
-                sPlayerCharacter.playerCharacterGlobal.ReturnGrabController().GrabReset();
+                //sPlayerCharacter.playerCharacterGlobal.ReturnGrabController().GrabReset();
 
                 // this keeps the grab UI from turning on and prevents player from grabbing
                     _audioGear.CanBeGrabbed = false;

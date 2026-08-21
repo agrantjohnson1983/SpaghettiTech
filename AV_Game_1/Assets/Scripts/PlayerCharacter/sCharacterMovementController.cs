@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -8,6 +9,10 @@ public class sCharacterMovementController : MonoBehaviour
     [SerializeField] private InputActionReference moveAction;
     [SerializeField] private InputActionReference sprintAction;
     [SerializeField] private InputActionReference dashAction;
+
+    private InputAction moveInput, sprintInput, dashInput;
+
+    PlayerInput playerInput;
 
     [Header("Movement")]
     public float characterSpeed = 5f;
@@ -38,6 +43,23 @@ public class sCharacterMovementController : MonoBehaviour
     private bool isGrounded;
     private RaycastHit groundHit;
 
+    private void Awake()
+    {
+        playerInput = GetComponentInParent<PlayerInput>();
+
+        if (playerInput == null)
+        {
+            Debug.LogError(
+                $"No PlayerInput found on {gameObject.name}",
+                this);
+
+            return;
+        }
+
+        moveInput = playerInput.actions.FindAction(moveAction.action.id);
+        sprintInput = playerInput.actions.FindAction(sprintAction.action.id);
+        dashInput = playerInput.actions.FindAction(dashAction.action.id);
+    }
 
     private void Start()
     {
@@ -52,11 +74,16 @@ public class sCharacterMovementController : MonoBehaviour
 
     private void OnEnable()
     {
-        moveAction.action.Enable();
-        sprintAction.action.Enable();
-        dashAction.action.Enable();
+        if(playerInput != null)
+        {
+            moveInput.Enable();
+            sprintInput.Enable();
+            dashInput.Enable();
 
-        dashAction.action.performed += OnDash;
+            dashInput.performed += OnDash;
+        }
+
+        
     }
 
 
@@ -101,12 +128,12 @@ public class sCharacterMovementController : MonoBehaviour
 
     private void GetInput()
     {
-        inputVelocity = moveAction.action.ReadValue<Vector2>();
+        inputVelocity = moveInput.ReadValue<Vector2>();
 
         // Prevent diagonal movement from being faster
         inputVelocity = Vector2.ClampMagnitude(inputVelocity, 1f);
 
-        isSprinting = sprintAction.action.IsPressed();
+        isSprinting = sprintInput.IsPressed();
     }
 
 

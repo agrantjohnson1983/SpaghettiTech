@@ -18,5 +18,8 @@ public class sLocalPlayerManager : MonoBehaviour
         }
 
         playerCount++;
+
+        foreach (var device in player.devices)
+            Debug.Log($"[Player devices] {gameObject.name} paired to: {device.displayName}", this);
     }
 }

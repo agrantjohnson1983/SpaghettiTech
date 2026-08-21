@@ -113,6 +113,7 @@ public class sInteractive : MonoBehaviour, iGrabbable
         }
     }
 
+    protected sPlayerCharacter playerRef = null;
     
 
     // Start is called before the first frame update
@@ -136,17 +137,19 @@ public class sInteractive : MonoBehaviour, iGrabbable
         CanBeGrabbed = true;
     }
 
-    public virtual void OnGrab()
+    public virtual void OnGrab(sPlayerCharacter _player)
     {
         IsGrabbed = true;
 
-        
+        playerRef = _player;   
     }
 
     public virtual void OffGrab()
     {
         IsGrabbed = false;
         canBeSelected = false;
+        playerRef = null;
+
         StartCoroutine(GrabSelectCooldown());
     }
 
@@ -163,9 +166,9 @@ public class sInteractive : MonoBehaviour, iGrabbable
         canBeSelected = true;
     }
 
-    public virtual void OnSelect()
+    public virtual void OnSelect(sPlayerCharacter _player)
     {
-        if(!sPlayerCharacter.playerCharacterGlobal.ReturnGrabController().ReturnIsGrabbing() && canBeSelected)
+        if(_player.ReturnGrabController().ReturnIsGrabbing() && canBeSelected)
         {
             if(ui_Select!=null)
                 ui_Select.SetActive(true);

@@ -243,14 +243,14 @@ public class sRiggingSetupSpot : sSetupSpotBASE
 
         //StopAllCoroutines();
 
-        sPlayerCharacter.playerCharacterGlobal.ToggleMovement(true);
+        //sPlayerCharacter.playerCharacterGlobal.ToggleMovement(true);
 
         soUI.TriggerTaskGauge(0, Vector3.zero);
     }
 
     void StartAction()
     {
-        sPlayerCharacter.playerCharacterGlobal.ToggleMovement(false);
+        //sPlayerCharacter.playerCharacterGlobal.ToggleMovement(false);
     }
 
     IEnumerator ActionTasking()
@@ -308,7 +308,7 @@ public class sRiggingSetupSpot : sSetupSpotBASE
 
         //GameManager.gm.ReturnCurrentPlayer().ToggleMovement(true);
 
-        sPlayerCharacter.playerCharacterGlobal.ToggleMovement(true);
+        //sPlayerCharacter.playerCharacterGlobal.ToggleMovement(true);
 
         Debug.Log("[" + this.name + "] FinishSetup step 3 complete - destroying setup spot");
 
@@ -422,7 +422,23 @@ public class sRiggingSetupSpot : sSetupSpotBASE
             if (_riggable.TypeRig == rigType && !_riggable.IsSet && !hasBeenSet)
             {
                 hasBeenSet = true;
-                _riggable.IsSet = true;
+
+                // Do NOT set _riggable.IsSet here. SetRigging (called
+                // inside SetupGear below) already sets IsSet = true
+                // internally, but only AFTER it has repositioned the
+                // object. Setting it here first meant sMotor's
+                // RecordGroundHeightIfNeeded() (triggered by IsSet)
+                // locked in the motor's pre-placement position - since
+                // that guard only records once, the correct position
+                // from SetRigging's own later IsSet=true never
+                // overwrote it. groundHeight (and everything derived
+                // from it: the chain's cached top anchor, raise/lower
+                // target heights) ended up wrong as a result. The
+                // !_riggable.IsSet check above still protects against
+                // the same object colliding with a second setup spot,
+                // since SetRigging sets it synchronously very early
+                // within SetupGear, before that second spot's
+                // OnTriggerEnter would run.
                 SetupGear(_riggable, other.gameObject);
             }
 
@@ -438,7 +454,7 @@ public class sRiggingSetupSpot : sSetupSpotBASE
     // TO DO - Check to see how close the rigging piece rotation is compared to the setup spot rotation
 
 
-    
+
 
     private void OnTriggerExit(Collider other)
     {

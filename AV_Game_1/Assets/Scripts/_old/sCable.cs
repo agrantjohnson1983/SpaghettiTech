@@ -119,7 +119,9 @@ public class sCable : sInteractive
     {
         Debug.Log("Cable connection complete - cable is now connected at location " + _tranform.position.ToString());
 
-        sPlayerCharacter.playerCharacterGlobal.ReturnGrabController().GrabReset();
+        //sPlayerCharacter.playerCharacterGlobal.ReturnGrabController().GrabReset();
+
+        
 
         collision.enabled = false;
 

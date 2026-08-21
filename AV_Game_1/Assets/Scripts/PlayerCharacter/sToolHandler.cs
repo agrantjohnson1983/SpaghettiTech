@@ -126,7 +126,7 @@ public class sToolHandler : MonoBehaviour
 
         Vector3 offset = new Vector3(randomCircle.x, 1f, randomCircle.z) * 2f;
 
-        tempObj.transform.position = sPlayerCharacter.playerCharacterGlobal.transform.position + Vector3.up * 2f;
+        tempObj.transform.position = this.transform.position + Vector3.up * 2f;
 
         Rigidbody rb = tempObj.GetComponent<Rigidbody>();
 

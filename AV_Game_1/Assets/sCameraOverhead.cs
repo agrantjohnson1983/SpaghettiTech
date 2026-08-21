@@ -11,12 +11,14 @@ public class sCameraOverhead : MonoBehaviour
 
     void GoZoomOut()
     {
-        if (sPlayerCharacter.playerCharacterGlobal == null)
-            return;
+        //if (sPlayerCharacter.playerCharacterGlobal == null)
+        //    return;
+
+        Vector3 startPos = Vector3.zero;
 
         Vector3 endPos = this.transform.position;
 
-        StartCoroutine(CameraMovement(sPlayerCharacter.playerCharacterGlobal.transform.position, endPos, 1f));
+        StartCoroutine(CameraMovement(startPos, endPos, 1f));
     }
 
     IEnumerator CameraMovement(Vector3 _startPos, Vector3 _endPos, float _time)

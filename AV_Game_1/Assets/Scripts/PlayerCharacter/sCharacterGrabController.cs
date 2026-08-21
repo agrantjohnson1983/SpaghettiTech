@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
@@ -17,7 +18,7 @@ public class sCharacterGrabController : MonoBehaviour
 
     iGrabbable grabbable = null;
 
-    public static bool isGrabbing = false;
+    public bool isGrabbing = false;
 
     bool isPressingGrab = false;
 
@@ -98,6 +99,20 @@ public class sCharacterGrabController : MonoBehaviour
     // and that search has no way to tell the two apart.
     FixedJoint _grabJoint;
 
+    // Objects currently overlapping this player's grab trigger that
+    // implement iGrabbable. Populated and cleared ONLY by OnTriggerEnter and
+    // OnTriggerExit - never by OnTriggerStay. PhysX stops calling
+    // OnTriggerStay once a pair of colliders settles and the non-player body
+    // goes to sleep, which is the normal resting state for most grabbable
+    // rig pieces. That meant the old HandleGrabbing() (called from
+    // OnTriggerStay) silently stopped being invoked at all the moment the
+    // player stopped moving next to an object - the grab button worked, the
+    // "already grabbed" and "can grab" checks worked, nothing was ever
+    // running them. Grab input is now checked every Update() against
+    // whatever is currently in this list, so it no longer depends on
+    // physics re-evaluating the overlap on every tick.
+    private List<GameObject> objectsInRange = new List<GameObject>();
+
     void Awake()
     {
         player = GetComponentInParent<sPlayerCharacter>();
@@ -121,7 +136,10 @@ public class sCharacterGrabController : MonoBehaviour
     void Start()
     {
         grabControlText = grabInput.GetBindingDisplayString();
-        throwControlText = grabInput.GetBindingDisplayString();
+        throwControlText = throwInput.GetBindingDisplayString();
+
+        Debug.Log("Grab: " + grabControlText);
+        Debug.Log("Throw: " + throwControlText);
     }
 
     private void OnEnable()
@@ -160,13 +178,17 @@ public class sCharacterGrabController : MonoBehaviour
         }
     }
 
-    // isGrabbing is static, so it survives a scene load (only a full domain
-    // reload clears it, not SceneManager.LoadScene). If a grab was active,
-    // or mid-cleanup, when a scene change happened - e.g. GameManager.StartGig()
-    // calling SceneManager.LoadScene - the old interactiveObject/joint get
-    // destroyed by the unload before GrabReset() ever runs, and isGrabbing
-    // is left stuck true forever, blocking every grab attempt from then on.
-    // Force a clean reset on every scene load so nothing can carry over.
+    // isGrabbing is a normal per-instance field (one sCharacterGrabController
+    // per player), so a freshly spawned player naturally starts with it
+    // false - it does not need this reset to be correct on its own. This
+    // reset instead covers the case where a scene load happens WHILE a grab
+    // or its cleanup is in progress on a player instance that survives the
+    // load (e.g. GameManager.StartGig() calling SceneManager.LoadScene
+    // mid-grab): the old interactiveObject/joint get destroyed by the
+    // unload before GrabReset() ever runs, which would otherwise leave
+    // isGrabbing stuck true and block every further grab attempt for that
+    // player. Force a clean reset on every scene load so nothing carries
+    // over.
     private void OnSceneLoaded(Scene _scene, LoadSceneMode _mode)
     {
         isGrabbing = false;
@@ -175,6 +197,7 @@ public class sCharacterGrabController : MonoBehaviour
         grabbable = null;
         interactiveObject = null;
         _grabJoint = null;
+        objectsInRange.Clear();
     }
 
     private void OnGrabInput(InputAction.CallbackContext context)
@@ -200,6 +223,8 @@ public class sCharacterGrabController : MonoBehaviour
 
     private void OnThrowInput(InputAction.CallbackContext context)
     {
+        Debug.Log("Throw input");
+
         HandleGrabToss();
     }
 
@@ -232,208 +257,196 @@ public class sCharacterGrabController : MonoBehaviour
 
         canLetGo = true;
     }
+
     public void GrabReset()
     {
-        //Debug.Log("Grab Reset Triggered on " + interactiveObject.name);
+        // Save these before clearing anything.
+        iGrabbable previousGrabbable = grabbable;
+        GameObject previousObject = interactiveObject;
 
-        if (interactiveObject != null && grabbable != null)
+        // Destroy only our grab joint.
+        if (_grabJoint != null)
         {
-            //Debug.Log("Grab Reset Triggered on " + interactiveObject.name);
+            Destroy(_grabJoint);
+            _grabJoint = null;
+        }
 
-            if (_grabJoint != null)
-            {
-                // Destroys only the joint this script created
-                Destroy(_grabJoint);
-                _grabJoint = null;
-            }
+        // Clear our grab state FIRST so callbacks cannot see us
+        // as still actively grabbing.
+        grabbable = null;
+        interactiveObject = null;
+        isGrabbing = false;
+        canLetGo = false;
 
-            // De-selects the grabbable
-            grabbable.OffSelect();
-            SetObjectHighlight(interactiveObject, false);
+        // Block a new grab until the button is physically released and
+        // pressed again. Without this, tossing while still holding the grab
+        // button (the normal way to throw, since grab is hold-to-carry)
+        // creates a one-frame window where Update() sees isGrabbing already
+        // false, the object still selectable, and isPressingGrab still true
+        // - and grabs it right back before the toss force is ever applied.
+        waitingForGrabRelease = true;
 
-            // Triggers the off grab
-            grabbable.OffGrab();
+        // Tell the object the grab ended.
+        if (previousGrabbable != null)
+        {
+            previousGrabbable.OffGrab();
+        }
 
-            // Sets the UI popup to null which turns it off
-            //soUI.ToggleControlsPopup(null);
+        // Clean up highlight.
+        if (previousObject != null)
+        {
+            SetObjectHighlight(previousObject, false);
+        }
 
-            // resets grabbable, interactive object to null and isGrabbing off
-            grabbable = null;
-            interactiveObject = null;
-            isGrabbing = false;
+        // Clear both controls.
+        soUI.TriggerControlsPopup("", "Grab");
+        soUI.TriggerControlsPopup("", "Throw");
+    }
 
-            soUI.TriggerControlsPopup("", "Throw");
+    void Update()
+    {
+        // Drop any entries that were destroyed while still "in range"
+        // (consumed, despawned, etc.) instead of waiting for an
+        // OnTriggerExit that will never come for a destroyed object.
+        objectsInRange.RemoveAll(obj => obj == null);
 
-            //// Checks if hand index list is null
-            //if(HandIndexList != null)
-            //{
-            //    // Checks the whole hand array.  Minus 1 cause it's a list to array.
-            //    for (int i = 0; i < HandIndexList.Count - 1; i++)
-            //    {
-            //        // Resets Hand in player script based on the hand index array
-            //        GameManager.gm.ReturnCurrentPlayer().ResetHand(HandIndexList.ToArray());
-            //    }
+        // While actively holding something, leave selection alone - the
+        // held object stays selected until GrabReset() runs (on release or
+        // toss).
+        if (isGrabbing)
+            return;
 
-            //    //Resets hand index list to null
-            //    HandIndexList = null;
-            //}
+        GameObject nearestObj = FindNearestGrabbable();
+
+        if (nearestObj != interactiveObject)
+        {
+            UpdateSelection(nearestObj);
+        }
+
+        if (grabbable == null || interactiveObject == null)
+            return;
+
+        PlugHoldCheck(interactiveObject);
+
+        // Checks if the character is grabbing and if the grabbable can be
+        // grabbed
+        if (!isGrabbing && grabbable.CanBeGrabbed)
+        {
+            // Sets grab UI text
+            soUI.TriggerControlsPopup(grabControlText, "Grab");
+        }
+
+        // Checks for input to start Grab, if the player isn't already
+        // grabbing, and if this specific grabbable isn't already held by
+        // someone else.
+        if (!grabbable.IsGrabbed && !isGrabbing && !waitingForGrabRelease && isPressingGrab && grabbable.CanBeGrabbed)
+        {
+            PerformGrab(grabbable, interactiveObject);
         }
     }
 
-    void HandleGrabbing(GameObject _collisionObj)
+    // Picks the closest currently-tracked object that still implements
+    // iGrabbable. Distance is the only tie-breaker, matching the original
+    // "closer object wins" behavior.
+    GameObject FindNearestGrabbable()
     {
-        // Checks for a grabbable interface in collision
-        if (_collisionObj.TryGetComponent<iGrabbable>(out iGrabbable _grabbable))
+        GameObject nearest = null;
+        float nearestDist = float.MaxValue;
+
+        foreach (GameObject obj in objectsInRange)
         {
-            // If the collision is with the same grabbable then the function returns
-            if (_grabbable == grabbable && isGrabbing)
+            if (!obj.TryGetComponent<iGrabbable>(out _))
+                continue;
+
+            float dist = Vector3.Distance(transform.position, obj.transform.position);
+
+            if (dist < nearestDist)
             {
-                //Debug.Log("Grab handler found itself and is already grabbing");
-                return;
+                nearest = obj;
+                nearestDist = dist;
             }
-
-            // Quick null check on the grabbable and interactive object
-            if (grabbable != null && interactiveObject != null)
-            {
-                // Checks if the current grabbable is closer than the new one triggered and if so sets it as the new grabbable
-                if (Vector3.Distance(this.gameObject.transform.position, interactiveObject.transform.position) > Vector3.Distance(this.gameObject.transform.position, _collisionObj.transform.position))
-                {
-                    //Debug.Log("New grabbale object is closer than the current grabbable");
-
-                    // De-selects current grabbable
-                    grabbable.OffSelect();
-                    SetObjectHighlight(interactiveObject, false);
-
-                    // Sets new grabbable
-                    grabbable = _grabbable;
-
-                    // Sets interactive object
-                    interactiveObject = _collisionObj;
-
-                    // Selects the the grabbable
-                    grabbable.OnSelect();
-                    SetObjectHighlight(interactiveObject, true);
-                }
-            }
-
-            // This gets called if grabbable or interactive object is null
-            else
-            {
-                //Debug.Log("Grabbable or Interactive Object Null - Setting to current collision object");
-
-                grabbable = _grabbable;
-
-                interactiveObject = _collisionObj;
-
-                grabbable.OnSelect();
-                SetObjectHighlight(interactiveObject, true);
-            }
-
-            int[] _tempIndexArray = new int[1] { -1 };
-
-            //Debug.Log("Testttt");
-
-            // Checks if the character is grabbing and if both hands are free and also if the grabbable can be grabbed
-            if (!isGrabbing && _grabbable.CanBeGrabbed)
-            {
-                // Sets grab UI text
-                soUI.TriggerControlsPopup(grabControlText, "Grab");
-            }
-
-            // Checks for input to start Grab, if the player is grabbing already, if both hands are free and if the grabbable object is grabbed
-            if (!iGrabbable.IsGrabbed && !isGrabbing && !waitingForGrabRelease && isPressingGrab)
-            {
-                //Debug.Log("Grab Key Detected and can grab");
-
-                // This gets called when the grabbable is first grabbed
-                grabbable.OnGrab();
-
-                // Turns off the select when grabbed?
-                grabbable.OffSelect();
-                SetObjectHighlight(interactiveObject, false);
-
-                // Toggles isGrabbing
-                isGrabbing = true;
-
-                //Debug.Log("Setting Hand to index of " + _tempIndex);
-
-                // This sets the hand in the current player script to used
-                //GameManager.gm.ReturnCurrentPlayer().SetHand(HandUseSprite, _tempIndexArray);
-
-                // Creates a new list of integers based on the number of hands returned by the player
-                //HandIndexList = new List<int>(_tempIndexArray);
-
-                soUI.TriggerControlsPopup("", "Grab");
-
-                // Turns off the popup by sending a null
-                soUI.TriggerControlsPopup(throwControlText, "Throw");
-
-                // Sets the interactive object
-                interactiveObject = _collisionObj;
-
-                //Debug.Log("Character collided with grabbable object and grabbed it");
-
-                // Temp RB for the player
-                Rigidbody _playerRB;
-
-                // Sets RB to this, which is on the player gameObject
-                _playerRB = this.gameObject.GetComponentInParent<Rigidbody>();
-
-
-                if (interactiveObject.TryGetComponent<Rigidbody>(out Rigidbody _rb))
-                {
-                    //_rb.constraints = RigidbodyConstraints.FreezeAll;
-
-                    //_rb.velocity = Vector3.zero;
-
-                    //_joint.connectedBody = _rb;
-                }
-
-                // Always create a fresh joint dedicated to this grab rather
-                // than searching the object for an existing FixedJoint - on
-                // cable pieces that already carry their own FixedJoint for
-                // the cable system's own connections, that search could
-                // grab the wrong joint and overwrite or destroy it later.
-                if (_grabJoint != null)
-                {
-                    Destroy(_grabJoint);
-                    _grabJoint = null;
-                }
-
-                StartCoroutine(GrabMovement());
-
-                _grabJoint = interactiveObject.AddComponent<FixedJoint>();
-                _grabJoint.connectedBody = _playerRB;
-                _grabJoint.enablePreprocessing = false;
-
-                
-            }
-
-            else
-            {
-                //Debug.Log("No Key input working");
-            }
-
-            //Debug.Log("Mid Test");
-
-            //GetComponent<sCharacterActionController>().SetGrabbable(_grabbable);
-            //if (!hasTool)
-            //    ToolCheck(_collision);
-
-            PlugHoldCheck(_collisionObj);
-
-            StartCoroutine(LetGoDelay());
-
-            //return;
         }
 
-        else
+        return nearest;
+    }
 
+    // Moves selection (highlight + OnSelect/OffSelect + UI popup) from
+    // whatever is currently selected to newObj, or clears selection
+    // entirely if newObj is null.
+    void UpdateSelection(GameObject newObj)
+    {
+        if (grabbable != null && interactiveObject != null)
         {
-            //Debug.Log("No keyboard input, grabbable is already grabbed or is already grabbing or both hands aren't free");
+            grabbable.OffSelect();
+            SetObjectHighlight(interactiveObject, false);
         }
 
-        //Debug.Log("End of Handle Grabbing Function");
+        if (newObj == null)
+        {
+            grabbable = null;
+            interactiveObject = null;
+            soUI.TriggerControlsPopup("", "Grab");
+            return;
+        }
+
+        newObj.TryGetComponent<iGrabbable>(out grabbable);
+        interactiveObject = newObj;
+
+        grabbable.OnSelect(player);
+        SetObjectHighlight(interactiveObject, true);
+    }
+
+    // Everything that happens the moment a grab is actually taken - was
+    // previously inline inside HandleGrabbing's if-block.
+    void PerformGrab(iGrabbable _grabbable, GameObject _collisionObj)
+    {
+        // This gets called when the grabbable is first grabbed
+        _grabbable.OnGrab(player);
+
+        // Turns off the select when grabbed
+        _grabbable.OffSelect();
+        SetObjectHighlight(_collisionObj, false);
+
+        // Toggles isGrabbing
+        isGrabbing = true;
+
+        soUI.TriggerControlsPopup("", "Grab");
+
+        // Turns off the popup by sending a null
+        soUI.TriggerControlsPopup(throwControlText, "Throw");
+
+        // Sets the interactive object
+        interactiveObject = _collisionObj;
+
+        // Temp RB for the player
+        Rigidbody _playerRB;
+
+        // Sets RB to this, which is on the player gameObject
+        _playerRB = this.gameObject.GetComponentInParent<Rigidbody>();
+
+        // Always create a fresh joint dedicated to this grab rather
+        // than searching the object for an existing FixedJoint - on
+        // cable pieces that already carry their own FixedJoint for
+        // the cable system's own connections, that search could
+        // grab the wrong joint and overwrite or destroy it later.
+        if (_grabJoint != null)
+        {
+            Destroy(_grabJoint);
+            _grabJoint = null;
+        }
+
+        StartCoroutine(GrabMovement());
+
+        _grabJoint = interactiveObject.AddComponent<FixedJoint>();
+        _grabJoint.connectedBody = _playerRB;
+        _grabJoint.enablePreprocessing = false;
+
+        // Starts the release-delay only now, once a grab has actually
+        // happened - previously this coroutine was started unconditionally
+        // on every single trigger tick (even while nothing was grabbed),
+        // which spun up a new coroutine every physics tick for no reason.
+        canLetGo = false;
+        StartCoroutine(LetGoDelay());
     }
 
     IEnumerator GrabMovement()
@@ -492,64 +505,59 @@ public class sCharacterGrabController : MonoBehaviour
 
     void HandleGrabToss()
     {
+        Debug.Log("Grab Toss control pressed");
+
         if (isGrabbing)
         {
-            TossGrabbedObject();
+            StartCoroutine(TossGrabbedObject());
         }
     }
 
-    void TossGrabbedObject()
+    IEnumerator TossGrabbedObject()
     {
-        if (interactiveObject != null &&
-            interactiveObject.TryGetComponent<Rigidbody>(out Rigidbody _grabbedRB))
-        {
-            Vector3 _tossDirection =
-                model.transform.forward +
-                model.transform.up * 0.5f;
+        Debug.Log("Starting grabb toss sequence");
 
-            if (_grabJoint != null)
-            {
-                Destroy(_grabJoint);
-                _grabJoint = null;
-            }
-
-            // The current grab input must be released before another
-            // object can be grabbed.
-            waitingForGrabRelease = true;
-
-            GrabReset();
-
-            soVFX?.Raise("Throw", transform.position, Quaternion.identity);
-
-            _grabbedRB.AddForce(
-                _tossDirection * throwPower,
-                ForceMode.Impulse);
-
-            _grabbedRB.AddTorque(
-                (model.transform.right + model.transform.up) * throwPower,
-                ForceMode.Impulse);
-        }
-        else
+        if (interactiveObject == null ||
+            !interactiveObject.TryGetComponent<Rigidbody>(out Rigidbody grabbedRB))
         {
             GrabReset();
-
-            // Still require the player to release the grab button.
-            waitingForGrabRelease = true;
+            yield break;
         }
+
+        // Save what we need before cleanup.
+        Vector3 tossDirection =
+            (model.transform.forward + model.transform.up * 0.5f).normalized;
+
+        // End the grab first.
+        GrabReset();
+
+        // Wait until the joint destruction has been processed by physics.
+        yield return new WaitForFixedUpdate();
+
+        // Now the object is completely free.
+        grabbedRB.AddForce(
+            tossDirection * throwPower,
+            ForceMode.Impulse);
+
+        grabbedRB.AddTorque(
+            (model.transform.right + model.transform.up).normalized * throwPower,
+            ForceMode.Impulse);
+
+        soVFX?.Raise("Throw", transform.position, Quaternion.identity);
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        HandleGrabbing(other.gameObject);
-    }
-
-    private void OnTriggerStay(Collider other)
-    {
-        HandleGrabbing(other.gameObject);
+        if (other.gameObject.TryGetComponent<iGrabbable>(out _) && !objectsInRange.Contains(other.gameObject))
+        {
+            objectsInRange.Add(other.gameObject);
+        }
     }
 
     private void OnTriggerExit(Collider other)
     {
+        objectsInRange.Remove(other.gameObject);
+
         if (other.gameObject.TryGetComponent<iGrabbable>(out iGrabbable _grabbable) && grabbable != null)
         {
             if (_grabbable == grabbable)

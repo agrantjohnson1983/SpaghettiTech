@@ -227,7 +227,7 @@ public class sCablePlug : sInteractive, iPluggable, iClickable
         // Sets plug to be plugged in
         IsPluggedIn = true;
 
-        sPlayerCharacter.playerCharacterGlobal.ToggleMovement(true);
+        //sPlayerCharacter.playerCharacterGlobal.ToggleMovement(true);
 
         // Checks if the other end of the cable is plugged in
         if(cablePlugOtherEnd.ReturnIsPluggedIn() == true)
@@ -615,12 +615,12 @@ public class sCablePlug : sInteractive, iPluggable, iClickable
         Index = _index;
     }
 
-    public override void OnSelect()
+    public override void OnSelect(sPlayerCharacter _player)
     {
         if (IsPluggedIn || !CanBeGrabbed)
             return;
 
-        base.OnSelect();
+        base.OnSelect(_player);
 
         //Debug.Log("Plug was selected: " + this);
     }

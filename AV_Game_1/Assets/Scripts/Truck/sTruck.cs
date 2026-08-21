@@ -38,6 +38,8 @@ public class sTruck : MonoBehaviour
 
     public SO_AudioEventChannel soAudio;
 
+    sPlayerCharacter _playerRef;
+
     private void Awake()
     {
         if(truckGlobal == null)
@@ -70,12 +72,14 @@ public class sTruck : MonoBehaviour
 
         textHatchClose.gameObject.SetActive(false);
 
-        sPlayerCharacter.playerCharacterGlobal.ToggleModelVisibility(false);
+        //sPlayerCharacter.playerCharacterGlobal.ToggleModelVisibility(false);
 
         if (soAudio != null)
             soAudio.TriggerSFX("TruckDrive");
 
         sGigManager.gigManagerGlobal.TruckDrive();
+
+        // TO DO : make all players temporarily disappear
     }
 
     // This is getting called by an animator event

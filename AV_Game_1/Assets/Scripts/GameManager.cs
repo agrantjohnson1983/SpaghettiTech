@@ -252,7 +252,7 @@ public class GameManager : MonoBehaviour
 
     public void StartGameplay()
     {
-        TogglePlayerCharacter(true);
+        //TogglePlayerCharacter(true);
 
         ToggleOrbitCamera(false);
 
@@ -260,10 +260,10 @@ public class GameManager : MonoBehaviour
 
         ToggleGameplayCamera(true);
 
-        if (sTruck.truckGlobal != null)
+        if (sTruck.truckGlobal != null && playerGlobal != null)
             playerGlobal.transform.position = sTruck.truckGlobal.truckDriverTransform.position;
         else
-            Debug.LogWarning("Truck global was null");
+            Debug.LogWarning("Truck or player global was null");
 
         TogglePlayerControls(true);
 
@@ -317,12 +317,12 @@ public class GameManager : MonoBehaviour
 
     void TogglePlayerControls(bool _isOn)
     {
-        playerGlobal.CharacterControlsToggle(_isOn);
+        //playerGlobal.CharacterControlsToggle(_isOn);
     }
 
     void TogglePlayerCharacter(bool _isOn)
     {
-        playerGlobal.ToggleModelVisibility(_isOn);
+        //playerGlobal.ToggleModelVisibility(_isOn);
     }
 
     public void SetPlayerGlobal(sPlayerCharacter _player)

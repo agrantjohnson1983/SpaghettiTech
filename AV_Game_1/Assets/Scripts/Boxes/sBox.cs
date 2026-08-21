@@ -58,6 +58,8 @@ public class sBox : sInteractive, iClickable, IPointerEnterHandler, IPointerExit
 
     [SerializeField] private InputActionReference openBoxAction;
 
+    //sPlayerCharacter playerRef = null;
+
     // Start is called before the first frame update
     private void Awake()
     {
@@ -153,7 +155,7 @@ public class sBox : sInteractive, iClickable, IPointerEnterHandler, IPointerExit
 
     private void Update()
     {
-        if (!isEmpty && sPlayerCharacter.playerCharacterGlobal != null)
+        if (!isEmpty || !isOpen)
             DetectPlayer();
 
         //if(ui_Ring)
@@ -189,7 +191,7 @@ public class sBox : sInteractive, iClickable, IPointerEnterHandler, IPointerExit
     // where the player currently is relative to the box, so the panel always
     // opens on the far side from the player (top-down: greater player z -> negative
     // offset, lesser player z -> positive offset). x/y magnitudes come from the data asset.
-    Vector3 GetInventoryPanelOffset()
+    /*Vector3 GetInventoryPanelOffset()
     {
         Vector3 offset = inventoryPanelOffset;
 
@@ -207,7 +209,7 @@ public class sBox : sInteractive, iClickable, IPointerEnterHandler, IPointerExit
         }
 
         return offset;
-    }
+    }*/
 
     public void TriggerOpenBox()
     {
@@ -218,13 +220,23 @@ public class sBox : sInteractive, iClickable, IPointerEnterHandler, IPointerExit
         {
             isOpen = true;
 
-            Debug.Log("Opening Box");
+            //Debug.Log("Opening Box");
 
             // gets panel offset
-            Vector3 panelOffset = GetInventoryPanelOffset();
+            //Vector3 panelOffset = GetInventoryPanelOffset();
 
             //turns off player movemement
-            sPlayerCharacter.playerCharacterGlobal.ToggleMovement(false);
+            //sPlayerCharacter.playerCharacterGlobal.ToggleMovement(false);
+
+            if(playerRef != null)
+            {
+                playerRef.ToggleMovement(false);
+            }
+
+            else
+            {
+                Debug.LogWarning("Box open triggered with no player ref...");
+            }
 
             // turns on inventory panel
             inventoryPanel.gameObject.SetActive(true);
@@ -264,7 +276,10 @@ public class sBox : sInteractive, iClickable, IPointerEnterHandler, IPointerExit
 
         inventoryPanel.SetActive(false);
 
-        sPlayerCharacter.playerCharacterGlobal.ToggleMovement(true);
+        //sPlayerCharacter.playerCharacterGlobal.ToggleMovement(true);
+
+        if (playerRef != null)
+            playerRef.ToggleMovement(true);
 
         if (soAudio != null)
             soAudio.TriggerSFX("BoxClose");
@@ -298,7 +313,7 @@ public class sBox : sInteractive, iClickable, IPointerEnterHandler, IPointerExit
         Debug.Log(gameObject.name + " OnClick called. isWithinOpenRange=" + isWithinOpenRange + " isEmpty=" + isEmpty + " isOpen=" + isOpen);
 
 
-        if (isWithinOpenRange && !isEmpty && !isOpen && !iGrabbable.IsGrabbed)
+        if (isWithinOpenRange && !isEmpty && !isOpen && !IsGrabbed)
         {
 
             //Debug.Log(gameObject.name + " OnClick called. isWithinOpenRange=" + isWithinOpenRange + " isEmpty=" + isEmpty + " isOpen=" + isOpen);
@@ -326,8 +341,29 @@ public class sBox : sInteractive, iClickable, IPointerEnterHandler, IPointerExit
     // this checks distance between the box and player and toggles on/off UI ring
     void DetectPlayer()
     {
+        Collider[] colliders;
+
+        colliders = Physics.OverlapSphere(this.transform.position, UI_ToggleDistance);
+
+        if(colliders != null)
+        {
+            foreach(Collider c in colliders)
+            {
+                if (c.gameObject.TryGetComponent<sPlayerCharacter>(out playerRef))
+                {
+                    //Debug.Log("Player was detected by box!");
+                }
+            }
+        }
+
+        if(playerRef == null)
+        {
+            //Debug.Log("Player was null in box detection");
+            return;
+        }
+
         // Checks if the player is less than the distance of the UI toggle distance and if so turns on the UI
-        if (Vector3.Distance(this.transform.position, sPlayerCharacter.playerCharacterGlobal.transform.position) < UI_ToggleDistance)
+        if (Vector3.Distance(this.transform.position, playerRef.transform.position) < UI_ToggleDistance)
         {
             isWithinOpenRange = true;
         }
@@ -343,10 +379,12 @@ public class sBox : sInteractive, iClickable, IPointerEnterHandler, IPointerExit
         }
     }
 
-    public override void OnGrab()
+    public override void OnGrab(sPlayerCharacter _player)
     {
+        base.OnGrab(_player);
+
         //Debug.Log("Box On Grab Triggered");
-        iGrabbable.IsGrabbed = true;
+        IsGrabbed = true;
 
         ui_Select.SetActive(false);
 
@@ -356,18 +394,20 @@ public class sBox : sInteractive, iClickable, IPointerEnterHandler, IPointerExit
 
     public override void OffGrab()
     {
+        base.OffGrab();
+
         //Debug.Log("Box Off Grab Triggered");
-        Invoke("GrabReset", 0.5f);
+        //Invoke("GrabReset", 0.5f);
     }
 
     void GrabReset()
     {
-        iGrabbable.IsGrabbed = false;
+        IsGrabbed = false;
     }
 
-    public override void OnSelect()
+    public override void OnSelect(sPlayerCharacter _player)
     {
-        if(sCharacterGrabController.isGrabbing || !canBeSelected)
+        if(_player.ReturnGrabController().isGrabbing || !canBeSelected)
         return;
 
         //Debug.Log("On Select on Box");
@@ -375,14 +415,11 @@ public class sBox : sInteractive, iClickable, IPointerEnterHandler, IPointerExit
         if(!isOpen)
             ui_Select.SetActive(true);
 
-        
-
         if (soUI != null)
         {
             soUI.TriggerControlsPopup("SPACE", "Grab");
             soUI.TriggerControlsPopup("F", "Open");
         }
-            
     }
 
     public override void OffSelect()
@@ -397,9 +434,9 @@ public class sBox : sInteractive, iClickable, IPointerEnterHandler, IPointerExit
     public void OnPointerEnter(PointerEventData eventData)
     {
         //Debug.Log("Mouse entered the box object of " + this.gameObject.name);
-
-        if (isWithinOpenRange && !sCharacterGrabController.isGrabbing)
-            ui_Img.SetActive(true);
+        if(playerRef != null)
+            if (isWithinOpenRange && !playerRef.ReturnGrabController().isGrabbing)
+                ui_Img.SetActive(true);
     }
 
     public void OnPointerExit(PointerEventData eventData)

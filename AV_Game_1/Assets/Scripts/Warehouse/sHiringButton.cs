@@ -23,6 +23,8 @@ public class sHiringButton : MonoBehaviour
 
     public SO_EventsUI soUI;
 
+    public Transform spawnTransform;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -74,7 +76,7 @@ public class sHiringButton : MonoBehaviour
 
         //tempObj = Instantiate(characterData.pCharacter);
 
-        tempObj = Instantiate(crewProfile.pCrew, (sPlayerCharacter.playerCharacterGlobal.transform.position + Random.insideUnitSphere + Vector3.up), Quaternion.identity);
+        tempObj = Instantiate(crewProfile.pCrew, (spawnTransform.transform.position + Random.insideUnitSphere + Vector3.up), Quaternion.identity);
 
         //tempObj.transform.position = new Vector3(tempObj.transform.position.x, 1f, transform.position.z);
 

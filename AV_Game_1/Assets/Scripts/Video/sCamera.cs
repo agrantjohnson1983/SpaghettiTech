@@ -44,10 +44,10 @@ public class sCamera : sInteractive, iActionable
     {
         //base.TriggerAction(_actionObj, _toolToUse);
 
-        sPlayerCharacter.playerCharacterGlobal.ToggleCameraMain(false);
+        //sPlayerCharacter.playerCharacterGlobal.ToggleCameraMain(false);
 
         // maybe set this to the model to full follow rotation
-        transform.rotation = sPlayerCharacter.playerCharacterGlobal.transform.rotation;
+        //transform.rotation = sPlayerCharacter.playerCharacterGlobal.transform.rotation;
 
         cameraFPS.SetActive(true);
     }
@@ -56,7 +56,7 @@ public class sCamera : sInteractive, iActionable
     {
         //base.StopAction(_actionObj);
 
-        sPlayerCharacter.playerCharacterGlobal.ToggleCameraMain(true);
+        //sPlayerCharacter.playerCharacterGlobal.ToggleCameraMain(true);
 
         cameraFPS.SetActive(false);
     }
