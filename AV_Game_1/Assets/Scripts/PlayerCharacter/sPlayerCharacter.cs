@@ -18,6 +18,8 @@ public class sPlayerCharacter : MonoBehaviour
 
     public SO_EventsUI soUI;
 
+    public SO_VFXEventChannel soVFX;
+
     sCharacterActionController actionController;
     sCharacterMovementController movementController;
     sCharacterGrabController grabController;
@@ -70,6 +72,9 @@ public class sPlayerCharacter : MonoBehaviour
 
 
         //gm.SetPlayerGlobal(this);
+
+        if (soVFX != null)
+            soVFX.Raise("StarburstLarge", this.transform.position, Quaternion.identity);
     }
 
     // Sets the player index - only used upon spawn

@@ -29,6 +29,7 @@ public class sInventory : MonoBehaviour
     [SerializeField] int maxColumns = 4;
     [SerializeField] float padding = 20f;
 
+    sPlayerUIController controller;
 
     // Start is called before the first frame update
     void Start()
@@ -42,6 +43,7 @@ public class sInventory : MonoBehaviour
         for (int i = 0; i < _itemData.Length; i++)
         {
             sInventoryItem tempItem;
+
             GameObject tempSlot;
 
             tempSlot = Instantiate(pInventorySlot, panelInventory);
@@ -53,6 +55,16 @@ public class sInventory : MonoBehaviour
             //inventoryItemList.Add(tempSlot);
 
             //ResizeInventory();
+
+            if (i == 0 && controller != null)
+            {
+                Debug.Log("Setting first inventory item to be first selected");
+
+                if(controller != null)
+                    controller.OpenPopup(null, tempSlot);
+            }
+
+            //GameManager.gm.SetFirstSelected(tempSlot);
         }
     }
 
@@ -117,6 +129,12 @@ public class sInventory : MonoBehaviour
     public void SetBox(sBox _box)
     {
         box = _box;
+    }
+
+    public void SetController(sPlayerUIController _controller)
+    {
+        Debug.Log("Setting UI controller in inventory");
+        controller = _controller;
     }
 
     public sBox ReturnBox()

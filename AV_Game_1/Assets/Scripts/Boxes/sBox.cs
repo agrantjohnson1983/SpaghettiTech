@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.InputSystem;
 
-public class sBox : sInteractive, iClickable, IPointerEnterHandler, IPointerExitHandler, iLoadable
+public class sBox : sInteractive, iClickable, IPointerEnterHandler, IPointerExitHandler, iLoadable, iOpenable
 {
     GameManager gm;
 
@@ -36,7 +35,7 @@ public class sBox : sInteractive, iClickable, IPointerEnterHandler, IPointerExit
     bool isWithinOpenRange = false;
 
     public GameObject ui_Img;
-    
+
     public Vector3 ui_Img_Offset, ui_Text_Offset;
 
     public GameObject pModel;
@@ -55,8 +54,6 @@ public class sBox : sInteractive, iClickable, IPointerEnterHandler, IPointerExit
     public float boxTextFontSize = 0.05f;
 
     //bool isBeingThrown = false;
-
-    [SerializeField] private InputActionReference openBoxAction;
 
     //sPlayerCharacter playerRef = null;
 
@@ -80,21 +77,7 @@ public class sBox : sInteractive, iClickable, IPointerEnterHandler, IPointerExit
 
         //ui_Text.SetActive(false);
 
-        
-    }
 
-    private void OnEnable()
-    {
-        openBoxAction.action.Enable();
-
-        openBoxAction.action.performed += OnOpenPress;
-    }
-
-    private void OnDisable()
-    {
-        openBoxAction.action.Disable();
-
-        openBoxAction.action.performed -= OnOpenPress;
     }
 
     // Called by sBoxSpawner right after Instantiate. Applies all data-driven
@@ -174,17 +157,32 @@ public class sBox : sInteractive, iClickable, IPointerEnterHandler, IPointerExit
         }*/
     }
 
-    private void OnOpenPress(InputAction.CallbackContext context)
+    // iOpenable - CanBeOpened lets the grab controller check gating before
+    // even calling TryOpen, and TryOpen double-checks it again itself so
+    // this is safe to call directly too.
+    public bool CanBeOpened
     {
-        // Uncomment when you implement dash
-        // rb.AddForce(direction * dashPower, ForceMode.Impulse);
+        get { return !isOpen && isWithinOpenRange; }
+    }
 
-        if (!isOpen && isWithinOpenRange)
-        {
-            Debug.Log("Open box input triggered");
+    // Called by whichever player's grab controller currently has this box
+    // selected - _player is that specific player, not whichever player
+    // DetectPlayer's proximity sweep happened to land on last. This is what
+    // makes box-opening correct with more than one player in the scene:
+    // each player's own grab controller only ever calls this for the box
+    // IT has selected, so two players near two different boxes each open
+    // their own independently, and a player near an already-open box (or
+    // out of range) is blocked by CanBeOpened same as before.
+    public void TryOpen(sPlayerCharacter _player)
+    {
+        if (!CanBeOpened)
+            return;
 
-            TriggerOpenBox();
-        }
+        Debug.Log("Open box input triggered");
+
+        playerRef = _player;
+
+        TriggerOpenBox();
     }
 
     // Recalculates the panel offset's z-sign each time the box opens, based on
@@ -228,16 +226,6 @@ public class sBox : sInteractive, iClickable, IPointerEnterHandler, IPointerExit
             //turns off player movemement
             //sPlayerCharacter.playerCharacterGlobal.ToggleMovement(false);
 
-            if(playerRef != null)
-            {
-                playerRef.ToggleMovement(false);
-            }
-
-            else
-            {
-                Debug.LogWarning("Box open triggered with no player ref...");
-            }
-
             // turns on inventory panel
             inventoryPanel.gameObject.SetActive(true);
 
@@ -257,6 +245,22 @@ public class sBox : sInteractive, iClickable, IPointerEnterHandler, IPointerExit
             // add Vfx?
             if (soVFX != null)
                 soVFX.Raise("", this.transform.position + Vector3.up * 2f, Quaternion.identity);
+
+            if (playerRef != null)
+            {
+                playerRef.ToggleMovement(false);
+            }
+
+            else
+            {
+                Debug.LogWarning("Box open triggered with no player ref...");
+                return;
+            }
+
+            if(playerRef.gameObject.TryGetComponent<sPlayerUIController>(out sPlayerUIController _controller))
+            {
+                inventory.SetController(_controller);
+            }
         }
 
         else
@@ -324,7 +328,7 @@ public class sBox : sInteractive, iClickable, IPointerEnterHandler, IPointerExit
             if (inventory == null)
             {
                 isOpen = true;
-                
+
                 TriggerOpenBox();
             }
 
@@ -345,18 +349,25 @@ public class sBox : sInteractive, iClickable, IPointerEnterHandler, IPointerExit
 
         colliders = Physics.OverlapSphere(this.transform.position, UI_ToggleDistance);
 
-        if(colliders != null)
+        if (colliders != null)
         {
-            foreach(Collider c in colliders)
+            foreach (Collider c in colliders)
             {
-                if (c.gameObject.TryGetComponent<sPlayerCharacter>(out playerRef))
+                // Break as soon as a match is found - TryGetComponent's out
+                // parameter is assigned on every call, success or not, so
+                // without this break a later non-matching collider in the
+                // same sweep silently resets playerRef back to null even
+                // after a valid player was already found earlier in the
+                // list.
+                if (c.gameObject.TryGetComponent<sPlayerCharacter>(out sPlayerCharacter foundPlayer))
                 {
-                    //Debug.Log("Player was detected by box!");
+                    playerRef = foundPlayer;
+                    break;
                 }
             }
         }
 
-        if(playerRef == null)
+        if (playerRef == null)
         {
             //Debug.Log("Player was null in box detection");
             return;
@@ -384,7 +395,6 @@ public class sBox : sInteractive, iClickable, IPointerEnterHandler, IPointerExit
         base.OnGrab(_player);
 
         //Debug.Log("Box On Grab Triggered");
-        IsGrabbed = true;
 
         ui_Select.SetActive(false);
 
@@ -392,27 +402,21 @@ public class sBox : sInteractive, iClickable, IPointerEnterHandler, IPointerExit
     }
 
 
-    public override void OffGrab()
+    public override void OffGrab(sPlayerCharacter _player)
     {
-        base.OffGrab();
+        base.OffGrab(_player);
 
         //Debug.Log("Box Off Grab Triggered");
-        //Invoke("GrabReset", 0.5f);
-    }
-
-    void GrabReset()
-    {
-        IsGrabbed = false;
     }
 
     public override void OnSelect(sPlayerCharacter _player)
     {
-        if(_player.ReturnGrabController().isGrabbing || !canBeSelected)
-        return;
+        if (_player.ReturnGrabController().isGrabbing || !canBeSelected)
+            return;
 
         //Debug.Log("On Select on Box");
 
-        if(!isOpen)
+        if (!isOpen)
             ui_Select.SetActive(true);
 
         if (soUI != null)
@@ -434,7 +438,7 @@ public class sBox : sInteractive, iClickable, IPointerEnterHandler, IPointerExit
     public void OnPointerEnter(PointerEventData eventData)
     {
         //Debug.Log("Mouse entered the box object of " + this.gameObject.name);
-        if(playerRef != null)
+        if (playerRef != null)
             if (isWithinOpenRange && !playerRef.ReturnGrabController().isGrabbing)
                 ui_Img.SetActive(true);
     }
@@ -445,5 +449,10 @@ public class sBox : sInteractive, iClickable, IPointerEnterHandler, IPointerExit
 
         if (eventData.fullyExited)
             ui_Img.SetActive(false);
+    }
+
+    public sPlayerCharacter ReturnPlayerReference()
+    {
+        return playerRef;
     }
 }

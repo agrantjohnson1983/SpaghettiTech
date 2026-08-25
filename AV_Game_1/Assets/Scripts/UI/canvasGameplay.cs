@@ -46,8 +46,8 @@ public class canvasGameplay : MonoBehaviour
 
     //public List<GameObject> toolButtonsList;
 
-    // WAREHOUSE
-    public GameObject startScreen;
+    // START SCREENa
+    public GameObject startScreen, startButton;
     //public GameObject gigSelectScreen;
 
     public TMP_Text textMessageMain;
@@ -114,6 +114,8 @@ public class canvasGameplay : MonoBehaviour
 
         // turns off message at start
         MessageSend("", 0f);
+
+        GameManager.gm.SetFirstSelected(startButton);
     }
 
     // GETS CALLED WHEN PLAYER PRESSES START

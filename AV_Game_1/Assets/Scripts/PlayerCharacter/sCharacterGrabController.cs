@@ -37,9 +37,11 @@ public class sCharacterGrabController : MonoBehaviour
     [Header("Input")]
     [SerializeField] private InputActionReference grabAction;
     [SerializeField] private InputActionReference throwAction;
+    [SerializeField] private InputActionReference openAction;
 
     private InputAction grabInput;
     private InputAction throwInput;
+    private InputAction openInput;
 
     PlayerInput playerInput;
 
@@ -92,12 +94,27 @@ public class sCharacterGrabController : MonoBehaviour
 
     bool waitingForGrabRelease = false;
 
-    // Tracks the specific FixedJoint this script creates for a grab, so
+    // Tunable spring feel - lower spring/higher damper = tighter and less
+    // wobbly, higher spring/lower damper = looser and more silly. Deliberately
+    // public so different player rigs (or even different objects, later) can
+    // be tuned independently in the Inspector.
+    public float grabSpringForce = 1000f;
+    public float grabSpringDamper = 50f;
+
+    // Tracks the specific SpringJoint this script creates for a grab, so
     // cleanup only ever touches a joint this script owns. Never search the
-    // object for "a" FixedJoint via TryGetComponent - objects like cable
-    // pieces can already carry their own FixedJoint for unrelated purposes,
-    // and that search has no way to tell the two apart.
-    FixedJoint _grabJoint;
+    // object for "a" joint via TryGetComponent - objects like cable pieces
+    // can already carry their own joints for unrelated purposes, and that
+    // search has no way to tell them apart. A SpringJoint rather than a
+    // FixedJoint is what makes multiple players able to hold the same
+    // object at once - a FixedJoint is a rigid zero-relative-motion
+    // constraint, and two of those pulling one Rigidbody toward two
+    // different, independently-moving players fight each other every
+    // physics step (jitter, launching, or the joints just breaking). A
+    // spring lets each holder pull toward their own position with some
+    // give, so the object settles somewhere between everyone holding it
+    // instead of the physics engine trying to satisfy a contradiction.
+    SpringJoint _grabJoint;
 
     // Objects currently overlapping this player's grab trigger that
     // implement iGrabbable. Populated and cleared ONLY by OnTriggerEnter and
@@ -130,6 +147,7 @@ public class sCharacterGrabController : MonoBehaviour
 
         grabInput = playerInput.actions.FindAction(grabAction.action.id);
         throwInput = playerInput.actions.FindAction(throwAction.action.id);
+        openInput = playerInput.actions.FindAction(openAction.action.id);
     }
 
     // Start is called before the first frame update
@@ -156,7 +174,13 @@ public class sCharacterGrabController : MonoBehaviour
         if (throwInput != null)
         {
             throwInput.Enable();
-            throwInput.performed += OnThrowInput;
+            throwInput.started += OnThrowInput;
+        }
+
+        if (openInput != null)
+        {
+            openInput.Enable();
+            openInput.performed += OnOpenInput;
         }
     }
 
@@ -173,8 +197,14 @@ public class sCharacterGrabController : MonoBehaviour
 
         if (throwInput != null)
         {
-            throwInput.performed -= OnThrowInput;
+            throwInput.started -= OnThrowInput;
             throwInput.Disable();
+        }
+
+        if (openInput != null)
+        {
+            openInput.performed -= OnOpenInput;
+            openInput.Disable();
         }
     }
 
@@ -223,9 +253,22 @@ public class sCharacterGrabController : MonoBehaviour
 
     private void OnThrowInput(InputAction.CallbackContext context)
     {
-        Debug.Log("Throw input");
-
         HandleGrabToss();
+    }
+
+    // Routes "open" through whatever this specific player currently has
+    // selected (interactiveObject), the same per-player tracking that
+    // already works correctly for Grab - rather than a separate
+    // proximity/global-input system that has no idea which player pressed
+    // the button. Works on anything implementing iOpenable, not just boxes.
+    private void OnOpenInput(InputAction.CallbackContext context)
+    {
+        if (interactiveObject != null &&
+            interactiveObject.TryGetComponent<iOpenable>(out iOpenable openable) &&
+            openable.CanBeOpened)
+        {
+            openable.TryOpen(player);
+        }
     }
 
     void HandleGrabLetGo()
@@ -289,7 +332,7 @@ public class sCharacterGrabController : MonoBehaviour
         // Tell the object the grab ended.
         if (previousGrabbable != null)
         {
-            previousGrabbable.OffGrab();
+            previousGrabbable.OffGrab(player);
         }
 
         // Clean up highlight.
@@ -336,10 +379,11 @@ public class sCharacterGrabController : MonoBehaviour
             soUI.TriggerControlsPopup(grabControlText, "Grab");
         }
 
-        // Checks for input to start Grab, if the player isn't already
-        // grabbing, and if this specific grabbable isn't already held by
-        // someone else.
-        if (!grabbable.IsGrabbed && !isGrabbing && !waitingForGrabRelease && isPressingGrab && grabbable.CanBeGrabbed)
+        // Checks for input to start Grab, if this player isn't already
+        // grabbing something. Deliberately does NOT check grabbable.IsGrabbed
+        // - multiple players are allowed to hold the same object at once now,
+        // so another player already holding it is not a reason to block.
+        if (!isGrabbing && !waitingForGrabRelease && isPressingGrab && grabbable.CanBeGrabbed)
         {
             PerformGrab(grabbable, interactiveObject);
         }
@@ -437,9 +481,12 @@ public class sCharacterGrabController : MonoBehaviour
 
         StartCoroutine(GrabMovement());
 
-        _grabJoint = interactiveObject.AddComponent<FixedJoint>();
+        _grabJoint = interactiveObject.AddComponent<SpringJoint>();
         _grabJoint.connectedBody = _playerRB;
-        _grabJoint.enablePreprocessing = false;
+        _grabJoint.spring = grabSpringForce;
+        _grabJoint.damper = grabSpringDamper;
+        _grabJoint.minDistance = 0f;
+        _grabJoint.maxDistance = 0f;
 
         // Starts the release-delay only now, once a grab has actually
         // happened - previously this coroutine was started unconditionally
@@ -505,8 +552,6 @@ public class sCharacterGrabController : MonoBehaviour
 
     void HandleGrabToss()
     {
-        Debug.Log("Grab Toss control pressed");
-
         if (isGrabbing)
         {
             StartCoroutine(TossGrabbedObject());
@@ -515,8 +560,6 @@ public class sCharacterGrabController : MonoBehaviour
 
     IEnumerator TossGrabbedObject()
     {
-        Debug.Log("Starting grabb toss sequence");
-
         if (interactiveObject == null ||
             !interactiveObject.TryGetComponent<Rigidbody>(out Rigidbody grabbedRB))
         {

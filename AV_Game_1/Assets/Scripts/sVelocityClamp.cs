@@ -42,7 +42,7 @@ public class sVelocityClamp : MonoBehaviour
         // but skipping it avoids any unnecessary velocity changes while held.
         if (TryGetComponent<iGrabbable>(out iGrabbable _grabbable))
         {
-            _grabbable.IsGrabbed = true;
+            //_grabbable.IsGrabbed = true;
             return;
         }
 

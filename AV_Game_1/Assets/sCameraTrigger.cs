@@ -8,6 +8,8 @@ public class sCameraTrigger : MonoBehaviour
 
     public bool canTrigger = true;
 
+    public Vector3 camOffset;
+
     private void Start()
     {
         //if (disableOnStart)
@@ -20,7 +22,7 @@ public class sCameraTrigger : MonoBehaviour
         {
             isTriggered = true;
 
-            _cameraController.ToggleForwardCamera(true, 0.5f);
+            _cameraController.ToggleForwardCamera(camOffset, true, 0.5f);
 
             return;
         }
@@ -34,7 +36,7 @@ public class sCameraTrigger : MonoBehaviour
 
             isTriggered = false;
 
-            _cameraController.ToggleForwardCamera(false, 0.5f);
+            _cameraController.ToggleForwardCamera(camOffset, false, 0.5f);
         }
     }
 }

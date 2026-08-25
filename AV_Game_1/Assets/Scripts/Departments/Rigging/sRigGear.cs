@@ -97,8 +97,6 @@ public class sRigGear : sInteractive, iRiggable
         if (IsGrabbed)
         {
             Debug.Log("Riggin setup being set while grabbing");
-
-            IsGrabbed = false;
         }
 
         IsSet = true;

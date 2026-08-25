@@ -17,14 +17,13 @@ public interface iGrabbable
     }
 
     // Per-instance - each grabbable tracks whether IT is currently held.
-    // This must not be static: a static property here is one single flag
-    // shared by every object in the game, which means it can never actually
-    // answer "is this specific object grabbed" and any check against it is
-    // either always true or always false for everyone.
+    // Read-only: grabbed state is derived from how many players are
+    // actively holding this object (see HolderCount on sInteractive), not
+    // set directly, since more than one player can hold the same object at
+    // once now.
     bool IsGrabbed
     {
         get;
-        set;
     }
 
 
@@ -37,7 +36,9 @@ public interface iGrabbable
 
     void OnGrab(sPlayerCharacter _player);
 
-    void OffGrab();
+    // _player is specifically who is letting go. Only that player's hold is
+    // released - other current holders, if any, are unaffected.
+    void OffGrab(sPlayerCharacter _player);
 
     void OnSelect(sPlayerCharacter _player);
 

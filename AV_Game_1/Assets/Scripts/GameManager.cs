@@ -338,6 +338,7 @@ public class GameManager : MonoBehaviour
 
     public void SetFirstSelected(GameObject _button)
     {
+        Debug.Log("Setting first selected with: " + _button);
         eventSystem.firstSelectedGameObject = _button;
     }
 

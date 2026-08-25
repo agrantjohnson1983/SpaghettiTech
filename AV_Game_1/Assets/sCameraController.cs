@@ -10,14 +10,12 @@ public class sCameraController : MonoBehaviour
 
     CinemachineVirtualCamera vCam;
 
-    public Vector3 camOffset, camStart;
+    private Vector3 camOffset, camStart;
 
     Camera cam;
 
     Vector3 camPos;
     Quaternion camRot;
-
-
 
     private void Awake()
     {
@@ -33,7 +31,6 @@ public class sCameraController : MonoBehaviour
 
         if (cam == null)
             cam = GameManager.gm.ReturnCameraGameplay().GetComponent<Camera>();
-
     }
 
     // Update is called once per frame
@@ -44,7 +41,7 @@ public class sCameraController : MonoBehaviour
 
     Coroutine truckCamRoutine;
 
-    public void ToggleForwardCamera(bool _isOn, float _moveTime)
+    public void ToggleForwardCamera(Vector3 _camOffset, bool _isOn, float _moveTime)
     {
         // Ignore duplicate calls - already in the requested state
         if (_isOn == isInTruckMode)
@@ -57,6 +54,8 @@ public class sCameraController : MonoBehaviour
 
         if (truckCamRoutine != null)
             StopCoroutine(truckCamRoutine);
+
+        camOffset = _camOffset;
 
         if (_isOn)
         {

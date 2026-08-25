@@ -512,6 +512,8 @@ GameObject:
   - component: {fileID: 8416505087930365737}
   - component: {fileID: 3272763752138916873}
   - component: {fileID: 7202288108800732871}
+  - component: {fileID: 1830511897160271965}
+  - component: {fileID: 5667445822221499501}
   m_Layer: 7
   m_Name: PlayerCharacter
   m_TagString: Player
@@ -596,6 +598,7 @@ MonoBehaviour:
   model: {fileID: 2012776718528749849}
   characterData: {fileID: 11400000, guid: b809d4cd6179c664785ae07a6a2666bf, type: 2}
   soUI: {fileID: 11400000, guid: 2b96b6b1405722c48a474d361c95f00a, type: 2}
+  soVFX: {fileID: 11400000, guid: 2e677f6310e0cd24e8679be3f3361b8f, type: 2}
 --- !u!114 &2012776716820894630
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -717,8 +720,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_ActionEvents: []
-  m_NeverAutoSwitchControlSchemes: 0
-  m_DefaultControlScheme: 
+  m_NeverAutoSwitchControlSchemes: 1
+  m_DefaultControlScheme: KeyboardAndMouse
   m_DefaultActionMap: CharacterController
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
@@ -734,8 +737,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1654858af31495043b7c1d10e10289ae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  camOffset: {x: 0, y: 0, z: 0}
-  camStart: {x: 0, y: 0, z: 0}
+--- !u!114 &1830511897160271965
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2012776716820894629}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 48ea367d5c1364b46b2077408832c0a6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cursor: {fileID: 0}
+  cursorSpeed: 800
+--- !u!114 &5667445822221499501
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2012776716820894629}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d37f53a237303974a825fddee6650e4a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerInput: {fileID: 3272763752138916873}
 --- !u!1 &2012776716926582537
 GameObject:
   m_ObjectHideFlags: 0
@@ -1913,7 +1941,7 @@ GameObject:
   - component: {fileID: 142620657}
   - component: {fileID: 142620656}
   m_Layer: 7
-  m_Name: transformGrab
+  m_Name: GrabController
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1965,8 +1993,11 @@ MonoBehaviour:
   transformGrab: {fileID: 7892026315839176651}
   soVFX: {fileID: 11400000, guid: 2e677f6310e0cd24e8679be3f3361b8f, type: 2}
   grabAction: {fileID: 5380840456326010044, guid: fc62af52181a74f4583fbd411a2c9312, type: 3}
-  throwAction: {fileID: 1248588675309013619, guid: fc62af52181a74f4583fbd411a2c9312, type: 3}
+  throwAction: {fileID: 3390722101937498682, guid: fc62af52181a74f4583fbd411a2c9312, type: 3}
+  openAction: {fileID: -1876474617413016653, guid: fc62af52181a74f4583fbd411a2c9312, type: 3}
   throwPower: 15
+  grabSpringForce: 4000
+  grabSpringDamper: 200
 --- !u!1 &5619849082514592858
 GameObject:
   m_ObjectHideFlags: 0

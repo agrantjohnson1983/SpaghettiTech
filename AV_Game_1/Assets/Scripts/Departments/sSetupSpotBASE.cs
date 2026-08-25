@@ -160,7 +160,7 @@ public class sSetupSpotBASE : MonoBehaviour, iActionable
             if(_object.TryGetComponent<sInteractive>(out sInteractive _interactive))
             {
                 Debug.Log("Setting interactive object for setup");
-                _interactive.OffGrab();
+                _interactive.OffGrab(null);
                 
             }
 

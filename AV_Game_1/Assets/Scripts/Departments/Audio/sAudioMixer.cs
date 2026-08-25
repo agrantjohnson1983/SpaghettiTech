@@ -9,12 +9,13 @@ public class sAudioMixer : sAudioGear
 
     bool isPlayingMinigame = false;
 
-    public GameObject canvasMixer;
+    public GameObject canvasMixer, firstSelected;
 
     public static bool isMixing = false;
 
     sCameraTrigger camTrigger;
 
+    sPlayerUIController controller;
 
     public override void Start()
     {
@@ -40,23 +41,31 @@ public class sAudioMixer : sAudioGear
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.CompareTag("Player") && !isPlayingMinigame && isSet)
+        if(other.TryGetComponent<sPlayerUIController>(out sPlayerUIController _UI_Controller) && !isPlayingMinigame && isSet)
         {
             isPlayingMinigame = true;
-            //mixerMiniGame.SetActive(true);
-            canvasMixer.SetActive(true);
 
-            
+            controller = _UI_Controller;
+
+            if(!canvasMixer || !firstSelected)
+            {
+                Debug.LogWarning("canvas mixer or first selected was null for audio mixer");
+                return;
+            }
+
+            controller.OpenPopup(canvasMixer, firstSelected);
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.CompareTag("Player") && isPlayingMinigame)
+        if (other.CompareTag("Player") && isPlayingMinigame && controller != null)
         {
             isPlayingMinigame = false;
-            //mixerMiniGame.SetActive(false);
-            canvasMixer.SetActive(false);
+
+            controller.ClosePopup();
+
+            controller = null;
         }
     }
 
